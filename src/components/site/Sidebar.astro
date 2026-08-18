@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import Card from '../ui/Card.vue';
 
 const docs = (await getCollection('docs')).sort(
 	(a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id)
@@ -13,54 +14,56 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '');
 
 function linkClass(href: string) {
 	if (href === currentPath) {
-		return 'block rounded px-2 py-1 bg-blue-50 font-medium text-blue-700';
+		return 'block rounded px-2 py-1 bg-sky-50 font-medium text-sky-700';
 	}
-	return 'block rounded px-2 py-1 text-gray-700 hover:bg-gray-100';
+	return 'block rounded px-2 py-1 text-slate-700 hover:bg-slate-100';
 }
 ---
 
-<aside class="w-56 shrink-0 border-r border-gray-200 px-4 py-12">
-	<a href="/" class="block px-2 text-sm font-semibold text-gray-900">
-		Documentation
-	</a>
+<aside class="w-64 shrink-0 px-4 py-12">
+	<Card surface="sunken">
+		<a href="/" class="block px-2 text-sm font-semibold text-slate-900">
+			Documentation
+		</a>
 
-	<nav class="mt-6 space-y-6 text-sm">
-		{
-			sections.map((section) => (
-				<div>
-					<h3 class="px-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
-						{section}
-					</h3>
-					<ul class="mt-2 space-y-1">
-						{docs
-							.filter((entry) => entry.id.split('/')[0] === section)
-							.map((entry) => (
-								<li>
-									<a href={`/docs/${entry.id}`} class={linkClass(`/docs/${entry.id}`)}>
-										{entry.data.title}
-									</a>
-								</li>
-							))}
-					</ul>
-				</div>
-			))
-		}
+		<nav class="mt-6 space-y-6 text-sm">
+			{
+				sections.map((section) => (
+					<div>
+						<h3 class="px-2 text-xs font-semibold tracking-wide text-slate-500 uppercase">
+							{section}
+						</h3>
+						<ul class="mt-2 space-y-1">
+							{docs
+								.filter((entry) => entry.id.split('/')[0] === section)
+								.map((entry) => (
+									<li>
+										<a href={`/docs/${entry.id}`} class={linkClass(`/docs/${entry.id}`)}>
+											{entry.data.title}
+										</a>
+									</li>
+								))}
+						</ul>
+					</div>
+				))
+			}
 
-		<div>
-			<h3 class="px-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
-				Skills
-			</h3>
-			<ul class="mt-2 space-y-1">
-				{
-					skills.map((entry) => (
-						<li>
-							<a href={`/skills/${entry.id}`} class={linkClass(`/skills/${entry.id}`)}>
-								{entry.data.title}
-							</a>
-						</li>
-					))
-				}
-			</ul>
-		</div>
-	</nav>
+			<div>
+				<h3 class="px-2 text-xs font-semibold tracking-wide text-slate-500 uppercase">
+					Skills
+				</h3>
+				<ul class="mt-2 space-y-1">
+					{
+						skills.map((entry) => (
+							<li>
+								<a href={`/skills/${entry.id}`} class={linkClass(`/skills/${entry.id}`)}>
+									{entry.data.title}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</nav>
+	</Card>
 </aside>

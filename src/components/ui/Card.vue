@@ -2,15 +2,14 @@
 import { computed } from 'vue';
 
 const props = withDefaults(
-  defineProps<{
-    content: string;
-    surface?: 'base' | 'glass' | 'glassRaised' | 'layered' | 'sunken' | 'dark';
-  }>(),
-  { surface: 'base' },
+	defineProps<{
+		surface?: 'default' | 'glass' | 'glassRaised' | 'layered' | 'sunken' | 'dark';
+	}>(),
+	{ surface: 'default' },
 );
 
 const surfaceClasses: Record<string, string> = {
-  base: 'bg-white shadow-sm',
+  default: 'bg-white shadow-sm',
   glass: 'bg-slate-50 border border-white shadow-sm',
   glassRaised: 'bg-white/80 border border-white shadow-2xl backdrop-blur-lg',
   layered: 'bg-white shadow-lg',
@@ -27,7 +26,7 @@ const cardClass = computed(() => `rounded-2xl p-6 ${surfaceClasses[props.surface
       :class="cardClass"
       class="relative"
     >
-      {{ content }}
+      <slot />
     </div>
 
     <div

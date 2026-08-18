@@ -6,27 +6,18 @@ order: 2
 
 import Card from '../../../components/ui/Card.vue';
 
-Card documentation goes here. Content is passed via the `content` prop, and the
-`surface` prop sets the background: `white` (default), `muted`, or `dark`.
+Card documentation goes here. Content is passed as children, and the `surface`
+prop sets the background: `default`, `glass`, `glassRaised`, `layered`,
+`sunken`, or `dark`.
 
-<Card content="default white surface" />
-<Card
-  surface="glass"
-  content="glass surface"
-/>
-<Card
-  surface="glassRaised"
-  content="glass raised surface"
-/>
-<Card
-  surface="layered"
-  content="layered surface"
-/>
-<Card
-  surface="sunken"
-  content="sunken surface"
-/>
-<Card
-  surface="dark"
-  content="dark surface"
-/>
+<Card>default surface</Card>
+
+<Card surface="glass">glass surface</Card>
+
+<Card surface="glassRaised">glass surface raised</Card>
+
+<Card surface="layered">layered surface</Card>
+
+<Card surface="sunken">sunken surface</Card>
+
+<Card surface="dark">dark surface</Card>
