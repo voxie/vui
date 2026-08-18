@@ -6,30 +6,47 @@ order: 2
 
 import Card from '../../../components/ui/Card.vue';
 
-Card documentation goes here. Content is passed as children, and the `surface`
+
+The default for all panel backgrounds is white.
+Callouts, stats, dashboards, list rows, etc.
+
+A muted variant with bg-slate-50 and border-white is used for settings and input panels. If the content includes any input form elements, it uses the muted variant. Inputs should have white backgrounds so they are subtly highlighted on the gray background. An exception to this rule is if we need to group form panels together inside another panel e.g. the filter and action panels on the automation config page. Here we use the muted variant on the parent container and the standard white panels on the config blocks. This alternating pattern continues if further nesting occurs.
+
+We should use borders on both panel types so layout doesn’t shift if a panel happens to change type.
+
+Grayscale buttons go approximately a step from their background.
+
+Surface Base (white) → button slate-100
+Surface Glass (white/60) → button slate-200
+Surface Sunken (slate-300/30) → button slate-300
+Surface Dark (slate-700) → button slate-600
+
+Background (slate-200) → button white
+Background (slate-200) → button slate-300
+Background (slate-200) → button slate-600
+
+## Examples
+
+Content is passed as children, and the `surface`
 prop sets the background: `default`, `glass`, `glassRaised`, `layered`,
 `sunken`, or `dark`.
 
-<Card>default surface</Card>
-
-<Card surface="glass">glass surface</Card>
-
-<Card surface="glassRaised">glass surface raised</Card>
-
-<Card surface="layered">layered surface</Card>
-
-<Card surface="sunken">sunken surface</Card>
-
-<Card surface="dark">dark surface</Card>
+<div class="not-prose space-y-8">
+  <Card>default surface</Card>
+  <Card surface="glass">glass surface</Card>
+  <Card surface="glassRaised">glass surface raised</Card>
+  <Card surface="layered">layered surface</Card>
+  <Card surface="sunken">sunken surface</Card>
+  <Card surface="dark">dark surface</Card>
+</div>
 
 The `padding` prop controls padding: `none` (no padding), `compact` (p-4),
 `default` (p-6), or `spacious` (p-8). Use `none` when the card wraps content
 that manages its own spacing, such as a table or an image.
 
-<Card padding="none">none padding</Card>
-
-<Card padding="compact">compact padding</Card>
-
-<Card>default padding</Card>
-
-<Card padding="spacious">spacious padding</Card>
+<div class="not-prose space-y-8">
+  <Card padding="none">none padding</Card>
+  <Card padding="compact">compact padding</Card>
+  <Card>default padding</Card>
+  <Card padding="spacious">spacious padding</Card>
+</div>

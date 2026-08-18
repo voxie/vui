@@ -21,7 +21,7 @@ const { Content } = await render(entry);
 		<main class="min-w-0 flex-1 px-8 py-12">
 			<h1 class="text-3xl font-bold">{entry.data.title}</h1>
 			<p class="mt-2 text-gray-600">{entry.data.description}</p>
-			<article class="mt-8 space-y-8">
+			<article class="prose prose-slate mt-8 max-w-none">
 				<Content />
 			</article>
 		</main>
