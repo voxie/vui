@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import Sidebar from '../../components/Sidebar.astro';
+import Sidebar from '../../components/site/Sidebar.astro';
 
 export async function getStaticPaths() {
 	const skills = await getCollection('skills');

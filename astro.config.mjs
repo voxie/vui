@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 import mdx from '@astrojs/mdx';
 
+import vue from '@astrojs/vue';
+
 // https://astro.build/config
 export default defineConfig({
   devToolbar: {
@@ -15,5 +17,5 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  integrations: [mdx()],
+  integrations: [mdx(), vue()],
 });
