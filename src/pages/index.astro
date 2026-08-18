@@ -12,34 +12,34 @@ const skills = (await getCollection('skills')).sort((a, b) =>
 ---
 
 <Layout title="Documentation">
-	<div class="mx-auto flex max-w-5xl">
+	<div class="mx-auto flex max-w-5xl gap-8 p-8 items-start">
 		<Sidebar />
-		<main class="min-w-0 flex-1 px-8 py-12">
-			<h1 class="text-3xl font-bold">Voxie UI Documentation</h1>
+		<main class="prose prose-slate">
+			<h1>Voxie UI Documentation</h1>
 
-			<h2 class="mt-10 text-xl font-semibold">Docs</h2>
-			<ul class="mt-4 space-y-2">
+			<h2>Docs</h2>
+			<ul>
 				{
 					docs.map((entry) => (
 						<li>
-							<a href={`/docs/${entry.id}`} class="text-sky-600 hover:underline">
+							<a href={`/docs/${entry.id}`}>
 								{entry.data.title}
 							</a>
-							<span class="text-slate-600"> — {entry.data.description}</span>
+							<span> — {entry.data.description}</span>
 						</li>
 					))
 				}
 			</ul>
 
-			<h2 class="mt-10 text-xl font-semibold">Skills</h2>
-			<ul class="mt-4 space-y-2">
+			<h2>Skills</h2>
+			<ul>
 				{
 					skills.map((entry) => (
 						<li>
-							<a href={`/skills/${entry.id}`} class="text-sky-600 hover:underline">
+							<a href={`/skills/${entry.id}`}>
 								{entry.data.title}
 							</a>
-							<span class="text-slate-600"> — {entry.data.description}</span>
+							<span> — {entry.data.description}</span>
 						</li>
 					))
 				}
