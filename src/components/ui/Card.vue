@@ -4,8 +4,9 @@ import { computed } from 'vue';
 const props = withDefaults(
 	defineProps<{
 		surface?: 'default' | 'glass' | 'glassRaised' | 'layered' | 'sunken' | 'dark';
+		padding?: 'none' | 'compact' | 'default' | 'spacious';
 	}>(),
-	{ surface: 'default' },
+	{ surface: 'default', padding: 'default' },
 );
 
 const surfaceClasses: Record<string, string> = {
@@ -17,7 +18,16 @@ const surfaceClasses: Record<string, string> = {
   dark: 'bg-slate-600 text-slate-100',
 };
 
-const cardClass = computed(() => `rounded-2xl p-6 ${surfaceClasses[props.surface]}`);
+const paddingClasses: Record<string, string> = {
+  none: '',
+  compact: 'p-4',
+  default: 'p-6',
+  spacious: 'p-8'
+};
+
+const cardClass = computed(
+  () => `rounded-2xl ${paddingClasses[props.padding]} ${surfaceClasses[props.surface]}`,
+);
 </script>
 
 <template>
