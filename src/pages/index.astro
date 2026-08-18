@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/site/Sidebar.astro';
 
 const docs = (await getCollection('docs')).sort(
 	(a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id)
@@ -11,35 +12,38 @@ const skills = (await getCollection('skills')).sort((a, b) =>
 ---
 
 <Layout title="Documentation">
-	<main class="mx-auto max-w-3xl px-6 py-12">
-		<h1 class="text-3xl font-bold">Voxie UI Documentation</h1>
+	<div class="mx-auto flex max-w-5xl">
+		<Sidebar />
+		<main class="min-w-0 flex-1 px-8 py-12">
+			<h1 class="text-3xl font-bold">Voxie UI Documentation</h1>
 
-		<h2 class="mt-10 text-xl font-semibold">Docs</h2>
-		<ul class="mt-4 space-y-2">
-			{
-				docs.map((entry) => (
-					<li>
-						<a href={`/docs/${entry.id}`} class="text-sky-600 hover:underline">
-							{entry.data.title}
-						</a>
-						<span class="text-slate-600"> — {entry.data.description}</span>
-					</li>
-				))
-			}
-		</ul>
+			<h2 class="mt-10 text-xl font-semibold">Docs</h2>
+			<ul class="mt-4 space-y-2">
+				{
+					docs.map((entry) => (
+						<li>
+							<a href={`/docs/${entry.id}`} class="text-sky-600 hover:underline">
+								{entry.data.title}
+							</a>
+							<span class="text-slate-600"> — {entry.data.description}</span>
+						</li>
+					))
+				}
+			</ul>
 
-		<h2 class="mt-10 text-xl font-semibold">Skills</h2>
-		<ul class="mt-4 space-y-2">
-			{
-				skills.map((entry) => (
-					<li>
-						<a href={`/skills/${entry.id}`} class="text-sky-600 hover:underline">
-							{entry.data.title}
-						</a>
-						<span class="text-slate-600"> — {entry.data.description}</span>
-					</li>
-				))
-			}
-		</ul>
-	</main>
+			<h2 class="mt-10 text-xl font-semibold">Skills</h2>
+			<ul class="mt-4 space-y-2">
+				{
+					skills.map((entry) => (
+						<li>
+							<a href={`/skills/${entry.id}`} class="text-sky-600 hover:underline">
+								{entry.data.title}
+							</a>
+							<span class="text-slate-600"> — {entry.data.description}</span>
+						</li>
+					))
+				}
+			</ul>
+		</main>
+	</div>
 </Layout>

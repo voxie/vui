@@ -22,8 +22,14 @@ prop sets the background: `default`, `glass`, `glassRaised`, `layered`,
 
 <Card surface="dark">dark surface</Card>
 
-The `padding` prop controls padding: `compact` (p-6) or `default` (p-8).
+The `padding` prop controls padding: `none` (no padding), `compact` (p-4),
+`default` (p-6), or `spacious` (p-8). Use `none` when the card wraps content
+that manages its own spacing, such as a table or an image.
+
+<Card padding="none">none padding</Card>
 
 <Card padding="compact">compact padding</Card>
 
 <Card>default padding</Card>
+
+<Card padding="spacious">spacious padding</Card>
