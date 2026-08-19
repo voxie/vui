@@ -14,11 +14,11 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '');
 const isHome = currentPath === '';
 
 function linkClass(href: string) {
-  let defaults = 'block px-3 py-0.5 border-l border-l-slate-400/50';
+  let defaults = 'block px-2 py-0.5 border-l border-l-slate-400/50';
   if (href === currentPath) {
     return defaults + ' ' + 'relative text-sky-700 cursor-default before:absolute before:inset-y-0 before:left-0 before:bg-sky-500 before:w-1 before:rounded-r';
   }
-  return defaults + ' ' + 'hover:text-sky-700';
+  return defaults + ' ' + 'hover:text-sky-700 group';
 }
 ---
 
@@ -37,7 +37,9 @@ function linkClass(href: string) {
                     href={`/docs/${entry.id}`}
                     class={linkClass(`/docs/${entry.id}`)}
                   >
+                    <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
                     {entry.data.title}
+                    </span>
                   </a>
                 </li>
               ))}
@@ -56,7 +58,9 @@ function linkClass(href: string) {
                 href={`/skills/${entry.id}`}
                 class={linkClass(`/skills/${entry.id}`)}
               >
+                <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
                 {entry.data.title}
+                </span>
               </a>
             </li>
           ))
