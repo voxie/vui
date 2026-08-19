@@ -5,6 +5,14 @@ type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type ButtonSurface = 'default' | 'glass' | 'sunken' | 'dark' | 'background';
 type ButtonColor = 'slate' | 'white' | 'sky' | 'teal' | 'amber' | 'rose' | 'violet' | 'transparent';
 
+type ColorStyle = {
+	fill: string;
+	hover: string;
+	// Outline drops the fill and fades it back in at a tenth on hover.
+	outlineHover: string;
+	border: string;
+};
+
 const props = withDefaults(
 	defineProps<{
 		href?: string;
@@ -31,128 +39,132 @@ const props = withDefaults(
 
 const element = computed(() => (props.href ? 'a' : 'button'));
 
-const outlineClasses = computed(() => {
-	return props.outline
-		? {
-				background: ['opacity-0', 'group-hover/btn:opacity-10'],
-				border: ['opacity-100'],
-			}
-		: {
-				background: ['opacity-100'],
-				border: ['opacity-100'],
-			};
-});
-
-const shadowClasses = computed(() => ({
-	'shadow hover:shadow-md': props.shadow,
-}));
-
 const sizeClasses = computed(() => {
-	const md = {
-		element: ['rounded-lg', 'px-4', 'text-xs', 'h-10'],
-		content: ['gap-2'],
-	};
-	if (props.size === 'xs') {
-		return {
-			element: ['rounded', 'px-2', 'text-xs', 'h-6'],
-			content: ['gap-1'],
-		};
-	}
-	if (props.size === 'sm') {
-		return {
-			element: ['rounded-md', 'px-3', 'text-xs', 'h-8'],
-			content: ['gap-1.5'],
-		};
-	}
-	if (props.size === 'lg') {
-		return {
-			element: ['rounded-xl', 'px-5', 'text-sm', 'h-12'],
-			content: ['gap-2'],
-		};
-	}
-	if (props.size === 'xl') {
-		return {
-			element: ['rounded-2xl', 'px-8', 'text-sm', 'h-16'],
-			content: ['gap-2'],
-		};
-	}
-	return md;
+	if (props.size === 'xs') return { element: 'rounded-lg px-2 text-xs h-6', content: 'gap-1' };
+	if (props.size === 'sm') return { element: 'rounded-lg px-3 text-xs h-8', content: 'gap-1.5' };
+	if (props.size === 'lg') return { element: 'rounded-xl px-5 text-sm h-12', content: 'gap-2' };
+	if (props.size === 'xl') return { element: 'rounded-2xl px-8 text-sm h-16', content: 'gap-2' };
+	return { element: 'rounded-xl px-4 text-xs h-10', content: 'gap-2' };
 });
 
 // Slate steps about one level away from the surface it sits on, so it needs a
 // value per surface. Every other color holds the same value everywhere.
-const slateBySurface: Record<ButtonSurface, { background: string[]; border: string[] }> = {
+const slateBySurface: Record<ButtonSurface, ColorStyle> = {
 	default: {
-		background: ['bg-slate-100', 'group-hover/btn:bg-slate-200'],
-		border: ['border-slate-100'],
+		fill: 'bg-slate-100',
+		hover: 'hover:bg-slate-200',
+		outlineHover: 'hover:bg-slate-100/10',
+		border: 'border-slate-100',
 	},
 	glass: {
-		background: ['bg-slate-200', 'group-hover/btn:bg-slate-300'],
-		border: ['border-slate-200'],
+		fill: 'bg-slate-200',
+		hover: 'hover:bg-slate-300',
+		outlineHover: 'hover:bg-slate-200/10',
+		border: 'border-slate-200',
 	},
 	sunken: {
-		background: ['bg-slate-300', 'group-hover/btn:bg-slate-400'],
-		border: ['border-slate-300'],
+		fill: 'bg-slate-300',
+		hover: 'hover:bg-slate-400',
+		outlineHover: 'hover:bg-slate-300/10',
+		border: 'border-slate-300',
 	},
 	dark: {
-		background: ['bg-slate-600', 'group-hover/btn:bg-slate-500'],
-		border: ['border-slate-600'],
+		fill: 'bg-slate-600',
+		hover: 'hover:bg-slate-500',
+		outlineHover: 'hover:bg-slate-600/10',
+		border: 'border-slate-600',
 	},
 	background: {
-		background: ['bg-slate-300', 'group-hover/btn:bg-slate-400'],
-		border: ['border-slate-300'],
+		fill: 'bg-slate-300',
+		hover: 'hover:bg-slate-400',
+		outlineHover: 'hover:bg-slate-300/10',
+		border: 'border-slate-300',
 	},
 };
 
 // Transparent has no resting fill, then hovers into the surface's slate value.
-const transparentHoverBySurface: Record<ButtonSurface, string> = {
-	default: 'group-hover/btn:bg-slate-100',
-	glass: 'group-hover/btn:bg-slate-200',
-	sunken: 'group-hover/btn:bg-slate-300',
-	dark: 'group-hover/btn:bg-slate-600',
-	background: 'group-hover/btn:bg-slate-300',
+const transparentBySurface: Record<ButtonSurface, ColorStyle> = {
+	default: {
+		fill: 'bg-transparent',
+		hover: 'hover:bg-slate-100',
+		outlineHover: 'hover:bg-slate-100/10',
+		border: 'border-transparent',
+	},
+	glass: {
+		fill: 'bg-transparent',
+		hover: 'hover:bg-slate-200',
+		outlineHover: 'hover:bg-slate-200/10',
+		border: 'border-transparent',
+	},
+	sunken: {
+		fill: 'bg-transparent',
+		hover: 'hover:bg-slate-300',
+		outlineHover: 'hover:bg-slate-300/10',
+		border: 'border-transparent',
+	},
+	dark: {
+		fill: 'bg-transparent',
+		hover: 'hover:bg-slate-600',
+		outlineHover: 'hover:bg-slate-600/10',
+		border: 'border-transparent',
+	},
+	background: {
+		fill: 'bg-transparent',
+		hover: 'hover:bg-slate-300',
+		outlineHover: 'hover:bg-slate-300/10',
+		border: 'border-transparent',
+	},
 };
 
-const fixedColors: Record<string, { background: string[]; border: string[] }> = {
+const fixedColors: Record<string, ColorStyle> = {
 	white: {
-		background: ['bg-white', 'group-hover/btn:bg-slate-50'],
-		border: ['border-white'],
+		fill: 'bg-white',
+		hover: 'hover:bg-slate-50',
+		outlineHover: 'hover:bg-white/10',
+		border: 'border-white',
 	},
 	sky: {
-		background: ['bg-sky-300', 'group-hover/btn:bg-sky-400'],
-		border: ['border-sky-300'],
+		fill: 'bg-sky-300',
+		hover: 'hover:bg-sky-400',
+		outlineHover: 'hover:bg-sky-300/10',
+		border: 'border-sky-300',
 	},
 	teal: {
-		background: ['bg-teal-300', 'group-hover/btn:bg-teal-400'],
-		border: ['border-teal-300'],
+		fill: 'bg-teal-300',
+		hover: 'hover:bg-teal-400',
+		outlineHover: 'hover:bg-teal-300/10',
+		border: 'border-teal-300',
 	},
 	amber: {
-		background: ['bg-amber-300', 'group-hover/btn:bg-amber-400'],
-		border: ['border-amber-300'],
+		fill: 'bg-amber-300',
+		hover: 'hover:bg-amber-400',
+		outlineHover: 'hover:bg-amber-300/10',
+		border: 'border-amber-300',
 	},
 	rose: {
-		background: ['bg-rose-300', 'group-hover/btn:bg-rose-400'],
-		border: ['border-rose-300'],
+		fill: 'bg-rose-300',
+		hover: 'hover:bg-rose-400',
+		outlineHover: 'hover:bg-rose-300/10',
+		border: 'border-rose-300',
 	},
 	violet: {
-		background: ['bg-violet-300', 'group-hover/btn:bg-violet-400'],
-		border: ['border-violet-300'],
+		fill: 'bg-violet-300',
+		hover: 'hover:bg-violet-400',
+		outlineHover: 'hover:bg-violet-300/10',
+		border: 'border-violet-300',
 	},
 };
 
-const colorClasses = computed(() => {
-	if (props.color === 'transparent') {
-		return {
-			background: ['bg-transparent', transparentHoverBySurface[props.surface]],
-			border: ['border-transparent'],
-		};
-	}
-
-	if (props.color === 'slate') {
-		return slateBySurface[props.surface];
-	}
-
+const colorStyle = computed<ColorStyle>(() => {
+	if (props.color === 'transparent') return transparentBySurface[props.surface];
+	if (props.color === 'slate') return slateBySurface[props.surface];
 	return fixedColors[props.color];
+});
+
+const colorClasses = computed(() => {
+	const style = colorStyle.value;
+	const fill = props.outline ? ['bg-transparent', style.outlineHover] : [style.fill, style.hover];
+	return [...fill, style.border];
 });
 
 // With no resting fill the label sits on the surface, so it takes its contrast
@@ -160,10 +172,8 @@ const colorClasses = computed(() => {
 const textClasses = computed(() => {
 	const unfilled = props.outline || props.color === 'transparent';
 	const onDark = unfilled ? props.surface === 'dark' : props.color === 'slate' && props.surface === 'dark';
-	return onDark ? ['text-white', 'hover:text-white'] : ['text-black', 'hover:text-black'];
+	return onDark ? 'text-white hover:text-white' : 'text-black hover:text-black';
 });
-
-const blockClasses = computed(() => (props.block ? ['w-full', 'flex'] : ['inline-flex']));
 
 const buttonRef = ref();
 
@@ -179,49 +189,36 @@ defineExpose({
 		:href="props.href"
 		:type="props.href ? undefined : 'button'"
 		:disabled="props.href ? undefined : props.disabled"
-		class="cursor-pointer group/btn font-sans relative z-0 font-semibold outline-blue-600 transition focus-visible:outline-2 focus-visible:outline-offset-4 active:outline-hidden items-center disabled:opacity-50 disabled:pointer-events-none justify-center hover:no-underline bg-transparent text-center will-change-transform"
+		class="relative cursor-pointer items-center justify-center border border-solid text-center font-sans font-semibold whitespace-nowrap transition duration-200 will-change-transform outline-blue-600 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 active:scale-95 active:outline-hidden disabled:pointer-events-none disabled:opacity-50"
 		:class="[
+			colorClasses,
 			textClasses,
 			sizeClasses.element,
-			shadowClasses,
-			blockClasses,
+			props.block ? 'flex w-full' : 'inline-flex',
 			{
-				'opacity-50 pointer-events-none': props.disabled && props.href,
+				'shadow hover:shadow-md': props.shadow,
+				'pointer-events-none opacity-50': props.disabled && props.href,
 			},
 		]"
 	>
 		<div
-			aria-hidden="true"
-			class="absolute inset-0 -z-40 rounded-[inherit] duration-200 group-active/btn:scale-90 group-active/btn:opacity-30!"
-			:class="[colorClasses.background, outlineClasses.background]"
-		></div>
-		<div
-			aria-hidden="true"
-			class="absolute inset-0 -z-30 rounded-[inherit] border border-solid duration-200 group-active/btn:scale-90"
-			:class="[colorClasses.border, outlineClasses.border]"
-		></div>
-
-		<div>
-			<div
-				class="flex items-center justify-center whitespace-nowrap transition"
-				:class="[
-					sizeClasses.content,
-					{
-						'opacity-0 ease-in motion-safe:scale-0': props.loading,
-						'duration-700 ease-[cubic-bezier(0,1.3,.3,1)]': !props.loading,
-					},
-				]"
-			>
-				<slot />
-			</div>
+			class="flex items-center justify-center transition"
+			:class="[
+				sizeClasses.content,
+				props.loading
+					? 'opacity-0 ease-in motion-safe:scale-0'
+					: 'duration-700 ease-[cubic-bezier(0,1.3,.3,1)]',
+			]"
+		>
+			<slot />
 		</div>
 
 		<div
-			class="absolute left-1/2 inline-flex -translate-x-1/2 gap-1.5 text-sm transition"
+			class="absolute left-1/2 inline-flex -translate-x-1/2 text-sm transition"
 			:class="
-				!props.loading
-					? 'opacity-0 motion-safe:scale-0'
-					: 'delay-150 duration-500 ease-[cubic-bezier(0,2,.3,1)]'
+				props.loading
+					? 'delay-150 duration-500 ease-[cubic-bezier(0,2,.3,1)]'
+					: 'opacity-0 motion-safe:scale-0'
 			"
 		>
 			<i class="fa-solid fa-spinner-third fa-spin [--fa-animation-duration:0.7s]" aria-hidden="true"></i>
