@@ -5,38 +5,117 @@ order: 1
 ---
 
 import Button from '../../../components/ui/Button.vue';
+import Card from '../../../components/ui/Card.vue';
 
-Grayscale buttons go approximately a step from their background.
-
-Surface Base (white) → button slate-100
-Surface Glass (white/60) → button slate-200
-Surface Sunken (slate-300/30) → button slate-300
-Surface Dark (slate-700) → button slate-600
-
-Background (slate-200) → button white
-Background (slate-200) → button slate-300
-Background (slate-200) → button slate-600
+Buttons are described by two props. `color` names the fill, and `surface`
+names what the button is sitting on. Most colors look the same everywhere, so
+`surface` only changes the slate and transparent buttons — those are the ones
+that have to stay a step away from their background.
 
 ## Examples
 
 ### Color
 
-The `color` prop sets the fill: `primary`, `secondary`, `muted-dark`, `muted`,
-`muted-light`, `white`, `transparent`, `info`, `success`, `violet`, or
-`danger`.
+The `color` prop sets the fill: `sky` (the default), `teal`, `amber`, `rose`,
+`violet`, `white`, `slate`, or `transparent`.
 
-<div class="not-prose flex flex-wrap gap-3">
-  <Button>primary</Button>
-  <Button color="secondary">secondary</Button>
-  <Button color="muted-dark">muted-dark</Button>
-  <Button color="muted">muted</Button>
-  <Button color="muted-light">muted-light</Button>
-  <Button color="white">white</Button>
-  <Button color="transparent">transparent</Button>
-  <Button color="info">info</Button>
-  <Button color="success">success</Button>
-  <Button color="violet">violet</Button>
-  <Button color="danger">danger</Button>
+<Card>
+  <div class="not-prose flex flex-wrap gap-3">
+    <Button>sky</Button>
+    <Button color="teal">teal</Button>
+    <Button color="amber">amber</Button>
+    <Button color="rose">rose</Button>
+    <Button color="violet">violet</Button>
+    <Button color="white">white</Button>
+    <Button color="slate">slate</Button>
+    <Button color="transparent">transparent</Button>
+  </div>
+</Card>
+
+Sky is the primary action. Rose is destructive. Teal, amber, and violet carry
+their usual meanings — success, caution, and accent. White and slate are the
+neutrals, for secondary and tertiary actions. Transparent is the quietest
+option: no fill until you hover it.
+
+White carries no border, so it needs something behind it. Use it on a colored
+or dark surface, or add `shadow` to lift it off a white one.
+
+### Surface
+
+The `surface` prop tells the button what it is sitting on, using the same
+names as [Card](/docs/components/card): `default` (the default), `glass`,
+`sunken`, `dark`, or `background` for a button placed straight on the page.
+
+A slate button steps about one level away from its surface so it stays
+readable without turning into a colored button:
+
+| `surface`    | Sits on         | Slate button |
+| ------------ | --------------- | ------------ |
+| `default`    | white           | slate-100    |
+| `glass`      | slate-50        | slate-200    |
+| `sunken`     | slate-300/30    | slate-300    |
+| `dark`       | slate-600       | slate-600    |
+| `background` | slate-200       | slate-300    |
+
+<div class="not-prose space-y-4">
+  <Card>
+    <div class="flex flex-wrap items-center gap-3">
+      <code class="text-xs">surface="default"</code>
+      <Button color="slate">slate</Button>
+      <Button color="transparent">transparent</Button>
+    </div>
+  </Card>
+  <Card surface="glass">
+    <div class="flex flex-wrap items-center gap-3">
+      <code class="text-xs">surface="glass"</code>
+      <Button color="slate" surface="glass">slate</Button>
+      <Button color="transparent" surface="glass">transparent</Button>
+    </div>
+  </Card>
+  <Card surface="sunken">
+    <div class="flex flex-wrap items-center gap-3">
+      <code class="text-xs">surface="sunken"</code>
+      <Button color="slate" surface="sunken">slate</Button>
+      <Button color="transparent" surface="sunken">transparent</Button>
+    </div>
+  </Card>
+  <Card surface="dark">
+    <div class="flex flex-wrap items-center gap-3">
+      <code class="text-xs">surface="dark"</code>
+      <Button color="slate" surface="dark">slate</Button>
+      <Button color="transparent" surface="dark">transparent</Button>
+    </div>
+  </Card>
+  <div class="flex flex-wrap items-center gap-3 py-2">
+    <code class="text-xs">surface="background"</code>
+    <Button color="slate" surface="background">slate</Button>
+    <Button color="transparent" surface="background">transparent</Button>
+  </div>
+</div>
+
+The other two card surfaces don't get their own value. Inside a `glassRaised`
+card use `surface="glass"`; inside a `layered` card use the default.
+
+Everything else ignores `surface`. Sky, teal, amber, rose, violet, and white
+hold their value on every background:
+
+<div class="not-prose space-y-4">
+  <Card>
+    <div class="flex flex-wrap gap-3">
+      <Button>sky</Button>
+      <Button color="teal">teal</Button>
+      <Button color="rose">rose</Button>
+      <Button color="white">white</Button>
+    </div>
+  </Card>
+  <Card surface="dark">
+    <div class="flex flex-wrap gap-3">
+      <Button surface="dark">sky</Button>
+      <Button color="teal" surface="dark">teal</Button>
+      <Button color="rose" surface="dark">rose</Button>
+      <Button color="white" surface="dark">white</Button>
+    </div>
+  </Card>
 </div>
 
 ### Size
@@ -44,32 +123,49 @@ The `color` prop sets the fill: `primary`, `secondary`, `muted-dark`, `muted`,
 The `size` prop controls height, padding, and corner radius: `xs`, `sm`, `md`
 (the default), `lg`, or `xl`.
 
-<div class="not-prose flex flex-wrap items-center gap-3">
-  <Button size="xs">xs</Button>
-  <Button size="sm">sm</Button>
-  <Button size="md">md</Button>
-  <Button size="lg">lg</Button>
-  <Button size="xl">xl</Button>
-</div>
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3">
+    <Button size="xs">xs</Button>
+    <Button size="sm">sm</Button>
+    <Button size="md">md</Button>
+    <Button size="lg">lg</Button>
+    <Button size="xl">xl</Button>
+  </div>
+</Card>
 
 ### Outline
 
 `outline` drops the fill and keeps the border, which fades back in on hover.
+Without a fill the label takes its contrast from the surface, so pass
+`surface` when the button isn't on a white background.
 
-<div class="not-prose flex flex-wrap gap-3">
-  <Button outline>primary</Button>
-  <Button outline color="secondary">secondary</Button>
-  <Button outline color="danger">danger</Button>
+<div class="not-prose space-y-4">
+  <Card>
+    <div class="flex flex-wrap gap-3">
+      <Button outline>sky</Button>
+      <Button outline color="rose">rose</Button>
+      <Button outline color="slate">slate</Button>
+    </div>
+  </Card>
+  <Card surface="dark">
+    <div class="flex flex-wrap gap-3">
+      <Button outline surface="dark">sky</Button>
+      <Button outline color="rose" surface="dark">rose</Button>
+      <Button outline color="slate" surface="dark">slate</Button>
+    </div>
+  </Card>
 </div>
 
 ### Shadow
 
 `shadow` adds a resting shadow that deepens on hover.
 
-<div class="not-prose flex flex-wrap gap-3">
-  <Button shadow>shadow</Button>
-  <Button shadow color="white">shadow</Button>
-</div>
+<Card>
+  <div class="not-prose flex flex-wrap gap-3">
+    <Button shadow>shadow</Button>
+    <Button shadow color="white">shadow</Button>
+  </div>
+</Card>
 
 ### Loading and disabled
 
@@ -77,21 +173,27 @@ The `size` prop controls height, padding, and corner radius: `xs`, `sm`, `md`
 `disabled` fades the button and blocks pointer events, for both button and
 link variants.
 
-<div class="not-prose flex flex-wrap gap-3">
-  <Button loading>Saving</Button>
-  <Button disabled>Disabled</Button>
-  <Button disabled href="/docs/components/card">Disabled link</Button>
-</div>
+<Card>
+  <div class="not-prose flex flex-wrap gap-3">
+    <Button loading>Saving</Button>
+    <Button disabled>Disabled</Button>
+    <Button disabled href="/docs/components/card">Disabled link</Button>
+  </div>
+</Card>
 
 ### Block
 
 `block` makes the button fill the width of its container.
 
-<div class="not-prose"><Button block>Block button</Button></div>
+<Card>
+  <div class="not-prose"><Button block>Block button</Button></div>
+</Card>
 
 ### Link
 
 Pass an `href` to render an `<a>` instead of a `<button>`. Styling is
 identical.
 
-<div class="not-prose"><Button href="/docs/components/card">Link button</Button></div>
+<Card>
+  <div class="not-prose"><Button href="/docs/components/card">Link button</Button></div>
+</Card>

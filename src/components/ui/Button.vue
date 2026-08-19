@@ -2,24 +2,15 @@
 import { computed, ref } from 'vue';
 
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type ButtonColor =
-	| 'primary'
-	| 'secondary'
-	| 'muted-dark'
-	| 'muted'
-	| 'muted-light'
-	| 'white'
-	| 'transparent'
-	| 'info'
-	| 'danger'
-	| 'success'
-	| 'violet';
+type ButtonSurface = 'default' | 'glass' | 'sunken' | 'dark' | 'background';
+type ButtonColor = 'slate' | 'white' | 'sky' | 'teal' | 'amber' | 'rose' | 'violet' | 'transparent';
 
 const props = withDefaults(
 	defineProps<{
 		href?: string;
 		size?: ButtonSize;
 		color?: ButtonColor;
+		surface?: ButtonSurface;
 		outline?: boolean;
 		shadow?: boolean;
 		disabled?: boolean;
@@ -28,7 +19,8 @@ const props = withDefaults(
 	}>(),
 	{
 		size: 'md',
-		color: 'primary',
+		color: 'sky',
+		surface: 'default',
 		outline: false,
 		shadow: false,
 		disabled: false,
@@ -87,94 +79,88 @@ const sizeClasses = computed(() => {
 	return md;
 });
 
-const colorClasses = computed(() => {
-	const primary = {
-		element: ['text-black', 'hover:text-black'],
+// Slate steps about one level away from the surface it sits on, so it needs a
+// value per surface. Every other color holds the same value everywhere.
+const slateBySurface: Record<ButtonSurface, { background: string[]; border: string[] }> = {
+	default: {
+		background: ['bg-slate-100', 'group-hover/btn:bg-slate-200'],
+		border: ['border-slate-100'],
+	},
+	glass: {
+		background: ['bg-slate-200', 'group-hover/btn:bg-slate-300'],
+		border: ['border-slate-200'],
+	},
+	sunken: {
+		background: ['bg-slate-300', 'group-hover/btn:bg-slate-400'],
+		border: ['border-slate-300'],
+	},
+	dark: {
+		background: ['bg-slate-600', 'group-hover/btn:bg-slate-500'],
+		border: ['border-slate-600'],
+	},
+	background: {
+		background: ['bg-slate-300', 'group-hover/btn:bg-slate-400'],
+		border: ['border-slate-300'],
+	},
+};
+
+// Transparent has no resting fill, then hovers into the surface's slate value.
+const transparentHoverBySurface: Record<ButtonSurface, string> = {
+	default: 'group-hover/btn:bg-slate-100',
+	glass: 'group-hover/btn:bg-slate-200',
+	sunken: 'group-hover/btn:bg-slate-300',
+	dark: 'group-hover/btn:bg-slate-600',
+	background: 'group-hover/btn:bg-slate-300',
+};
+
+const fixedColors: Record<string, { background: string[]; border: string[] }> = {
+	white: {
+		background: ['bg-white', 'group-hover/btn:bg-slate-50'],
+		border: ['border-white'],
+	},
+	sky: {
 		background: ['bg-sky-300', 'group-hover/btn:bg-sky-400'],
 		border: ['border-sky-300'],
-	};
+	},
+	teal: {
+		background: ['bg-teal-300', 'group-hover/btn:bg-teal-400'],
+		border: ['border-teal-300'],
+	},
+	amber: {
+		background: ['bg-amber-300', 'group-hover/btn:bg-amber-400'],
+		border: ['border-amber-300'],
+	},
+	rose: {
+		background: ['bg-rose-300', 'group-hover/btn:bg-rose-400'],
+		border: ['border-rose-300'],
+	},
+	violet: {
+		background: ['bg-violet-300', 'group-hover/btn:bg-violet-400'],
+		border: ['border-violet-300'],
+	},
+};
 
-	if (props.color === 'secondary') {
-		return {
-			element: [props.outline ? 'text-black hover:text-black' : 'text-white hover:text-white'],
-			background: ['bg-slate-600', 'group-hover/btn:bg-slate-700'],
-			border: ['border-slate-600'],
-		};
-	}
-
-	if (props.color === 'muted-dark') {
-		return {
-			element: ['text-black', 'hover:text-black'],
-			background: ['bg-slate-300', 'group-hover/btn:bg-slate-400'],
-			border: ['border-slate-300'],
-		};
-	}
-
-	if (props.color === 'muted') {
-		return {
-			element: ['text-black', 'hover:text-black'],
-			background: ['bg-slate-200', 'group-hover/btn:bg-slate-300'],
-			border: ['border-slate-200'],
-		};
-	}
-
-	if (props.color === 'muted-light') {
-		return {
-			element: ['text-black', 'hover:text-black'],
-			background: ['bg-slate-100', 'group-hover/btn:bg-slate-200'],
-			border: ['border-slate-100'],
-		};
-	}
-
-	if (props.color === 'white') {
-		return {
-			element: ['text-black', 'hover:text-black'],
-			background: ['bg-white', 'group-hover/btn:bg-slate-50'],
-			border: ['border-white'],
-		};
-	}
-
+const colorClasses = computed(() => {
 	if (props.color === 'transparent') {
 		return {
-			element: ['text-black', 'hover:text-black'],
-			background: ['bg-transparent', 'group-hover/btn:bg-slate-200'],
+			background: ['bg-transparent', transparentHoverBySurface[props.surface]],
 			border: ['border-transparent'],
 		};
 	}
 
-	if (props.color === 'info') {
-		return {
-			element: ['text-slate-800', 'hover:text-slate-800'],
-			background: ['bg-amber-300', 'group-hover/btn:bg-amber-400'],
-			border: ['border-amber-300'],
-		};
+	if (props.color === 'slate') {
+		return slateBySurface[props.surface];
 	}
 
-	if (props.color === 'success') {
-		return {
-			element: ['text-black', 'hover:text-black'],
-			background: ['bg-teal-300', 'group-hover/btn:bg-teal-400'],
-			border: ['border-teal-300'],
-		};
-	}
+	return fixedColors[props.color];
+});
 
-	if (props.color === 'violet') {
-		return {
-			element: ['text-black', 'hover:text-black'],
-			background: ['bg-violet-300', 'group-hover/btn:bg-violet-400'],
-			border: ['border-violet-300'],
-		};
-	}
-
-	if (props.color === 'danger') {
-		return {
-			element: ['text-black', 'hover:text-black'],
-			background: ['bg-rose-300', 'group-hover/btn:bg-rose-400'],
-			border: ['border-rose-300'],
-		};
-	}
-
-	return primary;
+// With no resting fill the label sits on the surface, so it takes its contrast
+// from the surface rather than from the color.
+const textClasses = computed(() => {
+	const unfilled = props.outline || props.color === 'transparent';
+	const onDark = unfilled ? props.surface === 'dark' : props.color === 'slate' && props.surface === 'dark';
+	return onDark ? ['text-white', 'hover:text-white'] : ['text-black', 'hover:text-black'];
 });
 
 const blockClasses = computed(() => (props.block ? ['w-full', 'flex'] : ['inline-flex']));
@@ -195,7 +181,7 @@ defineExpose({
 		:disabled="props.href ? undefined : props.disabled"
 		class="cursor-pointer group/btn font-sans relative z-0 font-semibold outline-blue-600 transition focus-visible:outline-2 focus-visible:outline-offset-4 active:outline-hidden items-center disabled:opacity-50 disabled:pointer-events-none justify-center hover:no-underline bg-transparent text-center will-change-transform"
 		:class="[
-			colorClasses.element,
+			textClasses,
 			sizeClasses.element,
 			shadowClasses,
 			blockClasses,
