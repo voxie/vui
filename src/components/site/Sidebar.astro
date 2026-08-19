@@ -9,6 +9,10 @@ const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare
 const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))];
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
 
+// The back link has nowhere to go from the home page, but it still holds its
+// space so the nav below starts at the same height on every page.
+const isHome = currentPath === '';
+
 function linkClass(href: string) {
   let defaults = 'block px-3 py-0.5 border-l border-l-slate-400/50';
   if (href === currentPath) {
@@ -19,10 +23,14 @@ function linkClass(href: string) {
 ---
 
 <aside class="w-56 shrink-0 justify-self-end sticky top-8">
-  <Card surface="sunken">
-    <Button href="/" surface="sunken"> <i class="fa-solid fa-arrow-left"></i> Documentation </Button>
 
-    <nav class="mt-6 space-y-6 text-sm">
+    
+
+    
+
+    <nav class="text-sm space-y-6">
+      <a href="/" class="font-extrabold hover:text-sky-700 block" class:list={[isHome && 'pointer-events-none']}>Documentation</a>
+
       {
         sections.map((section) => (
           <div>
@@ -63,5 +71,4 @@ function linkClass(href: string) {
         </ul>
       </div>
     </nav>
-  </Card>
 </aside>
