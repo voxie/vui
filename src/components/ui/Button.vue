@@ -27,7 +27,7 @@ const props = withDefaults(
 	}>(),
 	{
 		size: 'md',
-		color: 'sky',
+		color: 'slate',
 		surface: 'default',
 		outline: false,
 		shadow: false,

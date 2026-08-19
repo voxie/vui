@@ -10,32 +10,35 @@ import Card from '../../../components/ui/Card.vue';
 Buttons are described by two props. `color` names the fill, and `surface`
 names what the button is sitting on. Most colors look the same everywhere, so
 `surface` only changes the slate and transparent buttons — those are the ones
-that have to stay a step away from their background.
+that have to stay a step away from their background. Slate is the default, so
+in practice most buttons need the right `surface`.
 
 ## Examples
 
 ### Color
 
-The `color` prop sets the fill: `sky` (the default), `teal`, `amber`, `rose`,
-`violet`, `white`, `slate`, or `transparent`.
+The `color` prop sets the fill: `slate` (the default), `white`, `sky`, `teal`,
+`amber`, `rose`, `violet`, or `transparent`.
 
 <Card>
   <div class="not-prose flex flex-wrap gap-3">
-    <Button>sky</Button>
+    <Button>slate</Button>
+    <Button color="white">white</Button>
+    <Button color="sky">sky</Button>
     <Button color="teal">teal</Button>
     <Button color="amber">amber</Button>
     <Button color="rose">rose</Button>
     <Button color="violet">violet</Button>
-    <Button color="white">white</Button>
-    <Button color="slate">slate</Button>
     <Button color="transparent">transparent</Button>
   </div>
 </Card>
 
-Sky is the primary action. Rose is destructive. Teal, amber, and violet carry
-their usual meanings — success, caution, and accent. White and slate are the
-neutrals, for secondary and tertiary actions. Transparent is the quietest
-option: no fill until you hover it.
+Slate is the default because most buttons are ordinary actions that shouldn't
+compete for attention. Reach for a color only when the button earns it: sky
+for the primary action on a screen, rose for something destructive, and teal,
+amber, or violet for their usual meanings — success, caution, and accent.
+White is the other neutral. Transparent is the quietest option: no fill until
+you hover it.
 
 White carries no border, so it needs something behind it. Use it on a colored
 or dark surface, or add `shadow` to lift it off a white one.
@@ -54,7 +57,7 @@ readable without turning into a colored button:
 | `default`    | white           | slate-100    |
 | `glass`      | slate-50        | slate-200    |
 | `sunken`     | slate-300/30    | slate-300    |
-| `dark`       | slate-600       | slate-600    |
+| `dark`       | slate-700       | slate-600    |
 | `background` | slate-200       | slate-300    |
 
 <div class="not-prose space-y-4">
@@ -102,7 +105,7 @@ hold their value on every background:
 <div class="not-prose space-y-4">
   <Card>
     <div class="flex flex-wrap gap-3">
-      <Button>sky</Button>
+      <Button color="sky">sky</Button>
       <Button color="teal">teal</Button>
       <Button color="rose">rose</Button>
       <Button color="white">white</Button>
@@ -110,7 +113,7 @@ hold their value on every background:
   </Card>
   <Card surface="dark">
     <div class="flex flex-wrap gap-3">
-      <Button surface="dark">sky</Button>
+      <Button color="sky" surface="dark">sky</Button>
       <Button color="teal" surface="dark">teal</Button>
       <Button color="rose" surface="dark">rose</Button>
       <Button color="white" surface="dark">white</Button>
@@ -142,14 +145,14 @@ Without a fill the label takes its contrast from the surface, so pass
 <div class="not-prose space-y-4">
   <Card>
     <div class="flex flex-wrap gap-3">
-      <Button outline>sky</Button>
+      <Button outline color="sky">sky</Button>
       <Button outline color="rose">rose</Button>
       <Button outline color="slate">slate</Button>
     </div>
   </Card>
   <Card surface="dark">
     <div class="flex flex-wrap gap-3">
-      <Button outline surface="dark">sky</Button>
+      <Button outline color="sky" surface="dark">sky</Button>
       <Button outline color="rose" surface="dark">rose</Button>
       <Button outline color="slate" surface="dark">slate</Button>
     </div>
