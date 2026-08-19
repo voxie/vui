@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import Sidebar from '../components/site/Sidebar.astro';
 
 const docs = (await getCollection('docs')).sort(
 	(a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id)
@@ -12,38 +11,33 @@ const skills = (await getCollection('skills')).sort((a, b) =>
 ---
 
 <Layout title="Documentation">
-	<div class="mx-auto flex max-w-5xl gap-8 p-8 items-start">
-		<Sidebar />
-		<main class="prose prose-slate">
-			<h1>Voxie UI Documentation</h1>
+	<h1>Voxie UI Documentation</h1>
 
-			<h2>Docs</h2>
-			<ul>
-				{
-					docs.map((entry) => (
-						<li>
-							<a href={`/docs/${entry.id}`}>
-								{entry.data.title}
-							</a>
-							<span> — {entry.data.description}</span>
-						</li>
-					))
-				}
-			</ul>
+	<h2>Docs</h2>
+	<ul>
+		{
+			docs.map((entry) => (
+				<li>
+					<a href={`/docs/${entry.id}`}>
+						{entry.data.title}
+					</a>
+					<span> — {entry.data.description}</span>
+				</li>
+			))
+		}
+	</ul>
 
-			<h2>Skills</h2>
-			<ul>
-				{
-					skills.map((entry) => (
-						<li>
-							<a href={`/skills/${entry.id}`}>
-								{entry.data.title}
-							</a>
-							<span> — {entry.data.description}</span>
-						</li>
-					))
-				}
-			</ul>
-		</main>
-	</div>
+	<h2>Skills</h2>
+	<ul>
+		{
+			skills.map((entry) => (
+				<li>
+					<a href={`/skills/${entry.id}`}>
+						{entry.data.title}
+					</a>
+					<span> — {entry.data.description}</span>
+				</li>
+			))
+		}
+	</ul>
 </Layout>
