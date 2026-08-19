@@ -15,7 +15,7 @@ const surfaceClasses: Record<string, string> = {
   glassRaised: 'bg-white/80 border border-white shadow-2xl backdrop-blur-lg',
   layered: 'bg-white shadow-lg',
   sunken: 'bg-slate-300/30 shadow-inner border-b border-b-white',
-  dark: 'bg-slate-600 text-slate-100',
+  dark: 'bg-slate-700 text-slate-100',
 };
 
 const paddingClasses: Record<string, string> = {
