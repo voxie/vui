@@ -208,7 +208,7 @@ defineExpose({
 		:href="props.href"
 		:type="props.href ? undefined : 'button'"
 		:disabled="props.href ? undefined : props.disabled"
-		class="relative cursor-pointer items-center justify-center border border-solid text-center font-sans font-semibold whitespace-nowrap transition duration-200 will-change-transform outline-blue-600 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 active:scale-95 active:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+		class="relative cursor-pointer items-center justify-center border border-solid text-center font-sans font-semibold whitespace-nowrap transition duration-100 will-change-transform outline-blue-600 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 active:scale-95 active:outline-hidden disabled:pointer-events-none disabled:opacity-50"
 		:class="[
 			colorClasses,
 			textClasses,
