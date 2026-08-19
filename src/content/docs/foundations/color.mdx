@@ -4,4 +4,190 @@ description: Color palette and usage guidance.
 order: 1
 ---
 
-Color guidance goes here. Cover the palette, semantic roles, and contrast requirements.
+import Card from '../../../components/ui/Card.vue';
+import Button from '../../../components/ui/Button.vue';
+
+We use Tailwind's palette as-is and call colors by their real names — `sky`,
+`teal`, `slate`. There are no semantic aliases like `primary` or `danger` in
+the code. A component takes `color="sky"`, not `color="primary"`, so what you
+read in a class list is what you see on screen.
+
+Meaning lives in the guidance below, not in the token name. That way a
+button's color can change without a name that lies about it.
+
+## Slate is the spine
+
+Almost everything on screen is slate. It's the page, the panels, the text,
+and most of the buttons. The other colors are exceptions you reach for
+deliberately.
+
+Slate reads as a ladder of surfaces stacked from lightest to darkest, with
+the page sitting in the middle of the range so panels can rise above it and
+sink below it:
+
+<Card class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-3 items-center">
+  <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-white"></div>
+  <code class="text-xs">white</code>
+  <span class="text-sm">Card <code class="text-xs">default</code>. The workhorse panel.</span>
+
+  <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-slate-50"></div>
+  <code class="text-xs">slate-50</code>
+  <span class="text-sm">Card <code class="text-xs">glass</code>. Lets inputs stand out from the panel.</span>
+
+  <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-slate-200"></div>
+  <code class="text-xs">slate-200</code>
+  <span class="text-sm">The page background. Everything else is measured against this.</span>
+
+  <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-slate-300/30"></div>
+  <code class="text-xs">slate-300/30</code>
+  <span class="text-sm">Card <code class="text-xs">sunken</code>. Sidebars and collapsible containers.</span>
+
+  <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-slate-700"></div>
+  <code class="text-xs">slate-700</code>
+  <span class="text-sm">Card <code class="text-xs">dark</code>. Only the app navigation bar.</span>
+</Card>
+
+### Neutrals step, they don't jump
+
+A neutral element sits about one rung away from whatever is behind it. That
+is the whole rule, and it's why [Button](/docs/components/button) takes a
+`surface` prop — a slate button has no fixed value, only a distance from its
+background.
+
+| Behind it    | Neutral element | On hover  |
+| ------------ | --------------- | --------- |
+| white        | slate-100       | slate-200 |
+| slate-50     | slate-200       | slate-300 |
+| slate-300/30 | slate-300       | slate-400 |
+| slate-200    | slate-300       | slate-400 |
+| slate-700    | slate-600       | slate-500 |
+
+Hover moves one more rung in the same direction — further from the
+background, not toward it. On the dark surface that means moving *lighter*,
+since darker would sink the element into the panel.
+
+## Accent colors
+
+Five accents, each used at one rung: **300 at rest, 400 on hover.** No accent
+appears at any other weight in a component, which is what keeps a screen with
+four different colors on it from looking like four different products.
+
+<Card class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-4 items-center">
+  <div class="flex gap-1">
+    <div class="h-10 w-10 rounded-l-lg bg-sky-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-sky-400"></div>
+  </div>
+  <code class="text-xs">sky</code>
+  <span class="text-sm">The primary action. One per screen, ideally.</span>
+
+  <div class="flex gap-1">
+    <div class="h-10 w-10 rounded-l-lg bg-teal-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-teal-400"></div>
+  </div>
+  <code class="text-xs">teal</code>
+  <span class="text-sm">Success, completion, healthy state.</span>
+
+  <div class="flex gap-1">
+    <div class="h-10 w-10 rounded-l-lg bg-amber-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-amber-400"></div>
+  </div>
+  <code class="text-xs">amber</code>
+  <span class="text-sm">Caution. Something needs a look, but nothing is broken.</span>
+
+  <div class="flex gap-1">
+    <div class="h-10 w-10 rounded-l-lg bg-rose-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-rose-400"></div>
+  </div>
+  <code class="text-xs">rose</code>
+  <span class="text-sm">Destructive or failing. Deleting, disconnecting, errors.</span>
+
+  <div class="flex gap-1">
+    <div class="h-10 w-10 rounded-l-lg bg-violet-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-violet-400"></div>
+  </div>
+  <code class="text-xs">violet</code>
+  <span class="text-sm">Accent, with no status attached. Use it sparingly.</span>
+</Card>
+
+Unlike slate, accents hold the same value on every surface. A sky button is
+sky-300 on a white card and on the dark navigation bar. They're saturated
+enough to separate from any neutral behind them, so they don't need to know
+what they're sitting on.
+
+<div class="not-prose space-y-4">
+  <Card>
+    <div class="flex flex-wrap gap-3">
+      <Button color="sky">sky</Button>
+      <Button color="teal">teal</Button>
+      <Button color="amber">amber</Button>
+      <Button color="rose">rose</Button>
+      <Button color="violet">violet</Button>
+    </div>
+  </Card>
+  <Card surface="dark">
+    <div class="flex flex-wrap gap-3">
+      <Button color="sky" surface="dark">sky</Button>
+      <Button color="teal" surface="dark">teal</Button>
+      <Button color="amber" surface="dark">amber</Button>
+      <Button color="rose" surface="dark">rose</Button>
+      <Button color="violet" surface="dark">violet</Button>
+    </div>
+  </Card>
+</div>
+
+## Text
+
+Text is black or white, picked by what's directly behind it. Every accent at
+300 is a light color, so text on an accent is always black — white on sky-300
+lands at 1.67:1 and is unreadable.
+
+| Behind the text        | Text color |
+| ---------------------- | ---------- |
+| any accent at 300      | black      |
+| white, slate-50 to 300 | black      |
+| slate-600, slate-700   | white      |
+
+The consequence for components: anything with no fill of its own — an outline
+button, a transparent button — takes its text color from the *surface*, not
+from its color. That's why those components need to know what they're sitting
+on.
+
+Secondary text is slate-700, and links are sky-600.
+
+## Contrast
+
+Every accent at 300 clears black text comfortably. Measured against black:
+
+| Color      | Hex       | vs. black |
+| ---------- | --------- | --------- |
+| sky-300    | #74D4FF | 12.6:1    |
+| teal-300   | #46ECD5 | 14.3:1    |
+| amber-300  | #FFD230 | 14.5:1    |
+| rose-300   | #FFA1AD | 10.9:1    |
+| violet-300 | #C4B4FF | 11.3:1    |
+| slate-300  | #CAD5E2 | 14.2:1    |
+
+White text on slate-600 is 7.6:1, which clears AAA for body text. Every text
+pairing in the system passes AA with a wide margin.
+
+The soft step between a neutral and its background is a different story. It
+lands between 1.1:1 and 1.4:1 — a slate-100 button on a white card is 1.10:1.
+That's deliberate and it's what makes the interface feel calm, but it's below
+the 3:1 that WCAG asks for the boundary of a control. So the fill alone can't
+be what tells someone a control is there:
+
+- The label carries the contrast. Never build a neutral control whose meaning
+  depends on noticing the fill.
+- When a neutral control has to read as a control at a glance, give it
+  `shadow` or `outline` for a real edge.
+- Never signal state with a one-rung neutral shift. Nobody will see it.
+
+## Naming
+
+Use the actual Tailwind class. `bg-slate-900`, not `bg-primary`.
+
+Semantic aliases go stale the moment a color changes, and they hide the one
+thing you need when you're looking at a screen and something is off: which
+color is actually on the element. If you need to express meaning, put it in
+the component's prop — `<Button color="rose">` for a destructive action —
+where the guidance above gives it a shared reading.
