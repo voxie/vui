@@ -60,36 +60,30 @@ readable without turning into a colored button:
 | `dark`       | slate-700       | slate-600    |
 | `background` | slate-200       | slate-300    |
 
-<div class="not-prose space-y-4">
-  <Card>
-    <div class="flex flex-wrap items-center gap-3">
-      <code class="text-xs">surface="default"</code>
-      <Button color="slate">slate</Button>
-      <Button color="transparent">transparent</Button>
-    </div>
+{/* Each row is a subgrid of the three shared columns, so the buttons line up
+    down the page even though the labels and the card padding differ. */}
+<div class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-4">
+  <Card class="col-span-3 grid grid-cols-subgrid items-center justify-items-start">
+    <code class="text-xs">surface="default"</code>
+    <Button color="slate">slate</Button>
+    <Button color="transparent">transparent</Button>
   </Card>
-  <Card surface="glass">
-    <div class="flex flex-wrap items-center gap-3">
-      <code class="text-xs">surface="glass"</code>
-      <Button color="slate" surface="glass">slate</Button>
-      <Button color="transparent" surface="glass">transparent</Button>
-    </div>
+  <Card surface="glass" class="col-span-3 grid grid-cols-subgrid items-center justify-items-start">
+    <code class="text-xs">surface="glass"</code>
+    <Button color="slate" surface="glass">slate</Button>
+    <Button color="transparent" surface="glass">transparent</Button>
   </Card>
-  <Card surface="sunken">
-    <div class="flex flex-wrap items-center gap-3">
-      <code class="text-xs">surface="sunken"</code>
-      <Button color="slate" surface="sunken">slate</Button>
-      <Button color="transparent" surface="sunken">transparent</Button>
-    </div>
+  <Card surface="sunken" class="col-span-3 grid grid-cols-subgrid items-center justify-items-start">
+    <code class="text-xs">surface="sunken"</code>
+    <Button color="slate" surface="sunken">slate</Button>
+    <Button color="transparent" surface="sunken">transparent</Button>
   </Card>
-  <Card surface="dark">
-    <div class="flex flex-wrap items-center gap-3">
-      <code class="text-xs">surface="dark"</code>
-      <Button color="slate" surface="dark">slate</Button>
-      <Button color="transparent" surface="dark">transparent</Button>
-    </div>
+  <Card surface="dark" class="col-span-3 grid grid-cols-subgrid items-center justify-items-start">
+    <code class="text-xs">surface="dark"</code>
+    <Button color="slate" surface="dark">slate</Button>
+    <Button color="transparent" surface="dark">transparent</Button>
   </Card>
-  <div class="flex flex-wrap items-center gap-3 py-2">
+  <div class="col-span-3 grid grid-cols-subgrid items-center justify-items-start px-6 py-2">
     <code class="text-xs">surface="background"</code>
     <Button color="slate" surface="background">slate</Button>
     <Button color="transparent" surface="background">transparent</Button>

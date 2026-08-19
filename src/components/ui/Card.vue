@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+// Classes from the caller belong on the card itself, not on the wrapper that
+// only the layered surface needs.
+defineOptions({ inheritAttrs: false });
+
 const props = withDefaults(
 	defineProps<{
 		surface?: 'default' | 'glass' | 'glassRaised' | 'layered' | 'sunken' | 'dark';
@@ -31,21 +35,29 @@ const cardClass = computed(
 </script>
 
 <template>
-  <div :class="surface === 'layered' ? 'p-10 pl-0 pt-0 relative' : ''">
+  <div v-if="surface === 'layered'" class="p-10 pl-0 pt-0 relative">
     <div
       :class="cardClass"
       class="relative"
+      v-bind="$attrs"
     >
       <slot />
     </div>
 
     <div
-      v-if="surface === 'layered'"
       class="absolute -z-10 inset-5 bg-white/80 backdrop-blur-lg border border-white rounded-2xl shadow-lg"
     ></div>
     <div
-      v-if="surface === 'layered'"
       class="absolute -z-20 inset-5 translate-5 bg-sky-300 rounded-2xl"
     ></div>
+  </div>
+
+  <div
+    v-else
+    :class="cardClass"
+    class="relative"
+    v-bind="$attrs"
+  >
+    <slot />
   </div>
 </template>
