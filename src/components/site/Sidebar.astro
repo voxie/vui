@@ -16,59 +16,64 @@ const isHome = currentPath === '';
 function linkClass(href: string) {
   let defaults = 'block px-3 py-0.5 border-l border-l-slate-400/50';
   if (href === currentPath) {
-    return defaults + ' ' + 'text-sky-700 cursor-default';
+    return defaults + ' ' + 'relative text-sky-700 cursor-default before:absolute before:inset-y-0 before:left-0 before:bg-sky-500 before:w-1 before:rounded-r';
   }
   return defaults + ' ' + 'hover:text-sky-700';
 }
 ---
 
-<aside class="w-56 shrink-0 justify-self-end sticky top-8">
+<aside class="w-56 shrink-0 justify-self-end sticky top-8 spa">
+  <nav class="text-sm space-y-4">
+   
 
-    
+    {
+      sections.map((section) => (
+        <div>
+          <h3 class="font-extrabold capitalize">{section}</h3>
+          <ul class="mt-2">
+            {docs
+              .filter((entry) => entry.id.split('/')[0] === section)
+              .map((entry) => (
+                <li>
+                  <a
+                    href={`/docs/${entry.id}`}
+                    class={linkClass(`/docs/${entry.id}`)}
+                  >
+                    {entry.data.title}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </div>
+      ))
+    }
 
-    
+    <div>
+      <h3 class="font-extrabold capitalize">Skills</h3>
+      <ul class="mt-2">
+        {
+          skills.map((entry) => (
+            <li>
+              <a
+                href={`/skills/${entry.id}`}
+                class={linkClass(`/skills/${entry.id}`)}
+              >
+                {entry.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
 
-    <nav class="text-sm space-y-6">
-      <a href="/" class="font-extrabold hover:text-sky-700 block" class:list={[isHome && 'pointer-events-none']}>Documentation</a>
-
-      {
-        sections.map((section) => (
-          <div>
-            <h3 class="text-xs font-extrabold capitalize">{section}</h3>
-            <ul class="mt-2">
-              {docs
-                .filter((entry) => entry.id.split('/')[0] === section)
-                .map((entry) => (
-                  <li>
-                    <a
-                      href={`/docs/${entry.id}`}
-                      class={linkClass(`/docs/${entry.id}`)}
-                    >
-                      {entry.data.title}
-                    </a>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        ))
-      }
-
-      <div>
-        <h3 class="text-xs font-extrabold capitalize">Skills</h3>
-        <ul class="mt-2">
-          {
-            skills.map((entry) => (
-              <li>
-                <a
-                  href={`/skills/${entry.id}`}
-                  class={linkClass(`/skills/${entry.id}`)}
-                >
-                  {entry.data.title}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </nav>
+    <div class:list={[isHome && 'hidden','mt-6']}>
+      <Button
+        href="/"
+        surface="background"
+        size="sm"
+      >
+        <i class="fa-solid fa-arrow-left"></i> Back Home
+      </Button>
+    </div>
+  </nav>
 </aside>
