@@ -24,8 +24,6 @@ function linkClass(href: string) {
 
 <aside class="w-56 shrink-0 justify-self-end sticky top-8">
   <nav class="text-sm space-y-4">
-   
-
     {
       sections.map((section) => (
         <div>
@@ -66,7 +64,7 @@ function linkClass(href: string) {
       </ul>
     </div>
 
-    <div class:list={[isHome && 'hidden','mt-6']}>
+    <div class:list={[isHome && 'hidden', 'mt-6']}>
       <Button
         href="/"
         surface="background"
