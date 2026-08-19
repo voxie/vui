@@ -138,10 +138,48 @@ what they're sitting on.
 
 ## Text
 
-A label on a colored element takes **that color's own 950**. It reads as
-near-black, but it carries a trace of the hue, so a rose button's label is
-faintly warm and a sky button's is faintly cool. The button stays one object
-rather than a colored shape with flat black text dropped on top of it.
+Text sitting on a surface uses three colors, and only three.
+
+<Card class="not-prose grid grid-cols-3 gap-6">
+  <div class="h-24 rounded-lg bg-slate-800"></div>
+  <div class="h-24 rounded-lg bg-slate-500"></div>
+  <div class="h-24 rounded-lg bg-sky-700"></div>
+
+  <div>
+    <p class="font-extrabold">slate-800</p>
+    <p class="mt-1 text-sm leading-snug text-slate-500">The default color for all text.</p>
+  </div>
+  <div>
+    <p class="font-extrabold">slate-500</p>
+    <p class="mt-1 text-sm leading-snug text-slate-500">For when body text needs contrast separation from a header or surrounding text.</p>
+  </div>
+  <div>
+    <p class="font-extrabold">sky-700</p>
+    <p class="mt-1 text-sm leading-snug text-slate-500">Marks text as a link inside body copy.</p>
+  </div>
+</Card>
+
+slate-800 is the default — not black, and not slate-950. Those are reserved
+for labels on a fill, where the text has a colored shape holding it. Body
+copy on a surface sits at 800.
+
+slate-500 is a step back for supporting copy, not a disabled state. It's the
+one color here with a real limit: it clears AA on white (4.8:1) and on glass
+(4.6:1), but on the sunken surface it drops to 3.7:1 and on the page
+background to 3.9:1. On those two, use it only at large sizes, or move the
+text onto a card.
+
+sky-700 clears AA everywhere, down to 4.5:1 on the sunken surface. Note it's
+700, not the sky-300/400 the accents use — a link needs to be legible as
+text, which the light rungs can't do.
+
+### Labels on a fill
+
+A label on a colored element is a different problem, and takes **that color's
+own 950**. It reads as near-black, but it carries a trace of the hue, so a
+rose button's label is faintly warm and a sky button's is faintly cool. The
+button stays one object rather than a colored shape with flat black text
+dropped on top of it.
 
 | Behind the text        | Text color        |
 | ---------------------- | ----------------- |
@@ -155,8 +193,6 @@ on sky-300 lands at 1.67:1.
 One exception, and it's the reason components need to know their surface: an
 element with no fill of its own sits directly on the panel, so on the dark
 surface it takes white instead. No 950 would separate from slate-700.
-
-Secondary text is slate-700, and links are sky-600.
 
 ## Contrast
 
