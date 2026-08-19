@@ -11,8 +11,6 @@ type ColorStyle = {
 	// Outline drops the fill and fades it back in at a tenth on hover.
 	outlineHover: string;
 	border: string;
-	// The color's own 950, so the label is tinted rather than flatly black.
-	text: string;
 };
 
 const props = withDefaults(
@@ -57,35 +55,30 @@ const slateBySurface: Record<ButtonSurface, ColorStyle> = {
 		hover: 'hover:bg-slate-200',
 		outlineHover: 'hover:bg-slate-100/10',
 		border: 'border-slate-100',
-		text: 'text-slate-950',
 	},
 	glass: {
 		fill: 'bg-slate-200',
 		hover: 'hover:bg-slate-300',
 		outlineHover: 'hover:bg-slate-200/10',
 		border: 'border-slate-200',
-		text: 'text-slate-950',
 	},
 	sunken: {
 		fill: 'bg-slate-300',
 		hover: 'hover:bg-slate-400',
 		outlineHover: 'hover:bg-slate-300/10',
 		border: 'border-slate-300',
-		text: 'text-slate-950',
 	},
 	dark: {
 		fill: 'bg-slate-600',
 		hover: 'hover:bg-slate-500',
 		outlineHover: 'hover:bg-slate-600/10',
 		border: 'border-slate-600',
-		text: 'text-white',
 	},
 	background: {
 		fill: 'bg-slate-300',
 		hover: 'hover:bg-slate-400',
 		outlineHover: 'hover:bg-slate-300/10',
 		border: 'border-slate-300',
-		text: 'text-slate-950',
 	},
 };
 
@@ -96,35 +89,30 @@ const transparentBySurface: Record<ButtonSurface, ColorStyle> = {
 		hover: 'hover:bg-slate-100',
 		outlineHover: 'hover:bg-slate-100/10',
 		border: 'border-transparent',
-		text: 'text-slate-950',
 	},
 	glass: {
 		fill: 'bg-transparent',
 		hover: 'hover:bg-slate-200',
 		outlineHover: 'hover:bg-slate-200/10',
 		border: 'border-transparent',
-		text: 'text-slate-950',
 	},
 	sunken: {
 		fill: 'bg-transparent',
 		hover: 'hover:bg-slate-300',
 		outlineHover: 'hover:bg-slate-300/10',
 		border: 'border-transparent',
-		text: 'text-slate-950',
 	},
 	dark: {
 		fill: 'bg-transparent',
 		hover: 'hover:bg-slate-600',
 		outlineHover: 'hover:bg-slate-600/10',
 		border: 'border-transparent',
-		text: 'text-white',
 	},
 	background: {
 		fill: 'bg-transparent',
 		hover: 'hover:bg-slate-300',
 		outlineHover: 'hover:bg-slate-300/10',
 		border: 'border-transparent',
-		text: 'text-slate-950',
 	},
 };
 
@@ -134,42 +122,36 @@ const fixedColors: Record<string, ColorStyle> = {
 		hover: 'hover:bg-slate-50',
 		outlineHover: 'hover:bg-white/10',
 		border: 'border-white',
-		text: 'text-slate-950',
 	},
 	sky: {
 		fill: 'bg-sky-300',
 		hover: 'hover:bg-sky-400',
 		outlineHover: 'hover:bg-sky-300/10',
 		border: 'border-sky-300',
-		text: 'text-sky-950',
 	},
 	teal: {
-		fill: 'bg-teal-300',
-		hover: 'hover:bg-teal-400',
-		outlineHover: 'hover:bg-teal-300/10',
-		border: 'border-teal-300',
-		text: 'text-teal-950',
+		fill: 'bg-teal-100',
+		hover: 'hover:bg-teal-200',
+		outlineHover: 'hover:bg-teal-100/10',
+		border: 'border-teal-100',
 	},
 	amber: {
-		fill: 'bg-amber-300',
-		hover: 'hover:bg-amber-400',
-		outlineHover: 'hover:bg-amber-300/10',
-		border: 'border-amber-300',
-		text: 'text-amber-950',
+		fill: 'bg-amber-100',
+		hover: 'hover:bg-amber-200',
+		outlineHover: 'hover:bg-amber-100/10',
+		border: 'border-amber-100',
 	},
 	rose: {
-		fill: 'bg-rose-300',
-		hover: 'hover:bg-rose-400',
-		outlineHover: 'hover:bg-rose-300/10',
-		border: 'border-rose-300',
-		text: 'text-rose-950',
+		fill: 'bg-rose-100',
+		hover: 'hover:bg-rose-200',
+		outlineHover: 'hover:bg-rose-100/10',
+		border: 'border-rose-100',
 	},
 	violet: {
-		fill: 'bg-violet-300',
-		hover: 'hover:bg-violet-400',
-		outlineHover: 'hover:bg-violet-300/10',
-		border: 'border-violet-300',
-		text: 'text-violet-950',
+		fill: 'bg-violet-100',
+		hover: 'hover:bg-violet-200',
+		outlineHover: 'hover:bg-violet-100/10',
+		border: 'border-violet-100',
 	},
 };
 
@@ -185,13 +167,13 @@ const colorClasses = computed(() => {
 	return [...fill, style.border];
 });
 
-// Each color labels itself in its own 950, which reads as near-black but
-// keeps the button's hue. The exception is a label sitting on the dark
-// surface with no fill of its own to lift it off the panel.
+// Labels are black on every fill. The exception is a label on the dark
+// surface, whether that's the slate-600 fill or an unfilled button sitting
+// straight on the panel.
 const textClasses = computed(() => {
 	const unfilled = props.outline || props.color === 'transparent';
-	if (unfilled && props.surface === 'dark') return 'text-white';
-	return colorStyle.value.text;
+	const onDark = unfilled ? props.surface === 'dark' : props.color === 'slate' && props.surface === 'dark';
+	return onDark ? 'text-white' : 'text-black';
 });
 
 const buttonRef = ref();

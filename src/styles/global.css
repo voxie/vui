@@ -4,3 +4,26 @@
 @theme {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer base {
+  body {
+    color: var(--color-slate-800);
+  }
+}
+
+/*
+  Typography sets `color` on `.prose` itself, from the utilities layer, so it
+  beats the base rule above and documentation would ignore the palette. These
+  are unlayered on purpose — unlayered declarations outrank every layer — and
+  they point prose at the three text colors the foundations page documents.
+*/
+.prose {
+  --tw-prose-body: var(--color-slate-800);
+  --tw-prose-headings: var(--color-slate-800);
+  --tw-prose-bold: var(--color-slate-800);
+  --tw-prose-code: var(--color-slate-800);
+  --tw-prose-quotes: var(--color-slate-800);
+  --tw-prose-lead: var(--color-slate-500);
+  --tw-prose-captions: var(--color-slate-500);
+  --tw-prose-links: var(--color-sky-700);
+}

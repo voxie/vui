@@ -40,10 +40,6 @@ amber, or violet for their usual meanings — success, caution, and accent.
 White is the other neutral. Transparent is the quietest option: no fill until
 you hover it.
 
-Each color labels itself in its own 950 rather than in flat black, so a rose
-button's text is faintly warm and a sky button's faintly cool. See
-[Color](/docs/foundations/color) for the ratios.
-
 White carries no border, so it needs something behind it. Use it on a colored
 or dark surface, or add `shadow` to lift it off a white one.
 
@@ -137,9 +133,9 @@ The `size` prop controls height, padding, and corner radius: `xs`, `sm`, `md`
 ### Outline
 
 `outline` drops the fill and keeps the border, which fades back in on hover.
-The label keeps its color's 950, which still reads on any light surface — but
-on `dark` it switches to white, since no 950 would separate from the panel.
-So pass `surface` when an outline button isn't on a light background.
+The label stays black, which reads on any light surface — but on `dark` it
+switches to white, since black on the panel would be 2.0:1. So pass `surface`
+when an outline button isn't on a light background.
 
 <div class="not-prose space-y-4">
   <Card>

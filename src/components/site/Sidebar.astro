@@ -12,9 +12,9 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '');
 function linkClass(href: string) {
   let defaults = 'block px-3 py-0.5 border-l border-l-slate-400/50';
   if (href === currentPath) {
-    return defaults + ' ' + 'text-sky-600 cursor-default';
+    return defaults + ' ' + 'text-sky-700 cursor-default';
   }
-  return defaults + ' ' + 'text-slate-700 hover:text-sky-600';
+  return defaults + ' ' + 'hover:text-sky-700';
 }
 ---
 

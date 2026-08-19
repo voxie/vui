@@ -68,10 +68,16 @@ since darker would sink the element into the panel.
 
 ## Accent colors
 
-Five accents, each used at a fixed set of rungs: **300 at rest, 400 on hover,
-950 for the label.** No accent appears at any other weight in a component,
-which is what keeps a screen with four different colors on it from looking
-like four different products.
+Five accents, each pinned to one resting rung with a hover one step darker.
+Sky rests at 300; teal, amber, rose, and violet rest at 100. No accent
+appears at any other weight in a component, which is what keeps a screen with
+four different colors on it from looking like four different products.
+
+Sky is the odd one out because it's the only accent that appears directly on
+the page background. At 300 it still separates from slate-200; anything
+lighter goes muddy against it. The other four live on panels, and at 100 they
+sit lighter than the page background — teal-100 on slate-200 is 1.09:1, and
+rose-100 is 1.02:1, which is to say invisible. Keep them on a card.
 
 <Card class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-4 items-center">
   <div class="flex gap-1">
@@ -82,29 +88,29 @@ like four different products.
   <span class="text-sm">The primary action. One per screen, ideally.</span>
 
   <div class="flex gap-1">
-    <div class="h-10 w-10 rounded-l-lg bg-teal-300"></div>
-    <div class="h-10 w-10 rounded-r-lg bg-teal-400"></div>
+    <div class="h-10 w-10 rounded-l-lg bg-teal-100"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-teal-200"></div>
   </div>
   <code class="text-xs">teal</code>
   <span class="text-sm">Success, completion, healthy state.</span>
 
   <div class="flex gap-1">
-    <div class="h-10 w-10 rounded-l-lg bg-amber-300"></div>
-    <div class="h-10 w-10 rounded-r-lg bg-amber-400"></div>
+    <div class="h-10 w-10 rounded-l-lg bg-amber-100"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-amber-200"></div>
   </div>
   <code class="text-xs">amber</code>
   <span class="text-sm">Caution. Something needs a look, but nothing is broken. Can also be used sparingly to draw attention outside warning semantics e.g. the Quickblast feature uses this for its button color.</span>
 
   <div class="flex gap-1">
-    <div class="h-10 w-10 rounded-l-lg bg-rose-300"></div>
-    <div class="h-10 w-10 rounded-r-lg bg-rose-400"></div>
+    <div class="h-10 w-10 rounded-l-lg bg-rose-100"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-rose-200"></div>
   </div>
   <code class="text-xs">rose</code>
   <span class="text-sm">Destructive or failing. Deleting, disconnecting, errors.</span>
 
   <div class="flex gap-1">
-    <div class="h-10 w-10 rounded-l-lg bg-violet-300"></div>
-    <div class="h-10 w-10 rounded-r-lg bg-violet-400"></div>
+    <div class="h-10 w-10 rounded-l-lg bg-violet-100"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-violet-200"></div>
   </div>
   <code class="text-xs">violet</code>
   <span class="text-sm">Accent, with no status attached. Use it sparingly. Current uses: AI, segments, badge callouts.</span>
@@ -169,50 +175,64 @@ one color here with a real limit: it clears AA on white (4.8:1) and on glass
 background to 3.9:1. On those two, use it only at large sizes, or move the
 text onto a card.
 
-sky-700 clears AA everywhere, down to 4.5:1 on the sunken surface. Note it's
-700, not the sky-300/400 the accents use — a link needs to be legible as
-text, which the light rungs can't do.
+sky-700 marks links. Note it's 700, not the light rungs the accents use — a
+link has to be legible as text, which sky-300 can't manage. It clears AA
+everywhere, down to 4.5:1 on the sunken surface. sky-600 is the tempting
+alternative and it doesn't: 4.0:1 on white, under the 4.5:1 AA asks.
+
+None of this needs setting by hand. `body` carries slate-800 in the base
+layer and prose is pointed at all three, so text inherits the right color on
+its own. Reach for a utility only to step something back to slate-500, or
+where a surface flips the rule — the dark card sets its own light text.
 
 ### Labels on a fill
 
-A label on a colored element is a different problem, and takes **that color's
-own 950**. It reads as near-black, but it carries a trace of the hue, so a
-rose button's label is faintly warm and a sky button's is faintly cool. The
-button stays one object rather than a colored shape with flat black text
-dropped on top of it.
+A label sitting on a fill is **black**. Not slate-800, which is for text on a
+surface — a fill is a small, saturated shape holding a couple of words, and
+it wants the maximum the ramp offers.
 
-| Behind the text        | Text color        |
-| ---------------------- | ----------------- |
-| any accent at 300      | that accent's 950 |
-| white, slate-50 to 300 | slate-950         |
-| slate-600, slate-700   | white             |
+| Behind the label        | Label color |
+| ----------------------- | ----------- |
+| any accent at its rung  | black       |
+| white, slate-50 to 300  | black       |
+| slate-600, slate-700    | white       |
 
-Flat black is never the answer, and neither is white on a light fill — white
-on sky-300 lands at 1.67:1.
+White on a light fill is never the answer — white on sky-300 lands at 1.67:1.
 
 One exception, and it's the reason components need to know their surface: an
 element with no fill of its own sits directly on the panel, so on the dark
-surface it takes white instead. No 950 would separate from slate-700.
+surface it takes white. Black on slate-700 would be 2.0:1.
 
 ## Contrast
 
-Tinting the label costs some contrast against flat black, and every pairing
-still clears AAA. The narrowest is rose at 8.2:1, against the 7:1 that AAA
-asks of body text.
+Every label pairing clears AAA, the narrowest being sky at 12.6:1 against the
+7:1 AAA asks of body text.
 
-| Fill       | Label      | Ratio  |
-| ---------- | ---------- | ------ |
-| sky-300    | sky-950    | 8.3:1  |
-| teal-300   | teal-950   | 9.8:1  |
-| amber-300  | amber-950  | 10.4:1 |
-| rose-300   | rose-950   | 8.2:1  |
-| violet-300 | violet-950 | 8.2:1  |
-| slate-100  | slate-950  | 18.4:1 |
-| slate-300  | slate-950  | 13.6:1 |
-| slate-600  | white      | 7.6:1  |
+Two columns, because the two models disagree in ways worth seeing. WCAG 2.x
+is the ratio every audit and checker reports. APCA is the perceptual model
+behind the WCAG 3 draft; its Lc is a score, not a ratio, and it produces no
+pass/fail grade — roughly, Lc 75 suits body text, Lc 60 larger or heavier
+text, Lc 45 headlines.
 
-That margin is the budget for tinting. A label at 900 instead of 950 would
-still pass AA, but it eats into the room the darkest accents have left.
+| Fill       | Label | WCAG 2.x | APCA   |
+| ---------- | ----- | -------- | ------ |
+| sky-300    | black | 12.6:1   | Lc 75  |
+| teal-100   | black | 18.7:1   | Lc 98  |
+| amber-100  | black | 18.9:1   | Lc 99  |
+| rose-100   | black | 17.5:1   | Lc 94  |
+| violet-100 | black | 17.7:1   | Lc 94  |
+| slate-100  | black | 19.2:1   | Lc 100 |
+| slate-300  | black | 14.2:1   | Lc 81  |
+| slate-600  | white | 7.6:1    | Lc 91  |
+
+Lightening the fill is what bought that. The four accents began at 300, where
+rose and violet landed near Lc 63 — the weakest pairings in the system, even
+though WCAG scored them above 8:1. WCAG 2.x is generous to very dark text on
+saturated light fills and overstates what the last steps of the ramp buy;
+lifting the fill was worth four times what darkening the label could.
+
+Sky is now the floor at Lc 75, since it has to hold its rung to stay legible
+on the page background.
 
 The soft step between a neutral and its background is a different story. It
 lands between 1.1:1 and 1.4:1 — a slate-100 button on a white card is 1.10:1.
