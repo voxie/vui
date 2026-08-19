@@ -1,0 +1,112 @@
+---
+title: Typography
+description: Typeface, type scale, and usage guidance.
+order: 2
+---
+
+import Card from '../../../components/ui/Card.vue';
+
+Type here is mostly working type — dense application UI rather than reading
+material. So the default is `text-sm`, not `text-base`, and the scale goes
+down from there before it goes up. Reach for `xs` or `2xs` when a surface
+needs to hold more.
+
+## Typeface
+
+Inter, a workhorse typeface drawn specifically for interfaces. It's
+self-hosted as a variable font across the full 100–900 weight axis, so any
+weight costs the same as any other.
+
+<Card class="not-prose">
+  <p class="text-3xl font-extrabold">Handgloves</p>
+  <p class="mt-1 text-sm text-slate-500">Inter Variable · <code class="text-xs">--font-sans</code></p>
+</Card>
+
+## Scale
+
+<Card class="not-prose grid grid-cols-[max-content_max-content_max-content_1fr] items-baseline gap-x-6 gap-y-5">
+  <p class="text-5xl font-extrabold leading-none">5xl</p>
+  <code class="text-xs">text-5xl</code>
+  <span class="text-xs text-slate-500">48px</span>
+  <span class="text-sm">Stat callouts. Simple numbers shown very large.</span>
+
+  <p class="text-3xl font-extrabold leading-none">3xl</p>
+  <code class="text-xs">text-3xl</code>
+  <span class="text-xs text-slate-500">30px</span>
+  <span class="text-sm">Page headings.</span>
+
+  <p class="text-xl font-extrabold leading-snug">xl</p>
+  <code class="text-xs">text-xl</code>
+  <span class="text-xs text-slate-500">20px</span>
+  <span class="text-sm">Card headings, at the top of the range.</span>
+
+  <p class="text-lg font-extrabold leading-snug">lg</p>
+  <code class="text-xs">text-lg</code>
+  <span class="text-xs text-slate-500">18px</span>
+  <span class="text-sm">Card headings.</span>
+
+  <p class="text-base font-extrabold leading-snug">base</p>
+  <code class="text-xs">text-base</code>
+  <span class="text-xs text-slate-500">16px</span>
+  <span class="text-sm">Card headings and sub content, at the bottom of the range.</span>
+
+  <p class="text-sm font-semibold leading-snug">sm</p>
+  <code class="text-xs">text-sm</code>
+  <span class="text-xs text-slate-500">14px</span>
+  <span class="text-sm">The default. Body copy, and headings in a sidebar or aside.</span>
+
+  <p class="text-xs font-semibold leading-snug">xs</p>
+  <code class="text-xs">text-xs</code>
+  <span class="text-xs text-slate-500">12px</span>
+  <span class="text-sm">Dense UI, and the small end of aside headings.</span>
+
+  <p class="text-2xs font-semibold leading-snug">2xs</p>
+  <code class="text-xs">text-2xs</code>
+  <span class="text-xs text-slate-500">10px</span>
+  <span class="text-sm">The floor. Labels and metadata. Never a heading.</span>
+</Card>
+
+`2xs` isn't a Tailwind size — it's defined in `global.css` as a 10px rung
+below `xs`, with a 14px line height to match the shape of the built-in sizes.
+
+## Weight
+
+Headings are `font-extrabold`. Where headings nest and need separating, or
+where a heading should sit back rather than announce itself, drop to
+`font-semibold`.
+
+<Card class="not-prose">
+  <p class="text-xl font-extrabold leading-snug">Extrabold heading</p>
+  <p class="mt-5 text-base font-semibold leading-snug">Semibold, nested under it</p>
+  <p class="mt-2 text-sm leading-relaxed">
+    Body copy sits at the normal weight. The jump from semibold to extrabold
+    is doing the work of a size change, which is what lets headings stay close
+    in size without collapsing into each other.
+  </p>
+</Card>
+
+## Leading
+
+Leading is set with the relative values, never a fixed pixel height. Four are
+in use: `relaxed`, `snug`, `tight`, and `none`.
+
+Body copy that runs to more than one line gets `leading-relaxed`. Headings
+get `none` or `snug`, tightening as they grow — a 5xl stat wants `none`, a
+`sm` sidebar heading wants `snug`.
+
+<Card class="not-prose grid gap-6 sm:grid-cols-2">
+  <div>
+    <p class="text-2xs font-semibold text-slate-500">leading-relaxed</p>
+    <p class="mt-2 text-sm leading-relaxed">
+      Body copy that runs to more than one line gets the loosest of the four,
+      because the eye has to find its way back to the start of each line.
+    </p>
+  </div>
+  <div>
+    <p class="text-2xs font-semibold text-slate-500">leading-snug</p>
+    <p class="mt-2 text-sm leading-snug">
+      Body copy that runs to more than one line gets the loosest of the four,
+      because the eye has to find its way back to the start of each line.
+    </p>
+  </div>
+</Card>
