@@ -15,7 +15,7 @@ read in a class list is what you see on screen.
 Meaning lives in the guidance below, not in the token name. That way a
 button's color can change without a name that lies about it.
 
-## Slate is the spine
+## Slate is the core color
 
 Almost everything on screen is slate. It's the page, the panels, the text,
 and most of the buttons. The other colors are exceptions you reach for
@@ -68,9 +68,10 @@ since darker would sink the element into the panel.
 
 ## Accent colors
 
-Five accents, each used at one rung: **300 at rest, 400 on hover.** No accent
-appears at any other weight in a component, which is what keeps a screen with
-four different colors on it from looking like four different products.
+Five accents, each used at a fixed set of rungs: **300 at rest, 400 on hover,
+950 for the label.** No accent appears at any other weight in a component,
+which is what keeps a screen with four different colors on it from looking
+like four different products.
 
 <Card class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-4 items-center">
   <div class="flex gap-1">
@@ -137,38 +138,45 @@ what they're sitting on.
 
 ## Text
 
-Text is black or white, picked by what's directly behind it. Every accent at
-300 is a light color, so text on an accent is always black — white on sky-300
-lands at 1.67:1 and is unreadable.
+A label on a colored element takes **that color's own 950**. It reads as
+near-black, but it carries a trace of the hue, so a rose button's label is
+faintly warm and a sky button's is faintly cool. The button stays one object
+rather than a colored shape with flat black text dropped on top of it.
 
-| Behind the text        | Text color |
-| ---------------------- | ---------- |
-| any accent at 300      | black      |
-| white, slate-50 to 300 | black      |
-| slate-600, slate-700   | white      |
+| Behind the text        | Text color        |
+| ---------------------- | ----------------- |
+| any accent at 300      | that accent's 950 |
+| white, slate-50 to 300 | slate-950         |
+| slate-600, slate-700   | white             |
 
-The consequence for components: anything with no fill of its own — an outline
-button, a transparent button — takes its text color from the *surface*, not
-from its color. That's why those components need to know what they're sitting
-on.
+Flat black is never the answer, and neither is white on a light fill — white
+on sky-300 lands at 1.67:1.
+
+One exception, and it's the reason components need to know their surface: an
+element with no fill of its own sits directly on the panel, so on the dark
+surface it takes white instead. No 950 would separate from slate-700.
 
 Secondary text is slate-700, and links are sky-600.
 
 ## Contrast
 
-Every accent at 300 clears black text comfortably. Measured against black:
+Tinting the label costs some contrast against flat black, and every pairing
+still clears AAA. The narrowest is rose at 8.2:1, against the 7:1 that AAA
+asks of body text.
 
-| Color      | Hex       | vs. black |
-| ---------- | --------- | --------- |
-| sky-300    | #74D4FF | 12.6:1    |
-| teal-300   | #46ECD5 | 14.3:1    |
-| amber-300  | #FFD230 | 14.5:1    |
-| rose-300   | #FFA1AD | 10.9:1    |
-| violet-300 | #C4B4FF | 11.3:1    |
-| slate-300  | #CAD5E2 | 14.2:1    |
+| Fill       | Label      | Ratio  |
+| ---------- | ---------- | ------ |
+| sky-300    | sky-950    | 8.3:1  |
+| teal-300   | teal-950   | 9.8:1  |
+| amber-300  | amber-950  | 10.4:1 |
+| rose-300   | rose-950   | 8.2:1  |
+| violet-300 | violet-950 | 8.2:1  |
+| slate-100  | slate-950  | 18.4:1 |
+| slate-300  | slate-950  | 13.6:1 |
+| slate-600  | white      | 7.6:1  |
 
-White text on slate-600 is 7.6:1, which clears AAA for body text. Every text
-pairing in the system passes AA with a wide margin.
+That margin is the budget for tinting. A label at 900 instead of 950 would
+still pass AA, but it eats into the room the darkest accents have left.
 
 The soft step between a neutral and its background is a different story. It
 lands between 1.1:1 and 1.4:1 — a slate-100 button on a white card is 1.10:1.
