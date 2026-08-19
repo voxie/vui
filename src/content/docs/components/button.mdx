@@ -115,6 +115,12 @@ hold their value on every background:
   </Card>
 </div>
 
+Ignoring `surface` is not the same as working on any surface. Teal, amber,
+rose, and violet rest at 100, which is lighter than the page background —
+rose on `background` measures 1.02:1 and effectively disappears. Keep them on
+a panel. Sky is the one accent that holds up out there, which is why it stays
+at 300. See [Color](/docs/foundations/color) for the numbers.
+
 ### Size
 
 The `size` prop controls height, padding, and corner radius: `xs`, `sm`, `md`
