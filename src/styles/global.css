@@ -8,11 +8,32 @@
      shape as the built-in sizes: 14px over 10px. */
   --text-2xs: 0.625rem;
   --text-2xs--line-height: calc(0.875 / 0.625);
+
+  /*
+    Optical tracking, paired to each size so it comes along with the size
+    class rather than being remembered. Inter is drawn tight, so it opens up
+    below 12px and closes up as it gets large. Values are Tailwind's own
+    tracking scale; sm, base and lg are left alone.
+  */
+  --text-2xs--letter-spacing: var(--tracking-wide);
+  --text-xs--letter-spacing: var(--tracking-wide);
+  --text-xl--letter-spacing: var(--tracking-tight);
+  --text-2xl--letter-spacing: var(--tracking-tight);
+  --text-3xl--letter-spacing: var(--tracking-tight);
+  --text-4xl--letter-spacing: var(--tracking-tight);
+  --text-5xl--letter-spacing: var(--tracking-tight);
 }
 
 @layer base {
   body {
     color: var(--color-slate-800);
+    /*
+      Tabular figures, so numbers hold their column and don't jitter as they
+      update. No slashed-zero here on purpose: Fontsource packages Google's
+      Inter, which strips the `zero` feature, so the declaration would be
+      dead weight.
+    */
+    font-variant-numeric: tabular-nums;
   }
 }
 
