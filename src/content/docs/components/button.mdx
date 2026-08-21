@@ -94,7 +94,8 @@ The other two card surfaces don't get their own value. Inside a `glassRaised`
 card use `surface="glass"`; inside a `layered` card use the default.
 
 Everything else ignores `surface`. Sky, teal, amber, rose, violet, and white
-hold their value on every background:
+hold their value on every background — the accents all rest at 300, which is
+saturated enough to separate from any neutral behind them:
 
 <div class="not-prose space-y-4">
   <Card>
@@ -114,12 +115,6 @@ hold their value on every background:
     </div>
   </Card>
 </div>
-
-Ignoring `surface` is not the same as working on any surface. Teal, amber,
-rose, and violet rest at 100, which is lighter than the page background —
-rose on `background` measures 1.02:1 and effectively disappears. Keep them on
-a panel. Sky is the one accent that holds up out there, which is why it stays
-at 300. See [Color](/docs/foundations/color) for the numbers.
 
 ### Size
 

@@ -68,16 +68,14 @@ since darker would sink the element into the panel.
 
 ## Accent colors
 
-Five accents, each pinned to one resting rung with a hover one step darker.
-Sky rests at 300; teal, amber, rose, and violet rest at 100. No accent
-appears at any other weight in a component, which is what keeps a screen with
-four different colors on it from looking like four different products.
+All five accents rest at **300**, with a hover one step darker at 400. No
+accent appears at any other weight in a component, which is what keeps a
+screen with four different colors on it from looking like four different
+products.
 
-Sky is the odd one out because it's the only accent that appears directly on
-the page background. At 300 it still separates from slate-200; anything
-lighter goes muddy against it. The other four live on panels, and at 100 they
-sit lighter than the page background — teal-100 on slate-200 is 1.09:1, and
-rose-100 is 1.02:1, which is to say invisible. Keep them on a card.
+One rung for all five is what lets any accent sit anywhere, including
+directly on the page background. Anything lighter goes muddy against
+slate-200.
 
 <Card class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-4 items-center">
   <div class="flex gap-1">
@@ -88,29 +86,29 @@ rose-100 is 1.02:1, which is to say invisible. Keep them on a card.
   <span class="text-sm">The primary action. One per screen, ideally.</span>
 
   <div class="flex gap-1">
-    <div class="h-10 w-10 rounded-l-lg bg-teal-100"></div>
-    <div class="h-10 w-10 rounded-r-lg bg-teal-200"></div>
+    <div class="h-10 w-10 rounded-l-lg bg-teal-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-teal-400"></div>
   </div>
   <code class="text-xs">teal</code>
   <span class="text-sm">Success, completion, healthy state.</span>
 
   <div class="flex gap-1">
-    <div class="h-10 w-10 rounded-l-lg bg-amber-100"></div>
-    <div class="h-10 w-10 rounded-r-lg bg-amber-200"></div>
+    <div class="h-10 w-10 rounded-l-lg bg-amber-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-amber-400"></div>
   </div>
   <code class="text-xs">amber</code>
   <span class="text-sm">Caution. Something needs a look, but nothing is broken. Can also be used sparingly to draw attention outside warning semantics e.g. the Quickblast feature uses this for its button color.</span>
 
   <div class="flex gap-1">
-    <div class="h-10 w-10 rounded-l-lg bg-rose-100"></div>
-    <div class="h-10 w-10 rounded-r-lg bg-rose-200"></div>
+    <div class="h-10 w-10 rounded-l-lg bg-rose-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-rose-400"></div>
   </div>
   <code class="text-xs">rose</code>
   <span class="text-sm">Destructive or failing. Deleting, disconnecting, errors.</span>
 
   <div class="flex gap-1">
-    <div class="h-10 w-10 rounded-l-lg bg-violet-100"></div>
-    <div class="h-10 w-10 rounded-r-lg bg-violet-200"></div>
+    <div class="h-10 w-10 rounded-l-lg bg-violet-300"></div>
+    <div class="h-10 w-10 rounded-r-lg bg-violet-400"></div>
   </div>
   <code class="text-xs">violet</code>
   <span class="text-sm">Accent, with no status attached. Use it sparingly. Current uses: AI, segments, badge callouts.</span>
@@ -205,34 +203,37 @@ surface it takes white. Black on slate-700 would be 2.0:1.
 
 ## Contrast
 
-Every label pairing clears AAA, the narrowest being sky at 12.6:1 against the
-7:1 AAA asks of body text.
+Every label pairing clears WCAG AAA, the narrowest being slate-600 at 7.6:1
+against the 7:1 AAA asks of body text.
 
 Two columns, because the two models disagree in ways worth seeing. WCAG 2.x
 is the ratio every audit and checker reports. APCA is the perceptual model
 behind the WCAG 3 draft; its Lc is a score, not a ratio, and it produces no
 pass/fail grade — roughly, Lc 75 suits body text, Lc 60 larger or heavier
-text, Lc 45 headlines.
+text, Lc 45 headlines. Values below that Lc 75 mark are <span class="text-rose-700">in rose</span>.
 
-| Fill       | Label | WCAG 2.x | APCA   |
-| ---------- | ----- | -------- | ------ |
-| sky-300    | black | 12.6:1   | Lc 75  |
-| teal-100   | black | 18.7:1   | Lc 98  |
-| amber-100  | black | 18.9:1   | Lc 99  |
-| rose-100   | black | 17.5:1   | Lc 94  |
-| violet-100 | black | 17.7:1   | Lc 94  |
-| slate-100  | black | 19.2:1   | Lc 100 |
-| slate-300  | black | 14.2:1   | Lc 81  |
-| slate-600  | white | 7.6:1    | Lc 91  |
+| Fill       | Label | WCAG 2.x | APCA                                              |
+| ---------- | ----- | -------- | ------------------------------------------------- |
+| sky-300    | black | 12.6:1   | <span class="text-rose-700">Lc 75</span>          |
+| teal-300   | black | 14.3:1   | Lc 82                                             |
+| amber-300  | black | 14.5:1   | Lc 83                                             |
+| rose-300   | black | 10.9:1   | <span class="text-rose-700">Lc 67</span>          |
+| violet-300 | black | 11.3:1   | <span class="text-rose-700">Lc 69</span>          |
+| slate-100  | black | 19.2:1   | Lc 100                                            |
+| slate-300  | black | 14.2:1   | Lc 81                                             |
+| slate-600  | white | 7.6:1    | Lc 91                                             |
 
-Lightening the fill is what bought that. The four accents began at 300, where
-rose and violet landed near Lc 63 — the weakest pairings in the system, even
-though WCAG scored them above 8:1. WCAG 2.x is generous to very dark text on
-saturated light fills and overstates what the last steps of the ramp buy;
-lifting the fill was worth four times what darkening the label could.
+The three in rose are a known gap, kept for now so the documentation matches
+what the product actually ships. They pass every WCAG check — a contrast
+tool will call them AAA — but WCAG 2.x is generous to dark text on saturated
+light fills, and APCA prices sky, rose, and violet below what it wants for
+text at button size. Buttons run 12–14px, which is where that shortfall
+counts most.
 
-Sky is now the floor at Lc 75, since it has to hold its rung to stay legible
-on the page background.
+Lightening the fill is the fix when we get to it: at 100 those same pairings
+measure Lc 94–99. The cost is that a 100-level fill sits lighter than the
+page background — rose-100 on slate-200 is 1.02:1 — so the accents would
+have to stay on a panel.
 
 The soft step between a neutral and its background is a different story. It
 lands between 1.1:1 and 1.4:1 — a slate-100 button on a white card is 1.10:1.
