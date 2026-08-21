@@ -12,16 +12,17 @@
   /*
     Optical tracking, paired to each size so it comes along with the size
     class rather than being remembered. Inter is drawn tight, so it opens up
-    below 12px and closes up as it gets large. Values are Tailwind's own
-    tracking scale; sm, base and lg are left alone.
+    below 12px and closes up as it gets large. Tailwind's own scale only
+    offers 0.025em steps, which is too coarse across this range, so these are
+    graded. sm, base and lg are left alone.
   */
-  --text-2xs--letter-spacing: var(--tracking-wide);
-  --text-xs--letter-spacing: var(--tracking-wide);
-  --text-xl--letter-spacing: var(--tracking-tight);
-  --text-2xl--letter-spacing: var(--tracking-tight);
-  --text-3xl--letter-spacing: var(--tracking-tight);
-  --text-4xl--letter-spacing: var(--tracking-tight);
-  --text-5xl--letter-spacing: var(--tracking-tight);
+  --text-2xs--letter-spacing: 0.015em;
+  --text-xs--letter-spacing: 0.01em;
+  --text-xl--letter-spacing: -0.005em;
+  --text-2xl--letter-spacing: -0.01em;
+  --text-3xl--letter-spacing: -0.02em;
+  --text-4xl--letter-spacing: -0.03em;
+  --text-5xl--letter-spacing: -0.03em;
 }
 
 @layer base {

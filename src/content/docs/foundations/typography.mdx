@@ -156,13 +156,18 @@ it doesn't drift apart.
 
 Tracking is paired to the size tokens in `global.css`, so it arrives with the
 size class and there's nothing to remember — `text-3xl` is already tracked.
-The values are Tailwind's own, no custom numbers:
+Tailwind's own scale moves in 0.025em steps, which is too coarse across this
+range, so the values are graded:
 
-| Size                | Tracking                      |
-| ------------------- | ----------------------------- |
-| `2xs` `xs`          | `tracking-wide` — `0.025em`   |
-| `sm` `base` `lg`    | none                          |
-| `xl` through `5xl`  | `tracking-tight` — `-0.025em` |
+| Size             | Tracking   |
+| ---------------- | ---------- |
+| `2xs`            | `0.015em`  |
+| `xs`             | `0.01em`   |
+| `sm` `base` `lg` | none       |
+| `xl`             | `-0.005em` |
+| `2xl`            | `-0.01em`  |
+| `3xl`            | `-0.02em`  |
+| `4xl` `5xl`      | `-0.03em`  |
 
 Adding a `tracking-*` utility still overrides the paired value, so
 `text-3xl tracking-normal` flattens that one heading.
