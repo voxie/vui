@@ -1,0 +1,14 @@
+name: Claude Code Review (Approval)
+
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  claude-approval:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    uses: voxie/actions/.github/workflows/automated-approval.yml@v0
