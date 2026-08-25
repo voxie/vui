@@ -5,6 +5,7 @@ order: 1
 
 import Card from '@ui/Card.vue';
 import Button from '@ui/Button.vue';
+import Badge from '@ui/Badge.vue';
 
 We use Tailwind's palette as-is and call colors by their real names — `sky`,
 `teal`, `slate`. There are no semantic aliases like `primary` or `danger` in
@@ -67,20 +68,28 @@ since darker would sink the element into the panel.
 
 ## Accent colors
 
-All five accents rest at **300**, with a hover one step darker at 400. No
-accent appears at any other weight in a component, which is what keeps a
-screen with four different colors on it from looking like four different
-products.
+An accent shows up at one of two weights, and which one it takes depends on
+whether you can press it.
 
-One rung for all five is what lets any accent sit anywhere, including
-directly on the page background. Anything lighter goes muddy against
-slate-200.
+**Controls** — anything pressable — rest at **300**, with a hover one step
+darker at 400 and a black label. [Button](/docs/components/button) is the one
+that matters today.
 
-<Card class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-4 items-center">
+**Labels** — anything that only gets read — run on the **tint**: a 100 fill,
+the 900 of the same hue for the text, a 300 border, and a 500 icon.
+[Badge](/docs/components/badge) is the one that matters today.
+
+<Card class="not-prose grid grid-cols-[max-content_max-content_max-content_1fr] gap-x-6 gap-y-4 items-center">
+  <span class="text-2xs font-extrabold tracking-wide uppercase text-slate-500">Control</span>
+  <span class="text-2xs font-extrabold tracking-wide uppercase text-slate-500">Label</span>
+  <span></span>
+  <span></span>
+
   <div class="flex gap-1">
     <div class="h-10 w-10 rounded-l-lg bg-sky-300"></div>
     <div class="h-10 w-10 rounded-r-lg bg-sky-400"></div>
   </div>
+  <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-sky-300 bg-sky-100 text-sm font-medium text-sky-900">Aa</div>
   <code class="text-xs">sky</code>
   <span class="text-sm">The primary action. One per screen, ideally. Also used to indicate positive trends on charts and graphs.</span>
 
@@ -88,6 +97,7 @@ slate-200.
     <div class="h-10 w-10 rounded-l-lg bg-teal-300"></div>
     <div class="h-10 w-10 rounded-r-lg bg-teal-400"></div>
   </div>
+  <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-teal-300 bg-teal-100 text-sm font-medium text-teal-900">Aa</div>
   <code class="text-xs">teal</code>
   <span class="text-sm">Success or completion states.</span>
 
@@ -95,6 +105,7 @@ slate-200.
     <div class="h-10 w-10 rounded-l-lg bg-amber-300"></div>
     <div class="h-10 w-10 rounded-r-lg bg-amber-400"></div>
   </div>
+  <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-amber-300 bg-amber-100 text-sm font-medium text-amber-900">Aa</div>
   <code class="text-xs">amber</code>
   <span class="text-sm">Caution. Something needs a look, but nothing is broken. Can also be used sparingly to draw attention outside warning semantics e.g. the Quickblast feature uses this for its button color.</span>
 
@@ -102,6 +113,7 @@ slate-200.
     <div class="h-10 w-10 rounded-l-lg bg-rose-300"></div>
     <div class="h-10 w-10 rounded-r-lg bg-rose-400"></div>
   </div>
+  <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-rose-300 bg-rose-100 text-sm font-medium text-rose-900">Aa</div>
   <code class="text-xs">rose</code>
   <span class="text-sm">Destructive or failing. Deleting, disconnecting, errors.</span>
 
@@ -109,25 +121,51 @@ slate-200.
     <div class="h-10 w-10 rounded-l-lg bg-violet-300"></div>
     <div class="h-10 w-10 rounded-r-lg bg-violet-400"></div>
   </div>
+  <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-violet-300 bg-violet-100 text-sm font-medium text-violet-900">Aa</div>
   <code class="text-xs">violet</code>
   <span class="text-sm">Accent, with no status attached. Use it sparingly. Current uses: AI, segments, badge callouts.</span>
 </Card>
 
-Unlike slate, accents hold the same value on every surface. A sky button is
-sky-300 on a white card and on the dark navigation bar. They're saturated
-enough to separate from any neutral behind them, so they don't need to know
-what they're sitting on.
+The split isn't decoration. A control is one thing on a screen and it has to
+be found, so it takes the saturated rung. A label repeats — a column of them
+down a table, a row of tags on a contact — and has to sit still while you
+read past it, so it takes the tint. The tint also measures better at the size
+labels live at; see [Contrast](#contrast).
+
+Two things hold across both families:
+
+- **One weight per family, for all five accents.** No accent appears at any
+  other value in a component. That's what keeps a screen with four colors on
+  it from looking like four different products.
+- **Accents don't care what they sit on**, unlike slate. A sky button is
+  sky-300 on a white card and on the dark navigation bar. A control at 300 is
+  saturated enough to separate from any neutral behind it. A label at 100
+  isn't, which is why the tint carries a 300 border rather than a bare fill.
 
 Be reserved and tasteful with color usage. We want to avoid rainbow screens with tons of colors. The is especially important with data rich screens like tables or charts. We use color sparingly to highlight the most import details on a page. If everything has a color then nothing is import and the page looks like a unicorn took a dump on it. This can't always be avoided for instance a chart with 10 keys that have to be differentiated but try your best.
 
+The palette is these five, and the chart with ten keys is the exception it
+can't cover. For that case [Badge](/docs/components/badge) carries seven more
+tints on the label weight: `lime`, `orange`, `green`, `blue`, `fuchsia`,
+`pink`, and `emerald`. They exist to extend the range of difference between
+badges, nothing more. None of them carries a meaning, and outside a legend or
+a column of tags there's no reason to reach for one.
+
 <div class="not-prose space-y-4">
-  <Card>
+  <Card class="space-y-4">
     <div class="flex flex-wrap gap-3">
       <Button color="sky">sky</Button>
       <Button color="teal">teal</Button>
       <Button color="amber">amber</Button>
       <Button color="rose">rose</Button>
       <Button color="violet">violet</Button>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <Badge color="sky">sky</Badge>
+      <Badge color="teal">teal</Badge>
+      <Badge color="amber">amber</Badge>
+      <Badge color="rose">rose</Badge>
+      <Badge color="violet">violet</Badge>
     </div>
   </Card>
   <Card surface="dark">
@@ -202,11 +240,17 @@ A label sitting on a fill is **black**. Not slate-800, which is for text on a
 surface — a fill is a small, saturated shape holding a couple of words, and
 it wants the maximum the ramp offers.
 
-| Behind the label        | Label color |
-| ----------------------- | ----------- |
-| any accent at its rung  | black       |
-| white, slate-50 to 300  | black       |
-| slate-600, slate-700    | white       |
+| Behind the label           | Label color        |
+| -------------------------- | ------------------ |
+| any accent at 300          | black              |
+| white, slate-50 to 300     | black              |
+| slate-600, slate-700       | white              |
+| any accent at its 100 tint | the 900 of the hue |
+
+The tint is the one row that isn't black, and it follows from what a 100 fill
+is: barely a shape. Black on it reads as body copy that happens to have a
+tinted box around it, rather than as one object. The 900 of the same hue ties
+the label to its fill, and it measures better besides.
 
 White on a light fill is never the answer — white on sky-300 lands at 1.67:1.
 
@@ -224,6 +268,8 @@ is the ratio every audit and checker reports. APCA is the perceptual model
 behind the WCAG 3 draft; its Lc is a score, not a ratio, and it produces no
 pass/fail grade — roughly, Lc 75 suits body text, Lc 60 larger or heavier
 text, Lc 45 headlines. Values below that Lc 75 mark are <span class="text-rose-700">in rose</span>.
+
+Controls, at 300 with a black label:
 
 | Fill       | Label | WCAG 2.x | APCA                                              |
 | ---------- | ----- | -------- | ------------------------------------------------- |
@@ -243,10 +289,32 @@ light fills, and APCA prices sky, rose, and violet below what it wants for
 text at button size. Buttons run 12–14px, which is where that shortfall
 counts most.
 
-Lightening the fill is the fix when we get to it: at 100 those same pairings
-measure Lc 94–99. The cost is that a 100-level fill sits lighter than the
-page background — rose-100 on slate-200 is 1.02:1 — so the accents would
-have to stay on a panel.
+Labels, on the tint:
+
+| Fill       | Label      | WCAG 2.x | APCA   |
+| ---------- | ---------- | -------- | ------ |
+| sky-100    | sky-900    | 8.2:1    | Lc 82  |
+| teal-100   | teal-900   | 8.4:1    | Lc 83  |
+| amber-100  | amber-900  | 8.2:1    | Lc 83  |
+| rose-100   | rose-900   | 8.0:1    | Lc 78  |
+| violet-100 | violet-900 | 9.3:1    | Lc 83  |
+| slate-100  | slate-900  | 16.3:1   | Lc 98  |
+
+Nothing here falls short, and the two columns trade places to get there: the
+tint scores *lower* than the control rung on WCAG 2.x and *higher* on APCA.
+That's the disagreement between the models in miniature. WCAG 2.x rewards raw
+luminance distance, which black against a saturated fill always wins. APCA
+prices how the pairing actually resolves at small sizes, where a 900 on its
+own tint holds and black on 300 starts to smear.
+
+Which is also the answer to the gap above. Lightening the fill is the fix,
+and the label family already takes it — that's the whole reason a badge isn't
+a button in a smaller size. What keeps controls at 300 is the cost: a 100
+fill sits lighter than the page background — rose-100 on slate-200 is 1.02:1
+— so it can't describe its own edge. A label answers that with its 300
+border, which is enough for something you only have to read. A control has to
+be *found* before it's read, and a border alone won't do that, so 300 stays
+the control rung until there's something better.
 
 The soft step between a neutral and its background is a different story. It
 lands between 1.1:1 and 1.4:1 — a slate-100 button on a white card is 1.10:1.

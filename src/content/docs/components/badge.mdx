@@ -1,0 +1,243 @@
+---
+title: Badge
+order: 3
+---
+
+import Badge from '@ui/Badge.vue';
+import Card from '@ui/Card.vue';
+
+A badge labels the thing next to it: a status, a count, a category. It is a
+pill of text and nothing else. It doesn't respond to hover and it isn't
+clickable, so anything you can press is a [Button](/docs/components/button),
+not a badge.
+
+A badge is the main thing that takes the **label** weight in
+[Color](/docs/foundations/color) rather than the 300 rung a button rests at:
+a 100 fill, a 900 label, a 300 border, and a 500 icon. Badges repeat, a
+column of them down a table or a row of tags on a contact, so they have to
+sit quieter than a control. The tint also reads better at the 10–12px a badge
+is usually set at. The [Contrast](#contrast) section below has the numbers.
+
+## Examples
+
+### Color
+
+The `color` prop sets the tint: `sky` (the default), `teal`, `amber`, `rose`,
+`violet`, or `slate`.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3">
+    <Badge>sky</Badge>
+    <Badge color="teal">teal</Badge>
+    <Badge color="amber">amber</Badge>
+    <Badge color="rose">rose</Badge>
+    <Badge color="violet">violet</Badge>
+    <Badge color="slate">slate</Badge>
+  </div>
+</Card>
+
+The meanings are the same from the [Color Docs](/docs/foundations/color): teal for
+success or completion, amber for caution, rose for failing or destructive,
+sky for the primary thing on the screen, and violet as an accent with no
+status attached. Slate is the one with no meaning at all, and it should stay
+the answer for most badges. A colored badge in every row of a table spends
+the color budget on something nobody is reading.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3">
+    <Badge color="slate">Draft</Badge>
+    <Badge color="slate">Scheduled</Badge>
+    <Badge color="teal">Completed</Badge>
+    <Badge color="amber">Paused</Badge>
+    <Badge color="rose">Failed</Badge>
+  </div>
+</Card>
+
+Because badges carry a fill and a border of their own, they hold the same
+values on every surface, so there's no `surface` prop the way there is on
+Button. Every surface a badge lands on is a light one. The dark card is the
+app navigation bar, and nothing in there is badged.
+
+<div class="not-prose space-y-4">
+  <Card>
+    <div class="flex flex-wrap items-center gap-3">
+      <Badge>sky</Badge>
+      <Badge color="teal">teal</Badge>
+      <Badge color="slate">slate</Badge>
+    </div>
+  </Card>
+  <Card surface="glass">
+    <div class="flex flex-wrap items-center gap-3">
+      <Badge>sky</Badge>
+      <Badge color="teal">teal</Badge>
+      <Badge color="slate">slate</Badge>
+    </div>
+  </Card>
+  <Card surface="sunken">
+    <div class="flex flex-wrap items-center gap-3">
+      <Badge>sky</Badge>
+      <Badge color="teal">teal</Badge>
+      <Badge color="slate">slate</Badge>
+    </div>
+  </Card>
+</div>
+
+### Extending the range
+
+Seven more tints sit outside the palette: `lime`, `orange`, `green`, `blue`,
+`fuchsia`, `pink`, and `emerald`. They run on the same tint as everything
+else, so nothing about the treatment changes.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3">
+    <Badge color="lime">lime</Badge>
+    <Badge color="orange">orange</Badge>
+    <Badge color="green">green</Badge>
+    <Badge color="blue">blue</Badge>
+    <Badge color="fuchsia">fuchsia</Badge>
+    <Badge color="pink">pink</Badge>
+    <Badge color="emerald">emerald</Badge>
+  </div>
+</Card>
+
+Use them only where you need to extend the range of difference between
+badges. A chart legend whose keys are badges needs as many distinguishable
+values as the chart has series. A table column of tags, where a team has
+defined thirty of their own, needs the same thing. In both cases the job is
+telling one badge from the next, not saying what any of them means.
+
+Everywhere else, use the accents. These seven carry no meaning, and next to
+an accent they borrow one they don't have: emerald beside teal reads as a
+second kind of success, and orange beside amber reads as a worse warning.
+
+#### Reaching for them in order
+
+Thirteen tints at the same lightness is less range than it sounds. Taken in
+this order, each color is as far from the ones already on screen as the set
+allows:
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-2">
+    <Badge size="xs">sky</Badge>
+    <Badge size="xs" color="teal">teal</Badge>
+    <Badge size="xs" color="amber">amber</Badge>
+    <Badge size="xs" color="rose">rose</Badge>
+    <Badge size="xs" color="violet">violet</Badge>
+    <Badge size="xs" color="lime">lime</Badge>
+    <Badge size="xs" color="orange">orange</Badge>
+    <Badge size="xs" color="slate">slate</Badge>
+    <Badge size="xs" color="green">green</Badge>
+    <Badge size="xs" color="blue">blue</Badge>
+    <Badge size="xs" color="fuchsia">fuchsia</Badge>
+    <Badge size="xs" color="pink">pink</Badge>
+    <Badge size="xs" color="emerald">emerald</Badge>
+  </div>
+</Card>
+
+The separation thins out fast. By the eighth color each new tint is about a
+quarter as far from its nearest neighbour as the second was, and the last few
+pairs read as the same color at badge size: emerald and green, teal and
+emerald, pink and fuchsia, rose and pink. Past eight categories, reconsider
+whether color is carrying the distinction at all. A label, an icon, or a
+sorted order will do it better than a fourteenth green.
+
+### Size
+
+The `size` prop controls height, padding, and text size: `2xs`, `xs`, `sm`,
+`md` (the default), `lg`, or `xl`.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3">
+    <Badge size="2xs">2xs</Badge>
+    <Badge size="xs">xs</Badge>
+    <Badge size="sm">sm</Badge>
+    <Badge size="md">md</Badge>
+    <Badge size="lg">lg</Badge>
+    <Badge size="xl">xl</Badge>
+  </div>
+</Card>
+
+`xs` is the size to reach for inside something dense, like a table row, a
+list item, or a card header, where a taller pill pushes the line around it
+apart. That's most badges in the app. Drop to `2xs` for a badge riding alongside
+small text, and go past `md` only when the badge is the subject rather than
+an annotation.
+
+### Icons
+
+Icons go in the slot next to the label. They don't inherit the label's size:
+they're level with it at `2xs` and `xs`, then step one rung up the type scale
+from `sm` on, so they don't turn weedy next to the text. They also take the
+500 of the badge's color rather than the 900 the label uses.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3">
+    <Badge color="teal"><i class="fa-solid fa-circle-check"></i>Delivered</Badge>
+    <Badge color="amber"><i class="fa-solid fa-clock"></i>Pending</Badge>
+    <Badge color="rose"><i class="fa-solid fa-triangle-exclamation"></i>Failed</Badge>
+    <Badge color="slate"><i class="fa-solid fa-tag"></i>VIP</Badge>
+  </div>
+</Card>
+
+That 500 is a decorative weight, not a legible one. On its own tint it runs
+1.9:1 to 3.7:1, which is below anything WCAG asks of text. So the icon can
+reinforce the label but never replace it. An icon with no label isn't a
+badge; it's an icon in a pill, and a plain icon would do the job better.
+
+## Contrast
+
+The tint pairing is the strongest label contrast in the system. Every color
+clears WCAG AAA and APCA's
+Lc 75 mark for body text, which the 300-level fills on Button do not.
+
+| Fill        | Label       | WCAG   | APCA   |
+| ----------- | ----------- | ------ | ------ |
+| sky-100     | sky-900     | 8.2:1  | Lc 82  |
+| teal-100    | teal-900    | 8.4:1  | Lc 83  |
+| amber-100   | amber-900   | 8.2:1  | Lc 83  |
+| rose-100    | rose-900    | 8.0:1  | Lc 78  |
+| violet-100  | violet-900  | 9.3:1  | Lc 83  |
+| slate-100   | slate-900   | 16.3:1 | Lc 98  |
+
+That margin matters more here than on anything else in the system. Badge text
+runs 10–12px, the size at which a contrast shortfall counts most, and a badge
+is often the only colored thing in a table row. Color has the tint set
+against the control rung if you want the comparison.
+
+The extended set lands in the same band:
+
+| Fill        | Label        | WCAG  | APCA  |
+| ----------- | ------------ | ----- | ----- |
+| lime-100    | lime-900     | 8.0:1 | Lc 84 |
+| orange-100  | orange-900   | 8.2:1 | Lc 82 |
+| green-100   | green-900    | 8.3:1 | Lc 84 |
+| blue-100    | blue-900     | 8.5:1 | Lc 80 |
+| fuchsia-100 | fuchsia-900  | 8.7:1 | Lc 82 |
+| pink-100    | pink-900     | 8.2:1 | Lc 80 |
+| emerald-100 | emerald-900  | 8.5:1 | Lc 83 |
+
+### What the tint costs
+
+The tint buys its label contrast by giving up separation from the surface: a
+100 fill sits lighter than the page background, and rose-100 on slate-200 is
+1.02:1. That's the reason the 300 border is part of the treatment rather than
+something you turn on. Without it a badge has no edge at all, so there's no
+option to drop it.
+
+| Element     | On white | On the page background |
+| ----------- | -------- | ---------------------- |
+| sky-100     | 1.15:1   | 1.07:1                 |
+| teal-100    | 1.13:1   | 1.09:1                 |
+| amber-100   | 1.11:1   | 1.11:1                 |
+| rose-100    | 1.20:1   | 1.02:1                 |
+| violet-100  | 1.19:1   | 1.04:1                 |
+| slate-100   | 1.10:1   | 1.12:1                 |
+| sky-300     | 1.67:1   | 1.35:1                 |
+| rose-300    | 1.92:1   | 1.56:1                 |
+| slate-300   | 1.48:1   | 1.21:1                 |
+
+The border roughly doubles the separation, and it's still soft. Nothing here
+reaches the 3:1 WCAG asks for the boundary of a control. That's fine for a
+badge, which isn't a control and isn't announcing itself. It is not fine as a
+way to carry meaning: as everywhere else in the system, the label does that.
+Never build a badge whose meaning depends on someone noticing the fill.
