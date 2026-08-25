@@ -16,6 +16,22 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - `src/content/skills/` — AI-oriented skills/instructions (Markdown), served under `/skills/...`.
 - Content collections are defined in `src/content.config.ts`. Use collections for repeatable content; regular Astro pages only for unique pages like the homepage.
 
+## Imports
+
+Import across directories through the aliases in `tsconfig.json`, never with
+`../` traversal. Astro passes them to Vite, so they work the same in `.astro`,
+`.vue` and `.mdx`.
+
+| Alias       | Resolves to            | Example                                     |
+| ----------- | ---------------------- | ------------------------------------------- |
+| `@ui/*`     | `src/components/ui/*`  | `import Button from '@ui/Button.vue'`       |
+| `@site/*`   | `src/components/site/*`| `import Sidebar from '@site/Sidebar.astro'` |
+| `@layouts/*`| `src/layouts/*`        | `import Layout from '@layouts/Layout.astro'`|
+| `@data/*`   | `src/data/*`           | `import { testPages } from '@data/testPages'`|
+
+`@ui` and `@site` are deliberately separate so the design-system / site-chrome
+split above reads at the import line. Same-directory siblings still use `./`.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { testPages } from '../../data/testPages';
+import { testPages } from '@data/testPages';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
