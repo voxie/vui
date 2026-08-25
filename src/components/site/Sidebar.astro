@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Card from '../ui/Card.vue';
 import Button from '../ui/Button.vue';
+import { testPages } from '../../data/testPages';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
@@ -22,7 +23,13 @@ function linkClass(href: string) {
 }
 ---
 
-<aside class="w-56 shrink-0 justify-self-end sticky top-8">
+{/* The nav outgrows a short viewport now that every test page is listed, so it
+    scrolls itself. overflow alone would do nothing — the max height is what
+    gives it something to scroll against, and it leaves the same 2rem at the
+    bottom that `top-8` leaves at the top. */}
+<aside
+  class="w-56 shrink-0 justify-self-end sticky top-8 max-h-[calc(100dvh-4rem)] overflow-y-auto pr-2"
+>
   <nav class="text-sm space-y-4">
     {
       sections.map((section) => (
@@ -68,8 +75,7 @@ function linkClass(href: string) {
       </ul>
     </div>
 
-    {/* Unstyled fixtures rather than documentation, so they sit last and only
-        the index is listed — that page is the directory for the rest. */}
+    {/* Unstyled fixtures rather than documentation, so they sit last. */}
     <div>
       <h3 class="font-extrabold capitalize">Test Pages</h3>
       <ul class="mt-2">
@@ -80,6 +86,17 @@ function linkClass(href: string) {
             </span>
           </a>
         </li>
+        {
+          testPages.map((page) => (
+            <li>
+              <a href={page.href} class={linkClass(page.href)}>
+                <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
+                {page.title}
+                </span>
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </div>
 
