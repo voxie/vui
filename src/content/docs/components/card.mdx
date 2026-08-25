@@ -61,3 +61,24 @@ that manages its own spacing, such as a table or an image.
     <p class="leading-snug">Used for focused step by step flows like quick blast or modal content. Anything where the main UI is faded back or we have very low information density. Less stuff gives us more breathing room.</p>
   </Card>
 </div>
+
+### Element
+
+The `as` prop sets the tag the card renders as. It defaults to `div`, which is
+right for a card that is only a visual grouping. Switch to `section` when the
+card is a titled region of the page, or `article` when its content would still
+make sense pulled out on its own.
+
+<div class="not-prose space-y-8">
+  <Card as="section">
+    <h4 class="font-extrabold">section</h4>
+    <p class="leading-snug">A named region of a larger page, such as a settings group or a dashboard panel with a heading.</p>
+  </Card>
+  <Card as="article">
+    <h4 class="font-extrabold">article</h4>
+    <p class="leading-snug">Self-contained content, such as a message in a feed or a campaign summary in a list.</p>
+  </Card>
+</div>
+
+Under the `layered` surface the tag lands on the card holding the content; the
+offset layers behind it stay presentational.

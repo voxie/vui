@@ -9,8 +9,15 @@ const props = withDefaults(
 	defineProps<{
 		surface?: 'default' | 'glass' | 'glassRaised' | 'layered' | 'sunken' | 'dark';
 		padding?: 'none' | 'compact' | 'default' | 'spacious';
+		/*
+		  The tag the card renders as. A card is a box, not a meaning, so reach
+		  for `section` or `article` when the content is a landmark or stands on
+		  its own. Left as a plain string rather than a union so callers aren't
+		  blocked on this list growing.
+		*/
+		as?: string;
 	}>(),
-	{ surface: 'default', padding: 'default' },
+	{ surface: 'default', padding: 'default', as: 'div' },
 );
 
 const surfaceClasses: Record<string, string> = {
@@ -35,14 +42,17 @@ const cardClass = computed(
 </script>
 
 <template>
+  <!-- The layered wrapper stays a div: it only exists to position the stack,
+       so the semantic tag goes on the card that holds the content. -->
   <div v-if="surface === 'layered'" class="p-10 pl-0 pt-0 relative">
-    <div
+    <component
+      :is="as"
       :class="cardClass"
       class="relative"
       v-bind="$attrs"
     >
       <slot />
-    </div>
+    </component>
 
     <div
       class="absolute -z-10 inset-5 bg-white/80 backdrop-blur-lg border border-white rounded-2xl shadow-lg"
@@ -52,12 +62,13 @@ const cardClass = computed(
     ></div>
   </div>
 
-  <div
+  <component
+    :is="as"
     v-else
     :class="cardClass"
     class="relative"
     v-bind="$attrs"
   >
     <slot />
-  </div>
+  </component>
 </template>
