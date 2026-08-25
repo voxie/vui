@@ -7,10 +7,7 @@ const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 ---
 
-<Layout
-  title="Documentation"
-  description="The design system behind Voxie: components, foundations, and the guidance for putting them together."
->
+<Layout title="Documentation">
   <h1>Voxie UI Documentation</h1>
 
   <p>The design system behind Voxie. The components screens are built from, the foundations they sit on, and the guidance for putting the two together.</p>
