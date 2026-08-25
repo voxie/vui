@@ -73,6 +73,9 @@
   --tw-prose-lead: var(--color-slate-500);
   --tw-prose-captions: var(--color-slate-500);
   --tw-prose-links: var(--color-sky-700);
+  /* prose-slate points this at slate-200, which is the page background, so the
+     rule disappears. One step darker is the faintest line that still reads. */
+  --tw-prose-hr: var(--color-slate-300);
 }
 .prose :is(h1, h2, h3, h4, h5, h6, th) {
   font-weight: var(--font-weight-extrabold);
