@@ -4,6 +4,7 @@ order: 2
 ---
 
 import Card from '@ui/Card.vue';
+import Button from '@ui/Button.vue';
 
 ## Examples
 
@@ -82,3 +83,34 @@ make sense pulled out on its own.
 
 Under the `layered` surface the tag lands on the card holding the content; the
 offset layers behind it stay presentational.
+
+## Interaction
+
+Cards have no hover or active styles. Nothing about a card changes when you
+point at it or press it, and that is deliberate rather than unfinished.
+
+A card is a container, and its surface is the one thing it says: where this
+panel sits in the stack. Those values are fixed by
+[Color](/docs/foundations/color), so a hover state would have to move the card
+off the rung it is documented at, contradicting the only message the surface
+carries. A card is also large. Lighting a whole panel on hover puts a change
+of state across half the screen without telling anyone what it does or where
+to aim.
+
+When a card is meant to link somewhere or perform an action, put a
+[Button](/docs/components/button) inside it and let the button do that work.
+Make it the card's primary button, so there is one obvious target instead of a
+panel that might be clickable somewhere. The button is also the part that
+takes keyboard focus and the part a screen reader announces as pressable,
+neither of which a card can do.
+
+<div class="not-prose">
+  <Card>
+    <h4 class="font-extrabold">Hubspot</h4>
+    <p class="mt-1 leading-snug">Sync contacts and conversations with your Hubspot workspace.</p>
+    <div class="mt-4"><Button color="sky">Connect</Button></div>
+  </Card>
+</div>
+
+This holds for list rows too. A row of results is a stack of cards, and the
+thing you click is the link or button inside the row, not the row itself.
