@@ -29,7 +29,7 @@ const { title, description } = Astro.props;
 		{/* Equal 1fr gutters are what center the main column in the viewport. */}
 		<div class="grid grid-cols-[minmax(14rem,1fr)_minmax(0,41rem)_1fr] items-start">
 			<Sidebar />
-			<main class="prose prose-slate max-w-none p-8">
+			<main class="prose prose-slate max-w-none p-8 xl:py-24">
 				<slot />
 			</main>
 		</div>
