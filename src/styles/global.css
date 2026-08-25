@@ -48,6 +48,13 @@
     */
     font-variant-numeric: tabular-nums;
   }
+
+  /* not-prose drops prose's element rules but not the line-height declared on
+     .prose itself, which keeps inheriting in. Base layer, so leading-* wins. */
+  .prose .not-prose {
+    line-height: var(--leading-normal);
+    color: var(--color-slate-700);
+  }
 }
 
 /*
@@ -57,7 +64,8 @@
   they point prose at the three text colors the foundations page documents.
 */
 .prose {
-  --tw-prose-body: var(--color-slate-800);
+  line-height: var(--leading-relaxed);
+  --tw-prose-body: var(--color-slate-600);
   --tw-prose-headings: var(--color-slate-800);
   --tw-prose-bold: var(--color-slate-800);
   --tw-prose-code: var(--color-slate-800);
@@ -65,4 +73,7 @@
   --tw-prose-lead: var(--color-slate-500);
   --tw-prose-captions: var(--color-slate-500);
   --tw-prose-links: var(--color-sky-700);
+}
+.prose :is(h1, h2, h3, h4, h5, h6, th) {
+  font-weight: var(--font-weight-extrabold);
 }

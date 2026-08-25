@@ -21,17 +21,19 @@ function linkClass(href: string) {
   class="w-56 shrink-0 justify-self-end sticky top-0 max-h-dvh overflow-y-auto overscroll-y-contain py-8 px-4"
 >
   <nav class="text-sm space-y-4">
-    {/* The home page is the intro, so it leads the nav. currentPath strips the
-        trailing slash, which leaves the home page as an empty string. */}
-    <ul>
-      <li>
-        <a href="/" class={linkClass('')}>
-          <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
-          Intro
-          </span>
-        </a>
-      </li>
-    </ul>
+    {/* '' rather than '/' — currentPath has the trailing slash stripped. */}
+    <div>
+      <h3 class="font-extrabold capitalize">Voxie UI</h3>
+      <ul class="mt-2">
+        <li>
+          <a href="/" class={linkClass('')}>
+            <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
+            Intro
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
     {
       sections.map((section) => (
