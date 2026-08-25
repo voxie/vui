@@ -14,28 +14,30 @@ const skills = (await getCollection('skills')).sort((a, b) =>
 	<h1>Voxie UI Documentation</h1>
 
 	<h2>Docs</h2>
-	<ul>
+	<ul class="not-prose space-y-3">
 		{
 			docs.map((entry) => (
-				<li>
-					<a href={`/docs/${entry.id}`}>
+				<li class="leading-snug">
+					<a href={`/docs/${entry.id}`} class="text-sky-700 hover:text-black font-semibold">
 						{entry.data.title}
 					</a>
-					<span> — {entry.data.description}</span>
+					<br/>
+					<span class="text-sm">{entry.data.description}</span>
 				</li>
 			))
 		}
 	</ul>
 
 	<h2>Skills</h2>
-	<ul>
+	<ul class="not-prose space-y-3">
 		{
 			skills.map((entry) => (
-				<li>
-					<a href={`/skills/${entry.id}`}>
+				<li class="leading-snug">
+					<a href={`/skills/${entry.id}`} class="text-sky-700 hover:text-black font-semibold">
 						{entry.data.title}
 					</a>
-					<span> — {entry.data.description}</span>
+					<br/>
+					<span class="text-sm">{entry.data.description}</span>
 				</li>
 			))
 		}
