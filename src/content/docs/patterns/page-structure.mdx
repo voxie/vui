@@ -4,4 +4,26 @@ description: Guidance for structuring application pages.
 order: 1
 ---
 
-Page structure guidance goes here. A pattern page can reference several components as needed.
+import Card from '../../../components/ui/Card.vue';
+
+Pages are typically made up of two sections. The navbar which is flexible and fills the full browser width and the main content area witch has its max width capped.
+
+The navbar uses the navbar component.
+
+For the main content, we use the tailwind container class with a max width and padding:
+
+```
+container mx-auto px-3 md:px-8 max-w-(--breakpoint-xl)
+```
+
+We use a 12 column grid when necessary. Areas like a dashboard with variable width cards containing different callouts. Gaps between items should never exceed the gap between the container and edge of the screen and should ideally be slightly smaller.
+
+```
+grid grid-cols-12 gap-6 md:gap-8
+```
+
+<div class="grid grid-cols-12 gap-6 md:gap-8 mt-12">
+<Card class="col-span-6" /> <Card class="col-span-6" />
+<Card class="col-span-4" /> <Card class="col-span-4" /> <Card class="col-span-4" />
+<Card class="col-span-6" /> <Card class="col-span-6" />
+</div>
