@@ -68,6 +68,21 @@ function linkClass(href: string) {
       </ul>
     </div>
 
+    {/* Unstyled fixtures rather than documentation, so they sit last and only
+        the index is listed — that page is the directory for the rest. */}
+    <div>
+      <h3 class="font-extrabold capitalize">Test Pages</h3>
+      <ul class="mt-2">
+        <li>
+          <a href="/test-pages" class={linkClass('/test-pages')}>
+            <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
+            Overview
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
     <div class:list={[isHome && 'hidden', 'mt-6']}>
       <Button
         href="/"
