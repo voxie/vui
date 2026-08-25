@@ -26,6 +26,18 @@
 }
 
 @layer base {
+  html {
+    /*
+      The platform default is a warm gray that reads brown against slate. The
+      thumb takes slate-400 — the value the sidebar rails already use — and the
+      track goes transparent so nothing rules a line down the edge of the page.
+
+      Set here rather than on each scroll container because the property
+      inherits, so the sidebar and any future overflow area pick it up.
+    */
+    scrollbar-color: var(--color-slate-400) transparent;
+  }
+
   body {
     color: var(--color-slate-800);
     /*
