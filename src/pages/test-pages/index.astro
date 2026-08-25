@@ -1,0 +1,109 @@
+---
+/*
+  Index of the unstyled test pages.
+
+  This page is the one exception in this directory — it carries a little
+  styling of its own so the list stays readable while everything it links to
+  is still raw markup.
+*/
+import TestPageLayout from '../../layouts/TestPageLayout.astro';
+
+const pages = [
+	{
+		href: '/test-pages/dashboard',
+		title: 'Dashboard',
+		source: 'home/HomeCorporate.vue',
+		exercises:
+			'Unequal 12-column grid, promo panel, icon list, categorical chart, stat tiles.',
+	},
+	{
+		href: '/test-pages/contacts-list',
+		title: 'Contacts List',
+		source: 'contacts/contact/ContactList.vue',
+		exercises:
+			'Filter bar with an open filter form, data table that reflows to cards, badges, row overflow menus, cursor pagination.',
+	},
+	{
+		href: '/test-pages/contact-detail',
+		title: 'Contact Detail',
+		source: 'contacts/contact/form/ContactForm.vue',
+		exercises:
+			'Nested page sidebar, info alert, stacked expandable cards, dense form, field error, tag chips, sticky footer.',
+	},
+	{
+		href: '/test-pages/campaigns-list',
+		title: 'Campaigns List',
+		source: 'campaigns/list/CampaignList.vue',
+		exercises:
+			'Header with an overview strip, dismissible callout, and a status column running every badge color at once.',
+	},
+	{
+		href: '/test-pages/message-hub',
+		title: 'Message Hub',
+		source: 'message-hub/MessageHub.vue',
+		exercises:
+			'Full-height two-pane split, dense uniform-height list, inbound/outbound clouds, composer with a segmented action bar.',
+	},
+	{
+		href: '/test-pages/quick-blast',
+		title: 'Quick Blast',
+		source: 'quick-blast/QuickBlast.vue',
+		exercises:
+			'Low-density focused flow — centered narrow column, step nav, complete/active/upcoming steps, option tiles, SMS preview.',
+	},
+	{
+		href: '/test-pages/analytics-dashboard',
+		title: 'Analytics Dashboard',
+		source: 'analytics/AnalyticsDashboard.vue',
+		exercises:
+			'Stat tiles with deltas and an empty value, chart frames with legends, date-range controls, wide exportable table.',
+	},
+	{
+		href: '/test-pages/settings-security',
+		title: 'Settings — Security',
+		source: 'settings/security/SecuritySettings.vue',
+		exercises:
+			'Narrow single-column settings, expandable cards, success and warning alerts, password fields, a destructive section.',
+	},
+	{
+		href: '/test-pages/states',
+		title: 'States',
+		source: 'Composite',
+		exercises:
+			'Banners, four alert colors, empty states, loading and skeletons, errors and 404, the badge set, toasts, a modal.',
+	},
+];
+---
+
+<TestPageLayout title="Test Pages">
+	<main class="mx-auto max-w-3xl p-8">
+		<h1 class="text-3xl font-extrabold">Design System Test Pages</h1>
+
+		<p class="mt-4 text-sm leading-relaxed">
+			Real production markup pulled from the <code>voxie</code> app, stripped of
+			every Tailwind class and filled with static test data. Nothing here is
+			styled — that's the point. Point an agent at a page and the design system
+			docs, and see what comes back.
+		</p>
+
+		<p class="mt-4 text-sm leading-relaxed">
+			The brief for the agent lives in <code>src/pages/test-pages/_README.md</code>.
+		</p>
+
+		<ul class="mt-8 space-y-6">
+			{
+				pages.map((page) => (
+					<li>
+						<a href={page.href} class="text-base font-extrabold text-sky-700">
+							{page.title}
+						</a>
+						<p class="mt-1 text-xs text-slate-500">
+							<code>{page.source}</code>
+						</p>
+						<p class="mt-1 text-sm leading-snug">{page.exercises}</p>
+					</li>
+				))
+			}
+		</ul>
+	</main>
+</TestPageLayout>

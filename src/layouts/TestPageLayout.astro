@@ -1,0 +1,35 @@
+---
+/*
+  Bare shell for design-system test pages.
+
+  Deliberately carries no styling of its own beyond loading Tailwind and the
+  font, so a page renders as raw semantic HTML until someone styles it. Do not
+  add layout or color here — that is the exercise.
+*/
+import '@fontsource-variable/inter/wght.css';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	source?: string;
+}
+
+const { title, source } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		{source && <meta name="x-source" content={source} />}
+		<title>{title} · Test Page</title>
+		<script
+			is:inline
+			src="https://kit.fontawesome.com/06f511676f.js"
+			crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
