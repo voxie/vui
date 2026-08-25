@@ -1,0 +1,240 @@
+---
+/*
+  Campaigns list.
+
+  Source: resources/js/components/campaigns/list/CampaignList.vue plus
+  campaign-card/CampaignRow.vue and list/CampaignListHeader.vue.
+
+  Exercises: a header with an overview strip, a dismissible page callout, and a
+  table whose status column runs through every badge color in the palette —
+  the page to look at when checking that accents hold together side by side.
+*/
+import AppShell from './_AppShell.astro';
+
+/* Mirrors CAMPAIGN_STATUSES in resources/js/constants/campaign.ts. */
+const campaigns = [
+	{
+		id: 3312,
+		name: 'Spring Service Reminder',
+		status: 'Draft',
+		statusKey: 'draft',
+		contacts: '12.4k',
+		contactsExact: '12,441',
+		cost: '$248.82',
+		sendOn: '—',
+	},
+	{
+		id: 3311,
+		name: 'Lease Expiring — 60 Day Window',
+		status: 'Scheduled',
+		statusKey: 'scheduled',
+		contacts: '3.1k',
+		contactsExact: '3,092',
+		cost: '$61.84',
+		sendOn: 'Tomorrow, 9:00 AM',
+	},
+	{
+		id: 3310,
+		name: 'Labor Day Weekend Blast',
+		status: 'Live',
+		statusKey: 'published',
+		contacts: '48.9k',
+		contactsExact: '48,903',
+		cost: '$978.06',
+		sendOn: 'Today, 7:30 AM',
+	},
+	{
+		id: 3309,
+		name: 'Summer Tire Rotation Offer',
+		status: 'Completed',
+		statusKey: 'completed',
+		contacts: '22.0k',
+		contactsExact: '21,988',
+		cost: '$439.76',
+		sendOn: 'Aug 4, 2026 8:00 AM',
+	},
+	{
+		id: 3308,
+		name: 'Trade-In Appraisal Follow Up',
+		status: 'Paused',
+		statusKey: 'paused',
+		contacts: '—',
+		contactsExact: null,
+		cost: '—',
+		sendOn: 'Jul 29, 2026 10:00 AM',
+	},
+	{
+		id: 3307,
+		name: 'Q2 Loyalty Check-In',
+		status: 'Archived',
+		statusKey: 'archived',
+		contacts: '9.7k',
+		contactsExact: '9,714',
+		cost: '$194.28',
+		sendOn: 'Jun 12, 2026 9:00 AM',
+	},
+];
+
+const overview = [
+	['Total', '64'],
+	['Live', '3'],
+	['Scheduled', '7'],
+	['Contacts Reached', '118.2k'],
+];
+---
+
+<AppShell
+	title="Campaigns"
+	source="resources/js/components/campaigns/list/CampaignList.vue"
+>
+	<header data-test="campaign-list-header">
+		<h1>Campaigns</h1>
+		<p>64 campaigns</p>
+
+		<dl data-test="overview">
+			{
+				overview.map(([label, value]) => (
+					<div>
+						<dt>{label}</dt>
+						<dd>{value}</dd>
+					</div>
+				))
+			}
+		</dl>
+
+		<a href="#" data-test="new-campaign">
+			New Campaign
+			<i class="fa-solid fa-circle-plus"></i>
+		</a>
+	</header>
+
+	<section data-test="page-controls">
+		<div data-test="campaign-filters">
+			<button type="button" aria-expanded="false">
+				<span>Find Campaigns</span>
+			</button>
+		</div>
+
+		<label for="audience">Audience</label>
+		<select id="audience" name="audience">
+			<option value="">All</option>
+			<option value="marketing" selected>Marketing</option>
+			<option value="transactional">Transactional</option>
+		</select>
+
+		<label for="status">Status</label>
+		<select id="status" name="status">
+			<option value="">All</option>
+			<option value="draft">Draft</option>
+			<option value="published">Live</option>
+		</select>
+	</section>
+
+	<aside data-test="page-callout">
+		<i class="fa-solid fa-lightbulb"></i>
+		<div>
+			<h2>Collect more opt-ins with a form submission entry point</h2>
+			<p>
+				Turn any web form into a subscriber source. Contacts opt in at the point
+				of interest, so your first message lands while they still care.
+			</p>
+			<a href="#">
+				Learn More
+				<i class="fa-solid fa-square-arrow-up-right"></i>
+			</a>
+		</div>
+		<button type="button" aria-label="Dismiss">
+			<i class="fa-solid fa-xmark"></i>
+		</button>
+	</aside>
+
+	<table data-test="campaigns-table">
+		<thead>
+			<tr>
+				<th scope="col">Name</th>
+				<th scope="col">Status</th>
+				<th scope="col">Contacts</th>
+				<th scope="col">Cost</th>
+				<th scope="col">Send on</th>
+				<th scope="col"><span>Actions</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			{
+				campaigns.map((campaign) => (
+					<tr data-test="campaign-row">
+						<th scope="row" data-test="row-title">
+							<a href="#">{campaign.name}</a>
+							<button type="button" aria-label="Campaign details">
+								<i class="fa-solid fa-circle-info" />
+							</button>
+						</th>
+
+						<td>
+							<span data-test="label">Status:</span>
+							<span data-test="campaign-status" data-status={campaign.statusKey}>
+								{campaign.status}
+							</span>
+						</td>
+
+						<td data-test="contacts-count">
+							<span data-test="label">Contacts:</span>
+							<span title={campaign.contactsExact ?? undefined}>{campaign.contacts}</span>
+						</td>
+
+						<td data-test="cost">
+							<span data-test="label">Cost:</span>
+							{campaign.cost}
+						</td>
+
+						<td data-test="send-on">
+							<span data-test="label">Send On:</span>
+							<span data-test="live-at">{campaign.sendOn}</span>
+						</td>
+
+						<td data-test="row-buttons">
+							<div data-test="dropdown">
+								<button type="button" aria-label="More actions" aria-expanded="false">
+									<i class="fa-solid fa-ellipsis" />
+								</button>
+								<ul>
+									<li>
+										<button type="button" data-test="copy-btn">
+											Duplicate
+											<i class="fa-solid fa-copy" />
+										</button>
+									</li>
+									<li>
+										<button type="button" data-test="delete-btn">
+											Delete
+											<i class="fa-solid fa-trash" />
+										</button>
+									</li>
+								</ul>
+							</div>
+							{/* Disabled unless draft or scheduled — exercises the disabled state. */}
+							<a
+								href="#"
+								data-test="edit-btn"
+								aria-disabled={
+									['draft', 'scheduled'].includes(campaign.statusKey) ? undefined : 'true'
+								}
+							>
+								Edit
+								<i class="fa-solid fa-file-pen" />
+							</a>
+						</td>
+					</tr>
+				))
+			}
+		</tbody>
+	</table>
+
+	<footer data-test="pagination">
+		<button type="button" data-test="load-more-btn">
+			Load More
+			<i class="fa-solid fa-spinner"></i>
+		</button>
+		<p>6/64</p>
+	</footer>
+</AppShell>

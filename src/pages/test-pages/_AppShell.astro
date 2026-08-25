@@ -1,0 +1,111 @@
+---
+/*
+  The application chrome — navigation bar and page container.
+
+  Mirrors `resources/js/components/navbar/AppNavbar.vue` in the voxie repo,
+  flattened to plain markup. Shared across the test pages so the chrome gets
+  styled once and every page inherits it, which is how the real app behaves.
+*/
+import TestPageLayout from '@layouts/TestPageLayout.astro';
+
+interface Props {
+	title: string;
+	source?: string;
+	/* Message Hub and similar own the full viewport and manage their own scroll. */
+	fullBleed?: boolean;
+}
+
+const { title, source, fullBleed = false } = Astro.props;
+
+const navItems = [
+	{
+		name: 'Analytics',
+		href: '/test-pages/analytics-dashboard',
+		items: ['Dashboard', 'Contacts', 'Entry Points', 'Outbound Messages'],
+	},
+	{
+		name: 'Automation',
+		href: '#',
+		items: ['Automations', 'Flows', 'Workflow Builder'],
+	},
+	{
+		name: 'Contacts',
+		href: '/test-pages/contacts-list',
+		items: ['All Contacts', 'Segments', 'External Lists', 'Tags', 'Custom Attributes', 'Imports'],
+	},
+	{
+		name: 'Messaging',
+		href: '/test-pages/campaigns-list',
+		items: ['Message Hub', 'Quick Blast', 'Campaigns', 'Reserved Dates', 'Snippets'],
+	},
+	{ name: 'Support', href: '#', items: [] },
+];
+---
+
+<TestPageLayout title={title} source={source}>
+	<nav data-test="app-navbar" aria-label="Main">
+		<a href="/test-pages" data-test="navbar-logo">
+			<span>Voxie</span>
+		</a>
+
+		<a href="/test-pages/message-hub" data-test="navbar-message-hub">
+			<i class="fa-solid fa-messages"></i>
+			Message Hub
+		</a>
+
+		<a href="/test-pages/quick-blast" data-test="navbar-quick-blast">
+			<i class="fa-solid fa-rocket-launch"></i>
+			Quick Blast
+		</a>
+
+		<ul>
+			{
+				navItems.map((item) => (
+					<li>
+						<a href={item.href}>{item.name}</a>
+						{item.items.length > 0 && (
+							<ul>
+								{item.items.map((child) => (
+									<li>
+										<a href="#">{child}</a>
+									</li>
+								))}
+							</ul>
+						)}
+					</li>
+				))
+			}
+		</ul>
+
+		<div data-test="navbar-context-switch">
+			<button type="button">
+				Northside Auto Group
+				<i class="fa-solid fa-chevron-down"></i>
+			</button>
+		</div>
+
+		<div data-test="navbar-settings">
+			<button type="button" aria-label="Settings">
+				<i class="fa-solid fa-gear"></i>
+			</button>
+			<ul>
+				<li><a href="/test-pages/settings-security">Security</a></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="#">Team</a></li>
+				<li><a href="#">Billing</a></li>
+				<li><a href="#">Integrations</a></li>
+				<li><a href="#">Sign Out</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	{
+		fullBleed ? (
+			<slot />
+		) : (
+			<main data-test="page-container">
+				<slot />
+			</main>
+		)
+	}
+</TestPageLayout>

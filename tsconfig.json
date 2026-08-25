@@ -8,6 +8,19 @@
     "dist"
   ],
   "compilerOptions": {
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": ".",
+    /*
+      Astro reads these and hands them to Vite, so one definition covers .astro,
+      .vue and .mdx alike. Split by role rather than a single @components root:
+      the ui/site boundary is the one CLAUDE.md asks people to keep straight, so
+      it reads at the import line instead of hiding in a path segment.
+    */
+    "paths": {
+      "@ui/*": ["src/components/ui/*"],
+      "@site/*": ["src/components/site/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@data/*": ["src/data/*"]
+    }
   }
 }

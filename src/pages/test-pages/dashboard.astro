@@ -1,0 +1,143 @@
+---
+/*
+  Home dashboard.
+
+  Source: resources/js/components/home/HomeCorporate.vue, with HomeCallToAction,
+  HomeFeatures, HomeRecentlyCreatedCampaigns and HomeAnalytics flattened in.
+
+  Exercises: a 12-column grid of unequal cards, a promo/marketing panel, a
+  getting-started list with icon tiles, a categorical chart frame, and stat
+  tiles with a delta.
+*/
+import AppShell from './_AppShell.astro';
+
+const gettingStarted = [
+	{ label: 'See our Integrations', icon: 'fa-robot', href: '#' },
+	{ label: 'Install Contact Collector', icon: 'fa-message-captions', href: '#' },
+	{ label: 'Start Capturing Conversions', icon: 'fa-star', href: '#' },
+];
+
+const campaignsByStatus = [
+	{ label: 'Draft', count: 12 },
+	{ label: 'Scheduled', count: 7 },
+	{ label: 'Live', count: 3 },
+	{ label: 'Completed', count: 41 },
+	{ label: 'Paused', count: 1 },
+];
+
+const maxCount = Math.max(...campaignsByStatus.map((s) => s.count));
+---
+
+<AppShell title="Dashboard" source="resources/js/components/home/HomeCorporate.vue">
+	<h1>Dashboard</h1>
+
+	<section data-test="home-call-to-action">
+		<article>
+			<h2>New Hubspot App</h2>
+			<p>
+				Bring your HubSpot workflows to life with personalized SMS conversations
+				that cut through the noise.
+			</p>
+			<a href="#">
+				Learn More
+				<i class="fa-solid fa-square-arrow-up-right"></i>
+			</a>
+
+			<button type="button" data-test="intro-video">
+				<img
+					src="https://placehold.co/1022x593/e2e8f0/475569?text=Hubspot+Overview"
+					alt="Hubspot demo video"
+					width="1022"
+					height="593"
+				/>
+				<i class="fa-solid fa-circle-play"></i>
+			</button>
+		</article>
+
+		<ol data-test="slider-pagination">
+			<li><button type="button" aria-current="true" aria-label="Slide 1"></button></li>
+			<li><button type="button" aria-label="Slide 2"></button></li>
+			<li><button type="button" aria-label="Slide 3"></button></li>
+		</ol>
+	</section>
+
+	<section data-test="home-features">
+		<h2>Getting Started</h2>
+		<ul>
+			{
+				gettingStarted.map((item) => (
+					<li>
+						<a href={item.href}>
+							<span data-test="list-icon">
+								<i class={`fa-solid ${item.icon}`} />
+							</span>
+							{item.label}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+		<a href="#" target="_blank" rel="noopener noreferrer">
+			API Docs
+			<i class="fa-solid fa-arrow-right"></i>
+		</a>
+	</section>
+
+	<section data-test="recently-created-campaigns">
+		<h2>Recently Created Marketing Campaigns</h2>
+		<p>Last 30 Days</p>
+
+		<dl>
+			{
+				campaignsByStatus.map((status) => (
+					<div>
+						<dt>{status.label}</dt>
+						<dd>
+							{/* The bar is a meter so the value survives with no styling. */}
+							<meter value={status.count} min="0" max={maxCount}>
+								{status.count}
+							</meter>
+							<span>{status.count}</span>
+						</dd>
+					</div>
+				))
+			}
+		</dl>
+
+		<a href="/test-pages/campaigns-list">
+			Go to Campaigns
+			<i class="fa-solid fa-arrow-right"></i>
+		</a>
+	</section>
+
+	<section data-test="home-analytics">
+		<article data-test="stat-card">
+			<h3>Total Marketing Opt-Ins</h3>
+			<p>Last 30 days</p>
+			<p data-test="number">4,182</p>
+			<p data-test="difference">
+				<i class="fa-solid fa-arrow-up"></i>
+				12.4% vs previous period
+			</p>
+		</article>
+
+		<article data-test="stat-card">
+			<h3>Messages Sent by Type</h3>
+			<p>Last 30 days</p>
+			<p data-test="number">128,940</p>
+			<p data-test="difference">
+				<i class="fa-solid fa-arrow-down"></i>
+				3.1% vs previous period
+			</p>
+		</article>
+
+		<article data-test="more-analytics">
+			<h3>More Analytics</h3>
+			<p>Visit the analytics page for more in depth coverage.</p>
+			<a href="/test-pages/analytics-dashboard">
+				Analytics
+				<i class="fa-solid fa-arrow-right"></i>
+			</a>
+		</article>
+	</section>
+</AppShell>

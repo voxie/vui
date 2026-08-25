@@ -1,0 +1,208 @@
+---
+/*
+  Settings — Security.
+
+  Source: resources/js/components/settings/security/SecuritySettings.vue plus
+  UpdatePassword.vue, EnableTwoFactorAuth.vue and DisableTwoFactorAuth.vue.
+
+  Exercises: the narrow single-column settings archetype — a constrained
+  measure, stacked expandable cards, success and warning alerts, password
+  fields with a reveal toggle, and a block-width submit.
+*/
+import AppShell from './_AppShell.astro';
+
+const sections = [
+	{ label: 'Profile', href: '#' },
+	{ label: 'Security', href: '#', active: true },
+	{ label: 'Team', href: '#' },
+	{ label: 'Phone Numbers', href: '#' },
+	{ label: 'Message Standards', href: '#' },
+	{ label: 'Integrations', href: '#' },
+	{ label: 'API', href: '#' },
+	{ label: 'Billing', href: '#' },
+];
+
+const sessions = [
+	['Chrome on macOS', 'Austin, TX', 'Current session'],
+	['Safari on iOS', 'Austin, TX', '2 days ago'],
+	['Firefox on Windows', 'Chicago, IL', '3 weeks ago'],
+];
+---
+
+<AppShell
+	title="Security"
+	source="resources/js/components/settings/security/SecuritySettings.vue"
+>
+	<div data-test="settings-layout">
+		<nav data-test="settings-sidebar" aria-label="Settings">
+			<ul>
+				{
+					sections.map((section) => (
+						<li>
+							<a href={section.href} aria-current={section.active ? 'page' : undefined}>
+								{section.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<div data-test="settings-content">
+			<header data-test="page-header">
+				<h1>Security</h1>
+			</header>
+
+			<section data-test="expandable-card">
+				<h2>
+					<button type="button" aria-expanded="true">
+						Update Password
+						<i class="fa-solid fa-chevron-up"></i>
+					</button>
+				</h2>
+
+				<form data-test="card-content">
+					<aside data-test="alert" data-color="success">
+						<i class="fa-solid fa-circle-check"></i>
+						Updated successfully
+					</aside>
+
+					<div>
+						<label for="current_password">Current Password</label>
+						<input
+							id="current_password"
+							name="current_password"
+							type="password"
+							value="hunter2hunter2"
+						/>
+						<button type="button" aria-label="Show password">
+							<i class="fa-solid fa-eye"></i>
+						</button>
+					</div>
+
+					<div>
+						<label for="password">Password</label>
+						<input id="password" name="password" type="password" value="short" />
+						<button type="button" aria-label="Show password">
+							<i class="fa-solid fa-eye"></i>
+						</button>
+						<p data-test="error">Password must be at least 12 characters.</p>
+					</div>
+
+					<div>
+						<label for="password_confirmation">Password Confirmation</label>
+						<input
+							id="password_confirmation"
+							name="password_confirmation"
+							type="password"
+						/>
+						<button type="button" aria-label="Show password">
+							<i class="fa-solid fa-eye"></i>
+						</button>
+					</div>
+
+					<button type="submit" data-test="submit">Update</button>
+				</form>
+			</section>
+
+			<section data-test="expandable-card">
+				<h2>
+					<button type="button" aria-expanded="true">
+						Two-Factor Authentication
+						<i class="fa-solid fa-chevron-up"></i>
+					</button>
+				</h2>
+
+				<div data-test="card-content">
+					<aside data-test="alert" data-color="warning">
+						<i class="fa-solid fa-triangle-exclamation"></i>
+						Two-factor authentication is not enabled on this account.
+					</aside>
+
+					<p>
+						Add a second step to sign-in. You'll be asked for a code from your
+						authenticator app each time you log in from a new device.
+					</p>
+
+					<div>
+						<label for="country_code">Country Code</label>
+						<select id="country_code" name="country_code">
+							<option value="1" selected>+1 United States</option>
+							<option value="44">+44 United Kingdom</option>
+							<option value="61">+61 Australia</option>
+						</select>
+					</div>
+
+					<div>
+						<label for="phone_2fa">Phone Number</label>
+						<input id="phone_2fa" name="phone" type="tel" placeholder="(555) 555-5555" />
+					</div>
+
+					<button type="submit" data-test="enable-2fa">
+						Enable Two-Factor Authentication
+					</button>
+				</div>
+			</section>
+
+			<section data-test="expandable-card">
+				<h2>
+					<button type="button" aria-expanded="false">
+						Active Sessions
+						<i class="fa-solid fa-chevron-down"></i>
+					</button>
+				</h2>
+
+				<div data-test="card-content">
+					<table>
+						<thead>
+							<tr>
+								<th scope="col">Device</th>
+								<th scope="col">Location</th>
+								<th scope="col">Last Active</th>
+								<th scope="col"><span>Actions</span></th>
+							</tr>
+						</thead>
+						<tbody>
+							{
+								sessions.map(([device, location, active]) => (
+									<tr>
+										<th scope="row">{device}</th>
+										<td>{location}</td>
+										<td>{active}</td>
+										<td>
+											<button type="button" disabled={active === 'Current session'}>
+												Revoke
+											</button>
+										</td>
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
+
+					<button type="button" data-test="revoke-all">Sign out of all other sessions</button>
+				</div>
+			</section>
+
+			<section data-test="expandable-card" data-danger="true">
+				<h2>
+					<button type="button" aria-expanded="true">
+						Delete Account
+						<i class="fa-solid fa-chevron-up"></i>
+					</button>
+				</h2>
+
+				<div data-test="card-content">
+					<p>
+						Deleting your account removes every contact, campaign and message
+						history on it. This cannot be undone.
+					</p>
+					<button type="button" data-test="delete-account">
+						Delete Account
+						<i class="fa-solid fa-trash"></i>
+					</button>
+				</div>
+			</section>
+		</div>
+	</div>
+</AppShell>

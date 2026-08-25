@@ -26,8 +26,20 @@
 }
 
 @layer base {
+  html {
+    /*
+      The platform default is a warm gray that reads brown against slate. The
+      thumb takes slate-400 — the value the sidebar rails already use — and the
+      track goes transparent so nothing rules a line down the edge of the page.
+
+      Set here rather than on each scroll container because the property
+      inherits, so the sidebar and any future overflow area pick it up.
+    */
+    scrollbar-color: var(--color-slate-400) transparent;
+  }
+
   body {
-    color: var(--color-slate-800);
+    color: var(--color-slate-700);
     /*
       Tabular figures, so numbers hold their column and don't jitter as they
       update. No slashed-zero here on purpose: Fontsource packages Google's
@@ -35,6 +47,13 @@
       dead weight.
     */
     font-variant-numeric: tabular-nums;
+  }
+
+  /* not-prose drops prose's element rules but not the line-height declared on
+     .prose itself, which keeps inheriting in. Base layer, so leading-* wins. */
+  .prose .not-prose {
+    line-height: var(--leading-normal);
+    color: var(--color-slate-700);
   }
 }
 
@@ -45,7 +64,8 @@
   they point prose at the three text colors the foundations page documents.
 */
 .prose {
-  --tw-prose-body: var(--color-slate-800);
+  line-height: var(--leading-relaxed);
+  --tw-prose-body: var(--color-slate-700);
   --tw-prose-headings: var(--color-slate-800);
   --tw-prose-bold: var(--color-slate-800);
   --tw-prose-code: var(--color-slate-800);
@@ -53,4 +73,10 @@
   --tw-prose-lead: var(--color-slate-500);
   --tw-prose-captions: var(--color-slate-500);
   --tw-prose-links: var(--color-sky-700);
+  /* prose-slate points this at slate-200, which is the page background, so the
+     rule disappears. One step darker is the faintest line that still reads. */
+  --tw-prose-hr: var(--color-slate-300);
+}
+.prose :is(h1, h2, h3, h4, h5, h6, th) {
+  font-weight: var(--font-weight-extrabold);
 }

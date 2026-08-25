@@ -1,0 +1,81 @@
+---
+/*
+  Directory of the unstyled test pages.
+
+  Uses the documentation layout rather than TestPageLayout — this page is
+  about the fixtures, not one of them, so it should look like the rest of the
+  site and keep the sidebar. Everything it links to is raw markup.
+*/
+import Layout from '@layouts/Layout.astro';
+import { testPages } from '@data/testPages';
+import Card from '@ui/Card.vue';
+
+const checks = ['Does it use real Tailwind color names, or did it reach for <code>bg-primary</code>?', 'Do neutrals sit one rung from their background, and does each button carry the right <code>surface</code> for the card it is in?', 'Do all five accents stay at 300?', 'Is the default body size <code>text-sm</code>?', 'Does the dense inbox get a dense treatment, and the wizard a roomy one?', 'Do the empty, loading, and error states get the same care as the happy path?'];
+---
+
+<Layout title="Test Pages">
+  <h1>Test Pages</h1>
+
+  <p>
+    Nine pages of real production markup pulled from the <code>voxie</code> app, stripped of every Tailwind class and filled with static test data. They render as raw semantic HTML. Nothing here is styled — that is the point.
+  </p>
+
+  <p>They were picked by layout archetype rather than by feature, so the set spans what the product actually has to lay out: a dense two-pane inbox, a wizard at the opposite density, tables that reflow to cards, a settings column, and a page collecting the states everything else falls into.</p>
+
+  <h2>The pages</h2>
+
+  <ul class="not-prose space-y-3">
+    {
+      testPages.map((page) => (
+        <li class="leading-snug">
+          <a
+            href={page.href}
+            class="text-sky-700 font-semibold hover:text-black"
+          >
+            {page.title}
+          </a>
+          <br />
+          <span class="text-sm">{page.exercises}</span>
+          <br />
+          <code class="text-xs bg-slate-300/50 px-1 py-0.5 rounded-sm">{page.source}</code>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Running a trial</h2>
+
+  <p>Point an agent at one page with a brief along these lines:</p>
+
+  <Card padding="spacious">
+    <p class="mt-0">Style src/pages/test-pages/dashboard.astro. It's real production markup with every class stripped.</p>
+
+    <p>Read these first and treat them as binding: src/content/docs/foundations/color.mdx, foundations/typography.mdx, foundations/look-and-feel.mdx, components/button.mdx, components/card.mdx, patterns/page-structure.mdx.</p>
+
+    <h3>Rules:</h3>
+    <ul>
+      <li>Add classes freely. You may add wrapper elements and swap in existing components documented here e.g. a plain container for Card.</li>
+      <li>Don't create new components.</li>
+      <li>Don't remove or rename semantic elements, data-test attributes, or copy, and don't change the data.</li>
+      <li>Don't touch _AppShell.astro. If you need something like a page background color, put it on the main content wrapper.</li>
+      <li>When the docs don't answer something, make the call, but keep a running list of every gap you hit.</li>
+    </ul>
+    <p class="mb-0">Then self-review against the checklist in src/pages/test-pages/index.astro and report the gap list.</p>
+  </Card>
+
+  <h2>Review Checklist</h2>
+
+  <ul>
+    {checks.map((check) => <li set:html={check} />)}
+  </ul>
+
+  <h2>Resetting</h2>
+
+  <p>
+    These are fixtures, so they have to survive being styled. Note the commit before handing a page over; <code>git checkout -- src/pages/test-pages/</code> puts every page back to raw markup.
+  </p>
+
+  <p>
+    The same brief, plus notes on how the markup was stripped, lives in <code>src/pages/test-pages/_README.md</code>.
+  </p>
+</Layout>

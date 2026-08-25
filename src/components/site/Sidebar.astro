@@ -1,17 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
-import Card from '../ui/Card.vue';
-import Button from '../ui/Button.vue';
+import { testPages } from '@data/testPages';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 
-const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))];
-const currentPath = Astro.url.pathname.replace(/\/$/, '');
+// Directory names don't sort into a reading order. Unlisted sections fall last.
+const sectionOrder = ['foundations', 'components', 'patterns'];
+const rank = (section: string) => {
+  const i = sectionOrder.indexOf(section);
+  return i === -1 ? sectionOrder.length : i;
+};
 
-// The back link has nowhere to go from the home page, but it still holds its
-// space so the nav below starts at the same height on every page.
-const isHome = currentPath === '';
+const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))].sort(
+  (a, b) => rank(a) - rank(b) || a.localeCompare(b),
+);
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
 
 function linkClass(href: string) {
   let defaults = 'block px-2 py-0.5 border-l border-l-slate-400/50';
@@ -22,8 +26,24 @@ function linkClass(href: string) {
 }
 ---
 
-<aside class="w-56 shrink-0 justify-self-end sticky top-8">
+<aside
+  class="w-56 shrink-0 justify-self-end sticky top-0 max-h-dvh overflow-y-auto overscroll-y-contain py-10 px-4 xl:py-28"
+>
   <nav class="text-sm space-y-4">
+    {/* '' rather than '/' — currentPath has the trailing slash stripped. */}
+    <div>
+      <h3 class="font-extrabold capitalize">Voxie UI</h3>
+      <ul class="mt-2">
+        <li>
+          <a href="/" class={linkClass('')}>
+            <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
+            Intro
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
     {
       sections.map((section) => (
         <div>
@@ -68,14 +88,29 @@ function linkClass(href: string) {
       </ul>
     </div>
 
-    <div class:list={[isHome && 'hidden', 'mt-6']}>
-      <Button
-        href="/"
-        surface="background"
-        size="sm"
-      >
-        <i class="fa-solid fa-arrow-left"></i> Back Home
-      </Button>
+    {/* Unstyled fixtures rather than documentation, so they sit last. */}
+    <div>
+      <h3 class="font-extrabold capitalize">Test Pages</h3>
+      <ul class="mt-2">
+        <li>
+          <a href="/test-pages" class={linkClass('/test-pages')}>
+            <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
+            Overview
+            </span>
+          </a>
+        </li>
+        {
+          testPages.map((page) => (
+            <li>
+              <a href={page.href} class={linkClass(page.href)}>
+                <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
+                {page.title}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </nav>
 </aside>

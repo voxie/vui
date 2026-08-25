@@ -1,43 +1,34 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
+import Layout from '@layouts/Layout.astro';
+import Card from '@ui/Card.vue';
 
-const docs = (await getCollection('docs')).sort(
-	(a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id)
-);
-const skills = (await getCollection('skills')).sort((a, b) =>
-	a.id.localeCompare(b.id)
-);
+const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 ---
 
 <Layout title="Documentation">
-	<h1>Voxie UI Documentation</h1>
+  <h1>Voxie UI Documentation</h1>
 
-	<h2>Docs</h2>
-	<ul>
-		{
-			docs.map((entry) => (
-				<li>
-					<a href={`/docs/${entry.id}`}>
-						{entry.data.title}
-					</a>
-					<span> — {entry.data.description}</span>
-				</li>
-			))
-		}
-	</ul>
+  <p>The design system behind Voxie. The components screens are built from, the foundations they sit on, and the guidance for putting the two together.</p>
 
-	<h2>Skills</h2>
-	<ul>
-		{
-			skills.map((entry) => (
-				<li>
-					<a href={`/skills/${entry.id}`}>
-						{entry.data.title}
-					</a>
-					<span> — {entry.data.description}</span>
-				</li>
-			))
-		}
-	</ul>
+  <p>It is written to be read twice: once by a person deciding how a screen should look, and once by an agent building it. The docs carry the reasoning, and the skills restate the same rules as instructions an agent can follow.</p>
+
+  <h2>What's here</h2>
+
+  <h3 class="mt-0 mb-0">Docs</h3>
+  <p class="">Foundations, components, patterns and guidance, with the reasoning left in rather than boiled down to rules.</p>
+
+  <h3 class="mt-0 mb-0">Skills</h3>
+  <p class="">The same ground written as instructions, so generated UI lands inside the system instead of beside it.</p>
+
+  <h3 class="mt-0 mb-0">Test&nbsp;pages</h3>
+  <p class="">Nine real Voxie screens stripped of every class, for trying a direction end to end before committing to it.</p>
+
+  <h2>Where to start</h2>
+
+  <p>
+    <a href="/docs/foundations/color">Color</a> and{' '}
+    <a href="/docs/foundations/typography">Typography</a> are the furthest along, and everything else assumes them. Much of the rest is still an outline waiting to be filled in.
+  </p>
 </Layout>
