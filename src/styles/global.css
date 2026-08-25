@@ -39,7 +39,7 @@
   }
 
   body {
-    color: var(--color-slate-800);
+    color: var(--color-slate-700);
     /*
       Tabular figures, so numbers hold their column and don't jitter as they
       update. No slashed-zero here on purpose: Fontsource packages Google's
@@ -65,7 +65,7 @@
 */
 .prose {
   line-height: var(--leading-relaxed);
-  --tw-prose-body: var(--color-slate-600);
+  --tw-prose-body: var(--color-slate-700);
   --tw-prose-headings: var(--color-slate-800);
   --tw-prose-bold: var(--color-slate-800);
   --tw-prose-code: var(--color-slate-800);
