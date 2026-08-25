@@ -17,12 +17,8 @@ function linkClass(href: string) {
 }
 ---
 
-{/* The nav outgrows a short viewport now that every test page is listed, so it
-    scrolls itself. overflow alone would do nothing — the max height is what
-    gives it something to scroll against, and it leaves the same 2rem at the
-    bottom that `top-8` leaves at the top. */}
 <aside
-  class="w-56 shrink-0 justify-self-end sticky top-0 max-h-dvh overflow-y-auto py-8 px-4"
+  class="w-56 shrink-0 justify-self-end sticky top-0 max-h-dvh overflow-y-auto overscroll-y-contain py-8 px-4"
 >
   <nav class="text-sm space-y-4">
     {/* The home page is the intro, so it leads the nav. currentPath strips the
