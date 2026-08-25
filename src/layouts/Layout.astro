@@ -27,9 +27,9 @@ const { title, description } = Astro.props;
 	</head>
 	<body class="bg-slate-200">
 		{/* Equal 1fr gutters are what center the main column in the viewport. */}
-		<div class="grid grid-cols-[minmax(14rem,1fr)_minmax(0,41rem)_1fr] items-start gap-8 p-8">
+		<div class="grid grid-cols-[minmax(14rem,1fr)_minmax(0,41rem)_1fr] items-start">
 			<Sidebar />
-			<main class="prose prose-slate max-w-none">
+			<main class="prose prose-slate max-w-none p-8">
 				<slot />
 			</main>
 		</div>
