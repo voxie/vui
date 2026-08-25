@@ -5,7 +5,16 @@ import { testPages } from '../../data/testPages';
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 
-const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))];
+// Directory names don't sort into a reading order. Unlisted sections fall last.
+const sectionOrder = ['foundations', 'components', 'patterns'];
+const rank = (section: string) => {
+  const i = sectionOrder.indexOf(section);
+  return i === -1 ? sectionOrder.length : i;
+};
+
+const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))].sort(
+  (a, b) => rank(a) - rank(b) || a.localeCompare(b),
+);
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
 
 function linkClass(href: string) {
