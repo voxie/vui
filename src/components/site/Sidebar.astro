@@ -93,7 +93,7 @@ function linkClass(href: string) {
 </div>
 
 <aside
-  class="hidden md:block w-56 shrink-0 justify-self-end sticky top-0 max-h-dvh overflow-y-auto overscroll-y-contain p-8 xl:py-24"
+  class="hidden md:block w-56 shrink-0 justify-self-end sticky top-0 max-h-dvh overflow-y-auto overscroll-y-contain p-8 lg:py-18 xl:py-24"
 >
   <nav class="text-sm space-y-4">
     {
@@ -101,14 +101,14 @@ function linkClass(href: string) {
         <div>
           {/* The mark rides the first heading, sized to the text beside it. */}
           <h3 class="font-extrabold flex items-center gap-1.5">
-            {group.mark && <VoxieMark class="w-6 -ml-0.5 xl:ml-0 -mb-0.5 2xl:fixed top-4 left-4" />}
+            {group.mark && <a href="/" class="-ml-0.5 xl:ml-0 xl:fixed top-4 left-4"><VoxieMark class="w-6 " /></a>}
             {group.label}
           </h3>
-          <ul class="mt-2">
+          <ul class="mt-3">
             {group.links.map((link) => (
               <li>
                 <a href={link.href} class={linkClass(link.href)}>
-                  <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100 xl:text-nowrap">
+                  <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100 text-nowrap">
                     {link.title}
                   </span>
                 </a>
