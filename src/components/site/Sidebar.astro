@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import VoxieMark from '@site/VoxieMark.vue';
-import { testPages } from '@data/testPages';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
@@ -37,14 +36,12 @@ const groups = [
     label: 'Skills',
     links: skills.map((entry) => ({ href: `/skills/${entry.id}`, title: entry.data.title })),
   },
-  // Unstyled fixtures rather than documentation, so they sit last.
-  {
-    label: 'Test Pages',
-    links: [
-      { href: '/test-pages', title: 'Overview' },
-      ...testPages.map((page) => ({ href: page.href, title: page.title })),
-    ],
-  },
+  /*
+    The overview and nothing under it. The fixtures are pages to open from
+    there, not documentation to browse, and listing every one of them here
+    made the fixtures the longest section in the sidebar.
+  */
+  { label: 'Test Pages', links: [{ href: '/test-pages', title: 'Overview' }] },
 ];
 
 // Trailing slash stripped so hrefs above compare equal; the home page keeps its
