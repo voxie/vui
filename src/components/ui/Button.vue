@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { useSurface, type Surface } from './surface.ts';
 
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type ButtonSurface = 'default' | 'glass' | 'sunken' | 'dark' | 'background';
 type ButtonColor = 'slate' | 'white' | 'sky' | 'teal' | 'amber' | 'rose' | 'violet' | 'transparent';
 
 type ColorStyle = {
@@ -18,7 +18,12 @@ const props = withDefaults(
 		href?: string;
 		size?: ButtonSize;
 		color?: ButtonColor;
-		surface?: ButtonSurface;
+		/*
+		  What the button is sitting on. Left off, it's taken from the nearest
+		  Card or Navbar above it. Pass it where nothing can answer: straight on
+		  the page background, or inside a plain element with a background class.
+		*/
+		sitsOn?: Surface;
 		outline?: boolean;
 		shadow?: boolean;
 		disabled?: boolean;
@@ -28,7 +33,6 @@ const props = withDefaults(
 	{
 		size: 'md',
 		color: 'slate',
-		surface: 'default',
 		outline: false,
 		shadow: false,
 		disabled: false,
@@ -38,6 +42,8 @@ const props = withDefaults(
 );
 
 const element = computed(() => (props.href ? 'a' : 'button'));
+
+const surface = useSurface(() => props.sitsOn);
 
 const sizeClasses = computed(() => {
 	if (props.size === 'xs') return { element: 'rounded-lg px-2 text-xs h-6', content: 'gap-1' };
@@ -49,7 +55,7 @@ const sizeClasses = computed(() => {
 
 // Slate steps about one level away from the surface it sits on, so it needs a
 // value per surface. Every other color holds the same value everywhere.
-const slateBySurface: Record<ButtonSurface, ColorStyle> = {
+const slateBySurface: Record<Surface, ColorStyle> = {
 	default: {
 		fill: 'bg-slate-100',
 		hover: 'hover:bg-slate-200',
@@ -83,7 +89,7 @@ const slateBySurface: Record<ButtonSurface, ColorStyle> = {
 };
 
 // Transparent has no resting fill, then hovers into the surface's slate value.
-const transparentBySurface: Record<ButtonSurface, ColorStyle> = {
+const transparentBySurface: Record<Surface, ColorStyle> = {
 	default: {
 		fill: 'bg-transparent',
 		hover: 'hover:bg-slate-100',
@@ -156,8 +162,8 @@ const fixedColors: Record<string, ColorStyle> = {
 };
 
 const colorStyle = computed<ColorStyle>(() => {
-	if (props.color === 'transparent') return transparentBySurface[props.surface];
-	if (props.color === 'slate') return slateBySurface[props.surface];
+	if (props.color === 'transparent') return transparentBySurface[surface.value];
+	if (props.color === 'slate') return slateBySurface[surface.value];
 	return fixedColors[props.color];
 });
 
@@ -172,7 +178,7 @@ const colorClasses = computed(() => {
 // straight on the panel.
 const textClasses = computed(() => {
 	const unfilled = props.outline || props.color === 'transparent';
-	const onDark = unfilled ? props.surface === 'dark' : props.color === 'slate' && props.surface === 'dark';
+	const onDark = unfilled ? surface.value === 'dark' : props.color === 'slate' && surface.value === 'dark';
 	return onDark ? 'text-white' : 'text-black';
 });
 

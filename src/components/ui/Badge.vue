@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-type BadgeSize = '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+type BadgeSize = '2xs' | 'xs' | 'sm' | 'md' | 'lg';
 type BadgeColor =
 	// The five accents, which carry the meanings Color documents, plus slate.
 	| 'sky'
@@ -66,12 +66,11 @@ const colorClasses: Record<BadgeColor, string> = {
 // legible as the badge shrinks — level with the label at the two small sizes,
 // then one step up the type scale from sm on.
 const sizeClasses = computed(() => {
-	if (props.size === '2xs') return 'h-4 gap-0.5 px-1.5 py-0.5 text-2xs [&_i]:text-2xs [&_svg]:text-2xs';
-	if (props.size === 'xs') return 'h-5 gap-1.5 px-2 text-xs [&_i]:text-xs [&_svg]:text-xs';
-	if (props.size === 'sm') return 'h-6 gap-1.5 px-3 text-xs [&_i]:text-sm [&_svg]:text-sm';
-	if (props.size === 'lg') return 'h-8 gap-1.5 px-4 text-sm [&_i]:text-lg [&_svg]:text-lg';
-	if (props.size === 'xl') return 'h-9 gap-1.5 px-5 text-base [&_i]:text-xl [&_svg]:text-xl';
-	return 'h-7 gap-1.5 px-3 text-xs [&_i]:text-base [&_svg]:text-base';
+	if (props.size === '2xs') return 'h-4.5 gap-1.5 px-1.5 text-2xs [&_i]:text-2xs [&_svg]:text-2xs [&_i]:w-auto! [&_svg]:w-auto! [&_i]:mx-[-0.2em] [&_svg]:mx-[-0.2em]';
+	if (props.size === 'xs') return 'h-5 gap-1.5 px-2 text-xs [&_i]:text-2xs [&_svg]:text-2xs [&_i]:w-auto! [&_svg]:w-auto! [&_i]:mx-[-0.2em] [&_svg]:mx-[-0.2em]';
+	if (props.size === 'sm') return 'h-6 gap-2 px-2.5 text-xs [&_i]:text-xs [&_svg]:text-xs [&_i]:w-auto! [&_svg]:w-auto! [&_i]:mx-[-0.2em] [&_svg]:mx-[-0.2em]';
+	if (props.size === 'lg') return 'h-8 gap-2 px-4 text-sm [&_i]:text-xs [&_svg]:text-xs [&_i]:w-auto! [&_svg]:w-auto! [&_i]:mx-[-0.2em] [&_svg]:mx-[-0.2em]';
+	return 'h-7 gap-2 px-3 text-xs [&_i]:text-xs [&_svg]:text-xs [&_i]:w-auto! [&_svg]:w-auto! [&_i]:mx-[-0.2em] [&_svg]:mx-[-0.2em]';
 });
 </script>
 

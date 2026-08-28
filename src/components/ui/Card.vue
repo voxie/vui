@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { provideSurface, type Surface } from './surface.ts';
 
 // Classes from the caller belong on the card itself, not on the wrapper that
 // only the layered surface needs.
@@ -28,6 +29,24 @@ const surfaceClasses: Record<string, string> = {
   sunken: 'bg-slate-300/30 shadow-inner border-b border-b-white',
   dark: 'bg-slate-700 text-slate-100',
 };
+
+/*
+  What the card hands to everything inside it, which isn't always what the card
+  is. Four of the six surfaces are themselves. The two composites aren't: a
+  `glassRaised` card is a white panel over glass, and a `layered` one is a plain
+  white card in front of its stack, so a button in either sits on what it can
+  actually see rather than on the name of the effect.
+*/
+const childSurface: Record<string, Surface> = {
+  default: 'default',
+  glass: 'glass',
+  glassRaised: 'glass',
+  layered: 'default',
+  sunken: 'sunken',
+  dark: 'dark',
+};
+
+provideSurface(() => childSurface[props.surface]);
 
 const paddingClasses: Record<string, string> = {
   none: '',

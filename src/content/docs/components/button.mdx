@@ -5,19 +5,16 @@ order: 1
 
 import Button from '@ui/Button.vue';
 import Card from '@ui/Card.vue';
+import ButtonSurfacesExample from '@site/ButtonSurfacesExample.vue';
+import ButtonOutlineExample from '@site/ButtonOutlineExample.vue';
 
-Buttons are described by two props. `color` names the fill, and `surface`
-names what the button is sitting on. Most colors look the same everywhere, so
-`surface` only changes the slate and transparent buttons — those are the ones
-that have to stay a step away from their background. Slate is the default, so
-in practice most buttons need the right `surface`.
+A button is described by one prop. `color` names the fill. It works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. That matters because slate and transparent, the two neutrals, have to stay a step away from their background.
 
 ## Examples
 
 ### Color
 
-The `color` prop sets the fill: `slate` (the default), `white`, `sky`, `teal`,
-`amber`, `rose`, `violet`, or `transparent`.
+The `color` prop sets the fill. The choices are `slate` (the default), `white`, `sky`, `teal`, `amber`, `rose`, `violet`, and `transparent`.
 
 <Card>
   <div class="not-prose flex flex-wrap gap-3">
@@ -32,26 +29,15 @@ The `color` prop sets the fill: `slate` (the default), `white`, `sky`, `teal`,
   </div>
 </Card>
 
-Slate is the default because most buttons are ordinary actions that shouldn't
-compete for attention. Reach for a color only when the button earns it: sky
-for the primary action on a screen, rose for something destructive, and teal,
-amber, or violet for their usual meanings — success, caution, and accent.
-White is the other neutral. Transparent is the quietest option: no fill until
-you hover it.
+Slate is the default because most buttons are ordinary actions that shouldn't compete for attention. Reach for a color only when the button earns it. Sky is the primary action on a screen. Rose is for something destructive. Teal, amber, and violet carry their usual meanings (success, caution, accent). White is the other neutral. Transparent is the quietest option, with no fill until you hover it.
 
-White carries no border, so it needs something behind it. Use it on a colored
-or dark surface, or add `shadow` to lift it off a white one.
+White carries no border, so it needs something behind it. Use it on a colored or dark surface, or add `shadow` to lift it off a white one.
 
 ### Surface
 
-The `surface` prop tells the button what it is sitting on, using the same
-names as [Card](/docs/components/card): `default` (the default), `glass`,
-`sunken`, `dark`, or `background` for a button placed straight on the page.
+A slate button steps about one level away from whatever it is sitting on. It stays readable without turning into a colored button.
 
-A slate button steps about one level away from its surface so it stays
-readable without turning into a colored button:
-
-| `surface`    | Sits on         | Slate button |
+| Sitting on   | Which is        | Slate button |
 | ------------ | --------------- | ------------ |
 | `default`    | white           | slate-100    |
 | `glass`      | slate-50        | slate-200    |
@@ -59,42 +45,13 @@ readable without turning into a colored button:
 | `dark`       | slate-700       | slate-600    |
 | `background` | slate-200       | slate-300    |
 
-{/* Each row is a subgrid of the three shared columns, so the buttons line up
-    down the page even though the labels and the card padding differ. */}
-<div class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-4">
-  <Card class="col-span-3 grid grid-cols-subgrid items-center justify-items-start">
-    <code class="text-xs">surface="default"</code>
-    <Button color="slate">slate</Button>
-    <Button color="transparent">transparent</Button>
-  </Card>
-  <Card surface="glass" class="col-span-3 grid grid-cols-subgrid items-center justify-items-start">
-    <code class="text-xs">surface="glass"</code>
-    <Button color="slate" surface="glass">slate</Button>
-    <Button color="transparent" surface="glass">transparent</Button>
-  </Card>
-  <Card surface="sunken" class="col-span-3 grid grid-cols-subgrid items-center justify-items-start">
-    <code class="text-xs">surface="sunken"</code>
-    <Button color="slate" surface="sunken">slate</Button>
-    <Button color="transparent" surface="sunken">transparent</Button>
-  </Card>
-  <Card surface="dark" class="col-span-3 grid grid-cols-subgrid items-center justify-items-start">
-    <code class="text-xs">surface="dark"</code>
-    <Button color="slate" surface="dark">slate</Button>
-    <Button color="transparent" surface="dark">transparent</Button>
-  </Card>
-  <div class="col-span-3 grid grid-cols-subgrid items-center justify-items-start px-6 py-2">
-    <code class="text-xs">surface="background"</code>
-    <Button color="slate" surface="background">slate</Button>
-    <Button color="transparent" surface="background">transparent</Button>
-  </div>
-</div>
+Nobody has to tell it which. A Card and a Navbar announce their surface to everything inside them, slots included, so every button below is passed nothing. The two surfaces missing from the table resolve to ones that are in it. `glassRaised` reads as `glass`, and `layered` as the default white.
 
-The other two card surfaces don't get their own value. Inside a `glassRaised`
-card use `surface="glass"`; inside a `layered` card use the default.
+<ButtonSurfacesExample />
 
-Everything else ignores `surface`. Sky, teal, amber, rose, violet, and white
-hold their value on every background — the accents all rest at 300, which is
-saturated enough to separate from any neutral behind them:
+The last row is the page itself, the one surface with no component to announce it. That's what `sitsOn` is for. An element that paints its own background can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead. A button with nothing above it assumes white, so a bare one on the page comes out slate-100 on slate-200, which is hard to see and easy to miss.
+
+Everything else ignores the question. Sky, teal, amber, rose, violet, and white hold their value on every background. The five accents rest at 300, which separates them from any neutral behind them.
 
 <div class="not-prose space-y-4">
   <Card>
@@ -107,18 +64,17 @@ saturated enough to separate from any neutral behind them:
   </Card>
   <Card surface="dark">
     <div class="flex flex-wrap gap-3">
-      <Button color="sky" surface="dark">sky</Button>
-      <Button color="teal" surface="dark">teal</Button>
-      <Button color="rose" surface="dark">rose</Button>
-      <Button color="white" surface="dark">white</Button>
+      <Button color="sky">sky</Button>
+      <Button color="teal">teal</Button>
+      <Button color="rose">rose</Button>
+      <Button color="white">white</Button>
     </div>
   </Card>
 </div>
 
 ### Size
 
-The `size` prop controls height, padding, and corner radius: `xs`, `sm`, `md`
-(the default), `lg`, or `xl`.
+The `size` prop controls height, padding, and corner radius. The sizes are `xs`, `sm`, `md` (the default), `lg`, and `xl`.
 
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-3">
@@ -132,27 +88,9 @@ The `size` prop controls height, padding, and corner radius: `xs`, `sm`, `md`
 
 ### Outline
 
-`outline` drops the fill and keeps the border, which fades back in on hover.
-The label stays black, which reads on any light surface — but on `dark` it
-switches to white, since black on the panel would be 2.0:1. So pass `surface`
-when an outline button isn't on a light background.
+`outline` drops the fill and keeps the border. A faint wash of the fill comes back on hover. The label stays black, which reads on any light surface. On `dark` it switches to white, since black on the panel would be 2.0:1. With no fill of its own to read against, it's the shape that most depends on knowing where it is.
 
-<div class="not-prose space-y-4">
-  <Card>
-    <div class="flex flex-wrap gap-3">
-      <Button outline color="sky">sky</Button>
-      <Button outline color="rose">rose</Button>
-      <Button outline color="slate">slate</Button>
-    </div>
-  </Card>
-  <Card surface="dark">
-    <div class="flex flex-wrap gap-3">
-      <Button outline color="sky" surface="dark">sky</Button>
-      <Button outline color="rose" surface="dark">rose</Button>
-      <Button outline color="slate" surface="dark">slate</Button>
-    </div>
-  </Card>
-</div>
+<ButtonOutlineExample />
 
 ### Shadow
 
@@ -167,9 +105,7 @@ when an outline button isn't on a light background.
 
 ### Loading and disabled
 
-`loading` swaps the label for a spinner while keeping the button's width.
-`disabled` fades the button and blocks pointer events, for both button and
-link variants.
+`loading` swaps the label for a spinner while keeping the button's width. `disabled` fades the button and blocks pointer events, for both button and link variants.
 
 <Card>
   <div class="not-prose flex flex-wrap gap-3">
@@ -189,8 +125,7 @@ link variants.
 
 ### Link
 
-Pass an `href` to render an `<a>` instead of a `<button>`. Styling is
-identical.
+Pass an `href` to render an `<a>` instead of a `<button>`. Styling is identical.
 
 <Card>
   <div class="not-prose"><Button href="/docs/components/card">Link button</Button></div>

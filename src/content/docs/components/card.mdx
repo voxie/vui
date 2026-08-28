@@ -6,30 +6,30 @@ order: 2
 import Card from '@ui/Card.vue';
 import Button from '@ui/Button.vue';
 
+A card is the panel most of the interface is built from. The `surface` prop says where the panel sits in the stack, and the card announces that to everything inside it. A [Button](/docs/components/button) in a card takes the right neutral without being told anything.
+
 ## Examples
 
 ### Surface
 
-Content is passed as children, and the `surface`
-prop sets the background: `default`, `glass`, `glassRaised`, `layered`,
-`sunken`, or `dark`.
+Content is passed as children. The `surface` prop sets the background. The choices are `default`, `glass`, `glassRaised`, `layered`, `sunken`, and `dark`.
 
 <div class="not-prose space-y-8">
   <Card>
     <h4 class="font-extrabold capitalize">Default</h4>
-    <p class="leading-snug"> Most things use this white background for panels. Callouts, stats, dashboards panels, list rows, etc.</p>
+    <p class="leading-snug">Most panels use this white background, including callouts, stats, dashboard panels, and list rows.</p>
   </Card>
   <Card surface="glass">
     <h4 class="font-extrabold capitalize">glass</h4>
-    <p class="leading-snug">Use this for content panels like settings, forms, or sidebars. It allows inputs to subtly standout from the background and lets us put a white highlight border on the panel.</p>
+    <p class="leading-snug">Use this for content panels like settings, forms, or sidebars. Inputs stand out subtly from it, and it carries a white highlight border.</p>
   </Card>
   <Card surface="glassRaised">
     <h4 class="font-extrabold capitalize">glass raised</h4>
-    <p class="leading-snug">Used for floating elements like sticky button containers or in page navigation where the blur effect can shine as layered elements slide below it. Only use on elements sitting on the page background, never nested inside other panels. This is because the panel transparency and color has been tuned to match the base surface glass color when mixed with the page background color.</p>
+    <p class="leading-snug">For floating elements like sticky button containers or in-page navigation, where the blur shows as layered content slides under it. Use it only on the page background, never inside another panel. Its transparency is tuned to read as glass over the page background color.</p>
   </Card>
   <Card surface="layered">
     <h4 class="font-extrabold capitalize">layered</h4>
-    <p class="leading-snug">Surface Base, Glass Raised, and solid color layers stacked at 20 pixel increments. Used only for marketing style callouts on a dashboard, hero, or similar area. Used very sparingly.</p>
+    <p class="leading-snug">A default card, a glass raised layer, and a sky layer, stacked at 20px offsets. Only for marketing-style callouts on a dashboard, a hero, or similar. Use it very sparingly.</p>
   </Card>
   <Card surface="sunken">
     <h4 class="font-extrabold capitalize">sunken</h4>
@@ -41,11 +41,25 @@ prop sets the background: `default`, `glass`, `glassRaised`, `layered`,
   </Card>
 </div>
 
+The two composite surfaces pass on what a button in them can actually see. `glassRaised` passes on `glass`, and `layered` passes on the default white.
+
+### A surface that isn't a card
+
+Anything else that paints a background of its own is a surface to the eye and silent to the code. `SurfaceProvider` is how it speaks up. It renders one element, so it can be the box carrying the background instead of another layer around it.
+
+```vue
+<SurfaceProvider surface="dark" class="rounded-xl bg-slate-700 p-6">
+  <Button color="slate">Sits on dark</Button>
+</SurfaceProvider>
+```
+
+The navbar's dropdown panel is the one use in the system. It is white whatever the bar is, so its buttons take slate-100 instead of the slate-600 they would inherit from a dark bar.
+
+Reach for it only where there's a real background. Wrapping something that paints nothing tells the buttons inside it a lie, and they have no way to check.
+
 ### Padding
 
-The `padding` prop controls padding: `none` (no padding), `compact` (p-4),
-`default` (p-6), or `spacious` (p-8). Use `none` when the card wraps content
-that manages its own spacing, such as a table or an image.
+The `padding` prop sets the inset. The choices are `none`, `compact` (`p-4`), `default` (`p-6`), and `spacious` (`p-8`). Use `none` when the card wraps content that manages its own spacing, such as a table or an image.
 
 <div class="not-prose space-y-8">
   <Card padding="none">none</Card>
@@ -59,16 +73,13 @@ that manages its own spacing, such as a table or an image.
   </Card>
   <Card padding="spacious">
   <h4 class="font-extrabold capitalize">spacious</h4>
-    <p class="leading-snug">Used for focused step by step flows like quick blast or modal content. Anything where the main UI is faded back or we have very low information density. Less stuff gives us more breathing room.</p>
+    <p class="leading-snug">For focused step-by-step flows like Quick Blast or modal content, and anywhere the main UI is faded back or information density is very low. Less content gets more breathing room.</p>
   </Card>
 </div>
 
 ### Element
 
-The `as` prop sets the tag the card renders as. It defaults to `div`, which is
-right for a card that is only a visual grouping. Switch to `section` when the
-card is a titled region of the page, or `article` when its content would still
-make sense pulled out on its own.
+The `as` prop sets the tag the card renders as. It defaults to `div`, which is right for a card that is only a visual grouping. Switch to `section` when the card is a titled region of the page, or `article` when its content would still make sense pulled out on its own.
 
 <div class="not-prose space-y-8">
   <Card as="section">
@@ -81,28 +92,13 @@ make sense pulled out on its own.
   </Card>
 </div>
 
-Under the `layered` surface the tag lands on the card holding the content; the
-offset layers behind it stay presentational.
+Under the `layered` surface the tag lands on the card holding the content. The offset layers behind it stay presentational.
 
 ## Interaction
 
-Cards have no hover or active styles. Nothing about a card changes when you
-point at it or press it, and that is deliberate rather than unfinished.
+Cards have no hover or active styles, deliberately. A hover state would move the card off the rung its surface is documented at in [Color](/docs/foundations/color), and it would light half the screen without saying where to aim.
 
-A card is a container, and its surface is the one thing it says: where this
-panel sits in the stack. Those values are fixed by
-[Color](/docs/foundations/color), so a hover state would have to move the card
-off the rung it is documented at, contradicting the only message the surface
-carries. A card is also large. Lighting a whole panel on hover puts a change
-of state across half the screen without telling anyone what it does or where
-to aim.
-
-When a card is meant to link somewhere or perform an action, put a
-[Button](/docs/components/button) inside it and let the button do that work.
-Make it the card's primary button, so there is one obvious target instead of a
-panel that might be clickable somewhere. The button is also the part that
-takes keyboard focus and the part a screen reader announces as pressable,
-neither of which a card can do.
+When a card is meant to link somewhere or perform an action, put a [Button](/docs/components/button) inside it and let the button do that work. Make it the card's primary button, so there is one obvious target instead of a panel that might be clickable somewhere. The button is also the part that takes keyboard focus and the part a screen reader announces as pressable, neither of which a card can do.
 
 <div class="not-prose">
   <Card>
@@ -112,5 +108,4 @@ neither of which a card can do.
   </Card>
 </div>
 
-This holds for list rows too. A row of results is a stack of cards, and the
-thing you click is the link or button inside the row, not the row itself.
+This holds for list rows too. A row of results is a stack of cards, and the thing you click is the link or button inside the row, not the row itself.

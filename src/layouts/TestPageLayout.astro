@@ -6,7 +6,13 @@
   font, so a page renders as raw semantic HTML until someone styles it. Do not
   add layout or color here — that is the exercise.
 */
+/* Preloaded below, for the reason the documentation layout gives. */
+import solidFont from '../styles/fontawesome/webfonts/fa-solid-900.woff2?url';
 import '@fontsource-variable/inter/wght.css';
+/* Font Awesome, self-hosted, same as the documentation layout. */
+import '../styles/fontawesome/css/fontawesome.min.css';
+import '../styles/fontawesome/css/solid.min.css';
+import '../styles/fontawesome/css/regular.min.css';
 import '../styles/global.css';
 
 interface Props {
@@ -20,14 +26,11 @@ const { title, source } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		{source && <meta name="x-source" content={source} />}
 		<title>{title} · Test Page</title>
-		<script
-			is:inline
-			src="https://kit.fontawesome.com/06f511676f.js"
-			crossorigin="anonymous"></script>
+		<link rel="preload" href={solidFont} as="font" type="font/woff2" crossorigin />
 	</head>
 	<body>
 		<slot />

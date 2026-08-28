@@ -5,16 +5,11 @@ order: 2
 
 import Card from '@ui/Card.vue';
 
-Type here is mostly working type — dense application UI rather than reading
-material. So the default is `text-sm`, not `text-base`, and the scale goes
-down from there before it goes up. Reach for `xs` or `2xs` when a surface
-needs to hold more.
+Most of the type here is working type, the dense UI of an application rather than reading material. So the default is `text-sm`, not `text-base`. The scale goes down from there before it goes up. Reach for `xs` or `2xs` when a surface needs to hold more.
 
 ## Typeface
 
-Inter, a workhorse typeface drawn specifically for interfaces. It's
-self-hosted as a variable font across the full 100–900 weight axis, so any
-weight costs the same as any other.
+The typeface is Inter, a workhorse drawn for interfaces. It's self-hosted as a variable font across the full 100–900 weight axis, so any weight costs the same as any other.
 
 <Card class="not-prose">
   <p class="text-3xl font-extrabold">Handgloves</p>
@@ -65,18 +60,13 @@ weight costs the same as any other.
   <span class="text-sm">The floor. Small badges, and very dense UI like day labels in a calendar. Rarely reached for, and never a heading.</span>
 </Card>
 
-These are recommendations, not restrictions. Nothing in Tailwind is off the
-table — `2xl` and `4xl` are there when a layout needs them; they just don't
-have a job of their own in the brand.
+These are recommendations, not restrictions. Nothing in Tailwind is off the table. `2xl` and `4xl` are there when a layout needs them. They just don't have a job of their own in the brand.
 
-`2xs` is the exception, because it isn't a Tailwind size at all. It's defined
-in `global.css` as a 10px rung below `xs`, with a 14px line height matching
-the shape of the built-in sizes.
+`2xs` is the exception. It isn't a Tailwind size at all. It's defined in `global.css` as a 10px rung below `xs`, with a 14px line height that matches the shape of the built-in sizes.
 
 ### Headings in markup
 
-Heading levels don't map to fixed sizes — what a level is worth depends on
-where it sits. As a starting point:
+Heading levels don't map to fixed sizes. What a level is worth depends on where it sits. As a starting point:
 
 | Element                        | Size   |
 | ------------------------------ | ------ |
@@ -93,15 +83,11 @@ Sizes step down below the `xl` breakpoint, and only at the top of the scale:
 <h1 class="text-2xl xl:text-3xl">Page heading</h1>
 ```
 
-Large body copy in a hero or marketing section drops a rung the same way,
-usually `base` to `sm`. Everything else holds its size at every width — it's
-already working at a dense level and has nowhere to go.
+Large body copy in a hero or marketing section drops a rung the same way, usually `base` to `sm`. Everything else holds its size at every width. It's already dense and has nowhere to go.
 
 ## Weight
 
-Body copy is the normal weight. Headings are `font-extrabold`. Where headings
-nest and need separating, or where a heading should sit back rather than
-announce itself, drop to `font-semibold`.
+Body copy is the normal weight. Headings are `font-extrabold`. Where headings nest and need separating, or where a heading should sit back rather than announce itself, drop to `font-semibold`.
 
 Never all caps.
 
@@ -109,16 +95,13 @@ Never all caps.
   <p class="text-xl font-extrabold leading-snug">Extrabold heading</p>
   <p class="mt-5 text-base font-semibold leading-snug">Semibold, nested under it</p>
   <p class="mt-2 text-sm leading-relaxed">
-    Body copy sits at the normal weight. The jump from semibold to extrabold
-    is doing the work of a size change, which is what lets headings stay close
-    in size without collapsing into each other.
+    Body copy sits at the normal weight. The jump from semibold to extrabold is doing the work of a size change, which is what lets headings stay close in size without collapsing into each other.
   </p>
 </Card>
 
 ## Leading
 
-Leading is set with the relative values, never a fixed pixel height. Four are
-in use.
+Leading is set with the relative values, never a fixed pixel height. Four are in use.
 
 | Value             | Where                                                        |
 | ----------------- | ------------------------------------------------------------ |
@@ -127,36 +110,28 @@ in use.
 | `leading-tight`   | Select inputs, badges, and similar compact controls           |
 | `leading-none`    | The largest headings and stat callouts                        |
 
-Headings tighten as they grow — a 5xl stat wants `none`, a `sm` sidebar
-heading wants `snug`.
+Headings tighten as they grow. A `5xl` stat wants `none`, and a `sm` sidebar heading wants `snug`.
 
 <Card class="not-prose grid gap-6 sm:grid-cols-2">
   <div>
     <p class="text-2xs font-semibold text-slate-500">leading-relaxed</p>
     <p class="mt-2 text-sm leading-relaxed">
-      Body copy that runs to more than one line gets the loosest of the four,
-      because the eye has to find its way back to the start of each line.
+      Body copy that runs to more than one line gets the loosest of the four, because the eye has to find its way back to the start of each line.
     </p>
   </div>
   <div>
     <p class="text-2xs font-semibold text-slate-500">leading-snug</p>
     <p class="mt-2 text-sm leading-snug">
-      Body copy that runs to more than one line gets the loosest of the four,
-      because the eye has to find its way back to the start of each line.
+      Body copy that runs to more than one line gets the loosest of the four, because the eye has to find its way back to the start of each line.
     </p>
   </div>
 </Card>
 
 ## Tracking
 
-Inter is drawn tight, which is right at text sizes and wrong at both ends of
-the scale. Small type opens up so it doesn't clot; display type closes up so
-it doesn't drift apart.
+Inter is drawn tight, which is right at text sizes and wrong at both ends of the scale. Small type opens up so it doesn't clot. Display type closes up so it doesn't drift apart.
 
-Tracking is paired to the size tokens in `global.css`, so it arrives with the
-size class and there's nothing to remember — `text-3xl` is already tracked.
-Tailwind's own scale moves in 0.025em steps, which is too coarse across this
-range, so the values are graded:
+Tracking is paired to the size tokens in `global.css`, so it arrives with the size class and there's nothing to remember. `text-3xl` is already tracked. Tailwind's own scale moves in 0.025em steps, which is too coarse across this range, so the values are graded:
 
 | Size             | Tracking   |
 | ---------------- | ---------- |
@@ -168,18 +143,15 @@ range, so the values are graded:
 | `3xl`            | `-0.02em`  |
 | `4xl` `5xl`      | `-0.03em`  |
 
-Adding a `tracking-*` utility still overrides the paired value, so
-`text-3xl tracking-normal` flattens that one heading.
+Adding a `tracking-*` utility still overrides the paired value, so `text-3xl tracking-normal` flattens that one heading.
 
 ## Numerals
 
-Numbers are set in **tabular figures**, applied on `body` so it holds
-everywhere. Every digit shares one width, so a column of numbers lines up and
-a live value doesn't jitter as it changes.
+Numbers are set in **tabular figures**, applied on `body` so it holds everywhere. Every digit shares one width, so a column of numbers lines up and a live value doesn't jitter as it changes.
 
 <Card class="not-prose grid gap-8 sm:grid-cols-2">
   <div>
-    <p class="text-2xs font-semibold text-slate-500">Tabular — every digit the same width</p>
+    <p class="text-2xs font-semibold text-slate-500">Tabular, every digit the same width</p>
     <div class="mt-3 space-y-1 text-sm">
       <div class="flex justify-between"><span>Delivered</span><span>1,408</span></div>
       <div class="flex justify-between"><span>Opened</span><span>911</span></div>
@@ -187,7 +159,7 @@ a live value doesn't jitter as it changes.
     </div>
   </div>
   <div>
-    <p class="text-2xs font-semibold text-slate-500">Proportional — the same figures, drifting</p>
+    <p class="text-2xs font-semibold text-slate-500">Proportional, the same figures drifting</p>
     <div class="mt-3 space-y-1 text-sm proportional-nums">
       <div class="flex justify-between"><span>Delivered</span><span>1,408</span></div>
       <div class="flex justify-between"><span>Opened</span><span>911</span></div>
@@ -196,36 +168,25 @@ a live value doesn't jitter as it changes.
   </div>
 </Card>
 
-Reach for `proportional-nums` in the rare case a number sits inside running
-prose and the even spacing looks wrong.
+Reach for `proportional-nums` in the rare case a number sits inside running prose and the even spacing looks wrong.
 
 ## Truncation
 
-Dense lists need a hard ceiling on how much room a row can take. In a long
-list of rows, headings truncate to one line and body copy clamps to two:
+Dense lists need a hard ceiling on how much room a row can take. In a long list of rows, headings truncate to one line and body copy clamps to two:
 
 <Card class="not-prose max-w-sm">
   <p class="truncate text-sm font-extrabold">A conversation subject long enough to need cutting off</p>
   <p class="mt-1 line-clamp-2 text-sm leading-snug text-slate-500">
-    The body preview clamps at two lines, so every row in the list is the same
-    height no matter how much the sender wrote, and the list stays scannable
-    all the way down.
+    The body preview clamps at two lines, so every row in the list is the same height no matter how much the sender wrote, and the list stays scannable all the way down.
   </p>
 </Card>
 
-Everywhere else, let text wrap — but wrap it well. `text-balance` on headings
-evens the line lengths so you don't get one orphaned word. `text-pretty` on
-body copy does the lighter version of the same thing.
+Everywhere else, let text wrap, and wrap it well. `text-balance` on headings evens the line lengths so you don't get one orphaned word. `text-pretty` on body copy does the lighter version of the same thing.
 
 ## Measure
 
-65 characters is a reasonable ceiling for a paragraph. It rarely comes up —
-there isn't much long-form text in the product — but it's the number to reach
-for when there is.
+65 characters is a reasonable ceiling for a paragraph. There isn't much long-form text in the product, so it rarely comes up. It's the number to reach for when it does.
 
 ## A note on controls
 
-Buttons and other controls set their own type and sit a rung below body copy
-at their default size. That isn't a contradiction: a control has weight,
-padding, and a fill separating it from everything around it, none of which
-body copy gets.
+Buttons and other controls set their own type and sit a rung below body copy at their default size. That isn't a contradiction. A control has weight, padding, and a fill separating it from everything around it, none of which body copy gets.

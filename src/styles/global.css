@@ -80,3 +80,7 @@
 .prose :is(h1, h2, h3, h4, h5, h6, th) {
   font-weight: var(--font-weight-extrabold);
 }
+
+h1 {
+  text-box: trim-both cap alphabetic;
+}

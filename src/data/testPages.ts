@@ -66,7 +66,7 @@ export const testPages: TestPage[] = [
 	},
 	{
 		href: '/test-pages/settings-security',
-		title: 'Settings — Security',
+		title: 'Settings Security',
 		source: 'settings/security/SecuritySettings.vue',
 		exercises:
 			'Narrow single-column settings, expandable cards, success and warning alerts, password fields, a destructive section.',

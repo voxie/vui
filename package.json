@@ -8,6 +8,8 @@
     "pnpm": "^11.23.0"
   },
   "scripts": {
+    "start": "astro dev",
+    "stop": "astro dev stop",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

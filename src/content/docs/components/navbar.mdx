@@ -1,0 +1,227 @@
+---
+title: Navbar
+order: 4
+---
+
+import NavbarDemo from '@site/NavbarDemo.vue';
+
+The navigation bar is the entry point into the application. Main navigation and frequently used actions both live here. Navigation sits on the left, with the two most used page links called out as buttons. The right side holds account-level options like team and group switching, kiosk mode, and settings.
+
+A screen has one navbar, never two. It is the only place the `dark` surface from [Card](/docs/components/card) is used.
+
+The component is one wrapper and two sub-components. `Navbar` is the bar itself, and it decides how much of the navigation fits. `NavbarAction` sits inside `Navbar` and holds either a link or a label with a dropdown menu. `NavbarActionItem` is a row inside a dropdown.
+
+```vue
+<Navbar>
+  <template #left>…the logo…</template>
+
+  <NavbarAction icon="fa-solid fa-address-book" active>
+    Contacts
+    <template #items>
+      <NavbarActionItem active>All Contacts</NavbarActionItem>
+      <NavbarActionItem>Segments</NavbarActionItem>
+    </template>
+  </NavbarAction>
+
+  <NavbarAction href="/support" icon="fa-solid fa-circle-info">
+    Support
+  </NavbarAction>
+
+  <template #right>…the account menu…</template>
+</Navbar>
+```
+
+Actions go in the default slot because the bar measures them. The row is a `<ul>` and each section is an `<li>`, so a screen reader announces how many there are. `NavbarAction` renders that `<li>` for you.
+
+Everything in the default slot should be a `NavbarAction`. A [Button](/docs/components/button) dropped straight into the row would be a `<button>` in a `<ul>` with no `<li>` around it, and it wouldn't be measured or folded. Put it inside an action instead.
+
+The list rule applies inside menus too. The `items` slot is a list, so anything in it that isn't a `NavbarActionItem` needs its own `<li>`. Outside a list, such as the bar's right slot, pass `as="div"` so the action renders a `<div>` instead.
+
+The bar is 64px tall, and 80px once it has the room for it. There's no short variant. Anything that has to be shorter is a toolbar, like an inbox switcher or a builder's toolbar.
+
+## Examples
+
+Every bar below is live. They run at the width of this column rather than a window, so they hold fewer sections than the real bar does. [Folding](#folding) explains why.
+
+Open the menus. **Open full screen** under any bar puts it across the top of the window, where resizing exercises the fold. Which bar is open is in the URL, so a link to a preview can be sent to someone.
+
+The two bars under **Surface** carry Message Hub and Quick Blast, as the product's bar does. Those two [outrank the sections](#left-and-right) for room, which is why both bars are down to a hamburger in a column this narrow. The other examples leave them off.
+
+### Surface
+
+The `surface` prop says which surface the bar is. The choices are `dark` (the default) and `glass`. Both are named after the [Card](/docs/components/card) surface they are, and both are surfaces [Button](/docs/components/button) knows how to sit on.
+
+{/* An open panel hangs out of the bar's box, so a demo has to out-rank the one under it or that one paints over the menu. `isolate` on every demo keeps a bar's own `z-30` from reaching the page, which is what lets the two demos with something below them be the only numbers here. */}
+<div class="not-prose relative isolate z-10">
+  <NavbarDemo client:load previewId="surface-dark" />
+</div>
+
+<div class="not-prose relative isolate mt-8">
+  <NavbarDemo client:load previewId="surface-glass" surface="glass" />
+</div>
+
+`dark` is slate-700 and it's what the product ships. `glass` is slate-50, without the border the Card surface carries, since a bar is edge to edge.
+
+The prop sets the bar's background and announces it to everything inside the bar, side slots included. A section is a transparent [Button](/docs/components/button), so it reads its label color and its hover fill off the surface the same way a filled button does: white on the dark bar, black on the glass one, hovering one step off whichever it's on. A Button in `#right` is on the bar's surface without being told.
+
+### Sections
+
+A `NavbarAction` is either a link or a menu, and the arrow at its end says which. Give it an `href` and it renders an `<a>` with an arrow pointing right. Give it an `items` slot and it renders a `<button>` with a chevron. That chevron opens a panel underneath, and points up for as long as the panel is showing. `hideArrow` drops the arrow if a particular action is better off without one.
+
+The rows in an `items` slot are `NavbarActionItem`s. Give a row an `href` and it renders an `<a>`. Leave it off and it renders a `<button>`.
+
+For a panel that isn't a list of rows, use the `dropdown` slot instead of `items` and put whatever you like in it. The bar draws the panel and its slab and leaves the inside to you. The team button at the right of the examples above is built that way.
+
+`icon` takes Font Awesome classes as a string, like `icon="fa-solid fa-robot"`, and sets them on an `<i>` ahead of the label.
+
+In the bars above, open **More**. The chevrons are the menus, and Support is the one with an arrow.
+
+A menu drops from the left edge of its action. `placement="right"` lines it up with the right edge instead, which is what anything near the right end of the bar needs. Under 40rem the setting is ignored, since a menu takes the full width of the bar there.
+
+### An action around your own control
+
+Put a [Button](/docs/components/button) or a link in an action's label and the action stops being the control. It renders a `<div>`, draws no arrow, and lets what's inside take the focus, the cursor, and the press. This is the shape the side slots use, and the only way to put a button in an action, since a button can't sit inside a button.
+
+The action still positions the panel, carries the marker, and toggles the menu when the control is pressed. It can't put anything inside your control, so three things move to you: the chevron, `aria-haspopup`, and `aria-expanded`.
+
+The label slot hands you `open` for all three:
+
+```vue
+<template #right>
+  <NavbarAction as="div" placement="right">
+    <template #default="{ open }">
+      <Button size="sm" aria-haspopup="true" :aria-expanded="open">
+        <i class="fa-solid fa-gear" aria-hidden="true"></i>
+        <i :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+        <span class="sr-only">Account</span>
+      </Button>
+    </template>
+
+    <template #items>…the rows…</template>
+  </NavbarAction>
+</template>
+```
+
+The explicit `#default` template is what lets the slot be destructured. An action whose label is a bare word needs none of this.
+
+The space around the control takes no cursor and no click, so the press lands on the control and nowhere else.
+
+### The current section
+
+`active` on an action marks the section you're in, with a sky-500 bar under the label. `active` on an item does the same for a row in the open menu, as a bar down the left edge of the panel.
+
+{/* The open panel is positioned, so it adds no height of its own. The margin is what keeps it off the paragraph underneath. */}
+<div class="not-prose relative isolate mb-52">
+  <NavbarDemo client:load previewId="current-section" openCurrent hideActions />
+</div>
+
+Mark exactly one action active. The marker is the only thing on the bar that says where you are (the label doesn't change color), so a second one makes it say nothing.
+
+Mark the thing you're actually on and the bar works out the rest. An action whose menu holds what's marked takes the marker itself, including **More** when the marked section has folded into it.
+
+Hovering a section says so with the button's own fill, not with a bar under it. The marker is for where you are and nothing else, so the two cues are never confused for each other.
+
+`:marker="false"` turns the marker off for a single action. It's there for something that sits on the bar without being a place you can be.
+
+While a menu is open, its panel covers the marker under it, as in the bar above. The open panel says where you are instead. Under 40rem there is no panel to say it, so the hamburger takes a slate bar while its menu is open: slate-500 on the dark bar, slate-300 on the glass one.
+
+### Menus inside menus
+
+Put a `NavbarAction` inside an `items` slot and it becomes a section of that menu rather than a second panel, a heading with its own rows indented under it. In a bar wider than 40rem those sections are open. In a narrower bar they collapse, and the chevron flips as they open.
+
+A collapsed section holding the current page takes the page's bar onto its own heading, and gives it back to the row when opened.
+
+The account menu on the right of the examples above is built this way. Settings and Teams are actions nested inside one action.
+
+Two levels is the limit in practice. Nothing in the component stops a third, but at that point the thing you're building is a page, not a menu.
+
+### Left and right
+
+`#left` holds the logo and `#right` holds the account. Neither is measured and neither folds, so what you put there stays on the bar. Keep each slot to one or two things, since every pixel a side slot takes is a pixel the sections don't get.
+
+The bars at the top of this page carry two more things on the left: Message Hub and Quick Blast, the actions the product wants a click away from anywhere. They go in the slot as buttons rather than in the row as sections, so they never fold into **More**.
+
+On the right, the team you're in ends the bar. It's the one thing that never moves at any width, because which account you're looking at is not something to leave anyone guessing about.
+
+What's in a side slot outranks every section. The bar will put all five sections behind one **More** button before either of these buttons gives up a pixel. That's the right order for these two, since they're what the product is for, and the reason to think twice about a third.
+
+Under 40rem the bar folds every section away and hands a `narrow` flag to both side slots and to the two menu slots below. It moves nothing of yours on its own. The examples answer the flag by keeping the logo, the menu, and the team on the bar and sending the rest into the menu.
+
+### Moving into the menu
+
+`#nested-before` and `#nested-after` add rows at the top and the bottom of the **More** menu, around whatever sections have folded into it. With `narrow`, they're how something leaves the bar without leaving the page:
+
+```vue
+<template #left="{ narrow }">
+  …the logo…
+  <Button v-if="!narrow" color="sky">Message Hub</Button>
+</template>
+
+<template #nested-before="{ narrow }">
+  <li v-if="narrow" class="w-full">
+    <Button block color="sky">Message Hub</Button>
+  </li>
+</template>
+```
+
+It's written twice because a slot is markup, and the bar can't hand the same markup to two slots.
+
+Take any bar on this page to a phone and it holds the logo, one menu, and the team. Open the menu and the two buttons are at the top, with Settings, Teams, and Log out below the sections.
+
+## Folding
+
+The bar decides how many sections fit and puts the rest behind one menu. It measures rather than using breakpoints, because the answer depends on the labels, the side slots, and the reader's font size.
+
+Under 40rem it doesn't measure. Every section goes into the menu whether or not one would fit, and the side slots get `narrow`. Widening out of it gives back what the side slots moved first, and the sections after.
+
+Above that it measures its own width, not the window's, so a bar in a column, a split pane, or beside a collapsible sidebar folds to the room it actually has. Its spacing is a container query for the same reason. It refolds on its own when a label changes, a section is added or removed, a font finishes loading, or the reader turns their text size up. There is nothing to call.
+
+Whatever goes in the default slot is mounted twice, once on the bar or in the menu and once hidden for measuring. A `NavbarAction` doesn't notice. Something that fires a request or starts a timer when it mounts would do it twice, and doesn't belong on the bar.
+
+It takes sections from the left while they fit, and what's left goes into a **More** menu at the end of the row as nested actions. If everything fits there's no More button at all. The exception is a menu carrying something of its own from `#nested-before` or `#nested-after`, which is on the row at every width and counted like a section. One section left on the bar turns into no sections. A lone section beside More would read as the whole navigation, so the last one folds too and the trigger becomes a hamburger.
+
+There is nothing to tune. How tightly the bar packs isn't a setting, because the measurement already has the answer. Open this one full screen and drag the window in and out to watch the count change:
+
+<div class="not-prose relative isolate">
+  <NavbarDemo client:load previewId="folding" hideActions />
+</div>
+
+## Interaction
+
+A menu opens on click. It closes on a click anywhere outside it, on <kbd>Escape</kbd>, or on a second click of its own label. `open` is two-way. Bind it with `v-model:open` to drive a menu from outside, or pass it one-way to open a menu on load.
+
+Everything on the bar is a real `<button>` or `<a>`. The whole bar is reachable with <kbd>Tab</kbd>, a menu opens with <kbd>Enter</kbd>, and its rows join the tab order once it's open.
+
+An action that is its own control carries `aria-haspopup` and an `aria-expanded` that tracks its panel. One wrapped [around a control of yours](#an-action-around-your-own-control) can't, since the attributes belong on the control. It hands you `open` on the label slot to set them from.
+
+`aria-current` goes on the action or item that really is the page, and only there. An action marked because its menu holds the current page takes the marker without the attribute.
+
+There are no arrow keys and no `role="menu"`, deliberately. This is a disclosure pattern, a row of buttons each revealing a list of links, with <kbd>Tab</kbd> moving through everything. `role="menu"` would commit the bar to menubar semantics, which are for application menus, not navigation.
+
+Closing a menu with <kbd>Escape</kbd> hands focus back to the control that opened it. A section that folds while it has focus passes that focus to the **More** button.
+
+Menus don't open on hover. A pointer crossing the bar would open them by accident, and a touchscreen has no hover at all.
+
+## Contrast
+
+The bar's own pairings are the strongest in the system. White on slate-700 is 10.4:1, and the glass bar's black on slate-50 is 20.1:1. Menus are darker still, since a panel is white and its rows are slate-900. [Color](/docs/foundations/color#contrast) explains the two columns.
+
+| Element                   | On         | WCAG 2.x | APCA   |
+| ------------------------- | ---------- | -------- | ------ |
+| white label               | slate-700  | 10.4:1   | Lc 98  |
+| black label               | slate-50   | 20.1:1   | Lc 106 |
+| slate-900 menu row        | white      | 17.8:1   | Lc 105 |
+| slate-900 menu row hover  | sky-100    | 15.5:1   | Lc 95  |
+| sky-500 marker            | slate-700  | 3.8:1    | Lc 40  |
+| slate-400 icon            | slate-700  | 3.9:1    | Lc 41  |
+| slate-500 open marker     | slate-700  | 2.2:1    | Lc 19  |
+| slate-300 open marker     | slate-50   | 1.4:1    | Lc 20  |
+| sky-500 item bar          | white      | 2.7:1    | Lc 40  |
+
+The labels are the part that has to be read, and they have room to spare. Everything below them is a marker or an icon, and those are priced differently. WCAG asks 3:1 of a non-text element that carries meaning, not the 4.5:1 it asks of text.
+
+The section marker clears that at 3.8:1, and the icons at 3.9:1. Icons drop to 2.5:1 on the glass bar, but they're never the only thing saying what a section is. An action with an icon and no label is a guess. The two open markers are far under, at 2.2:1 and 1.4:1, and that's fine for a bar that only exists while the menu it belongs to is on screen saying the same thing.
+
+The item bar is the one that can't carry its own weight. At 2.7:1 against the panel it's just under the 3:1 a state indicator wants, so it isn't asked to work alone. The current row's label is also semibold, which survives at any contrast, and `aria-current` carries the same thing to a screen reader.
+
+That pairing is the rule to keep if you build on this. A state that exists only as a color a shade off its background is a state some people can't see.

@@ -18,9 +18,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 ## Imports
 
-Import across directories through the aliases in `tsconfig.json`, never with
-`../` traversal. Astro passes them to Vite, so they work the same in `.astro`,
-`.vue` and `.mdx`.
+Import across directories through the aliases in `tsconfig.json`, never with `../` traversal. Astro passes them to Vite, so they work the same in `.astro`, `.vue` and `.mdx`.
 
 | Alias       | Resolves to            | Example                                     |
 | ----------- | ---------------------- | ------------------------------------------- |
@@ -29,8 +27,13 @@ Import across directories through the aliases in `tsconfig.json`, never with
 | `@layouts/*`| `src/layouts/*`        | `import Layout from '@layouts/Layout.astro'`|
 | `@data/*`   | `src/data/*`           | `import { testPages } from '@data/testPages'`|
 
-`@ui` and `@site` are deliberately separate so the design-system / site-chrome
-split above reads at the import line. Same-directory siblings still use `./`.
+`@ui` and `@site` are deliberately separate so the design-system / site-chrome split above reads at the import line. Same-directory siblings still use `./`.
+
+## Writing
+
+Never hard-wrap prose in Markdown or MDX. A paragraph, a list item, or a comment is one line, however long it runs. Editors do their own wrapping. Code fences, tables, and JSX keep whatever line structure they need.
+
+Read `.claude/skills/docs-voice/SKILL.md` before writing or revising prose in `src/content/`. It is the single source for the house style, and it covers the hard rules, the voice, the page structure, and how to run a cleanup pass.
 
 ## Documentation
 

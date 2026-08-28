@@ -10,9 +10,13 @@ const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare
 <Layout title="Documentation">
   <h1>Voxie UI Documentation</h1>
 
-  <p>The design system behind Voxie. The components screens are built from, the foundations they sit on, and the guidance for putting the two together.</p>
+  <Card surface='layered' padding='spacious'>
 
-  <p>It is written to be read twice: once by a person deciding how a screen should look, and once by an agent building it. The docs carry the reasoning, and the skills restate the same rules as instructions an agent can follow.</p>
+  <p class="mt-0">The design system behind Voxie. The components screens are built from, the foundations they sit on, and the guidance for putting the two together.</p>
+
+  <p class="mb-0">It is written to be read twice: once by a person deciding how a screen should look, and once by an agent building it. The docs carry the reasoning, and the skills restate the same rules as instructions an agent can follow.</p>
+
+  </Card>
 
   <h2>What's here</h2>
 

@@ -1,18 +1,13 @@
 ---
 title: Page Structure
-order: 1
+order: 4
 ---
 
 import Card from '@ui/Card.vue';
 
-Pages are typically made up of two sections. The navbar which is flexible and fills the full browser width and the main content area witch has its max width capped.
+A page is typically two parts. The [Navbar](/docs/components/navbar) runs the full width of the window. The main content area has its max width capped.
 
-The navbar uses the navbar component.
-
-For the main content, we use the tailwind container class with a max width and padding. Exceptions to the max width content container would instances like the message hub or workflow builder where the user needs all the space they can get for complex or heavy work tasks.
-
-relative shadow flex justify-between items-center px-4 sm:px-6 md:px-8 bg-slate-700 h-16 sm:h-20 app-navbar mb-6 md:mb-0
-container mx-auto px-4 sm:px-6 md:px-8 
+The main content sits in Tailwind's `container`, with a max width and padding. Screens like Message Hub and the workflow builder are exceptions. They drop the max width, because the user needs all the space they can get for complex or heavy work.
 
 ```
 container mx-auto px-4 sm:px-6 md:px-8 max-w-(--breakpoint-xl)
@@ -20,7 +15,7 @@ container mx-auto px-4 sm:px-6 md:px-8 max-w-(--breakpoint-xl)
 
 Headings should always sit inside cards with their content. Page titles are the exception. They sit directly on the page background.
 
-We use a left aligned 12 column grid for most pages. Areas like a dashboard with variable width cards containing different callouts. Gaps between items should never exceed the gap between the container and edge of the screen and should ideally be slightly smaller. This grid sits at the main content level in markup not at the body level. This allows us to drop it in when needed and manage main content padding and gaps apart from the navbar. 
+Most pages use a left-aligned 12-column grid, in areas like a dashboard with cards of different widths holding different callouts. The gap between items never exceeds the gap between the container and the edge of the window, and is ideally a little smaller. The grid sits at the main content level in the markup, not on the body. That way it can be dropped in when a page needs it, and content padding and gaps are managed apart from the navbar.
 
 ```
 grid grid-cols-12 gap-6 md:gap-8
@@ -38,7 +33,7 @@ grid grid-cols-12 gap-6 md:gap-8
 
 <hr />
 
-An exception to the above rules are create pages e.g. creating a campaign, segment, or contact. Those screens follow a single column centered layout and use a tighter max width of `--breakpoint-sm`. We also show a page description on the page background, directly under the page heading. The cards here are usually glass because they contain form inputs.
+Create pages are an exception, such as creating a campaign, a segment, or a contact. Those screens use a single centered column with a tighter max width of `--breakpoint-sm`. A page description sits on the page background, directly under the heading. The cards are usually `glass`, because they hold form inputs.
 
 <hr />
 
@@ -67,7 +62,7 @@ An exception to the above rules are create pages e.g. creating a campaign, segme
 
 <hr />
 
-Another common page layout we use is a sidebar + main content combo. Used in edit screens for main app functions like edit campaign, segment, or contact. Also used in the main app configuration settings.
+Another common layout is a sidebar beside the main content. Edit screens for main app functions use it, such as editing a campaign, a segment, or a contact, and so do the app's configuration settings.
 
 <hr />
 

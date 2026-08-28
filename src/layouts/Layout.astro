@@ -1,6 +1,25 @@
 ---
+/*
+  Preloaded below. Solid is on every page, and Font Awesome ships
+  `font-display: block`, which holds icons invisible until the file lands. The
+  preload starts that fetch with the HTML rather than after the stylesheet
+  parses. Regular is on one test page, so it loads the ordinary way.
+*/
+import solidFont from '../styles/fontawesome/webfonts/fa-solid-900.woff2?url';
 import '@fontsource-variable/inter/wght.css';
+/*
+  Font Awesome, self-hosted. The hosted kit was a blocking third-party script
+  that cached for 60 seconds, so every navigation waited on a fresh round trip
+  to fontawesome.com before it painted, then chained four stylesheets and a
+  font off a second origin. These are the same files, bundled into this site's
+  own stylesheet and served from this site's own domain. Only the two families
+  the pages use are here, classic solid and classic regular.
+*/
+import '../styles/fontawesome/css/fontawesome.min.css';
+import '../styles/fontawesome/css/solid.min.css';
+import '../styles/fontawesome/css/regular.min.css';
 import '../styles/global.css';
+
 import Sidebar from '@site/Sidebar.astro';
 
 interface Props {
@@ -15,19 +34,20 @@ const { title } = Astro.props;
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-		<script
-			is:inline
-			src="https://kit.fontawesome.com/06f511676f.js"
-			crossorigin="anonymous"></script>
+		<link rel="preload" href={solidFont} as="font" type="font/woff2" crossorigin />
 	</head>
 	<body class="bg-slate-200">
-		{/* Equal 1fr gutters are what center the main column in the viewport. */}
-		<div class="grid grid-cols-[minmax(14rem,1fr)_minmax(0,48rem)_1fr] items-start">
+		{/*
+			Equal 1fr gutters are what center the main column in the viewport.
+			One column below `md`, where the sidebar collapses to a select and
+			stacks above the content instead of sitting beside it.
+		*/}
+		<div class="grid grid-cols-1 md:grid-cols-[auto_minmax(0,48rem)] lg:grid-cols-[minmax(auto,1fr)_minmax(0,52rem)_1fr] items-start">
 			<Sidebar />
-			<main class="prose prose-slate max-w-none p-8 xl:py-24">
+			<main class="prose prose-slate max-w-none p-5 sm:p-8 xl:py-24">
 				<slot />
 			</main>
 		</div>

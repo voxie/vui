@@ -13,6 +13,14 @@ export default defineConfig({
   enabled: false,
 },
 
+  // Docs pages are small static files, so fetching one on link hover makes the
+  // click itself instant. `hover` rather than `viewport`, since the sidebar puts
+  // every page in view at once.
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },

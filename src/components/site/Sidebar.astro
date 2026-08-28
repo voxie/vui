@@ -1,12 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
+import VoxieMark from '@site/VoxieMark.vue';
 import { testPages } from '@data/testPages';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 
 // Directory names don't sort into a reading order. Unlisted sections fall last.
-const sectionOrder = ['foundations', 'components', 'patterns'];
+const sectionOrder = ['foundations', 'components'];
 const rank = (section: string) => {
   const i = sectionOrder.indexOf(section);
   return i === -1 ? sectionOrder.length : i;
@@ -15,7 +16,40 @@ const rank = (section: string) => {
 const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))].sort(
   (a, b) => rank(a) - rank(b) || a.localeCompare(b),
 );
-const currentPath = Astro.url.pathname.replace(/\/$/, '');
+
+/*
+  One list of groups, rendered twice: as the column beside the content on wide
+  viewports and as a select above it on narrow ones. Building it once is what
+  keeps the two from drifting apart as pages are added.
+
+  Section labels are capitalized here rather than with `capitalize`, because
+  `optgroup` labels are attribute text that CSS can't reach.
+*/
+const groups = [
+  { label: 'Voxie UI', mark: true, links: [{ href: '/', title: 'Intro' }] },
+  ...sections.map((section) => ({
+    label: section.charAt(0).toUpperCase() + section.slice(1),
+    links: docs
+      .filter((entry) => entry.id.split('/')[0] === section)
+      .map((entry) => ({ href: `/docs/${entry.id}`, title: entry.data.title })),
+  })),
+  {
+    label: 'Skills',
+    links: skills.map((entry) => ({ href: `/skills/${entry.id}`, title: entry.data.title })),
+  },
+  // Unstyled fixtures rather than documentation, so they sit last.
+  {
+    label: 'Test Pages',
+    links: [
+      { href: '/test-pages', title: 'Overview' },
+      ...testPages.map((page) => ({ href: page.href, title: page.title })),
+    ],
+  },
+];
+
+// Trailing slash stripped so hrefs above compare equal; the home page keeps its
+// single slash rather than collapsing to ''.
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 
 function linkClass(href: string) {
   let defaults = 'block px-2 py-0.5 border-l border-l-slate-400/50';
@@ -26,91 +60,71 @@ function linkClass(href: string) {
 }
 ---
 
+{/*
+  Below `md` the two columns can't both fit, so the nav collapses to a select
+  that sits above the content. Sticky, so it stays reachable down a long page —
+  the column it replaces is sticky for the same reason.
+*/}
+<div
+  class="md:hidden sticky top-0 z-50 p-5 bg-slate-200/90 backdrop-blur-md border-b border-slate-300"
+>
+  <label class="relative block">
+    <span class="sr-only">Browse documentation</span>
+    <select
+      data-docs-nav
+      class="w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm font-medium text-slate-800"
+    >
+      {
+        groups.map((group) => (
+          <optgroup label={group.label}>
+            {group.links.map((link) => (
+              <option value={link.href} selected={link.href === currentPath}>
+                {link.title}
+              </option>
+            ))}
+          </optgroup>
+        ))
+      }
+    </select>
+    <i
+      class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500 pointer-events-none"
+    ></i>
+  </label>
+</div>
+
 <aside
-  class="w-56 shrink-0 justify-self-end sticky top-0 max-h-dvh overflow-y-auto overscroll-y-contain py-10 px-4 xl:py-28"
+  class="hidden md:block w-56 shrink-0 justify-self-end sticky top-0 max-h-dvh overflow-y-auto overscroll-y-contain p-8 xl:py-24"
 >
   <nav class="text-sm space-y-4">
-    {/* '' rather than '/' — currentPath has the trailing slash stripped. */}
-    <div>
-      <h3 class="font-extrabold capitalize">Voxie UI</h3>
-      <ul class="mt-2">
-        <li>
-          <a href="/" class={linkClass('')}>
-            <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
-            Intro
-            </span>
-          </a>
-        </li>
-      </ul>
-    </div>
-
     {
-      sections.map((section) => (
+      groups.map((group) => (
         <div>
-          <h3 class="font-extrabold capitalize">{section}</h3>
+          {/* The mark rides the first heading, sized to the text beside it. */}
+          <h3 class="font-extrabold flex items-center gap-1.5">
+            {group.mark && <VoxieMark class="w-6 -ml-0.5 xl:ml-0 -mb-0.5 2xl:fixed top-4 left-4" />}
+            {group.label}
+          </h3>
           <ul class="mt-2">
-            {docs
-              .filter((entry) => entry.id.split('/')[0] === section)
-              .map((entry) => (
-                <li>
-                  <a
-                    href={`/docs/${entry.id}`}
-                    class={linkClass(`/docs/${entry.id}`)}
-                  >
-                    <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
-                    {entry.data.title}
-                    </span>
-                  </a>
-                </li>
-              ))}
+            {group.links.map((link) => (
+              <li>
+                <a href={link.href} class={linkClass(link.href)}>
+                  <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100 xl:text-nowrap">
+                    {link.title}
+                  </span>
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       ))
     }
-
-    <div>
-      <h3 class="font-extrabold capitalize">Skills</h3>
-      <ul class="mt-2">
-        {
-          skills.map((entry) => (
-            <li>
-              <a
-                href={`/skills/${entry.id}`}
-                class={linkClass(`/skills/${entry.id}`)}
-              >
-                <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
-                {entry.data.title}
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-
-    {/* Unstyled fixtures rather than documentation, so they sit last. */}
-    <div>
-      <h3 class="font-extrabold capitalize">Test Pages</h3>
-      <ul class="mt-2">
-        <li>
-          <a href="/test-pages" class={linkClass('/test-pages')}>
-            <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
-            Overview
-            </span>
-          </a>
-        </li>
-        {
-          testPages.map((page) => (
-            <li>
-              <a href={page.href} class={linkClass(page.href)}>
-                <span class="group-hover:bg-slate-300/40 rounded-lg px-2 py-1 transition duration-100">
-                {page.title}
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
   </nav>
 </aside>
+
+<script>
+  // Selecting is the whole interaction — no separate Go button to press.
+  const select = document.querySelector<HTMLSelectElement>('[data-docs-nav]');
+  select?.addEventListener('change', () => {
+    if (select.value) window.location.href = select.value;
+  });
+</script>
