@@ -46,44 +46,47 @@ const element = computed(() => (props.href ? 'a' : 'button'));
 const surface = useSurface(() => props.sitsOn);
 
 const sizeClasses = computed(() => {
-	if (props.size === 'xs') return { element: 'rounded-lg px-2 text-xs h-6', content: 'gap-1' };
-	if (props.size === 'sm') return { element: 'rounded-lg px-3 text-xs h-8', content: 'gap-1.5' };
-	if (props.size === 'lg') return { element: 'rounded-xl px-5 text-sm h-12', content: 'gap-2' };
-	if (props.size === 'xl') return { element: 'rounded-2xl px-8 text-sm h-16', content: 'gap-2' };
-	return { element: 'rounded-xl px-4 text-xs h-10', content: 'gap-2' };
+	if (props.size === 'xs') return { radius: 'rounded-lg', element: 'px-2 text-xs h-6', content: 'gap-1' };
+	if (props.size === 'sm') return { radius: 'rounded-lg', element: 'px-3 text-xs h-8', content: 'gap-1.5' };
+	if (props.size === 'lg') return { radius: 'rounded-xl', element: 'px-5 text-sm h-12', content: 'gap-2' };
+	if (props.size === 'xl') return { radius: 'rounded-2xl', element: 'px-8 text-sm h-16', content: 'gap-2' };
+	return { radius: 'rounded-xl', element: 'px-4 text-xs h-10', content: 'gap-2' };
 });
+
+// Hover lives on the fill layer, which is pointer-transparent, so every hover
+// class is driven off the button's own hover state through the named group.
 
 // Slate steps about one level away from the surface it sits on, so it needs a
 // value per surface. Every other color holds the same value everywhere.
 const slateBySurface: Record<Surface, ColorStyle> = {
 	default: {
 		fill: 'bg-slate-100',
-		hover: 'hover:bg-slate-200',
-		outlineHover: 'hover:bg-slate-100/10',
+		hover: 'group-hover/button:bg-slate-200',
+		outlineHover: 'group-hover/button:bg-slate-100/10',
 		border: 'border-slate-100',
 	},
 	glass: {
 		fill: 'bg-slate-200',
-		hover: 'hover:bg-slate-300',
-		outlineHover: 'hover:bg-slate-200/10',
+		hover: 'group-hover/button:bg-slate-300',
+		outlineHover: 'group-hover/button:bg-slate-200/10',
 		border: 'border-slate-200',
 	},
 	sunken: {
 		fill: 'bg-slate-300',
-		hover: 'hover:bg-slate-400',
-		outlineHover: 'hover:bg-slate-300/10',
+		hover: 'group-hover/button:bg-slate-400',
+		outlineHover: 'group-hover/button:bg-slate-300/10',
 		border: 'border-slate-300',
 	},
 	dark: {
 		fill: 'bg-slate-600',
-		hover: 'hover:bg-slate-500',
-		outlineHover: 'hover:bg-slate-600/10',
+		hover: 'group-hover/button:bg-slate-500',
+		outlineHover: 'group-hover/button:bg-slate-600/10',
 		border: 'border-slate-600',
 	},
 	background: {
 		fill: 'bg-slate-300',
-		hover: 'hover:bg-slate-400',
-		outlineHover: 'hover:bg-slate-300/10',
+		hover: 'group-hover/button:bg-slate-400',
+		outlineHover: 'group-hover/button:bg-slate-300/10',
 		border: 'border-slate-300',
 	},
 };
@@ -92,32 +95,32 @@ const slateBySurface: Record<Surface, ColorStyle> = {
 const transparentBySurface: Record<Surface, ColorStyle> = {
 	default: {
 		fill: 'bg-transparent',
-		hover: 'hover:bg-slate-100',
-		outlineHover: 'hover:bg-slate-100/10',
+		hover: 'group-hover/button:bg-slate-100',
+		outlineHover: 'group-hover/button:bg-slate-100/10',
 		border: 'border-transparent',
 	},
 	glass: {
 		fill: 'bg-transparent',
-		hover: 'hover:bg-slate-200',
-		outlineHover: 'hover:bg-slate-200/10',
+		hover: 'group-hover/button:bg-slate-200',
+		outlineHover: 'group-hover/button:bg-slate-200/10',
 		border: 'border-transparent',
 	},
 	sunken: {
 		fill: 'bg-transparent',
-		hover: 'hover:bg-slate-300',
-		outlineHover: 'hover:bg-slate-300/10',
+		hover: 'group-hover/button:bg-slate-300',
+		outlineHover: 'group-hover/button:bg-slate-300/10',
 		border: 'border-transparent',
 	},
 	dark: {
 		fill: 'bg-transparent',
-		hover: 'hover:bg-slate-600',
-		outlineHover: 'hover:bg-slate-600/10',
+		hover: 'group-hover/button:bg-slate-600',
+		outlineHover: 'group-hover/button:bg-slate-600/10',
 		border: 'border-transparent',
 	},
 	background: {
 		fill: 'bg-transparent',
-		hover: 'hover:bg-slate-300',
-		outlineHover: 'hover:bg-slate-300/10',
+		hover: 'group-hover/button:bg-slate-300',
+		outlineHover: 'group-hover/button:bg-slate-300/10',
 		border: 'border-transparent',
 	},
 };
@@ -125,38 +128,38 @@ const transparentBySurface: Record<Surface, ColorStyle> = {
 const fixedColors: Record<string, ColorStyle> = {
 	white: {
 		fill: 'bg-white',
-		hover: 'hover:bg-slate-50',
-		outlineHover: 'hover:bg-white/10',
+		hover: 'group-hover/button:bg-slate-50',
+		outlineHover: 'group-hover/button:bg-white/10',
 		border: 'border-white',
 	},
 	sky: {
 		fill: 'bg-sky-300',
-		hover: 'hover:bg-sky-400',
-		outlineHover: 'hover:bg-sky-300/10',
+		hover: 'group-hover/button:bg-sky-400',
+		outlineHover: 'group-hover/button:bg-sky-300/10',
 		border: 'border-sky-300',
 	},
 	teal: {
 		fill: 'bg-teal-300',
-		hover: 'hover:bg-teal-400',
-		outlineHover: 'hover:bg-teal-300/10',
+		hover: 'group-hover/button:bg-teal-400',
+		outlineHover: 'group-hover/button:bg-teal-300/10',
 		border: 'border-teal-300',
 	},
 	amber: {
 		fill: 'bg-amber-300',
-		hover: 'hover:bg-amber-400',
-		outlineHover: 'hover:bg-amber-300/10',
+		hover: 'group-hover/button:bg-amber-400',
+		outlineHover: 'group-hover/button:bg-amber-300/10',
 		border: 'border-amber-300',
 	},
 	rose: {
 		fill: 'bg-rose-300',
-		hover: 'hover:bg-rose-400',
-		outlineHover: 'hover:bg-rose-300/10',
+		hover: 'group-hover/button:bg-rose-400',
+		outlineHover: 'group-hover/button:bg-rose-300/10',
 		border: 'border-rose-300',
 	},
 	violet: {
 		fill: 'bg-violet-300',
-		hover: 'hover:bg-violet-400',
-		outlineHover: 'hover:bg-violet-300/10',
+		hover: 'group-hover/button:bg-violet-400',
+		outlineHover: 'group-hover/button:bg-violet-300/10',
 		border: 'border-violet-300',
 	},
 };
@@ -196,25 +199,37 @@ defineExpose({
 		:href="props.href"
 		:type="props.href ? undefined : 'button'"
 		:disabled="props.href ? undefined : props.disabled"
-		class="relative cursor-pointer items-center justify-center border border-solid text-center font-sans font-semibold whitespace-nowrap transition duration-100 will-change-transform outline-blue-600 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 active:scale-95 active:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+		class="group/button relative cursor-pointer items-center justify-center bg-transparent text-center font-sans font-semibold whitespace-nowrap transition duration-100 outline-blue-600 select-none hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 active:outline-hidden disabled:pointer-events-none disabled:opacity-50"
 		:class="[
-			colorClasses,
 			textClasses,
+			sizeClasses.radius,
 			sizeClasses.element,
 			props.block ? 'flex w-full' : 'inline-flex',
-			{
-				'shadow hover:shadow-md': props.shadow,
-				'pointer-events-none opacity-50': props.disabled && props.href,
-			},
+			{ 'pointer-events-none opacity-50': props.disabled && props.href },
 		]"
 	>
+		<!--
+		  The press is a fixed 2px inset on this layer rather than a scale on the
+		  button, so a 6px-tall button and a 64px-tall one shrink by the same
+		  amount. Everything that draws the button's shape lives here.
+		-->
+		<span
+			aria-hidden="true"
+			class="pointer-events-none absolute inset-0 border border-solid transition-all duration-100 group-active/button:inset-0.5"
+			:class="[
+				colorClasses,
+				sizeClasses.radius,
+				{ 'shadow group-hover/button:shadow-md': props.shadow },
+			]"
+		></span>
+
 		<div
-			class="flex items-center justify-center transition"
+			class="relative flex items-center justify-center transition"
 			:class="[
 				sizeClasses.content,
 				props.loading
 					? 'opacity-0 ease-in motion-safe:scale-0'
-					: 'duration-700 ease-[cubic-bezier(0,1.3,.3,1)]',
+					: 'duration-700 ease-[cubic-bezier(0,1.3,.3,1)] group-active/button:scale-[0.96] group-active/button:duration-100',
 			]"
 		>
 			<slot />
