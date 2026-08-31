@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useSurface, type Surface } from './surface.ts';
+import Spinner from './Spinner.vue';
 
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type ButtonColor = 'slate' | 'white' | 'sky' | 'teal' | 'amber' | 'rose' | 'violet' | 'transparent';
@@ -234,23 +235,14 @@ defineExpose({
 		</div>
 
 		<div
-			class="absolute left-1/2 flex -translate-x-1/2 text-sm transition"
+			class="absolute left-1/2 flex -translate-x-1/2 transition"
 			:class="
 				props.loading
 					? ''
 					: 'opacity-0 motion-safe:scale-0'
 			"
 		>
-			<!-- Reduced motion swaps the rotation for a pulse: it still reads as
-			     working, without anything travelling. -->
-			<i
-				class="fa-solid fa-spinner-third animate-spin [animation-duration:0.7s] motion-reduce:hidden!"
-				aria-hidden="true"
-			></i>
-			<i
-				class="fa-solid fa-loader animate-pulse  motion-safe:hidden!"
-				aria-hidden="true"
-			></i>
+			<Spinner />
 		</div>
 	</component>
 </template>
