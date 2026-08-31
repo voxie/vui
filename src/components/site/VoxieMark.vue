@@ -1,13 +1,6 @@
 <script setup lang="ts">
-/*
-  The product logo, inline rather than an image file, so it scales without a
-  second asset and the sheen gradient stays editable. The Navbar examples and
-  the docs sidebar both draw it from here.
-
-  The mark is `fill-current`, so its color is whatever `color` it's given, and
-  sky-400 is what it takes when nobody says otherwise. Both halves of that come
-  from the wrapper in the template.
-*/
+// Inline rather than an image file, so it scales without a second asset and the
+// sheen stays editable. `fill-current`, so the color comes from the wrapper.
 defineOptions({
 	// The caller's class belongs on the svg, not on the box holding the default.
 	inheritAttrs: false,
@@ -26,28 +19,16 @@ withDefaults(
 	},
 );
 
-/*
-  Every mark on the page carries the same id for the sheen. A per-instance id
-  would be the tidier answer, but there's nothing to build one from that both
-  the server render and the hydration agree on. Astro hydrates islands in a
-  different order than it renders them, so a counter drifts. Since all the
-  defs are identical, `url(#…)` resolving to the first one is the same
-  gradient either way.
-*/
+// Shared rather than per-instance: Astro hydrates islands in a different order
+// than it renders them, so a counter drifts. The defs are identical, so `url(#…)`
+// resolving to the first one is the same gradient either way.
 const gradientId = 'voxie-mark-sheen';
 </script>
 
 <template>
-	<!--
-		The default color, one element up from the thing that uses it. `color`
-		inherits, so the svg takes sky-400 from here — and a `text-*` class from
-		the caller lands on the svg itself, which is closer, so it wins whatever
-		order the two rules happen to sit in the stylesheet. Two utilities on one
-		element would be a coin toss instead.
-
-		`contents` so the box is only there to hold a color: it generates none of
-		its own and nothing about the layout changes.
-	-->
+	<!-- The default color one element up, so a caller's `text-*` lands closer and
+	     wins outright rather than by stylesheet order. `contents`, so the box
+	     generates none of its own and the layout is unchanged. -->
 	<span class="contents text-sky-400">
 		<svg v-bind="$attrs" aria-hidden="true" :width="width" :height="height" viewBox="0 0 35 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-auto overflow-visible">
     <rect :width="width" :height="height" :rx="radius" class="fill-current"/>

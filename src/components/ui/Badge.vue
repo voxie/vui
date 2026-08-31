@@ -31,17 +31,9 @@ const props = withDefaults(
 	},
 );
 
-/*
-  Badges run on a tint of their color rather than the 300 rung the accents use
-  elsewhere: a 100 fill, a 900 label, a 300 border, and a 500 icon. Every color
-  in the set follows it, with no exceptions. Badges repeat, a column of them
-  down a table or a row of tags on a contact, so they have to sit quieter than
-  a button, and the tint carries far better label contrast at the 10–12px
-  they're usually set at.
-
-  The cost is that a 100 fill barely separates from the page background, which
-  is what the border is for. See the docs page for the numbers.
-*/
+// One tint per color, no exceptions: a 100 fill, a 900 label, a 300 border, a
+// 500 icon. The border is there because a 100 fill barely separates from the
+// page background. See /docs/components/badge for the numbers.
 const colorClasses: Record<BadgeColor, string> = {
 	sky: 'bg-sky-100 text-sky-900 border-sky-300 [&_i]:text-sky-500 [&_svg]:text-sky-500',
 	teal: 'bg-teal-100 text-teal-900 border-teal-300 [&_i]:text-teal-500 [&_svg]:text-teal-500',
@@ -63,8 +55,7 @@ const colorClasses: Record<BadgeColor, string> = {
 };
 
 // Icons hold their own size rather than inheriting the label, so they stay
-// legible as the badge shrinks — level with the label at the two small sizes,
-// then one step up the type scale from sm on.
+// legible as the badge shrinks.
 const sizeClasses = computed(() => {
 	if (props.size === '2xs') return 'h-4.5 gap-1.5 px-1.5 text-2xs [&_i]:text-2xs [&_svg]:text-2xs [&_i]:w-auto! [&_svg]:w-auto! [&_i]:mx-[-0.2em] [&_svg]:mx-[-0.2em]';
 	if (props.size === 'xs') return 'h-5 gap-1.5 px-2 text-xs [&_i]:text-2xs [&_svg]:text-2xs [&_i]:w-auto! [&_svg]:w-auto! [&_i]:mx-[-0.2em] [&_svg]:mx-[-0.2em]';

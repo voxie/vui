@@ -1,17 +1,9 @@
 ---
-/*
-  States and edge cases.
-
-  Sources: resources/js/components/general/EmptyState.vue, PageLoading.vue,
-  LoadingBars.vue, LoadingSpinner.vue, ImpersonationAlert.vue,
-  TeamSuspendedAlert.vue, PageCallout.vue, the modal set under
-  components/modals/, and the toast registrations in
-  toaster/AppToastManager.vue.
-
-  Not a page from the app — a catalogue of the states every other page can
-  fall into. Worth styling last, and worth checking first when something
-  looks wrong in production.
-*/
+// Sources: resources/js/components/general/EmptyState.vue, PageLoading.vue,
+// LoadingBars.vue, LoadingSpinner.vue, ImpersonationAlert.vue, TeamSuspendedAlert.vue,
+// PageCallout.vue, the modal set under components/modals/, and the toast registrations
+// in toaster/AppToastManager.vue. Not a page from the app: a catalogue of the
+// states every other page can fall into.
 import AppShell from './_AppShell.astro';
 
 const alerts = [

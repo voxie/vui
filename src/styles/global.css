@@ -9,13 +9,8 @@
   --text-2xs: 0.625rem;
   --text-2xs--line-height: calc(0.875 / 0.625);
 
-  /*
-    Optical tracking, paired to each size so it comes along with the size
-    class rather than being remembered. Inter is drawn tight, so it opens up
-    below 12px and closes up as it gets large. Tailwind's own scale only
-    offers 0.025em steps, which is too coarse across this range, so these are
-    graded. sm, base and lg are left alone.
-  */
+  /* Optical tracking, paired to each size so it comes with the size class.
+     Tailwind's own 0.025em steps are too coarse across this range. */
   --text-2xs--letter-spacing: 0.015em;
   --text-xs--letter-spacing: 0.01em;
   --text-xl--letter-spacing: -0.005em;
@@ -27,25 +22,15 @@
 
 @layer base {
   html {
-    /*
-      The platform default is a warm gray that reads brown against slate. The
-      thumb takes slate-400 — the value the sidebar rails already use — and the
-      track goes transparent so nothing rules a line down the edge of the page.
-
-      Set here rather than on each scroll container because the property
-      inherits, so the sidebar and any future overflow area pick it up.
-    */
+    /* The platform default is a warm gray that reads brown against slate. Set
+       here rather than per scroll container, since the property inherits. */
     scrollbar-color: var(--color-slate-400) transparent;
   }
 
   body {
     color: var(--color-slate-700);
-    /*
-      Tabular figures, so numbers hold their column and don't jitter as they
-      update. No slashed-zero here on purpose: Fontsource packages Google's
-      Inter, which strips the `zero` feature, so the declaration would be
-      dead weight.
-    */
+    /* Tabular figures, so numbers hold their column. No slashed-zero: Fontsource
+       packages Google's Inter, which strips the `zero` feature. */
     font-variant-numeric: tabular-nums;
   }
 
@@ -57,12 +42,8 @@
   }
 }
 
-/*
-  Typography sets `color` on `.prose` itself, from the utilities layer, so it
-  beats the base rule above and documentation would ignore the palette. These
-  are unlayered on purpose — unlayered declarations outrank every layer — and
-  they point prose at the three text colors the foundations page documents.
-*/
+/* Typography sets `color` on `.prose` from the utilities layer, which beats the
+   base rule above. Unlayered on purpose: that outranks every layer. */
 .prose {
   line-height: var(--leading-relaxed);
   --tw-prose-body: var(--color-slate-700);

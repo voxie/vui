@@ -16,14 +16,9 @@ const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))].sort(
   (a, b) => rank(a) - rank(b) || a.localeCompare(b),
 );
 
-/*
-  One list of groups, rendered twice: as the column beside the content on wide
-  viewports and as a select above it on narrow ones. Building it once is what
-  keeps the two from drifting apart as pages are added.
-
-  Section labels are capitalized here rather than with `capitalize`, because
-  `optgroup` labels are attribute text that CSS can't reach.
-*/
+// Built once and rendered twice, as the wide column and as the narrow select.
+// Labels are capitalized here and not with `capitalize`, since `optgroup` labels
+// are attribute text CSS can't reach.
 const groups = [
   { label: 'Voxie UI', mark: true, links: [{ href: '/', title: 'Intro' }] },
   ...sections.map((section) => ({
@@ -36,11 +31,8 @@ const groups = [
     label: 'Skills',
     links: skills.map((entry) => ({ href: `/skills/${entry.id}`, title: entry.data.title })),
   },
-  /*
-    The overview and nothing under it. The fixtures are pages to open from
-    there, not documentation to browse, and listing every one of them here
-    made the fixtures the longest section in the sidebar.
-  */
+  // The overview and nothing under it: the fixtures are pages to open, not
+  // documentation to browse.
   { label: 'Test Pages', links: [{ href: '/test-pages', title: 'Overview' }] },
 ];
 
@@ -57,11 +49,8 @@ function linkClass(href: string) {
 }
 ---
 
-{/*
-  Below `md` the two columns can't both fit, so the nav collapses to a select
-  that sits above the content. Sticky, so it stays reachable down a long page —
-  the column it replaces is sticky for the same reason.
-*/}
+{/* Below `md` the two columns can't both fit, so the nav collapses to a select
+    above the content. Sticky, like the column it replaces. */}
 <div
   class="md:hidden sticky top-0 z-50 p-5 bg-slate-200/90 backdrop-blur-md border-b border-slate-300"
 >

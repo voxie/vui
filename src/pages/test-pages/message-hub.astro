@@ -1,19 +1,9 @@
 ---
-/*
-  Message Hub — the two-pane inbox.
-
-  Source: resources/js/components/message-hub/MessageHub.vue, with
-  message-hub-threads/MessageHubThreadsSidebar.vue,
-  message-hub-threads/MessageHubThreadSidebarRow.vue,
-  MessageHubConversationNav.vue and the browser-extension
-  ConversationMessages.vue / MessageCloud.vue / ConversationInput.vue flattened in.
-
-  Exercises: a full-height split layout that owns its own scroll, a dense
-  scannable list where every row must stay one height, inbound/outbound message
-  clouds, date separators, and a composer with a segmented action bar.
-
-  This is the page that will punish a design system for having no dense mode.
-*/
+// Source: resources/js/components/message-hub/MessageHub.vue, with
+// message-hub-threads/MessageHubThreadsSidebar.vue,
+// message-hub-threads/MessageHubThreadSidebarRow.vue, MessageHubConversationNav.vue and
+// the browser-extension ConversationMessages.vue / MessageCloud.vue /
+// ConversationInput.vue flattened in.
 import AppShell from './_AppShell.astro';
 
 const inboxes = [

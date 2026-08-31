@@ -1,11 +1,6 @@
 <script setup lang="ts">
-/*
-  Outline buttons on a light card and a dark one. An outline button has no fill
-  to read a label against, so the dark surface is the one case where the label
-  flips to white — which makes this an example that only tells the truth if the
-  buttons can see the card they're in. Same reason as `ButtonSurfacesExample`:
-  written in MDX, the card and the buttons would be separate Astro islands.
-*/
+// A component and not MDX markup: the label flips to white on the dark card, so
+// the buttons have to be able to see the card. See `surface.ts`.
 import Button from '@ui/Button.vue';
 import Card from '@ui/Card.vue';
 </script>

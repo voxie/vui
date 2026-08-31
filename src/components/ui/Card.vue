@@ -10,12 +10,9 @@ const props = withDefaults(
 	defineProps<{
 		surface?: 'default' | 'glass' | 'glassRaised' | 'layered' | 'sunken' | 'dark';
 		padding?: 'none' | 'compact' | 'default' | 'spacious';
-		/*
-		  The tag the card renders as. A card is a box, not a meaning, so reach
-		  for `section` or `article` when the content is a landmark or stands on
-		  its own. Left as a plain string rather than a union so callers aren't
-		  blocked on this list growing.
-		*/
+		// A card is a box, not a meaning, so reach for `section` or `article` when
+		// the content is a landmark. A plain string, not a union, so a caller isn't
+		// blocked on this list growing.
 		as?: string;
 	}>(),
 	{ surface: 'default', padding: 'default', as: 'div' },
@@ -30,13 +27,8 @@ const surfaceClasses: Record<string, string> = {
   dark: 'bg-slate-700 text-slate-100',
 };
 
-/*
-  What the card hands to everything inside it, which isn't always what the card
-  is. Four of the six surfaces are themselves. The two composites aren't: a
-  `glassRaised` card is a white panel over glass, and a `layered` one is a plain
-  white card in front of its stack, so a button in either sits on what it can
-  actually see rather than on the name of the effect.
-*/
+// What the card hands down, which isn't always what the card is: the two
+// composites resolve to the layer a child can actually see.
 const childSurface: Record<string, Surface> = {
   default: 'default',
   glass: 'glass',

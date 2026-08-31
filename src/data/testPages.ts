@@ -1,10 +1,5 @@
-/*
-  The unstyled fixtures under /test-pages.
-
-  Shared by the sidebar, which needs the titles, and the index page, which
-  needs the rest. Order is the reading order on the index — roughly densest
-  layout first, with the states catalogue last.
-*/
+// The unstyled fixtures under /test-pages, shared by the sidebar and the index
+// page. Order is the reading order on the index: densest layout first.
 
 export interface TestPage {
 	href: string;

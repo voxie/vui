@@ -1,19 +1,8 @@
 <script setup lang="ts">
-/*
-  A navigation bar in the documentation, with a way to see it at full width.
-
-  The bar sizes itself to its container, so in the docs column it is always a
-  folded bar — honest, but not the thing being documented. "Open full screen"
-  puts the same bar across the top of the viewport, at the width it would have
-  in the product, where resizing the window actually exercises the fold.
-
-  A native `<dialog>` rather than a hand-rolled overlay: `showModal()` brings
-  the focus trap, the inert background, the top layer and Escape with it.
-
-  Which bar is open lives in the URL, so a preview survives a reload — the
-  thing you're most likely to do while testing how it responds — and so a
-  particular one can be linked to.
-*/
+// The bar sizes itself to its container, so in the docs column it is always
+// folded; full screen gives it the width it would have in the product. A native
+// `<dialog>` for the focus trap, the top layer and Escape. Which bar is open
+// lives in the URL, so a preview survives a reload and can be linked to.
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import NavbarExample from './NavbarExample.vue';
 
@@ -23,11 +12,8 @@ const props = withDefaults(
 		openCurrent?: boolean;
 		hideRight?: boolean;
 		hideActions?: boolean;
-		/*
-		  Names this bar in the URL. Without one the preview still opens, it just
-		  isn't addressable — so every bar on a page that has more than one wants
-		  its own, or a link couldn't say which it meant.
-		*/
+		// Names this bar in the URL. Without one the preview still opens, it just
+		// isn't addressable.
 		previewId?: string;
 	}>(),
 	{
@@ -43,13 +29,9 @@ const PARAM = 'preview';
 const dialogEl = ref<HTMLDialogElement | null>(null);
 const previewOpen = ref(false);
 
-/*
-  A real link, not a button: the point of putting this in the URL is that it can
-  be shared, and an anchor is what makes "copy link address" and opening in a
-  new tab work. The click is intercepted so the common case doesn't navigate.
-  Relative, so it resolves against whatever page the bar is documented on, and
-  so it's the same string on the server as in the browser.
-*/
+// A real link and not a button, so "copy link address" and open-in-new-tab
+// work; the click is intercepted so the common case doesn't navigate. Relative,
+// so it's the same string on the server as in the browser.
 const previewHref = computed(() =>
 	props.previewId ? `?${PARAM}=${encodeURIComponent(props.previewId)}` : undefined,
 );
@@ -65,11 +47,8 @@ const writeUrl = (open: boolean) => {
 	history.replaceState(history.state, '', url);
 };
 
-/*
-  `showModal()` first, then the flag. A bar mounted inside a closed dialog has
-  no width to fold against. It would catch up the moment the dialog opened, but
-  it's better arriving already folded than refolding in view.
-*/
+// `showModal()` first, then the flag: a bar mounted inside a closed dialog has
+// no width to fold against, and would refold in view.
 const open = () => {
 	if (previewOpen.value) return;
 	dialogEl.value?.showModal();
@@ -96,16 +75,9 @@ const onTriggerClick = (event: MouseEvent) => {
 
 const panelIsOpen = () => Boolean(dialogEl.value?.querySelector('[data-navbar-panel]'));
 
-/*
-  Dismissing goes innermost-first: with a menu open, Escape and a click on the
-  backdrop close the menu, and it takes a second one to close the preview.
-
-  Both have to be caught before the bar's own handlers on `document` see them.
-  By the time the dialog's `cancel` or `click` fires, Vue has flushed the close
-  and there's nothing left in the DOM to say a menu was ever open — so whether
-  one was is recorded on the way down. The events aren't stopped, only recorded
-  and (for Escape) defaulted away, so the bar still closes its own menu.
-*/
+// Dismissing goes innermost-first, so a menu closes before the preview does.
+// Whether a menu was open is recorded in the capture phase: by the time `cancel`
+// or `click` fires, Vue has flushed the close and the DOM no longer says.
 let swallowCancel = false;
 let hadPanelOnPointerDown = false;
 
@@ -130,10 +102,8 @@ const onPointerDownCapture = () => {
 	hadPanelOnPointerDown = panelIsOpen();
 };
 
-/*
-  A click on the backdrop is dispatched to the dialog itself, so the target is
-  what separates "outside the bar" from "on it".
-*/
+// A click on the backdrop is dispatched to the dialog itself, so the target is
+// what separates "outside the bar" from "on it".
 const onClick = (event: MouseEvent) => {
 	if (event.target !== dialogEl.value) return;
 	if (hadPanelOnPointerDown) return;
@@ -174,21 +144,11 @@ onBeforeUnmount(() => {
 			<span class="ms-2">to resize the window and watch it fold.</span>
 		</p>
 
-		<!--
-			Transparent, so the backdrop is what sits behind the bar. Two of these
-			classes are load-bearing against the UA stylesheet, which gives a
-			dialog `width: fit-content` and `overflow: auto`: `w-full`, or
-			`inset-x-0` is over-constrained and the bar sits at its content width
-			rather than the window's, and `overflow-visible`, or the dialog's box
-			ends at the bar and clips any menu hanging below it.
-
-			`outline-none` is the third. `showModal()` has to put focus somewhere,
-			and with nothing inside asking for it the dialog takes it itself — so
-			the browser draws its focus ring on this box, which is the width of
-			the window and sits right on top of the bar. It reads as the bar being
-			focused, and nothing here is: the frame is transparent and holds no
-			control. The trap, Escape and the first Tab into the bar are unchanged.
-		-->
+		<!-- Three classes are load-bearing against the UA stylesheet's
+		     `width: fit-content` and `overflow: auto`: `w-full`, or the bar sits at
+		     its content width; `overflow-visible`, or the box clips a menu hanging
+		     below the bar; and `outline-none`, since `showModal()` focuses the
+		     dialog itself and its ring would read as the bar being focused. -->
 		<dialog
 			ref="dialogEl"
 			aria-label="Navigation bar, full screen"

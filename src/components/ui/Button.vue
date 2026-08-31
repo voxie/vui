@@ -19,11 +19,9 @@ const props = withDefaults(
 		href?: string;
 		size?: ButtonSize;
 		color?: ButtonColor;
-		/*
-		  What the button is sitting on. Left off, it's taken from the nearest
-		  Card or Navbar above it. Pass it where nothing can answer: straight on
-		  the page background, or inside a plain element with a background class.
-		*/
+		// What the button sits on. Left off, it's taken from the nearest Card or
+		// Navbar. Pass it where nothing can answer: the page background, or a plain
+		// element with a background class.
 		sitsOn?: Surface;
 		outline?: boolean;
 		shadow?: boolean;
