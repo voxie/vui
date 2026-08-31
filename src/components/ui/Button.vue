@@ -199,7 +199,7 @@ defineExpose({
 		:href="props.href"
 		:type="props.href ? undefined : 'button'"
 		:disabled="props.href ? undefined : props.disabled"
-		class="group/button relative cursor-pointer items-center justify-center bg-transparent text-center font-sans font-semibold whitespace-nowrap transition duration-100 outline-blue-600 select-none hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 active:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+		class="group/button relative cursor-pointer items-center justify-center bg-transparent text-center font-sans font-semibold whitespace-nowrap outline-blue-600 select-none hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 active:outline-hidden disabled:pointer-events-none disabled:opacity-50"
 		:class="[
 			textClasses,
 			sizeClasses.radius,
@@ -215,7 +215,7 @@ defineExpose({
 		-->
 		<span
 			aria-hidden="true"
-			class="pointer-events-none absolute inset-0 border border-solid transition-all duration-100 group-active/button:inset-0.5"
+			class="pointer-events-none absolute inset-0 border border-solid transition-all ease-out group-active/button:duration-75 motion-safe:group-active/button:inset-0.5  motion-reduce:group-active/button:opacity-70  "
 			:class="[
 				colorClasses,
 				sizeClasses.radius,
@@ -228,8 +228,8 @@ defineExpose({
 			:class="[
 				sizeClasses.content,
 				props.loading
-					? 'opacity-0 ease-in motion-safe:scale-0'
-					: 'duration-700 ease-[cubic-bezier(0,1.3,.3,1)] group-active/button:scale-[0.96] group-active/button:duration-100',
+					? 'opacity-0 motion-safe:scale-90'
+					: 'motion-safe:group-active/button:scale-[0.96] group-active/button:duration-75 will-change-transform ease-out',
 			]"
 		>
 			<slot />
@@ -239,7 +239,7 @@ defineExpose({
 			class="absolute left-1/2 inline-flex -translate-x-1/2 text-sm transition"
 			:class="
 				props.loading
-					? 'delay-150 duration-500 ease-[cubic-bezier(0,2,.3,1)]'
+					? ''
 					: 'opacity-0 motion-safe:scale-0'
 			"
 		>
