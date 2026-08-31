@@ -7,6 +7,7 @@ import Button from '@ui/Button.vue';
 import Card from '@ui/Card.vue';
 import ButtonSurfacesExample from '@site/ButtonSurfacesExample.vue';
 import ButtonOutlineExample from '@site/ButtonOutlineExample.vue';
+import ButtonLoadingExample from '@site/ButtonLoadingExample.vue';
 
 A button is described by one prop. `color` names the fill. It works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. That matters because slate and transparent, the two neutrals, have to stay a step away from their background.
 
@@ -110,6 +111,7 @@ The `size` prop controls height, padding, and corner radius. The sizes are `xs`,
 <Card>
   <div class="not-prose flex flex-wrap gap-3">
     <Button loading>Saving</Button>
+    <ButtonLoadingExample client:load />
     <Button disabled>Disabled</Button>
     <Button disabled href="/docs/components/card">Disabled link</Button>
   </div>
