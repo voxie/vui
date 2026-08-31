@@ -199,6 +199,7 @@ defineExpose({
 		:href="props.href"
 		:type="props.href ? undefined : 'button'"
 		:disabled="props.href ? undefined : props.disabled"
+		:aria-busy="props.loading || undefined"
 		class="group/button relative cursor-pointer items-center justify-center bg-transparent text-center font-sans font-semibold whitespace-nowrap outline-blue-600 select-none hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 active:outline-hidden disabled:pointer-events-none disabled:opacity-50"
 		:class="[
 			textClasses,
@@ -208,11 +209,8 @@ defineExpose({
 			{ 'pointer-events-none opacity-50': props.disabled && props.href },
 		]"
 	>
-		<!--
-		  The press is a fixed 2px inset on this layer rather than a scale on the
-		  button, so a 6px-tall button and a 64px-tall one shrink by the same
-		  amount. Everything that draws the button's shape lives here.
-		-->
+		<!-- Fill, border and shadow live here so the press can be a fixed 2px
+		     inset rather than a scale, which every size shrinks by equally. -->
 		<span
 			aria-hidden="true"
 			class="pointer-events-none absolute inset-0 border border-solid transition-all ease-out group-active/button:duration-75 motion-safe:group-active/button:inset-0.5  motion-reduce:group-active/button:opacity-70  "
@@ -236,14 +234,23 @@ defineExpose({
 		</div>
 
 		<div
-			class="absolute left-1/2 inline-flex -translate-x-1/2 text-sm transition"
+			class="absolute left-1/2 flex -translate-x-1/2 text-sm transition"
 			:class="
 				props.loading
 					? ''
 					: 'opacity-0 motion-safe:scale-0'
 			"
 		>
-			<i class="fa-solid fa-spinner-third fa-spin [--fa-animation-duration:0.7s]" aria-hidden="true"></i>
+			<!-- Reduced motion swaps the rotation for a pulse: it still reads as
+			     working, without anything travelling. -->
+			<i
+				class="fa-solid fa-spinner-third animate-spin [animation-duration:0.7s] motion-reduce:hidden!"
+				aria-hidden="true"
+			></i>
+			<i
+				class="fa-solid fa-loader animate-pulse  motion-safe:hidden!"
+				aria-hidden="true"
+			></i>
 		</div>
 	</component>
 </template>
