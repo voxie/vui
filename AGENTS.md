@@ -35,6 +35,10 @@ Never hard-wrap prose in Markdown or MDX. A paragraph, a list item, or a comment
 
 Read `.claude/skills/docs-voice/SKILL.md` before writing or revising prose in `src/content/`. It is the single source for the house style, and it covers the hard rules, the voice, the page structure, and how to run a cleanup pass.
 
+## Comments
+
+Keep code comments short. One or two lines, saying what a reader can't get from the code itself: a non-obvious constraint, a workaround and what forces it, a unit or an order that matters. Rationale, background, and anything that runs to a paragraph belongs in `src/content/docs/`, not in a comment. If an explanation feels too long for a comment, that's a sign it should be documented and linked, or left out.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
