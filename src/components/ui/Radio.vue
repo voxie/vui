@@ -72,14 +72,14 @@ const describedBy = computed(() => {
 	return ids.length ? ids.join(' ') : undefined;
 });
 
-// The marker is the line-height of its own label, so the two line up on the
-// first line however far the text wraps.
+// `ring` is the picked border, which is 1px at sm. A 2px ring on a 12px
+// circle would leave the dot with no gap around it.
 const sizeClasses = computed(() => {
 	if (props.size === 'sm')
-		return { marker: 'h-4 w-4', dot: 'h-1.5 w-1.5', gap: 'gap-2', label: 'text-xs leading-4', description: 'text-xs leading-4' };
+		return { marker: 'h-3 w-3', dot: 'h-1.5 w-1.5', ring: 'border', gap: 'gap-2', label: 'text-xs leading-4', description: 'text-xs leading-4' };
 	if (props.size === 'lg')
-		return { marker: 'h-6 w-6', dot: 'h-2.5 w-2.5', gap: 'gap-3', label: 'text-base leading-6', description: 'text-sm leading-5' };
-	return { marker: 'h-5 w-5', dot: 'h-2 w-2', gap: 'gap-2.5', label: 'text-sm leading-5', description: 'text-xs leading-4' };
+		return { marker: 'h-5 w-5', dot: 'h-3 w-3', ring: 'border-2', gap: 'gap-3', label: 'text-base leading-6', description: 'text-sm leading-5' };
+	return { marker: 'h-4 w-4', dot: 'h-2 w-2', ring: 'border-2', gap: 'gap-2.5', label: 'text-sm leading-5', description: 'text-xs leading-4' };
 });
 
 // The label is slate-800 everywhere but the dark surface, where it would sit
@@ -91,10 +91,13 @@ const textClasses = computed(() => {
 	return { label: dark ? 'text-white' : 'text-slate-800', description: dark ? 'text-slate-300' : 'text-slate-500' };
 });
 
+// Picked is a ring rather than a fill. The border takes the size's ring width
+// and a dot lands inside it, with the white showing through as the gap.
 const markerClasses = computed(() => {
-	if (props.disabled) return 'border-slate-200 bg-slate-100 shadow-none';
+	const ring = checked.value ? sizeClasses.value.ring : 'border';
+	if (props.disabled) return [ring, 'border-slate-200 bg-slate-100 shadow-none'];
 	const border = props.error ? 'border-rose-300' : checked.value ? 'border-sky-500' : boundary.value.border;
-	return [checked.value ? 'bg-sky-300' : `bg-white ${shadow.value}`, border];
+	return [ring, 'bg-white', shadow.value, border];
 });
 
 defineExpose({
@@ -123,13 +126,13 @@ defineExpose({
 
 			<span
 				aria-hidden="true"
-				class="grid shrink-0 place-items-center rounded-full border border-solid transition ease-out outline-blue-600 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 motion-safe:group-active/radio:scale-90 group-active/radio:duration-75"
+				class="grid shrink-0 place-items-center rounded-full border-solid transition ease-out outline-blue-600 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 motion-safe:group-active/radio:scale-90 group-active/radio:duration-75"
 				:class="[sizeClasses.marker, markerClasses]"
 			>
 				<span
 					v-if="checked"
 					class="rounded-full"
-					:class="[sizeClasses.dot, props.disabled ? 'bg-slate-400' : 'bg-black']"
+					:class="[sizeClasses.dot, props.disabled ? 'bg-slate-400' : 'bg-sky-500']"
 				></span>
 			</span>
 
