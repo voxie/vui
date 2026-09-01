@@ -1,0 +1,154 @@
+---
+title: Modal
+order: 8
+---
+
+import Card from '@ui/Card.vue';
+import ModalDemo from '@site/ModalDemo.vue';
+import ModalStackedExample from '@site/ModalStackedExample.vue';
+
+A modal is a panel over the page, for a task that has to be finished or abandoned before anything else happens. It renders at the end of `<body>` rather than where you wrote it, so no ancestor's overflow or stacking context can clip it.
+
+Four slots make the panel, top to bottom. `header` is the title, rendered as an `h2`. `subheader` sits under it in the same white bar. The default slot is the body, tinted to slate-50, and the body is the part that scrolls. `footer` is the action bar, white again and pinned under the body.
+
+```html
+<Modal v-model="open" size="md">
+  <template #header>Create an API token</template>
+  <template #subheader>A token reads and writes on behalf of your team.</template>
+
+  <Input v-model="name" block placeholder="Token name" />
+
+  <template #footer>
+    <Button @click="open = false">Cancel</Button>
+    <Button color="sky" block @click="create">Create token</Button>
+  </template>
+</Modal>
+```
+
+`v-model` is the boolean that opens and closes it. The modal also emits `close` when it closes itself, for the cases where the open state isn't the only thing that has to be reset.
+
+## Examples
+
+### Head and footer
+
+Every region pads its content by `24px` and is divided from the next by a slate-100 line. The head and the footer are white, the body is slate-50, so the chrome reads as chrome and the content reads as content.
+
+<Card surface="glass">
+  <ModalDemo client:load label="Open" />
+</Card>
+
+The body is a `glass` surface and it says so to everything inside it. An [Input](/docs/components/input) or a [Select](/docs/components/select) in there picks up the right boundary without being told. The head and the footer are `default`, so a [Button](/docs/components/button) in the action bar comes out slate-100.
+
+The action bar is always there. A modal ends in its actions, so the bar is part of the shape rather than a slot that comes and goes.
+
+The head is the part that can go. Drop `header` and `subheader` for a modal whose body speaks for itself, and the body runs to the top edge with no empty bar above it.
+
+<Card surface="glass">
+  <ModalDemo client:load header={false} label="No head" />
+</Card>
+
+The close button floats over the panel rather than sitting in the head, so it survives the head going away. Whichever region is at the top holds its end corner clear of it. With a head that's `64px` of end padding on the title. With no head it's `56px` of top padding on the body, since indenting the body's whole end edge would pull every row in with it.
+
+A modal with no `header` needs an `aria-label`, since there's no title for the dialog to be named by.
+
+### The action bar
+
+The footer is a row. Below `sm` it stacks, reversed, so the last button written is the one on top and closest to the thumb.
+
+The primary action fills the bar. Give it `block` and write it last. A secondary button beside it keeps its own width and the primary takes what's left.
+
+```html
+<template #footer>
+  <Button @click="open = false">Cancel</Button>
+  <Button color="sky" block @click="create">Create token</Button>
+</template>
+```
+
+### Size
+
+The `size` prop sets the panel's maximum width on screens above `sm`. The sizes are `sm`, `md` (the default), `lg`, `xl`, and `full`.
+
+| Size   | Max width       |
+| ------ | --------------- |
+| `sm`   | `28rem`         |
+| `md`   | `36rem`         |
+| `lg`   | `48rem`         |
+| `xl`   | `64rem`         |
+| `full` | the full window |
+
+<Card surface="glass">
+  <div class="not-prose flex flex-wrap items-center gap-3">
+    <ModalDemo client:load size="sm" label="sm" />
+    <ModalDemo client:load size="md" label="md" />
+    <ModalDemo client:load size="lg" label="lg" />
+    <ModalDemo client:load size="xl" label="xl" />
+    <ModalDemo client:load size="full" label="full" />
+  </div>
+</Card>
+
+Below `sm` the size is ignored. The panel is a sheet on the bottom edge at every size, full width, square across the bottom and rounded across the top. It stops `4rem` short of the top of the window, so the page behind it stays visible.
+
+### Stacking
+
+A modal can open another one. Mark the one underneath `stacked` while the second is open, and it scales back, fades, and blurs behind it. A stacked modal ignores Escape and clicks outside, so the only way out is through the modal on top.
+
+Pass `:backdrop="false"` on the second one. The first modal's backdrop is already there, and a second would double the dimming.
+
+<Card surface="glass">
+  <ModalStackedExample client:load />
+</Card>
+
+### Closing
+
+`dismissible` is on by default. Turn it off and the close button goes, along with the padding that was holding room for it. Escape does nothing and a click outside does nothing. The only way out is a control you put in the modal.
+
+<Card surface="glass">
+  <ModalDemo client:load dismissible={false} label="Has to be answered" />
+</Card>
+
+Reach for it when leaving halfway through would put something in a broken state. A modal that is merely important still closes.
+
+### Backdrop
+
+`backdrop` is on by default and paints slate-300 at 80% over the page. Turn it off for a modal that sits on top of another one, or where the page behind has to stay readable.
+
+<Card surface="glass">
+  <ModalDemo client:load backdrop={false} label="No backdrop" />
+</Card>
+
+The page still locks either way. Clicking outside still closes it.
+
+## Interaction
+
+Opening fades the backdrop in over 200ms and brings the panel up over 300ms, from `4rem` below on desktop and from off the bottom edge on mobile. Closing runs at 200ms. Under `prefers-reduced-motion` the panel only fades.
+
+The page behind stops scrolling while a modal is open, and the width the scrollbar leaves behind is added back as padding so nothing shifts. Nested modals count, so the lock lifts when the last one closes.
+
+Opening focuses the first `input`, `select`, or `textarea` in the body. With no field to focus, the panel takes focus itself. Closing puts focus back on whatever had it before.
+
+<kbd>Tab</kbd> and <kbd>Shift</kbd> + <kbd>Tab</kbd> cycle inside the panel and can't reach the page behind it. <kbd>Esc</kbd> closes it, and only the topmost modal answers, so one press closes one modal. Clicking the backdrop closes it, but only when the press started there, so dragging a selection out of the panel doesn't.
+
+## Methods
+
+A `ref` on the modal reaches four methods, for the case where the body is a long form and the modal has to move to a part of it.
+
+| Method                            | What it does                                                       |
+| --------------------------------- | ------------------------------------------------------------------ |
+| `scrollTo(options)`               | Scrolls the body. Defaults to the top, smoothly.                     |
+| `scrollToElement(element)`        | Scrolls the element into the body, `80px` down from the top edge.    |
+| `focusField(index, scroll)`       | Focuses the nth `input`, `select`, or `textarea` in the body.        |
+| `focusInvalidField(index, scroll)`| Focuses the nth element in the body marked `aria-invalid="true"`.   |
+
+`focusField` and `focusInvalidField` scroll to what they focus unless you pass `false`. Both return `false` when there's nothing at that index.
+
+## Contrast
+
+| Element             | On            | WCAG 2.x |
+| ------------------- | ------------- | -------- |
+| slate-700 title     | white head    | 10.4:1   |
+| slate-500 body text | slate-50 body | 4.6:1    |
+| slate-50 body       | white head    | 1.05:1   |
+| slate-100 divider   | white         | 1.1:1    |
+| white panel         | backdrop      | 1.4:1    |
+
+The title and the body text clear AA. The divider and the panel edge do not, and neither is asked to carry meaning. The step from the white head to the slate-50 body is 1.05:1, which is why the slate-100 line is there as well. The panel is told apart from the page by the backdrop's dimming and the shadow under it, not by the 1.4:1 step in lightness.
