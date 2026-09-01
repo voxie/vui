@@ -34,7 +34,7 @@ const element = computed(() => (props.href ? 'a' : 'button'));
 			<div
 				v-if="props.active"
 				class="absolute h-full w-1.5 rounded-r-lg bg-sky-500"
-				:class="props.nested ? '-start-[33px]' : '-start-3'"
+				:class="props.nested ? '-start-[29px]' : '-start-3'"
 			></div>
 			<!-- On the label rather than the row, which runs the full width of the
 			     panel: the box the hover fill is already on. -->

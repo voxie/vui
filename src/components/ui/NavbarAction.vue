@@ -239,7 +239,7 @@ const markerClasses = () => {
 			     draws its own, and two bars in a column read as two pages. -->
 			<div
 				v-if="props.nested && !dropdownOpen && marked()"
-				class="absolute -start-4 h-full w-1.5 rounded-r-lg bg-sky-500"
+				class="absolute -start-3 h-full w-1.5 rounded-r-lg bg-sky-500"
 			></div>
 			<!-- `transparent` is the button with no resting fill, so the label still
 			     sits straight on the bar. The icon and arrow go inside it so the fill
