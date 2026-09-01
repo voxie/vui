@@ -5,8 +5,10 @@ import VoxieMark from '@site/VoxieMark.vue';
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 
-// Directory names don't sort into a reading order. Unlisted sections fall last.
-const sectionOrder = ['foundations', 'patterns', 'components'];
+// Directory names don't sort into a reading order, and the sections build on
+// each other: components use foundations, patterns use components. Unlisted
+// sections fall last.
+const sectionOrder = ['foundations', 'components', 'patterns'];
 const rank = (section: string) => {
   const i = sectionOrder.indexOf(section);
   return i === -1 ? sectionOrder.length : i;
