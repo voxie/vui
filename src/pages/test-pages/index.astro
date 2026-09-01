@@ -115,9 +115,10 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
       <p class="mb-0">{promptClosing}</p>
     </div>
 
-    {/* The Modal footer, borrowed: same border and padding, stacked rather than
-        turning into a row, since the pick reads as a step before the copy. */}
-    <div class="not-prose flex flex-col gap-3 border-t border-solid border-slate-100 p-6">
+    {/* The Modal footer, borrowed: same border, stacked rather than turning into
+        a row, since the pick reads as a step before the copy. Padding matches
+        the brief above it so the two share one edge. */}
+    <div class="not-prose flex flex-col gap-3 border-t border-solid border-slate-100 p-8">
       <Select
         block
         sits-on="glass"
