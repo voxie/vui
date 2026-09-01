@@ -1,0 +1,118 @@
+---
+title: Forms
+order: 1
+---
+
+import Card from '@ui/Card.vue';
+import Input from '@ui/Input.vue';
+import Select from '@ui/Select.vue';
+
+A form is [Input](/docs/components/input) and [Select](/docs/components/select) stacked in a column, each one carrying its own label, description, and messages. This page is how they go together. The component pages are what each prop does.
+
+## Anatomy
+
+A field is up to five parts, top to bottom.
+
+<Card surface="glass">
+  <div class="not-prose max-w-md">
+    <Input
+      label="Message"
+      description="Sent to every contact in the selected segments."
+      counter
+      maxlength={160}
+      hint="Links count as 23 characters once shortened."
+      rows={3}
+    />
+  </div>
+</Card>
+
+| Part            | What it holds                                                                    |
+| --------------- | -------------------------------------------------------------------------------- |
+| **Label**       | What this field is. Always there, apart from the compact case below.               |
+| **Description** | What the label can't hold. Only when the field needs it.                           |
+| The control     | The field itself.                                                                  |
+| **Counter**     | A bar and a count, for a field with a length limit. See [Char Counter](/docs/components/char-counter). |
+| **Message**     | The validation message, or the details line. Rose with a warning mark when the field is in error, slate with an info mark otherwise. |
+
+Label and description are props on the control rather than a component you stack above it. A field that renders itself whole is a field nobody can forget to label.
+
+```html
+<Input
+  v-model="message"
+  label="Message"
+  description="Sent to every contact in the selected segments."
+/>
+```
+
+## Labels
+
+Every field gets a label. It's the one part that tells someone what they're filling in, and it's what a screen reader announces when focus lands.
+
+The label is extrabold and slate-800, so a form column scans as a list of questions. It sizes with the control, so the label on a `sm` field is `text-xs` like the field's own value.
+
+<Card surface="glass">
+  <div class="not-prose grid max-w-lg gap-4">
+    <Input label="First name" />
+    <Select label="Time zone" options={[{ value: 'et', label: 'Eastern Time' }, { value: 'ct', label: 'Central Time' }]} />
+  </div>
+</Card>
+
+## Descriptions
+
+Put a description under the label when there's something the reader needs before they type, and it won't fit in a label. It goes above the control, not below it, since it's information for filling the field in rather than feedback on what was filled in.
+
+<Card surface="glass">
+  <div class="not-prose max-w-lg">
+    <Input
+      label="Sender name"
+      description="Shown at the start of every message from this group. Keep it under 20 characters so it doesn't get cut off."
+    />
+  </div>
+</Card>
+
+Anything that only matters after the fact belongs in the message line under the control instead.
+
+## Placeholders
+
+Avoid placeholder text. A field with grey text in it reads as a field that already has an answer, so people skip it, and the moment they start typing the text is gone. Whatever the placeholder was going to say belongs in the label or the description.
+
+<Card surface="glass">
+  <div class="not-prose grid gap-6 sm:grid-cols-2">
+    <div>
+      <div class="mb-3 text-xs font-extrabold text-slate-800">Do</div>
+      <Input label="Sender name" description="Shown at the start of every message." />
+    </div>
+    <div>
+      <div class="mb-3 text-xs font-extrabold text-slate-800">Don't</div>
+      <Input placeholder="Sender name, shown at the start of every message" />
+    </div>
+  </div>
+</Card>
+
+## Compact fields
+
+A compact field is one in a row that reads as a sentence, where a label above every control would break the line. Automation filters and actions are the case this exists for. There, drop the label and let a placeholder carry the name of the field.
+
+<Card surface="glass">
+  <div class="not-prose flex flex-wrap items-center gap-2 text-sm">
+    <span>When</span>
+    <Select size="sm" options={[{ value: 'tag', label: 'contact tag' }, { value: 'segment', label: 'segment' }]} />
+    <span>is</span>
+    <Input size="sm" placeholder="Value" />
+  </div>
+</Card>
+
+This is the exception, not a second style to choose from. A field in a form column takes a label.
+
+## Messages
+
+One line under the control, with a mark at the start of it. The error is rose-800 with a warning mark. The details line is slate-600 with an info mark, for validation notes and formatting tips. A field can show both, with the error above.
+
+<Card surface="glass">
+  <div class="not-prose grid max-w-lg gap-4">
+    <Input label="Work email" hint="A personal address won't pass the domain check." />
+    <Input label="Work email" error="That address is already on the team." />
+  </div>
+</Card>
+
+Color alone doesn't carry the error, which is why the mark is there. `aria-invalid` and `aria-describedby` are set for you when `error` is passed.

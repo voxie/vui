@@ -6,7 +6,7 @@ const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.
 const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 
 // Directory names don't sort into a reading order. Unlisted sections fall last.
-const sectionOrder = ['foundations', 'components'];
+const sectionOrder = ['foundations', 'patterns', 'components'];
 const rank = (section: string) => {
   const i = sectionOrder.indexOf(section);
   return i === -1 ? sectionOrder.length : i;

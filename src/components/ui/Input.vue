@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId } from 'vue';
+import { computed, ref, useAttrs, useId } from 'vue';
 import { useControlBoundary, type Surface } from './surface.ts';
 import CharCounter from './CharCounter.vue';
 
@@ -24,6 +24,11 @@ const props = withDefaults(
 	defineProps<{
 		type?: InputType;
 		size?: InputSize;
+		// What the field is for. Leave it off only where a label can't fit, and
+		// see the forms pattern for what counts.
+		label?: string;
+		// A second line under the label, for what the label can't hold.
+		description?: string;
 		// What the input is sitting on. Left off, it's taken from the nearest Card
 		// or Navbar. Pass it on the page background, which has no component to
 		// announce it.
@@ -71,6 +76,13 @@ const model = defineModel<string | number | null>();
 const boundary = useControlBoundary(() => props.sitsOn);
 
 const errorId = useId();
+const descriptionId = useId();
+const generatedId = useId();
+
+// The caller's own `id` wins, since a `for` somewhere else may already point at
+// it.
+const attrs = useAttrs();
+const fieldId = computed(() => (attrs.id as string | undefined) ?? generatedId);
 
 const field = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
 const box = ref<HTMLElement | null>(null);
@@ -92,18 +104,25 @@ const errors = computed(() => {
 	return Array.isArray(props.error) ? props.error : [props.error];
 });
 
+const describedBy = computed(() => {
+	const ids = [];
+	if (props.description) ids.push(descriptionId);
+	if (errors.value.length) ids.push(errorId);
+	return ids.length ? ids.join(' ') : undefined;
+});
+
 // Padding is in pixels because the slot widths are measured, and the two have
 // to add up.
 const sizeClasses = computed(() => {
 	if (props.size === 'xs')
-		return { field: 'rounded-lg text-xs', height: 'h-6', rows: 'py-[3.5px]', box: 'w-9 rounded-s-lg text-xs', boxWidth: 36, start: 'start-2', end: 'end-2', padding: 8, padY: 3.5 };
+		return { field: 'rounded-lg text-xs', height: 'h-6', rows: 'py-[3.5px]', box: 'w-9 rounded-s-lg text-xs', boxWidth: 36, start: 'start-2', end: 'end-2', padding: 8, padY: 3.5, label: 'text-xs' };
 	if (props.size === 'sm')
-		return { field: 'rounded-lg text-xs', height: 'h-8', rows: 'py-[7.5px]', box: 'w-10 rounded-s-lg text-xs', boxWidth: 40, start: 'start-3', end: 'end-3', padding: 12, padY: 7.5 };
+		return { field: 'rounded-lg text-xs', height: 'h-8', rows: 'py-[7.5px]', box: 'w-10 rounded-s-lg text-xs', boxWidth: 40, start: 'start-3', end: 'end-3', padding: 12, padY: 7.5, label: 'text-xs' };
 	if (props.size === 'lg')
-		return { field: 'rounded-xl text-sm', height: 'h-12', rows: 'py-[14.25px]', box: 'w-14 rounded-s-xl text-sm', boxWidth: 56, start: 'start-5', end: 'end-5', padding: 20, padY: 14.25 };
+		return { field: 'rounded-xl text-sm', height: 'h-12', rows: 'py-[14.25px]', box: 'w-14 rounded-s-xl text-sm', boxWidth: 56, start: 'start-5', end: 'end-5', padding: 20, padY: 14.25, label: 'text-sm' };
 	if (props.size === 'xl')
-		return { field: 'rounded-2xl text-base', height: 'h-16', rows: 'py-[21px]', box: 'w-16 rounded-s-2xl text-base', boxWidth: 64, start: 'start-8', end: 'end-8', padding: 32, padY: 21 };
-	return { field: 'rounded-xl text-sm', height: 'h-10', rows: 'py-[10.25px]', box: 'w-12 rounded-s-xl text-sm', boxWidth: 48, start: 'start-4', end: 'end-4', padding: 16, padY: 10.25 };
+		return { field: 'rounded-2xl text-base', height: 'h-16', rows: 'py-[21px]', box: 'w-16 rounded-s-2xl text-base', boxWidth: 64, start: 'start-8', end: 'end-8', padding: 32, padY: 21, label: 'text-base' };
+	return { field: 'rounded-xl text-sm', height: 'h-10', rows: 'py-[10.25px]', box: 'w-12 rounded-s-xl text-sm', boxWidth: 48, start: 'start-4', end: 'end-4', padding: 16, padY: 10.25, label: 'text-sm' };
 });
 
 // Whatever is in a slot decides how far the value has to start or stop, so the
@@ -258,6 +277,24 @@ defineExpose({
 
 <template>
 	<div>
+		<label
+			v-if="props.label"
+			:for="fieldId"
+			class="block font-sans font-extrabold text-slate-800"
+			:class="[sizeClasses.label, props.description ? '' : 'mb-1']"
+		>
+			{{ props.label }}
+		</label>
+
+		<div
+			v-if="props.description"
+			:id="descriptionId"
+			class="mb-2 font-sans font-normal text-slate-500"
+			:class="sizeClasses.label"
+		>
+			{{ props.description }}
+		</div>
+
 		<div class="relative">
 			<div
 				v-if="slots.box"
@@ -272,6 +309,7 @@ defineExpose({
 				:is="isTextarea ? 'textarea' : 'input'"
 				ref="field"
 				v-bind="$attrs"
+				:id="fieldId"
 				:value="model"
 				:type="isTextarea ? undefined : inputType"
 				:rows="isTextarea ? props.rows : undefined"
@@ -281,7 +319,7 @@ defineExpose({
 				:maxlength="props.counter ? undefined : props.maxlength"
 				:minlength="props.counter ? undefined : props.minlength"
 				:aria-invalid="errors.length ? true : undefined"
-				:aria-describedby="errors.length ? errorId : undefined"
+				:aria-describedby="describedBy"
 				class="w-full appearance-none border border-solid bg-white font-sans leading-tight outline-blue-600 transition focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500 disabled:shadow-none disabled:hover:shadow-none"
 				:class="[
 					sizeClasses.field,
@@ -379,14 +417,24 @@ defineExpose({
 			/>
 		</div>
 
-		<div v-if="slots.error || errors.length" :id="errorId" class="mt-2 px-0.5 text-xs text-rose-800">
-			<slot name="error" />
-			<div v-for="message in errors" :key="message">{{ message }}</div>
+		<div
+			v-if="slots.error || errors.length"
+			:id="errorId"
+			class="mt-2 flex gap-1.5 px-0.5 text-xs text-rose-800"
+		>
+			<i aria-hidden="true" class="fa-solid fa-circle-exclamation mt-0.5"></i>
+			<div>
+				<slot name="error" />
+				<div v-for="message in errors" :key="message">{{ message }}</div>
+			</div>
 		</div>
 
-		<div v-if="slots.hint || props.hint" class="mt-2 px-0.5 text-xs text-slate-600">
-			<slot name="hint" />
-			{{ props.hint }}
+		<div v-if="slots.hint || props.hint" class="mt-2 flex gap-1.5 px-0.5 text-xs text-slate-600">
+			<i aria-hidden="true" class="fa-solid fa-circle-info mt-0.5"></i>
+			<div>
+				<slot name="hint" />
+				{{ props.hint }}
+			</div>
 		</div>
 	</div>
 </template>

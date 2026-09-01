@@ -12,7 +12,24 @@ It follows [Select](/docs/components/select) for everything around the edge. A w
 
 An input fills the width it's given. Constrain it from the outside, with the column it sits in.
 
+How a field goes together with its label, its description, and its messages is on the [Forms](/docs/patterns/forms) page.
+
 ## Examples
+
+### Label and description
+
+`label` is what the field is for, and every field in a form column gets one. `description` is a second line under it, for what the label can't hold. Both render above the control, and the label is wired to the field with `for`, so clicking it focuses.
+
+<Card surface="glass">
+  <div class="not-prose max-w-md">
+    <Input
+      label="Sender name"
+      description="Shown at the start of every message from this group."
+    />
+  </div>
+</Card>
+
+Leaving `label` off is how a [compact field](/docs/patterns/forms#compact-fields) is written, and that's the only place it's right. Avoid `placeholder` everywhere else, since a field with grey text in it reads as a field that's already answered.
 
 ### Type
 
@@ -20,10 +37,10 @@ The `type` prop is passed through to the field. The choices are `text` (the defa
 
 <Card surface="glass">
   <div class="not-prose grid gap-3 sm:grid-cols-2">
-    <Input placeholder="text" />
-    <Input type="email" placeholder="email" />
-    <Input type="tel" placeholder="tel" />
-    <Input type="date" />
+    <Input label="Text" />
+    <Input type="email" label="Email" />
+    <Input type="tel" label="Phone" />
+    <Input type="date" label="Send on" />
   </div>
 </Card>
 
@@ -35,11 +52,11 @@ The `size` prop sets height, padding, and text size. The sizes are `xs`, `sm`, `
 
 <Card surface="glass">
   <div class="not-prose space-y-3">
-    <Input size="xs" placeholder="xs" />
-    <Input size="sm" placeholder="sm" />
-    <Input size="md" placeholder="md" />
-    <Input size="lg" placeholder="lg" />
-    <Input size="xl" placeholder="xl" />
+    <Input size="xs" label="xs" />
+    <Input size="sm" label="sm" />
+    <Input size="md" label="md" />
+    <Input size="lg" label="lg" />
+    <Input size="xl" label="xl" />
   </div>
 </Card>
 
@@ -51,13 +68,13 @@ Three slots put things inside the field, and the value's padding is measured off
 
 <Card surface="glass">
   <div class="not-prose space-y-3">
-    <Input placeholder="Search contacts">
+    <Input label="Search contacts">
       <i class="fa-solid fa-magnifying-glass" slot="left"></i>
     </Input>
-    <Input placeholder="0.00">
+    <Input label="Budget">
       <span slot="box">$</span>
     </Input>
-    <Input placeholder="Message">
+    <Input label="Message">
       <i class="fa-solid fa-face-smile" slot="right"></i>
     </Input>
   </div>
@@ -71,8 +88,8 @@ Three slots put things inside the field, and the value's padding is measured off
 
 <Card surface="glass">
   <div class="not-prose space-y-3">
-    <Input rows={1} placeholder="Starts at one line" />
-    <Input rows={3} placeholder="Starts at three" />
+    <Input rows={1} label="Starts at one line" />
+    <Input rows={3} label="Starts at three" />
   </div>
 </Card>
 
@@ -84,8 +101,8 @@ At one row a textarea is exactly as tall as an input of the same size, and each 
 
 <Card surface="glass">
   <div class="not-prose grid gap-3 sm:grid-cols-2">
-    <Input client:load type="number" min={0} max={10} placeholder="0 to 10" />
-    <Input client:load type="number" step={0.01} min={0} placeholder="Two decimals" />
+    <Input client:load type="number" min={0} max={10} label="0 to 10" />
+    <Input client:load type="number" step={0.01} min={0} label="Two decimals" />
   </div>
 </Card>
 
@@ -97,7 +114,7 @@ The stepper appears on focus and disappears again, so a row of numeric fields is
 
 <Card surface="glass">
   <div class="not-prose">
-    <Input client:load type="password" toggle-password placeholder="Password" />
+    <Input client:load type="password" toggle-password label="Password" />
   </div>
 </Card>
 
@@ -105,15 +122,15 @@ The button is in the tab order and it announces which state it will switch to, s
 
 ### Error
 
-`error` takes one message or an array of them. Passing it recolors the border and the text, and points `aria-describedby` at the messages.
+`error` takes one message or an array of them. Passing it recolors the border and the text, marks the line with a warning icon, and points `aria-describedby` at the messages.
 
 <Card surface="glass">
   <div class="not-prose space-y-3">
-    <Input error="Enter a valid mobile number" placeholder="Phone" />
+    <Input error="Enter a valid mobile number" label="Phone" />
     <Input
       error={['Must be at least 8 characters', 'Must contain a number']}
       type="password"
-      placeholder="Password"
+      label="Password"
     />
   </div>
 </Card>
@@ -122,11 +139,11 @@ There's an `error` slot too, for a message that needs markup, such as a link to 
 
 ### Hint
 
-`hint` is the line under the field that is there before anything goes wrong. It sits at slate-600 and stays put when an error appears above it.
+`hint` is the line under the field that is there before anything goes wrong. It sits at slate-600 behind an info mark, and stays put when an error appears above it.
 
 <Card surface="glass">
   <div class="not-prose">
-    <Input hint="Contacts see this name on every message you send." placeholder="Sender name" />
+    <Input hint="Contacts see this name on every message you send." label="Sender name" />
   </div>
 </Card>
 
@@ -136,7 +153,7 @@ There's an `error` slot too, for a message that needs markup, such as a link to 
 
 <Card surface="glass">
   <div class="not-prose">
-    <Input client:load counter maxlength={160} rows={2} placeholder="Message" />
+    <Input client:load counter maxlength={160} rows={2} label="Message" />
   </div>
 </Card>
 
@@ -148,7 +165,7 @@ The counter is muted while the field is unfocused.
 
 <Card surface="glass">
   <div class="not-prose">
-    <Input disabled placeholder="Managed by your admin" />
+    <Input disabled label="Sending number" hint="Managed by your admin." />
   </div>
 </Card>
 
@@ -164,4 +181,6 @@ The numeric stepper and the counter both key off focus. The stepper fades in, an
 
 The values are the same as [Select](/docs/components/select#contrast), and so are the shortfalls. The border is short of the 3:1 WCAG asks of a control's boundary, and the message under the field is what carries an error rather than the rose border.
 
-Two colors are the input's own, and both clear AA. The hint runs slate-600 on the surface, at 7.6:1 on white and 6.1:1 on the page background. The `box` is slate-600 on a slate-100 fill, at 6.9:1.
+Three colors are the input's own. The label runs slate-800, at 14.6:1 on white and 11.9:1 on the page background. The hint runs slate-600, at 7.6:1 on white and 6.1:1 on the page background. The `box` is slate-600 on a slate-100 fill, at 6.9:1. All three clear AA on every surface.
+
+The description is the one that doesn't. It runs slate-500, which is 4.8:1 on white and 4.6:1 on glass, and 3.9:1 on the page background. Description text is never large enough for the 3:1 threshold, so a field on the page background with a description is short of AA. Put fields that need a description on a `glass` card.
