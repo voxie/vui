@@ -35,22 +35,7 @@ Browse them at `/test-pages`.
 
 ## The brief
 
-> Style this page using the Voxie design system. Read `/docs/foundations/color`
-> and `/docs/foundations/typography` first, and the component docs under
-> `/docs/components/` for anything that maps to an existing component. Add
-> Tailwind classes to the existing markup. Do not restructure the HTML, rename
-> `data-test` attributes, or change the copy.
-
-Points worth checking in the result:
-
-- Does it use real Tailwind color names, or did it reach for `bg-primary`?
-- Do neutrals sit one rung from their background, and does the button carry the
-  right `surface` for the card it's in?
-- Do all five accents stay at 300?
-- Is the default body size `text-sm`?
-- Does the dense inbox get a dense treatment, and the wizard a roomy one?
-- Do the empty, loading, and error states on `states` get the same care as the
-  happy path?
+The brief an agent gets, its rules, and the review checklist live on `index.astro`, rendered at `/test-pages`. That copy is the only one: it builds its reading list from the docs collection, so it lists every foundation, component, and pattern page that currently exists rather than a snapshot of them.
 
 ## Pages
 
