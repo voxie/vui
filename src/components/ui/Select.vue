@@ -71,7 +71,7 @@ const sizeClasses = computed(() => {
 				:disabled="props.disabled"
 				:aria-invalid="props.error ? true : undefined"
 				:aria-describedby="props.error ? errorId : undefined"
-				class="relative block cursor-pointer appearance-none border border-solid bg-white font-sans leading-tight outline-blue-600 transition focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none disabled:hover:shadow-none"
+				class="relative block cursor-pointer appearance-none border border-solid bg-white font-sans leading-tight outline-blue-600 transition focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500 disabled:shadow-none disabled:hover:shadow-none"
 				:class="[
 					sizeClasses.element,
 					surfaceClasses.shadow,
