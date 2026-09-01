@@ -51,7 +51,7 @@ The label is `font-medium` and slate-800, a step lighter than the extrabold labe
 
 ### Surface
 
-A radio works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. An unpicked radio is white, and what draws its boundary is what changes. A picked one is a sky-500 ring around a sky-500 dot on every surface, with the white showing through as the gap between the two.
+A radio works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. An unpicked radio is white, and what draws its boundary is what changes. Picking it drops the fill, so a sky-500 ring and a sky-500 dot are all that's left and the surface shows through the gap between them.
 
 | Sitting on   | Which is     | Boundary          |
 | ------------ | ------------ | ----------------- |
@@ -59,13 +59,13 @@ A radio works out what it is sitting on for itself, by asking the [Card](/docs/c
 | `glass`      | slate-50     | slate-200 border  |
 | `sunken`     | slate-300/30 | slate-300 border  |
 | `dark`       | slate-700    | slate-200 border  |
-| `background` | slate-200    | shadow, no border |
+| `background` | slate-200    | slate-300 border  |
 
 <RadioSurfacesExample client:load />
 
 The label goes white on the dark surface, and the description slate-300. Everywhere else they are slate-800 and slate-500.
 
-The page background is the only surface that gets the shadow, and the only one with no border. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+A radio carries no shadow on any surface, so the page background takes a border like the rest of them. Slate-300, the step sunken takes for the same reason, since slate-200 has the surface almost on top of it. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
 
 ### Size
 
@@ -110,7 +110,7 @@ A group has one answer, so it has one message. Put `error` on the last radio in 
 
 ## Interaction
 
-On the page background, hovering anywhere in the row deepens the shadow from `shadow` to `shadow-md`. On a panel there is no shadow, so hover does nothing.
+Nothing happens on hover. A radio has no shadow to deepen.
 
 Pressing shrinks the circle to 90% for the length of the press, and leaves the label where it is. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
 
@@ -129,7 +129,9 @@ Everything else is the browser's. A group is one tab stop, landing on whichever 
 | slate-500 description   | glass      | 4.6:1    | Lc 70  |
 | rose-800 message        | glass      | 7.6:1    | Lc 82  |
 | sky-500 ring and dot    | white      | 2.7:1    | Lc 52  |
+| sky-500 ring and dot    | glass      | 2.6:1    | Lc 49  |
 | slate-200 border        | white      | 1.2:1    | Lc 12  |
+| slate-300 border        | background | 1.2:1    | Lc 9   |
 | rose-300 border         | white      | 1.9:1    | Lc 37  |
 | slate-400 dot           | slate-100  | 2.4:1    | Lc 45  |
 

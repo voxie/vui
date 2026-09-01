@@ -47,10 +47,10 @@ const model = defineModel<RadioValue | undefined>();
 const surface = useSurface(() => props.sitsOn);
 const boundary = useControlBoundary(() => props.sitsOn);
 
-// The whole row is the hover target, so the lift comes off the group rather
-// than the marker's own hover.
-const shadow = computed(() =>
-	surface.value === 'background' ? 'shadow group-hover/radio:shadow-md' : 'shadow-none',
+// A radio carries no shadow, so the page background can't rely on one to lift
+// it and takes the slate-300 border the sunken surface takes.
+const restingBorder = computed(() =>
+	surface.value === 'background' ? 'border-slate-300' : boundary.value.border,
 );
 
 const errorId = useId();
@@ -59,6 +59,10 @@ const descriptionId = useId();
 const input = ref<HTMLInputElement | null>(null);
 
 const checked = computed(() => model.value === props.value);
+
+const hasText = computed(
+	() => Boolean(props.label || slots.default || props.description || slots.description),
+);
 
 const errors = computed(() => {
 	if (!props.error) return [];
@@ -78,7 +82,7 @@ const sizeClasses = computed(() => {
 	if (props.size === 'sm')
 		return { marker: 'h-3 w-3', dot: 'h-1.5 w-1.5', ring: 'border', gap: 'gap-2', label: 'text-xs leading-4', description: 'text-xs leading-4' };
 	if (props.size === 'lg')
-		return { marker: 'h-5 w-5', dot: 'h-3 w-3', ring: 'border-2', gap: 'gap-3', label: 'text-base leading-6', description: 'text-sm leading-5' };
+		return { marker: 'h-5 w-5', dot: 'h-3 w-3', ring: 'border-2', gap: 'gap-2.5', label: 'text-base leading-6', description: 'text-sm leading-5' };
 	return { marker: 'h-4 w-4', dot: 'h-2 w-2', ring: 'border-2', gap: 'gap-2.5', label: 'text-sm leading-5', description: 'text-xs leading-4' };
 });
 
@@ -91,13 +95,14 @@ const textClasses = computed(() => {
 	return { label: dark ? 'text-white' : 'text-slate-800', description: dark ? 'text-slate-300' : 'text-slate-500' };
 });
 
-// Picked is a ring rather than a fill. The border takes the size's ring width
-// and a dot lands inside it, with the white showing through as the gap.
+// Picked is a ring rather than a fill. The border takes the size's ring width,
+// a dot lands inside it, and the white drops away so the surface shows through
+// the gap between the two.
 const markerClasses = computed(() => {
 	const ring = checked.value ? sizeClasses.value.ring : 'border';
-	if (props.disabled) return [ring, 'border-slate-200 bg-slate-100 shadow-none'];
-	const border = props.error ? 'border-rose-300' : checked.value ? 'border-sky-500' : boundary.value.border;
-	return [ring, 'bg-white', shadow.value, border];
+	if (props.disabled) return [ring, 'border-slate-200 bg-slate-100'];
+	if (props.error) return [ring, 'border-rose-300', checked.value ? '' : 'bg-white'];
+	return checked.value ? [ring, 'border-sky-500'] : [ring, 'bg-white', restingBorder.value];
 });
 
 defineExpose({
@@ -124,10 +129,13 @@ defineExpose({
 				class="peer sr-only"
 			/>
 
+			<!-- The circle is 4px shorter than its label's line box at every size, so
+			     2px of top margin centers it on the first line and leaves it there
+			     when the text wraps. -->
 			<span
 				aria-hidden="true"
 				class="grid shrink-0 place-items-center rounded-full border-solid transition ease-out outline-blue-600 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 motion-safe:group-active/radio:scale-90 group-active/radio:duration-75"
-				:class="[sizeClasses.marker, markerClasses]"
+				:class="[sizeClasses.marker, markerClasses, hasText ? 'mt-0.5' : '']"
 			>
 				<span
 					v-if="checked"
@@ -136,7 +144,7 @@ defineExpose({
 				></span>
 			</span>
 
-			<span v-if="props.label || slots.default || props.description || slots.description" class="min-w-0">
+			<span v-if="hasText" class="min-w-0">
 				<span
 					class="block font-medium"
 					:class="[sizeClasses.label, textClasses.label]"
