@@ -1,0 +1,165 @@
+---
+title: Select
+order: 5
+---
+
+import Select from '@ui/Select.vue';
+import Card from '@ui/Card.vue';
+import SelectSurfacesExample from '@site/SelectSurfacesExample.vue';
+
+A select is a native `<select>` in the house shell. The picker that opens is the platform's, so it behaves the way it does everywhere else on the device. Options come from the `options` prop, or from the default slot when you need `<optgroup>` or anything the prop can't express.
+
+A select usually sits on a `glass` [Card](/docs/components/card) or on the page background. Almost never on a white default card. The exception is a white card nested inside another card.
+
+## Examples
+
+### Options
+
+The `options` prop takes an array of `{ value, label }`. An option can also carry `disabled`.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Select
+      options={[
+        { value: 'america/new_york', label: 'Eastern Time' },
+        { value: 'america/chicago', label: 'Central Time' },
+        { value: 'america/denver', label: 'Mountain Time' },
+        { value: 'america/los_angeles', label: 'Pacific Time' },
+      ]}
+    />
+  </div>
+</Card>
+
+Write the options as markup instead when you need grouping, or a first option that stands in for no choice at all.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Select>
+      <option value="">All campaigns</option>
+      <optgroup label="Running">
+        <option value="spring-promo">Spring promo</option>
+        <option value="welcome">Welcome series</option>
+      </optgroup>
+      <optgroup label="Finished">
+        <option value="black-friday">Black Friday</option>
+      </optgroup>
+    </Select>
+  </div>
+</Card>
+
+The value is bound with `v-model`. Anything else you pass, such as `id`, `name`, or `required`, lands on the `<select>` rather than the label around it.
+
+```html
+<Select v-model="timeZone" :options="timeZones" name="time_zone" />
+```
+
+### Surface
+
+A select works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. The white fill holds on every surface. What draws the boundary is what changes.
+
+| Sitting on   | Which is     | Boundary          |
+| ------------ | ------------ | ----------------- |
+| `default`    | white        | slate-200 border  |
+| `glass`      | slate-50     | slate-200 border  |
+| `sunken`     | slate-300/30 | slate-300 border  |
+| `dark`       | slate-700    | slate-200 border  |
+| `background` | slate-200    | shadow, no border |
+
+The page background is the only surface that gets the shadow, and the only one with no border. Nothing else lifts the control off it. Sunken darkens the border a step, since slate-200 has the surface almost on top of it.
+
+<SelectSurfacesExample />
+
+It's also the one surface with no component to announce it. That's what `sitsOn` is for. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+
+### Size
+
+The `size` prop sets height, padding, and text size. The sizes are `xs`, `sm`, `md` (the default), `lg`, and `xl`. They match [Button](/docs/components/button) at every step, so a select and a button in the same row are the same height and share a corner radius.
+
+<Card surface="glass">
+  <div class="not-prose flex flex-wrap items-center gap-3">
+    <Select size="xs" options={[{ value: 'xs', label: 'xs' }]} />
+    <Select size="sm" options={[{ value: 'sm', label: 'sm' }]} />
+    <Select size="md" options={[{ value: 'md', label: 'md' }]} />
+    <Select size="lg" options={[{ value: 'lg', label: 'lg' }]} />
+    <Select size="xl" options={[{ value: 'xl', label: 'xl' }]} />
+  </div>
+</Card>
+
+Text runs `text-xs` at `xs` and `sm`, `text-sm` at `md` and `lg`, and `text-base` at `xl`.
+
+### Width
+
+A select is as wide as its longest option. Add `block` to fill the container instead, which is what a select in a form column wants.
+
+<Card surface="glass">
+  <div class="not-prose space-y-3">
+    <Select
+      options={[
+        { value: 'all', label: 'Sized to its options' },
+      ]}
+    />
+    <Select
+      block
+      options={[
+        { value: 'all', label: 'block' },
+      ]}
+    />
+  </div>
+</Card>
+
+### Error
+
+`error` takes the message to show under the control. Passing it recolors the border, the text, and the chevron, and points `aria-describedby` at the message.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Select
+      error="Pick a time zone before saving"
+      options={[
+        { value: '', label: 'Select a time zone' },
+        { value: 'america/new_york', label: 'Eastern Time' },
+      ]}
+    />
+  </div>
+</Card>
+
+The border is there in the resting state too, so only its color changes and nothing moves when a form fails validation. On the page background the resting border is transparent rather than absent, for the same reason.
+
+### Disabled
+
+`disabled` swaps the white fill for slate-50 with slate-500 text. On the page background the shadow goes and a slate-200 border takes over, so the control still has an edge.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Select
+      disabled
+      options={[{ value: 'locked', label: 'Managed by your admin' }]}
+    />
+  </div>
+</Card>
+
+## Interaction
+
+On the page background, hover deepens the shadow from `shadow` to `shadow-md`. On a panel there is no shadow, so hover does nothing. There is no press state either, because the press opens the platform picker and the picker is what gives the feedback.
+
+Focus draws a blue outline, two pixels wide at a two pixel offset, and only for keyboard focus. Clicking the control doesn't ring it.
+
+Everything else is the browser's. <kbd>Space</kbd> or <kbd>Enter</kbd> opens the list, the arrow keys move through it, and typing jumps to a matching option.
+
+## Contrast
+
+| Element    | On         | WCAG 2.x |
+| ---------- | ---------- | -------- |
+| slate-900  | white      | 17.8:1   |
+| rose-600   | white      | 4.5:1    |
+| rose-800   | glass      | 7.6:1    |
+| slate-500  | white      | 4.8:1    |
+| slate-200  | white      | 1.2:1    |
+| slate-300  | white      | 1.5:1    |
+| rose-300   | white      | 1.9:1    |
+| white fill | glass      | 1.05:1   |
+| white fill | background | 1.23:1   |
+
+The option text and the error message clear AA comfortably. The chevron sits at slate-500, which clears AA at 4.8:1, and it is decorative in any case.
+
+The boundary doesn't. The border runs 1.2:1 against the white fill, or 1.5:1 on sunken, well short of the 3:1 WCAG asks of a control's boundary. The fill itself is only 1.05:1 against a glass card. On the page background the fill separates a little better at 1.23:1, with the shadow to help. The error state has the same problem, at 1.9:1 for the rose-300 border, which is why the message under the control carries the meaning rather than the color.
