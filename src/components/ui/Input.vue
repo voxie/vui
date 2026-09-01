@@ -32,9 +32,9 @@ const props = withDefaults(
 		error?: string | string[];
 		hint?: string;
 		disabled?: boolean;
-		// More than one row makes it a textarea.
+		// Passing `rows` at all makes it a textarea, and `rows` is the height it
+		// starts at. A textarea grows with its content, so this is a floor.
 		rows?: number;
-		autoresize?: boolean;
 		maxHeight?: string | number;
 		togglePassword?: boolean;
 		counter?: boolean;
@@ -49,8 +49,6 @@ const props = withDefaults(
 	{
 		type: 'text',
 		size: 'md',
-		rows: 1,
-		autoresize: false,
 		disabled: false,
 		togglePassword: false,
 		counter: false,
@@ -80,7 +78,7 @@ const leftSlot = ref<HTMLElement | null>(null);
 const rightSlot = ref<HTMLElement | null>(null);
 const focused = ref(false);
 
-const isTextarea = computed(() => props.rows > 1 || props.autoresize);
+const isTextarea = computed(() => props.rows !== undefined);
 const isNumeric = computed(() => props.type === 'number');
 
 // Safari won't vertically center the value of a date or time input unless the
@@ -98,14 +96,14 @@ const errors = computed(() => {
 // to add up.
 const sizeClasses = computed(() => {
 	if (props.size === 'xs')
-		return { field: 'rounded-lg text-xs', height: 'h-6', rows: 'py-1', box: 'w-9 rounded-s-lg text-xs', boxWidth: 36, start: 'start-2', end: 'end-2', padding: 8 };
+		return { field: 'rounded-lg text-xs', height: 'h-6', rows: 'py-[3.5px]', box: 'w-9 rounded-s-lg text-xs', boxWidth: 36, start: 'start-2', end: 'end-2', padding: 8, padY: 3.5 };
 	if (props.size === 'sm')
-		return { field: 'rounded-lg text-xs', height: 'h-8', rows: 'py-1.5', box: 'w-10 rounded-s-lg text-xs', boxWidth: 40, start: 'start-3', end: 'end-3', padding: 12 };
+		return { field: 'rounded-lg text-xs', height: 'h-8', rows: 'py-[7.5px]', box: 'w-10 rounded-s-lg text-xs', boxWidth: 40, start: 'start-3', end: 'end-3', padding: 12, padY: 7.5 };
 	if (props.size === 'lg')
-		return { field: 'rounded-xl text-sm', height: 'h-12', rows: 'py-3', box: 'w-14 rounded-s-xl text-sm', boxWidth: 56, start: 'start-5', end: 'end-5', padding: 20 };
+		return { field: 'rounded-xl text-sm', height: 'h-12', rows: 'py-[14.25px]', box: 'w-14 rounded-s-xl text-sm', boxWidth: 56, start: 'start-5', end: 'end-5', padding: 20, padY: 14.25 };
 	if (props.size === 'xl')
-		return { field: 'rounded-2xl text-base', height: 'h-16', rows: 'py-4', box: 'w-16 rounded-s-2xl text-base', boxWidth: 64, start: 'start-8', end: 'end-8', padding: 32 };
-	return { field: 'rounded-xl text-sm', height: 'h-10', rows: 'py-2', box: 'w-12 rounded-s-xl text-sm', boxWidth: 48, start: 'start-4', end: 'end-4', padding: 16 };
+		return { field: 'rounded-2xl text-base', height: 'h-16', rows: 'py-[21px]', box: 'w-16 rounded-s-2xl text-base', boxWidth: 64, start: 'start-8', end: 'end-8', padding: 32, padY: 21 };
+	return { field: 'rounded-xl text-sm', height: 'h-10', rows: 'py-[10.25px]', box: 'w-12 rounded-s-xl text-sm', boxWidth: 48, start: 'start-4', end: 'end-4', padding: 16, padY: 10.25 };
 });
 
 // Whatever is in a slot decides how far the value has to start or stop, so the
@@ -125,6 +123,16 @@ const paddingEnd = computed(() => {
 	const hasRight = slots.right || isNumeric.value || (props.type === 'password' && props.togglePassword);
 	if (hasRight) return base + (rightSlot.value?.clientWidth || ICON_WIDTH + 8) + 8;
 	return base;
+});
+
+// `field-sizing: content` sizes the field to what's in it and ignores `rows`,
+// so the row count has to come back as a floor. 1.25em is `leading-tight`. The
+// vertical padding is set so one row comes out at the height an input of the
+// same size has, which is why it lands on half pixels.
+const minHeightStyle = computed(() => {
+	if (!isTextarea.value) return undefined;
+	const { padY } = sizeClasses.value;
+	return `calc(${props.rows} * 1.25em + ${padY * 2 + 2}px)`;
 });
 
 const maxHeightStyle = computed(() => {
@@ -281,15 +289,17 @@ defineExpose({
 					isTextarea ? sizeClasses.rows : sizeClasses.height,
 					isDateTime ? 'flex' : 'block',
 					isTextarea && !props.maxHeight ? 'max-h-[50vh]' : '',
-					isTextarea ? 'overflow-auto' : '',
-					props.autoresize
-						? 'resize-y supports-[field-sizing:content]:field-sizing-content supports-[field-sizing:content]:resize-none'
+					// The drag handle is the fallback for a browser that can't size the
+					// field itself.
+					isTextarea
+						? 'overflow-auto resize-y supports-[field-sizing:content]:field-sizing-content supports-[field-sizing:content]:resize-none'
 						: '',
 					props.error ? 'border-rose-300 text-rose-600' : `${boundary.border} text-slate-900`,
 				]"
 				:style="{
 					paddingInlineStart: `${paddingStart}px`,
 					paddingInlineEnd: `${paddingEnd}px`,
+					minHeight: minHeightStyle,
 					maxHeight: maxHeightStyle,
 				}"
 				@input="onInput"

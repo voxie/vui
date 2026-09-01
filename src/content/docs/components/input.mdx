@@ -6,7 +6,7 @@ order: 6
 import Input from '@ui/Input.vue';
 import Card from '@ui/Card.vue';
 
-An input is the text field, and the textarea. One `rows` above the default turns it into the other, so a field that grows as it's typed into is the same component with `autoresize` on.
+An input is the text field, and the textarea. Passing `rows` turns it into the other. A textarea grows with what's typed into it, with no prop to ask for that.
 
 It follows [Select](/docs/components/select) for everything around the edge. A white fill, a slate-200 border that darkens a step on sunken, and a shadow only on the page background. It works that out from the [Card](/docs/components/card) it's inside, or from `sitsOn` where there's no card to ask. Like a select, it belongs on a `glass` card or on the page background rather than on a white one.
 
@@ -43,7 +43,7 @@ The `size` prop sets height, padding, and text size. The sizes are `xs`, `sm`, `
   </div>
 </Card>
 
-On a textarea the size sets vertical padding instead of a height, since `rows` is what decides how tall it is.
+On a textarea the size sets vertical padding instead of a height, since `rows` and the content are what decide how tall it is.
 
 ### Content inside the field
 
@@ -67,16 +67,16 @@ Three slots put things inside the field, and the value's padding is measured off
 
 ### More than one line
 
-`rows` above 1 renders a textarea. `autoresize` grows it to its content as it's typed into, and caps at half the viewport height unless `maxHeight` says otherwise.
+`rows` renders a textarea, at the height it names. Any value counts, so `rows={1}` is a field that starts at one line. From there it grows with its content and caps at half the viewport height, unless `maxHeight` says otherwise.
 
 <Card surface="glass">
   <div class="not-prose space-y-3">
-    <Input rows={3} placeholder="Three rows" />
-    <Input autoresize placeholder="Grows as you type" />
+    <Input rows={1} placeholder="Starts at one line" />
+    <Input rows={3} placeholder="Starts at three" />
   </div>
 </Card>
 
-`autoresize` implies a textarea, so it doesn't need `rows` as well. The growing is `field-sizing: content`, so it's the browser doing it rather than anything measuring the content. Browsers without that property keep the drag handle, so the field can still be sized by hand. Where the property is supported the handle goes, since the field is already sizing itself.
+At one row a textarea is exactly as tall as an input of the same size, and each row after that adds one line. The growing is `field-sizing: content`, so it's the browser doing it rather than anything measuring the content. There's nothing to turn on. Browsers without that property can't grow the field, so they get the drag handle instead. Where the property is supported there is no handle, since the field is already sizing itself.
 
 ### Numbers
 
@@ -136,7 +136,7 @@ There's an `error` slot too, for a message that needs markup, such as a link to 
 
 <Card surface="glass">
   <div class="not-prose">
-    <Input client:load counter maxlength={160} rows={3} placeholder="Message" />
+    <Input client:load counter maxlength={160} rows={2} placeholder="Message" />
   </div>
 </Card>
 
