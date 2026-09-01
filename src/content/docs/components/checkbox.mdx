@@ -1,0 +1,164 @@
+---
+title: Checkbox
+order: 8
+---
+
+import Checkbox from '@ui/Checkbox.vue';
+import Card from '@ui/Card.vue';
+import CheckboxSurfacesExample from '@site/CheckboxSurfacesExample.vue';
+import CheckboxGroupExample from '@site/CheckboxGroupExample.vue';
+import CheckboxIndeterminateExample from '@site/CheckboxIndeterminateExample.vue';
+
+A checkbox is a native `<input type="checkbox">` with a drawn box beside its label. The input itself is there, hidden to the eye and not to the browser, so it submits with a form, answers to <kbd>Space</kbd>, and announces itself as a checkbox.
+
+The whole row is the target. The box, the label, and the description are inside one `<label>`, so a press anywhere in them toggles the box.
+
+How a field goes together with its label, its description, and its messages is on the [Forms](/docs/patterns/forms) page.
+
+## Examples
+
+### Label and description
+
+`label` is the option text, and it sits beside the box rather than above it. `description` is a second line under the label, for what the label can't hold. Use the default slot instead of `label` when the text needs markup.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Checkbox
+      client:load
+      label="Skip contacts who replied"
+      description="A contact who answered in the last 24 hours drops out of this send."
+    />
+  </div>
+</Card>
+
+The label is `font-medium` and slate-800, a step lighter than the extrabold label on an [Input](/docs/components/input). A checkbox label is the answer rather than the question.
+
+### One box or several
+
+Bind `v-model` to a boolean for a single box that stands on its own.
+
+```html
+<Checkbox v-model="skipRecent" label="Skip contacts who replied" />
+```
+
+Bind it to an array for a set, and give each box a `value`. Checking one adds its value to the array, unchecking takes it out.
+
+<CheckboxGroupExample client:load />
+
+```html
+<Checkbox v-model="channels" value="sms" label="Text message" />
+<Checkbox v-model="channels" value="email" label="Email" />
+```
+
+A set gets a `<fieldset>` and a `<legend>`, so the question above the options is read out with each of them. Stack the boxes with `gap-2`, or `gap-3` when they carry descriptions.
+
+### Indeterminate
+
+`indeterminate` draws a dash instead of a check, for a box that stands for a set where only some are on. It's a display state. The model isn't touched until someone presses the box, and then it's the press you handle.
+
+<CheckboxIndeterminateExample client:load />
+
+```html
+<Checkbox
+  :model-value="all"
+  :indeterminate="some"
+  label="Every channel"
+  @update:model-value="toggleAll"
+/>
+```
+
+### Surface
+
+A checkbox works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. An unchecked box is white, and what draws its boundary is what changes. A checked box is sky-300 with a sky-500 border on every surface.
+
+| Sitting on   | Which is     | Boundary          |
+| ------------ | ------------ | ----------------- |
+| `default`    | white        | slate-200 border  |
+| `glass`      | slate-50     | slate-200 border  |
+| `sunken`     | slate-300/30 | slate-300 border  |
+| `dark`       | slate-700    | slate-200 border  |
+| `background` | slate-200    | shadow, no border |
+
+<CheckboxSurfacesExample client:load />
+
+The label goes white on the dark surface, and the description slate-300. Everywhere else they are slate-800 and slate-500.
+
+The page background is the only surface that gets the shadow, and the only one with no border. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+
+### Size
+
+The `size` prop sets the box, the label, and the gap between them. The sizes are `sm`, `md` (the default), and `lg`. The box is the line-height of its own label at every size, so the two line up on the first line however far the text wraps.
+
+<Card surface="glass">
+  <div class="not-prose flex flex-col gap-3">
+    <Checkbox client:load size="sm" label="sm, a 16px box and text-xs" />
+    <Checkbox client:load size="md" label="md, a 20px box and text-sm" />
+    <Checkbox client:load size="lg" label="lg, a 24px box and text-base" />
+  </div>
+</Card>
+
+There is no `xs` or `xl`. [Input](/docs/components/input), [Select](/docs/components/select), and [Button](/docs/components/button) run the full five, and a checkbox stops at the three that stay big enough to hit.
+
+### Error and hint
+
+`error` takes the message to show under the row. It recolors the border, marks the line with a warning icon, sets `aria-invalid`, and points `aria-describedby` at the message. Pass an array for more than one message.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Checkbox client:load error="Accept the terms before continuing" label="I accept the terms of service" />
+  </div>
+</Card>
+
+The border is there in the resting state too, so only its color changes and nothing moves when a form fails validation. On the page background the resting border is transparent rather than absent, for the same reason.
+
+`hint` is the same line before anything goes wrong, at slate-600 behind an info mark. A checkbox can show both.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Checkbox client:load hint="Applies to every campaign in this group." label="Skip contacts who replied" />
+  </div>
+</Card>
+
+### Disabled
+
+`disabled` swaps the white fill for slate-100 and drops the label to slate-500. A checked box that's disabled keeps its check, in slate-400, rather than losing the state along with the control.
+
+<Card surface="glass">
+  <div class="not-prose flex flex-col gap-3">
+    <Checkbox client:load disabled label="Managed by your admin" />
+    <Checkbox client:load disabled modelValue={true} label="Required for every account" />
+  </div>
+</Card>
+
+## Interaction
+
+On the page background, hovering anywhere in the row deepens the shadow from `shadow` to `shadow-md`. On a panel there is no shadow, so hover does nothing.
+
+Pressing shrinks the box to 90% for the length of the press, and leaves the label where it is. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
+
+Focus draws a blue outline around the box, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it.
+
+Everything else is the browser's. <kbd>Tab</kbd> reaches the box and <kbd>Space</kbd> toggles it. Boxes in a set are each their own tab stop, unlike a set of radios.
+
+## Contrast
+
+| Element                 | On         | WCAG 2.x | APCA   |
+| ----------------------- | ---------- | -------- | ------ |
+| black check             | sky-300    | 12.6:1   | Lc 75  |
+| slate-800 label         | white      | 14.7:1   | Lc 101 |
+| slate-800 label         | glass      | 14.0:1   | Lc 98  |
+| white label             | dark       | 10.3:1   | Lc 98  |
+| slate-300 description   | dark       | 7.0:1    | Lc 71  |
+| slate-500 description   | glass      | 4.6:1    | Lc 70  |
+| rose-800 message        | glass      | 7.6:1    | Lc 82  |
+| sky-500 border          | white      | 2.7:1    | Lc 52  |
+| sky-300 fill            | white      | 1.7:1    | Lc 29  |
+| slate-200 border        | white      | 1.2:1    | Lc 12  |
+| rose-300 border         | white      | 1.9:1    | Lc 37  |
+| slate-400 check         | slate-100  | 2.4:1    | Lc 45  |
+
+The label, the description, and the messages clear AA.
+
+The mark is what carries the state. Black on sky-300 is 12.6:1, so a checked box reads as checked from its shape and not from its color. The fill underneath it doesn't clear anything. Sky-300 against a white card is 1.7:1, and the sky-500 border that edges it is 2.7:1, both short of the 3:1 WCAG asks of a control's boundary. The unchecked box has the same problem at 1.2:1, and so does the rose-300 error border at 1.9:1, which is why the message under the row carries the error rather than the color.
+
+The disabled check runs slate-400 on slate-100 at 2.4:1. Disabled controls are exempt from the contrast rules, and it is deliberately quiet.

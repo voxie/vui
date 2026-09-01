@@ -1,0 +1,140 @@
+---
+title: Radio
+order: 9
+---
+
+import Radio from '@ui/Radio.vue';
+import Card from '@ui/Card.vue';
+import RadioSurfacesExample from '@site/RadioSurfacesExample.vue';
+import RadioGroupExample from '@site/RadioGroupExample.vue';
+import RadioErrorExample from '@site/RadioErrorExample.vue';
+
+A radio is a native `<input type="radio">` with a drawn dot beside its label. The input itself is there, hidden to the eye and not to the browser, so it submits with a form, answers to the arrow keys, and announces itself as a radio.
+
+A radio never stands alone. Two or more share one `v-model` and one `name`, and the model holds the `value` of whichever is picked. The `name` is what makes them a group to the browser, and without it the arrow keys won't move between them.
+
+```html
+<Radio v-model="when" name="when-to-send" value="now" label="Send now" />
+<Radio v-model="when" name="when-to-send" value="later" label="Schedule for later" />
+```
+
+How a field goes together with its label, its description, and its messages is on the [Forms](/docs/patterns/forms) page.
+
+## Examples
+
+### A group
+
+Each radio carries the `value` it puts in the model when it's picked. Wrap the set in a `<fieldset>` with a `<legend>`, so the question above the options is read out with each of them. Stack them with `gap-2`, or `gap-3` when they carry descriptions.
+
+<RadioGroupExample client:load />
+
+Picking one unpicks the rest. Nothing in the component does that, since the browser does it for every input sharing a `name`.
+
+### Label and description
+
+`label` is the option text, and it sits beside the dot rather than above it. `description` is a second line under the label, for what the label can't hold. Use the default slot instead of `label` when the text needs markup.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Radio
+      client:load
+      name="anatomy"
+      value="now"
+      modelValue="now"
+      label="Send now"
+      description="Goes out as soon as the campaign is approved."
+    />
+  </div>
+</Card>
+
+The label is `font-medium` and slate-800, a step lighter than the extrabold label on an [Input](/docs/components/input). A radio label is the answer rather than the question. The question is the legend above the group.
+
+### Surface
+
+A radio works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. An unpicked radio is white, and what draws its boundary is what changes. A picked one is sky-300 with a sky-500 border on every surface.
+
+| Sitting on   | Which is     | Boundary          |
+| ------------ | ------------ | ----------------- |
+| `default`    | white        | slate-200 border  |
+| `glass`      | slate-50     | slate-200 border  |
+| `sunken`     | slate-300/30 | slate-300 border  |
+| `dark`       | slate-700    | slate-200 border  |
+| `background` | slate-200    | shadow, no border |
+
+<RadioSurfacesExample client:load />
+
+The label goes white on the dark surface, and the description slate-300. Everywhere else they are slate-800 and slate-500.
+
+The page background is the only surface that gets the shadow, and the only one with no border. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+
+### Size
+
+The `size` prop sets the dot, the label, and the gap between them. The sizes are `sm`, `md` (the default), and `lg`. It matches [Checkbox](/docs/components/checkbox) at every step, so a checkbox and a radio in the same column line up. The circle is the line-height of its own label at every size, so the two line up on the first line however far the text wraps.
+
+<Card surface="glass">
+  <div class="not-prose flex flex-col gap-3">
+    <Radio client:load name="sizes-sm" value="sm" modelValue="sm" size="sm" label="sm, a 16px circle and text-xs" />
+    <Radio client:load name="sizes-md" value="md" modelValue="md" size="md" label="md, a 20px circle and text-sm" />
+    <Radio client:load name="sizes-lg" value="lg" modelValue="lg" size="lg" label="lg, a 24px circle and text-base" />
+  </div>
+</Card>
+
+### Error and hint
+
+`error` takes the message to show under the row. It recolors the border, marks the line with a warning icon, sets `aria-invalid`, and points `aria-describedby` at the message. Pass an array for more than one message.
+
+A group has one answer, so it has one message. Put `error` on the last radio in the set, where the line reads as the group's own.
+
+<RadioErrorExample client:load />
+
+`hint` is the same line before anything goes wrong, at slate-600 behind an info mark. A radio can show both.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Radio client:load name="hint-example" value="later" label="Schedule for later" hint="Scheduled sends run in the recipient's time zone." />
+  </div>
+</Card>
+
+### Disabled
+
+`disabled` swaps the white fill for slate-100 and drops the label to slate-500. A picked radio that's disabled keeps its dot, in slate-400, rather than losing the answer along with the control.
+
+<Card surface="glass">
+  <div class="not-prose flex flex-col gap-3">
+    <Radio client:load disabled name="disabled-off" value="now" label="Send now" />
+    <Radio client:load disabled name="disabled-on" value="later" modelValue="later" label="Scheduled by your admin" />
+  </div>
+</Card>
+
+## Interaction
+
+On the page background, hovering anywhere in the row deepens the shadow from `shadow` to `shadow-md`. On a panel there is no shadow, so hover does nothing.
+
+Pressing shrinks the circle to 90% for the length of the press, and leaves the label where it is. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
+
+Focus draws a blue outline around the circle, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it.
+
+Everything else is the browser's. A group is one tab stop, landing on whichever radio is picked. The arrow keys move through the set and pick as they go, wrapping at either end.
+
+## Contrast
+
+| Element                 | On         | WCAG 2.x | APCA   |
+| ----------------------- | ---------- | -------- | ------ |
+| black dot               | sky-300    | 12.6:1   | Lc 75  |
+| slate-800 label         | white      | 14.7:1   | Lc 101 |
+| slate-800 label         | glass      | 14.0:1   | Lc 98  |
+| white label             | dark       | 10.3:1   | Lc 98  |
+| slate-300 description   | dark       | 7.0:1    | Lc 71  |
+| slate-500 description   | glass      | 4.6:1    | Lc 70  |
+| rose-800 message        | glass      | 7.6:1    | Lc 82  |
+| sky-500 border          | white      | 2.7:1    | Lc 52  |
+| sky-300 fill            | white      | 1.7:1    | Lc 29  |
+| slate-200 border        | white      | 1.2:1    | Lc 12  |
+| rose-300 border         | white      | 1.9:1    | Lc 37  |
+| slate-400 dot           | slate-100  | 2.4:1    | Lc 45  |
+
+The label, the description, and the messages clear AA.
+
+The dot is what carries the answer. Black on sky-300 is 12.6:1, so a picked radio reads as picked from its shape and not from its color. The fill underneath it doesn't clear anything. Sky-300 against a white card is 1.7:1, and the sky-500 border that edges it is 2.7:1, both short of the 3:1 WCAG asks of a control's boundary. The unpicked circle has the same problem at 1.2:1, and so does the rose-300 error border at 1.9:1, which is why the message under the row carries the error rather than the color.
+
+The disabled dot runs slate-400 on slate-100 at 2.4:1. Disabled controls are exempt from the contrast rules, and it is deliberately quiet.
