@@ -1,0 +1,69 @@
+---
+title: Char Counter
+order: 7
+---
+
+import CharCounter from '@ui/CharCounter.vue';
+import Card from '@ui/Card.vue';
+
+A char counter is the bar and the count under a field that has a limit. [Input](/docs/components/input) renders one for you when you pass `counter`, so reach for this directly only when the thing being counted isn't an input.
+
+`content` is what to measure and `max` is what to measure it against. `content` takes a string or an array, so a list of recipients counts the same way a message does.
+
+## Examples
+
+### Filling up
+
+The bar is the length over `max`, and it holds slate until the count is worth reacting to.
+
+<Card surface="glass">
+  <div class="not-prose grid gap-6 sm:grid-cols-3">
+    <CharCounter content="Thanks for stopping by." max={160} />
+    <CharCounter content={'x'.repeat(150)} max={160} />
+    <CharCounter content={'x'.repeat(172)} max={160} />
+  </div>
+</Card>
+
+Amber is the last tenth before the limit, and rose is past it. `maxWarning` moves where amber starts. Nothing stops at the limit, since the counter reports and the field decides.
+
+### Counting up to a minimum
+
+`min` and `minWarning` cover the other direction, for a field that is too short rather than too long. Below `min` the counter reads as an error. Below `minWarning` it warns.
+
+<Card surface="glass">
+  <div class="not-prose grid gap-6 sm:grid-cols-2">
+    <CharCounter content="Hi" max={160} min={10} />
+    <CharCounter content="Hi there, this is" max={160} min={10} minWarning={40} />
+  </div>
+</Card>
+
+### Muted
+
+`muted` holds the bar and the count at slate whatever the length is. [Input](/docs/components/input) passes it while the field is unfocused, so a form of counters isn't a row of warnings before anyone has typed.
+
+<Card surface="glass">
+  <div class="not-prose grid gap-6 sm:grid-cols-2">
+    <CharCounter content={'x'.repeat(172)} max={160} />
+    <CharCounter content={'x'.repeat(172)} max={160} muted />
+  </div>
+</Card>
+
+### Label
+
+`label` names what is being counted. It defaults to `characters`.
+
+<Card surface="glass">
+  <div class="not-prose grid gap-6 sm:grid-cols-2">
+    <CharCounter content={['a', 'b', 'c']} max={10} label="recipients" />
+    <CharCounter content={'x'.repeat(4)} max={30} label="characters in the name" />
+  </div>
+</Card>
+
+## Contrast
+
+| Element   | On    | WCAG 2.x |
+| --------- | ----- | -------- |
+| slate-500 | white | 4.8:1    |
+| rose-800  | white | 7.9:1    |
+
+The count clears AA at slate-500, and the part that turns rose clears it at 7.9:1. The bar itself is decorative. Amber and rose there repeat what the count already says, so nothing is carried by the color alone.

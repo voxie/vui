@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
-import { useSurface, type Surface } from './surface.ts';
+import { useControlBoundary, type Surface } from './surface.ts';
 
 type SelectSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type SelectOption = { value: string | number; label: string; disabled?: boolean };
@@ -32,18 +32,7 @@ const props = withDefaults(
 
 const model = defineModel<string | number | undefined>();
 
-const surface = useSurface(() => props.sitsOn);
-
-// One boundary at a time. The page background gets the shadow, since nothing
-// else lifts the control off it, and the border goes transparent rather than
-// away so the error state can't shift the text. A panel gets the border, one
-// step darker on sunken to hold up against the darker surface.
-const surfaceClasses = computed(() => {
-	if (surface.value === 'background')
-		return { shadow: 'shadow hover:shadow-md', border: 'border-transparent' };
-	if (surface.value === 'sunken') return { shadow: 'shadow-none', border: 'border-slate-300' };
-	return { shadow: 'shadow-none', border: 'border-slate-200' };
-});
+const boundary = useControlBoundary(() => props.sitsOn);
 
 const errorId = useId();
 
@@ -74,9 +63,9 @@ const sizeClasses = computed(() => {
 				class="relative block cursor-pointer appearance-none border border-solid bg-white font-sans leading-tight outline-blue-600 transition focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500 disabled:shadow-none disabled:hover:shadow-none"
 				:class="[
 					sizeClasses.element,
-					surfaceClasses.shadow,
+					boundary.shadow,
 					props.block ? 'w-full' : 'w-auto',
-					props.error ? 'border-rose-300' : surfaceClasses.border,
+					props.error ? 'border-rose-300' : boundary.border,
 					props.error ? 'text-rose-600' : 'text-slate-900',
 				]"
 			>

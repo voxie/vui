@@ -24,3 +24,20 @@ export function useSurface(override: () => Surface | undefined): ComputedRef<Sur
 	const inherited = inject(SurfaceKey, null);
 	return computed(() => override() ?? inherited?.value ?? 'default');
 }
+
+// What a form control draws its edge with, which is one thing at a time. The
+// page background gets the shadow, since nothing else lifts a control off it,
+// and its border goes transparent rather than away so an error state can
+// recolor it without moving the text. A panel gets the border, one step darker
+// on sunken to hold up against the darker surface.
+export function useControlBoundary(
+	override: () => Surface | undefined,
+): ComputedRef<{ shadow: string; border: string }> {
+	const surface = useSurface(override);
+	return computed(() => {
+		if (surface.value === 'background')
+			return { shadow: 'shadow hover:shadow-md', border: 'border-transparent' };
+		if (surface.value === 'sunken') return { shadow: 'shadow-none', border: 'border-slate-300' };
+		return { shadow: 'shadow-none', border: 'border-slate-200' };
+	});
+}

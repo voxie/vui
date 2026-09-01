@@ -1,0 +1,167 @@
+---
+title: Input
+order: 6
+---
+
+import Input from '@ui/Input.vue';
+import Card from '@ui/Card.vue';
+
+An input is the text field, and the textarea. One `rows` above the default turns it into the other, so a field that grows as it's typed into is the same component with `autoresize` on.
+
+It follows [Select](/docs/components/select) for everything around the edge. A white fill, a slate-200 border that darkens a step on sunken, and a shadow only on the page background. It works that out from the [Card](/docs/components/card) it's inside, or from `sitsOn` where there's no card to ask. Like a select, it belongs on a `glass` card or on the page background rather than on a white one.
+
+An input fills the width it's given. Constrain it from the outside, with the column it sits in.
+
+## Examples
+
+### Type
+
+The `type` prop is passed through to the field. The choices are `text` (the default), `password`, `number`, `email`, `tel`, `url`, `search`, `time`, `date`, and `datetime-local`.
+
+<Card surface="glass">
+  <div class="not-prose grid gap-3 sm:grid-cols-2">
+    <Input placeholder="text" />
+    <Input type="email" placeholder="email" />
+    <Input type="tel" placeholder="tel" />
+    <Input type="date" />
+  </div>
+</Card>
+
+`number` and `password` do more than pass the type along. They have their own sections below.
+
+### Size
+
+The `size` prop sets height, padding, and text size. The sizes are `xs`, `sm`, `md` (the default), `lg`, and `xl`. They match [Button](/docs/components/button) and [Select](/docs/components/select) at every step.
+
+<Card surface="glass">
+  <div class="not-prose space-y-3">
+    <Input size="xs" placeholder="xs" />
+    <Input size="sm" placeholder="sm" />
+    <Input size="md" placeholder="md" />
+    <Input size="lg" placeholder="lg" />
+    <Input size="xl" placeholder="xl" />
+  </div>
+</Card>
+
+On a textarea the size sets vertical padding instead of a height, since `rows` is what decides how tall it is.
+
+### Content inside the field
+
+Three slots put things inside the field, and the value's padding is measured off whatever you put in them. `left` and `right` sit over the fill. `box` is a filled panel pinned to the start, for a unit or a prefix that is part of the value rather than a decoration.
+
+<Card surface="glass">
+  <div class="not-prose space-y-3">
+    <Input placeholder="Search contacts">
+      <i class="fa-solid fa-magnifying-glass" slot="left"></i>
+    </Input>
+    <Input placeholder="0.00">
+      <span slot="box">$</span>
+    </Input>
+    <Input placeholder="Message">
+      <i class="fa-solid fa-face-smile" slot="right"></i>
+    </Input>
+  </div>
+</Card>
+
+`box` and `left` are mutually exclusive. When both are passed, the box wins and the left slot isn't rendered.
+
+### More than one line
+
+`rows` above 1 renders a textarea. `autoresize` grows it to its content as it's typed into, and caps at half the viewport height unless `maxHeight` says otherwise.
+
+<Card surface="glass">
+  <div class="not-prose space-y-3">
+    <Input rows={3} placeholder="Three rows" />
+    <Input client:load autoresize placeholder="Grows as you type" />
+  </div>
+</Card>
+
+`autoresize` implies a textarea, so it doesn't need `rows` as well. It also turns off the drag handle, since the field is sizing itself.
+
+### Numbers
+
+`type="number"` runs as a text field underneath, so the value can be cleaned up as it's typed. Anything that isn't a number is dropped, the minus sign only counts at the start, and the decimals are held to whatever `step` implies. `min` and `max` clamp on blur, which is also when the value is padded out to the step's decimals.
+
+<Card surface="glass">
+  <div class="not-prose grid gap-3 sm:grid-cols-2">
+    <Input client:load type="number" min={0} max={10} placeholder="0 to 10" />
+    <Input client:load type="number" step={0.01} min={0} placeholder="Two decimals" />
+  </div>
+</Card>
+
+The stepper appears on focus and disappears again, so a row of numeric fields isn't a wall of arrows. <kbd>↑</kbd> and <kbd>↓</kbd> do the same job and are always there, which is why the buttons are out of the tab order. A `right` slot replaces the stepper.
+
+### Passwords
+
+`type="password"` with `togglePassword` adds the reveal button.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Input client:load type="password" toggle-password placeholder="Password" />
+  </div>
+</Card>
+
+The button is in the tab order and it announces which state it will switch to, so the reveal is reachable without a mouse.
+
+### Error
+
+`error` takes one message or an array of them. Passing it recolors the border and the text, and points `aria-describedby` at the messages.
+
+<Card surface="glass">
+  <div class="not-prose space-y-3">
+    <Input error="Enter a valid mobile number" placeholder="Phone" />
+    <Input
+      error={['Must be at least 8 characters', 'Must contain a number']}
+      type="password"
+      placeholder="Password"
+    />
+  </div>
+</Card>
+
+There's an `error` slot too, for a message that needs markup, such as a link to whatever the reader has to go and fix.
+
+### Hint
+
+`hint` is the line under the field that is there before anything goes wrong. It sits at slate-600 and stays put when an error appears above it.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Input hint="Contacts see this name on every message you send." placeholder="Sender name" />
+  </div>
+</Card>
+
+### Counting characters
+
+`counter` swaps the hint area for a [Char Counter](/docs/components/char-counter). It needs `maxlength` to count against. Passing `counter` stops `maxlength` and `minlength` reaching the field, so someone can type past the limit and see that they have, rather than finding the field silently refusing keystrokes.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Input client:load counter maxlength={160} rows={3} placeholder="Message" />
+  </div>
+</Card>
+
+The counter is muted while the field is unfocused.
+
+### Disabled
+
+`disabled` swaps the white fill for slate-100 with slate-500 text.
+
+<Card surface="glass">
+  <div class="not-prose">
+    <Input disabled placeholder="Managed by your admin" />
+  </div>
+</Card>
+
+## Interaction
+
+Focus draws a blue outline, two pixels wide at a two pixel offset. Unlike a [Button](/docs/components/button), a text field takes the ring on a click as well as on a keyboard focus, because that's what `:focus-visible` does for a field you can type into.
+
+On the page background, hover deepens the shadow from `shadow` to `shadow-md`. On a panel there's no shadow, so hover does nothing.
+
+The numeric stepper and the counter both key off focus. The stepper fades in, and the counter comes out of its muted state.
+
+## Contrast
+
+The values are the same as [Select](/docs/components/select#contrast), and so are the shortfalls. The border is short of the 3:1 WCAG asks of a control's boundary, and the message under the field is what carries an error rather than the rose border.
+
+Two colors are the input's own, and both clear AA. The hint runs slate-600 on the surface, at 7.6:1 on white and 6.1:1 on the page background. The `box` is slate-600 on a slate-100 fill, at 6.9:1.
