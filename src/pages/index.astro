@@ -12,27 +12,18 @@ const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare
 
   <Card surface='layered' padding='spacious'>
 
-  <p class="mt-0">The design system behind Voxie. The components screens are built from, the foundations they sit on, and the guidance for putting the two together.</p>
-
-  <p class="mb-0">It is written to be read twice: once by a person deciding how a screen should look, and once by an agent building it. The docs carry the reasoning, and the skills restate the same rules as instructions an agent can follow.</p>
+  <p class="my-0!">Voxie UI is a system built on top of Tailwind, a utility based UI framework for designing interfaces. These docs provide examples, reasoning, and usage guidance for everything that makes up the Voxie design system. It then builds on these with skills to help agents stay aligned with the system.</p>
 
   </Card>
 
   <h2>What's here</h2>
 
   <h3 class="mt-0 mb-0">Docs</h3>
-  <p class="">Foundations, components, patterns and guidance, with the reasoning left in rather than boiled down to rules.</p>
+  <p class="">Foundations, components, patterns and guidance.</p>
 
   <h3 class="mt-0 mb-0">Skills</h3>
-  <p class="">The same ground written as instructions, so generated UI lands inside the system instead of beside it.</p>
+  <p class="">The same docs written as instructions for AI agents.</p>
 
   <h3 class="mt-0 mb-0">Test&nbsp;pages</h3>
-  <p class="">Nine real Voxie screens stripped of every class, for trying a direction end to end before committing to it.</p>
-
-  <h2>Where to start</h2>
-
-  <p>
-    <a href="/docs/foundations/color">Color</a> and{' '}
-    <a href="/docs/foundations/typography">Typography</a> are the furthest along, and everything else assumes them. Much of the rest is still an outline waiting to be filled in.
-  </p>
+  <p class="">A set of real Voxie screens, stripped of every class, for testing guidance and rules.</p>
 </Layout>
