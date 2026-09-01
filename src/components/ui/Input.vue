@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useId, watch } from 'vue';
+import { computed, ref, useId } from 'vue';
 import { useControlBoundary, type Surface } from './surface.ts';
 import CharCounter from './CharCounter.vue';
 
@@ -237,15 +237,6 @@ const onKeydown = (event: KeyboardEvent) => {
 	}
 };
 
-const resize = () => {
-	if (!field.value || !props.autoresize) return;
-	// Reset first, so the field can shrink as well as grow.
-	field.value.style.height = 'auto';
-	field.value.style.height = `${field.value.scrollHeight + 2}px`;
-};
-
-watch(() => model.value, () => nextTick().then(resize), { immediate: true });
-
 const toggleShowPassword = () => {
 	showPassword.value = !showPassword.value;
 	field.value?.focus();
@@ -291,7 +282,9 @@ defineExpose({
 					isDateTime ? 'flex' : 'block',
 					isTextarea && !props.maxHeight ? 'max-h-[50vh]' : '',
 					isTextarea ? 'overflow-auto' : '',
-					props.autoresize ? 'resize-none' : '',
+					props.autoresize
+						? 'resize-y supports-[field-sizing:content]:field-sizing-content supports-[field-sizing:content]:resize-none'
+						: '',
 					props.error ? 'border-rose-300 text-rose-600' : `${boundary.border} text-slate-900`,
 				]"
 				:style="{

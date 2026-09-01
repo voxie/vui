@@ -72,11 +72,11 @@ Three slots put things inside the field, and the value's padding is measured off
 <Card surface="glass">
   <div class="not-prose space-y-3">
     <Input rows={3} placeholder="Three rows" />
-    <Input client:load autoresize placeholder="Grows as you type" />
+    <Input autoresize placeholder="Grows as you type" />
   </div>
 </Card>
 
-`autoresize` implies a textarea, so it doesn't need `rows` as well. It also turns off the drag handle, since the field is sizing itself.
+`autoresize` implies a textarea, so it doesn't need `rows` as well. The growing is `field-sizing: content`, so it's the browser doing it rather than anything measuring the content. Browsers without that property keep the drag handle, so the field can still be sized by hand. Where the property is supported the handle goes, since the field is already sizing itself.
 
 ### Numbers
 
