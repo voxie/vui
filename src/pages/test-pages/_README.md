@@ -61,8 +61,14 @@ app. Both start unstyled.
 `index.astro` is the exception: it carries a little styling of its own so the
 list stays readable.
 
-## Resetting
+## Running a trial
 
-These are fixtures, so they need to survive being styled. Before handing a page
-to an agent, note the commit; `git checkout -- src/pages/test-pages/` puts every
-page back to raw markup.
+A trial never touches these files. `npm run trial` copies every page and the
+shell into `src/pages/trial/`, rewriting the links between pages so the copy
+stays self-contained, and the agent styles that copy. It serves at `/trial/…`
+next to the raw page at `/test-pages/…`. The folder is in `.gitignore`, so a
+trial can't be committed, and the fixtures here stay ordinary source that can be
+edited and committed like anything else.
+
+The script refuses to overwrite an existing trial. `npm run trial -- --fresh`
+starts over, and so does `rm -rf src/pages/trial`.

@@ -35,12 +35,14 @@ const reading = [...new Set(docs.map((entry) => entry.id.split('/')[0]))]
 const PAGE = '{{page}}';
 const promptOpening = (page: string) =>
   `Style ${page}. It's real production markup with every class stripped.`;
+// The brief points at the trial copy, never at the fixture itself.
 const pageOptions = testPages.map((page) => ({
-  value: `src/pages${page.href}.astro`,
+  value: `src/pages/trial${page.href.replace('/test-pages', '')}.astro`,
   label: page.title,
 }));
 const promptReading = 'Read all of these first and treat them as binding:';
 const promptRules = [
+  "Run `npm run trial` first if src/pages/trial/ doesn't exist. It copies the raw fixtures there, and the copy is what you style. Never edit src/pages/test-pages/.",
   'Add classes freely. You may add wrapper elements and swap in the documented components wherever the markup maps to one: Card for a plain container, Button for a button, Input for a text input or textarea and its label, Select for a select, Checkbox and Radio for their inputs, Badge for a data-test="badge" span, Modal for the inline dialog, CharCounter for a length-limited field, Navbar with NavbarAction and NavbarActionItem for the app navbar.',
   "Prefer a component over restyling the raw element. If a component doesn't fit, say why in the gap list rather than working around it silently.",
   "Don't create new components.",
@@ -92,7 +94,7 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
 
   <h2>Running a trial</h2>
 
-  <p>Point an agent at one page with a brief along these lines:</p>
+  <p>Point an agent at one page with a brief along these lines. The brief has the agent copy the fixtures into <code>src/pages/trial/</code> with <code>npm run trial</code> and style the copy, which serves at <code>/trial/…</code> beside the raw page. The folder is ignored by git, so a trial can't be committed by accident.</p>
 
   {/* Padding moves onto the body so the footer can reach the card's edges, the
       way the one in a Modal does. The brief is white on the card's glass, so it
@@ -178,7 +180,7 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
   <h2>Resetting</h2>
 
   <p>
-    These are fixtures, so they have to survive being styled. Note the commit before handing a page over; <code>git checkout -- src/pages/test-pages/</code> puts every page back to raw markup.
+    A trial lives in <code>src/pages/trial/</code> and nowhere else. <code>rm -rf src/pages/trial</code> throws it away, and <code>npm run trial -- --fresh</code> does the same and copies the fixtures again. The fixtures under <code>src/pages/test-pages/</code> are ordinary source, so edit and commit them freely.
   </p>
 
   <p>
