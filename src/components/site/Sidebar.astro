@@ -20,9 +20,9 @@ const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))].sort(
 
 // Built once and rendered twice, as the wide column and as the narrow select.
 // Labels are capitalized here and not with `capitalize`, since `optgroup` labels
-// are attribute text CSS can't reach.
+// are attribute text CSS can't reach. The intro lives outside: the wide column
+// reaches it through the brand header, the select through a top-level option.
 const groups = [
-  { label: 'Voxie UI', mark: true, links: [{ href: '/', title: 'Intro' }] },
   ...sections.map((section) => ({
     label: section.charAt(0).toUpperCase() + section.slice(1),
     links: docs
@@ -60,6 +60,7 @@ function linkClass(href: string) {
       data-docs-nav
       class="w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm font-medium text-slate-800"
     >
+      <option value="/" selected={currentPath === '/'}>Intro</option>
       {
         groups.map((group) => (
           <optgroup label={group.label}>
@@ -79,17 +80,18 @@ function linkClass(href: string) {
 </div>
 
 <aside
-  class="hidden md:block w-56 shrink-0 h-dvh overflow-y-auto overscroll-y-contain p-8 lg:py-18 xl:py-24 bg-slate-300/30 border-r border-r-white/50 shadow-inner"
+  class="hidden md:block w-56 shrink-0 h-dvh overflow-y-auto overscroll-y-contain p-8 bg-slate-300/30 border-r border-r-white/50 shadow-inner"
 >
-  <nav class="text-sm space-y-4">
+  <a href="/" class="inline-flex items-center gap-1.5 text-sm font-extrabold hover:opacity-50 transition">
+    <VoxieMark class="w-6" />
+    Voxie UI
+  </a>
+
+  <nav class="mt-4 text-sm space-y-4 xl:py-8">
     {
       groups.map((group) => (
         <div>
-          {/* The mark rides the first heading, sized to the text beside it. */}
-          <h3 class="font-extrabold flex items-center gap-1.5">
-            {group.mark && <a href="/"><VoxieMark class="w-6 " /></a>}
-            {group.label}
-          </h3>
+          <h3 class="font-extrabold">{group.label}</h3>
           <ul class="mt-3">
             {group.links.map((link) => (
               <li>
