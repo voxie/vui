@@ -41,11 +41,11 @@ const pageOptions = testPages.map((page) => ({
 }));
 const promptReading = 'Read all of these first and treat them as binding:';
 const promptRules = [
-  'Add classes freely. You may add wrapper elements and swap in the documented components wherever the markup maps to one: Card for a plain container, Button for a button, Input for a text input or textarea and its label, Select for a select, Checkbox and Radio for their inputs, Badge for a data-test="badge" span, Modal for the inline dialog, CharCounter for a length-limited field.',
+  'Add classes freely. You may add wrapper elements and swap in the documented components wherever the markup maps to one: Card for a plain container, Button for a button, Input for a text input or textarea and its label, Select for a select, Checkbox and Radio for their inputs, Badge for a data-test="badge" span, Modal for the inline dialog, CharCounter for a length-limited field, Navbar with NavbarAction and NavbarActionItem for the app navbar.',
   "Prefer a component over restyling the raw element. If a component doesn't fit, say why in the gap list rather than working around it silently.",
   "Don't create new components.",
   "Don't remove or rename semantic elements, data-test attributes, or copy, and don't change the data.",
-  "Don't touch _AppShell.astro. If you need something like a page background color, put it on the main content wrapper.",
+  "_AppShell.astro is shared by every test page, so it gets styled once and only for what every page needs: the navbar and the page container. Anything one page needs, like a background color, goes on that page's main content wrapper. Its dropdowns are rendered open so their contents are visible; the Navbar component decides that itself, so let it.",
   "When the docs don't answer something, make the call, but keep a running list of every gap you hit.",
 ];
 const promptClosing = 'Then self-review against the checklist in src/pages/test-pages/index.astro and report the gap list.';
@@ -57,7 +57,7 @@ const promptTemplate = [
   promptClosing,
 ].join('\n\n');
 
-const checks = ['Does it use real Tailwind color names, or did it reach for <code>bg-primary</code>?', 'Do neutrals sit one rung from their background, and does each button carry the right <code>surface</code> for the card it is in?', 'Do all five accents stay at 300?', 'Is the default body size <code>text-sm</code>?', 'Does every input, select, checkbox, radio, badge and dialog in the markup reach for the documented component, rather than hand-styled markup that resembles it?', 'Does the dense inbox get a dense treatment, and the wizard a roomy one?', 'Do the empty, loading, and error states get the same care as the happy path?'];
+const checks = ['Does it use real Tailwind color names, or did it reach for <code>bg-primary</code>?', 'Do neutrals sit one rung from their background, and does each button carry the right <code>surface</code> for the card it is in?', 'Do all five accents stay at 300?', 'Is the default body size <code>text-sm</code>?', 'Does every input, select, checkbox, radio, badge and dialog in the markup reach for the documented component, rather than hand-styled markup that resembles it? Is the navbar in the shell a Navbar, with its sections and rows as NavbarAction and NavbarActionItem?', 'Does the dense inbox get a dense treatment, and the wizard a roomy one?', 'Do the empty, loading, and error states get the same care as the happy path?'];
 ---
 
 <Layout title="Test Pages">
