@@ -3,91 +3,72 @@ title: Page Structure
 order: 1
 ---
 
-import Card from '@ui/Card.vue';
+import PageStructureDemo from '@site/PageStructureDemo.vue';
 
-A page is typically two parts. The [Navbar](/docs/components/navbar) runs the full width of the window. The main content area has its max width capped.
+A page is made up of two layout sections. The [Navbar](/docs/components/navbar) runs the full width of the window. The main content area has its width capped.
 
-The main content sits in Tailwind's `container`, with a max width and padding. Screens like Message Hub and the workflow builder are exceptions. They drop the max width, because the user needs all the space they can get for complex or heavy work.
+Tailwind's `container` plus a max width and padding determine the main content width.
 
 ```
 container mx-auto px-4 sm:px-6 md:px-8 max-w-(--breakpoint-xl)
 ```
 
-Headings should always sit inside cards with their content. Page titles are the exception. They sit directly on the page background.
+Screens like Message Hub and the workflow builder are exceptions. They drop the max width, because the user needs maximum space for complex or heavy work.
 
-Most pages use a left-aligned 12-column grid, in areas like a dashboard with cards of different widths holding different callouts. The gap between items never exceeds the gap between the container and the edge of the window, and is ideally a little smaller. The grid sits at the main content level in the markup, not on the body. That way it can be dropped in when a page needs it, and content padding and gaps are managed apart from the navbar.
+Headings should always sit with their content inside cards. Page titles are the exception. They sit directly on the page background.
+
+The space between cards is the same on every layout. It never exceeds the padding between the container and the edge of the window.
 
 ```
-grid grid-cols-12 gap-6 md:gap-8
+gap-4 md:gap-6 xl:gap-8
 ```
 
-<hr />
-<div class="not-prose container mx-auto px-3 md:px-8 max-w-(--breakpoint-xl)">
-  <div class="grid grid-cols-12 gap-3 sm:gap-6 md:gap-8">
-    <h1 class="col-span-12 text-3xl">Example Heading</h1>
-    <Card class="col-span-6" /> <Card class="col-span-6" />
-    <Card class="col-span-4" /> <Card class="col-span-4" /> <Card class="col-span-4" />
-    <Card class="col-span-6" /> <Card class="col-span-6" />
-  </div>
+Every layout below is live. **View Full Screen** will let you preview the layout at production scale.
+
+## Base Layout
+
+Most pages use a left-aligned 12-column grid that gets filled with content cards. Examples are dashboards, item lists, and analytics.
+
+```
+grid grid-cols-12 gap-4 md:gap-6 xl:gap-8
+```
+
+The grid sits at the main content level in the markup, not on the html body. That way it can be dropped in when a page needs it. This also allows content padding and gaps to be managed separately from the navbar.
+
+<div class="not-prose my-10">
+  <PageStructureDemo client:load layout="base" previewId="base" />
 </div>
 
-<hr />
+## Create Pages
 
-Create pages are an exception, such as creating a campaign, a segment, or a contact. Those screens use a single centered column with a tighter max width of `--breakpoint-sm`. A page description sits on the page background, directly under the heading. The cards are usually `glass`, because they hold form inputs.
+Create pages use a centered, single column layout for a focused flow experience. These are the only pages that do so. Examples include creating a campaign, a segment, or a contact. The column is a flex stack with its cards centered. Each card is full width up to `md`, then capped at `max-w-2xl`. A page description sits on the page background, directly under the heading. The cards usually have a `glass` surface, because they hold form inputs.
 
-<hr />
+```
+w-full md:max-w-2xl
+```
 
-<div class="not-prose flex flex-col items-center gap-6 md:gap-8 container mx-auto px-3 md:px-8 max-w-(--breakpoint-sm)">
-  <div class="text-center">
-    <h1 class="text-3xl mb-3 leading-none">Example Heading</h1>
-    <p class="leading-tight">Single sentence page description.</p>
-  </div>
+That card width is shared with the small cards on sidebar pages, so a form looks the same wherever it appears.
 
-  <div class="sticky top-4 rounded-full border-solid border border-white/60 bg-slate-100/50 px-4 shadow-xl backdrop-blur-md z-20">
-    <div class="text-slate-700 relative no-underline hover:no-underline overflow-hidden py-2 px-2 text-xs transition inline-flex justify-center cursor-pointer">Sticky Nav</div>
-  </div>
-  <Card
-    surface="glass"
-    class="w-full"
-  />
-  <Card
-    surface="glass"
-    class="w-full"
-  />
-  <Card
-    surface="glass"
-    class="w-full"
-  />
+<div class="not-prose my-10">
+  <PageStructureDemo client:load layout="create" previewId="create" />
 </div>
 
-<hr />
+## Sidebar Pages
 
-Another common layout is a sidebar beside the main content. Edit screens for main app functions use it, such as editing a campaign, a segment, or a contact, and so do the app's configuration settings.
+Some pages require sidebars. Examples include edit screen, analytics, and settings. The sidebar and the content sit in a flex row from `md` up. Below that the sidebar stacks above the content. The sidebar has a fixed width of `w-48` at `md` and `w-56` at `lg`. The content column takes the remaining width.
 
-<hr />
+```
+flex flex-col md:flex-row
+```
 
-<div class="not-prose container mx-auto px-3 md:px-8 max-w-(--breakpoint-xl)">
-  <div class="grid grid-cols-12 gap-6 md:gap-8">
-    <h1 class="col-span-12 text-3xl">Example Heading</h1>
+Small content cards in this layout match the width of the ones in the create screens for consistency. They use the same `w-full md:max-w-2xl` and sit at the left of the content column. Some content requires more space. In those instances the cards fill the full width of the content column with `w-full`.
 
-    	<div class="col-span-12 flex flex-col pb-8 lg:col-span-2">
-    		<a class="group no-underline! py-1 hover:text-sky-600 flex items-center font-extrabold text-sky-600">Details</a>
-    		<a class="group no-underline! py-1 hover:text-sky-600 flex items-center font-extrabold text-slate-600">Contacts</a>
-			</div>
-
-			<div class="flex items-center gap-6 md:gap-8 flex-col col-span-12 lg:col-span-8 lg:col-start-3">
-
-				<Card
-					surface="glass"
-					class="w-full"
-				/>
-				<Card
-					surface="glass"
-					class="w-full"
-				/>
-
-		</div>
-	</div>
+<div class="not-prose my-10">
+  <PageStructureDemo client:load layout="edit" previewId="edit" />
 </div>
 
-<hr />
+A settings page mixes both widths in one column. The overview card and the table rows run the full content width. The form cards and the button bar keep the small card width.
+
+<div class="not-prose my-10">
+  <PageStructureDemo client:load layout="settings" previewId="settings" />
+</div>

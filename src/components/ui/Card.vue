@@ -43,8 +43,8 @@ provideSurface(() => childSurface[props.surface]);
 const paddingClasses: Record<string, string> = {
   none: '',
   compact: 'p-4',
-  default: 'p-6',
-  spacious: 'p-8'
+  default: 'p-4 sm:p-6',
+  spacious: 'p-6 sm:p-8'
 };
 
 const cardClass = computed(
