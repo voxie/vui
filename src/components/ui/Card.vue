@@ -54,8 +54,9 @@ const cardClass = computed(
 
 <template>
   <!-- The layered wrapper stays a div: it only exists to position the stack,
-       so the semantic tag goes on the card that holds the content. -->
-  <div v-if="surface === 'layered'" class="p-10 pl-0 pt-0 relative">
+       so the semantic tag goes on the card that holds the content. `isolate`
+       keeps the negative z-index layers above whatever paints the page. -->
+  <div v-if="surface === 'layered'" class="p-10 pl-0 pt-0 relative isolate">
     <component
       :is="as"
       :class="cardClass"
