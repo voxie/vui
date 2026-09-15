@@ -20,8 +20,7 @@ const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))].sort(
 
 // Built once and rendered twice, as the wide column and as the narrow select.
 // Labels are capitalized here and not with `capitalize`, since `optgroup` labels
-// are attribute text CSS can't reach. The intro lives outside: the wide column
-// reaches it through the brand header, the select through a top-level option.
+// are attribute text CSS can't reach. The intro lives outside, behind the mark.
 const groups = [
   ...sections.map((section) => ({
     label: section.charAt(0).toUpperCase() + section.slice(1),
@@ -53,14 +52,16 @@ function linkClass(href: string) {
 
 {/* Below `md` the two columns can't both fit, so the nav collapses to a select
     above the content. The content scrolls beneath it, so it needs no sticky. */}
-<div class="md:hidden shrink-0 p-5 bg-slate-200 border-b border-slate-300">
-  <label class="relative block">
+<div class="md:hidden shrink-0 flex items-center gap-3 p-5 bg-slate-200 border-b border-slate-300">
+  <a href="/" aria-label="Voxie UI home" class="shrink-0 h-full"><VoxieMark class="h-full! w-auto" /></a>
+  <label class="relative block flex-1">
     <span class="sr-only">Browse documentation</span>
     <select
       data-docs-nav
       class="w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm font-medium text-slate-800"
     >
-      <option value="/" selected={currentPath === '/'}>Intro</option>
+      {/* Home matches no option; without this the first doc would read as selected. */}
+      {currentPath === '/' && <option value="" hidden selected>Browse…</option>}
       {
         groups.map((group) => (
           <optgroup label={group.label}>
