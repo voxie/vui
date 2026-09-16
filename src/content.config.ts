@@ -13,6 +13,7 @@ const skills = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/skills' }),
 	schema: z.object({
 		title: z.string(),
+		order: z.number().default(0),
 	}),
 });
 
