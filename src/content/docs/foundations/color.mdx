@@ -20,23 +20,23 @@ Slate is a ladder of surfaces, lightest to darkest. The page sits in the middle 
 <Card class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-3 items-center">
   <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-white"></div>
   <code class="text-xs">white</code>
-  <span class="text-sm">Card <code class="text-xs">default</code>. The workhorse panel.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Card <code class="text-xs">default</code>. The workhorse panel.</span>
 
   <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-slate-50"></div>
   <code class="text-xs">slate-50</code>
-  <span class="text-sm">Card <code class="text-xs">glass</code>. Lets inputs stand out from the panel.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Card <code class="text-xs">glass</code>. Lets inputs stand out from the panel.</span>
 
   <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-slate-200"></div>
   <code class="text-xs">slate-200</code>
-  <span class="text-sm">The page background. Everything else is measured against this.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">The page background. Everything else is measured against this.</span>
 
   <div class="rounded-lg bg-slate-300"><div class="h-10 w-16 rounded-[inherit] border border-slate-900/10 bg-slate-300/30"></div></div>
   <code class="text-xs">slate-300/30</code>
-  <span class="text-sm">Card <code class="text-xs">sunken</code>. Sidebars and collapsible containers.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Card <code class="text-xs">sunken</code>. Sidebars and collapsible containers.</span>
 
   <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-slate-700"></div>
   <code class="text-xs">slate-700</code>
-  <span class="text-sm">Card <code class="text-xs">dark</code>. Only the app navigation bar.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Card <code class="text-xs">dark</code>. Only the app navigation bar.</span>
 </Card>
 
 ### Neutrals step, they don't jump
@@ -61,11 +61,11 @@ An accent shows up at one of two weights. Which one depends on whether you can p
 
 **Labels**, anything that only gets read, run on the **tint**. That is a 100 fill, the 900 of the same hue for the text, a 300 border, and a 500 icon. [Badge](/docs/components/badge) is the one that matters today.
 
-<Card class="not-prose grid grid-cols-[max-content_max-content_max-content_1fr] gap-x-6 gap-y-4 items-center">
+<Card class="not-prose grid grid-cols-[max-content_max-content_1fr] sm:grid-cols-[max-content_max-content_max-content_1fr] gap-x-4 sm:gap-x-6 gap-y-4 items-center">
   <span class="text-2xs font-extrabold tracking-wide uppercase text-slate-500">Control</span>
   <span class="text-2xs font-extrabold tracking-wide uppercase text-slate-500">Label</span>
   <span></span>
-  <span></span>
+  <span class="hidden sm:block"></span>
 
   <div class="flex gap-1">
     <div class="h-10 w-10 rounded-l-lg bg-sky-300"></div>
@@ -73,7 +73,7 @@ An accent shows up at one of two weights. Which one depends on whether you can p
   </div>
   <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-sky-300 bg-sky-100 text-sm font-medium text-sky-900">Aa</div>
   <code class="text-xs">sky</code>
-  <span class="text-sm">The primary action. One per screen, ideally. It also marks a positive trend on a chart.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">The primary action. One per screen, ideally. It also marks a positive trend on a chart.</span>
 
   <div class="flex gap-1">
     <div class="h-10 w-10 rounded-l-lg bg-teal-300"></div>
@@ -81,7 +81,7 @@ An accent shows up at one of two weights. Which one depends on whether you can p
   </div>
   <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-teal-300 bg-teal-100 text-sm font-medium text-teal-900">Aa</div>
   <code class="text-xs">teal</code>
-  <span class="text-sm">Success or completion states.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Success or completion states.</span>
 
   <div class="flex gap-1">
     <div class="h-10 w-10 rounded-l-lg bg-amber-300"></div>
@@ -89,7 +89,7 @@ An accent shows up at one of two weights. Which one depends on whether you can p
   </div>
   <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-amber-300 bg-amber-100 text-sm font-medium text-amber-900">Aa</div>
   <code class="text-xs">amber</code>
-  <span class="text-sm">Caution. Something needs a look, but nothing is broken. Sparingly, it also draws attention outside warning semantics. The Quick Blast button uses it that way.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Caution. Something needs a look, but nothing is broken. Sparingly, it also draws attention outside warning semantics. The Quick Blast button uses it that way.</span>
 
   <div class="flex gap-1">
     <div class="h-10 w-10 rounded-l-lg bg-rose-300"></div>
@@ -97,7 +97,7 @@ An accent shows up at one of two weights. Which one depends on whether you can p
   </div>
   <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-rose-300 bg-rose-100 text-sm font-medium text-rose-900">Aa</div>
   <code class="text-xs">rose</code>
-  <span class="text-sm">Destructive or failing. Deleting, disconnecting, errors.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Destructive or failing. Deleting, disconnecting, errors.</span>
 
   <div class="flex gap-1">
     <div class="h-10 w-10 rounded-l-lg bg-violet-300"></div>
@@ -105,7 +105,7 @@ An accent shows up at one of two weights. Which one depends on whether you can p
   </div>
   <div class="flex h-10 w-20 items-center justify-center rounded-lg border border-violet-300 bg-violet-100 text-sm font-medium text-violet-900">Aa</div>
   <code class="text-xs">violet</code>
-  <span class="text-sm">Accent, with no status attached. Use it sparingly. Current uses: AI, segments, badge callouts.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Accent, with no status attached. Use it sparingly. Current uses: AI, segments, badge callouts.</span>
 </Card>
 
 A control is one thing on a screen and has to be found, so it takes the saturated rung. A label repeats and has to sit still while you read past it, so it takes the tint. The tint also measures better at the size labels live at. [Contrast](#contrast) has the numbers.
@@ -151,26 +151,28 @@ The palette is these five. For the chart with ten keys, [Badge](/docs/components
 
 Text sitting on a surface uses four colors, and only four.
 
-<Card class="not-prose grid grid-cols-4 gap-6">
-  <div class="h-24 rounded-lg bg-slate-700"></div>
-  <div class="h-24 rounded-lg bg-slate-800"></div>
-  <div class="h-24 rounded-lg bg-slate-500"></div>
-  <div class="h-24 rounded-lg bg-sky-700"></div>
-
+<Card class="not-prose grid grid-cols-2 gap-6 sm:grid-cols-4">
   <div>
-    <p class="font-extrabold">slate-700</p>
+    <div class="h-24 rounded-lg bg-slate-700"></div>
+    <p class="mt-6 font-extrabold">slate-700</p>
     <p class="mt-1 text-sm leading-snug text-slate-500">Body copy. The default for text on a surface.</p>
   </div>
+
   <div>
-    <p class="font-extrabold">slate-800</p>
+    <div class="h-24 rounded-lg bg-slate-800"></div>
+    <p class="mt-6 font-extrabold">slate-800</p>
     <p class="mt-1 text-sm leading-snug text-slate-500">Headings, and anything that has to stand out of body copy.</p>
   </div>
+
   <div>
-    <p class="font-extrabold">slate-500</p>
+    <div class="h-24 rounded-lg bg-slate-500"></div>
+    <p class="mt-6 font-extrabold">slate-500</p>
     <p class="mt-1 text-sm leading-snug text-slate-500">Supporting copy that has to step back from a heading or the text around it.</p>
   </div>
+
   <div>
-    <p class="font-extrabold">sky-700</p>
+    <div class="h-24 rounded-lg bg-sky-700"></div>
+    <p class="mt-6 font-extrabold">sky-700</p>
     <p class="mt-1 text-sm leading-snug text-slate-500">Marks text as a link inside body copy.</p>
   </div>
 </Card>
