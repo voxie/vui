@@ -9,7 +9,7 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
 ---
 
 <Layout title="Documentation">
-  <h1 class="text-3xl">Voxie User Interface Docs</h1>
+  <h1>Voxie User Interface Docs</h1>
 
   <Card
     surface="layered"
@@ -25,7 +25,7 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
       class="flex flex-col"
       padding="compact"
     >
-      <h3 class="mb-1">Docs</h3>
+      <h3 class="mb-1 text-base font-extrabold leading-snug text-slate-800">Docs</h3>
       <p class="text-xs text-slate-500 leading-snug grow mb-4">Foundations, components, patterns and guidance.</p>
       <Button href="/docs/foundations/look-and-feel">Look and Feel <i class="fa-solid fa-arrow-right"></i></Button>
     </Card>
@@ -34,7 +34,7 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
       class="flex flex-col"
       padding="compact"
     >
-      <h3 class="mb-1">Skills</h3>
+      <h3 class="mb-1 text-base font-extrabold leading-snug text-slate-800">Skills</h3>
       <p class="text-xs text-slate-500 leading-snug grow mb-4">The same docs written as instructions for AI agents.</p>
       <Button href="/skills/intro">Skills Intro <i class="fa-solid fa-arrow-right"></i></Button>
     </Card>
@@ -43,7 +43,7 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
       class="flex flex-col"
       padding="compact"
     >
-      <h3 class="mb-1">Test&nbsp;Pages</h3>
+      <h3 class="mb-1 text-base font-extrabold leading-snug text-slate-800">Test&nbsp;Pages</h3>
       <p class="text-xs text-slate-500 leading-snug grow mb-4">A set of real Voxie screens, stripped of every class, for testing guidance and rules.</p>
       <Button href="/test-pages">Overview <i class="fa-solid fa-arrow-right"></i></Button>
     </Card>
