@@ -26,6 +26,8 @@ These are not preferences. Fix them on sight, in new prose and in prose you are 
 
 **No abbreviations.** No e.g., i.e., or etc. Write "such as" or "like", and either finish the list or stop it cleanly.
 
+**Links live inside the sentence.** A link is part of the sentence that explains the thing, never a sentence of its own tacked on after it. "[Button](/docs/components/button#two-buttons) has the layout" and "See [Button](/docs/components/button)" are the shapes to cut. Put the link on the words the reader would already be reading ("When a form ends in [two buttons](/docs/components/button#two-buttons), ..."), or on a phrase that names what's at the other end ("For the full rule and an example read [two buttons](/docs/components/button#two-buttons)").
+
 **Never hard-wrap prose.** A paragraph, a list item, or a comment is one line, however long it runs. Code fences, tables, and JSX keep whatever line structure they need.
 
 ## Before and after
@@ -62,6 +64,12 @@ The team as the subject, replaced by the system:
 
 > The main content sits in Tailwind's `container`, with a max width and padding.
 
+A link tacked on as its own sentence, folded into the sentence it belongs to:
+
+> When a form ends in two buttons, the primary goes on the right and fills the width. [Button](/docs/components/button#two-buttons) has the layout.
+
+> When a form ends in [two buttons](/docs/components/button#two-buttons), the primary goes on the right and fills the width.
+
 ## Behavior and direction
 
 Every page has two kinds of sentences, and they are handled differently.
@@ -89,7 +97,7 @@ Write like a colleague explaining the component at a desk. Plain, concrete, a li
 - Contrast is written `10.4:1` for WCAG 2.x and `Lc 98` for APCA. Lengths are `64px` and `40rem`, with no space. Ranges take an en dash: `10–12px`.
 - Props, values, slot names, and surface names go in backticks. Colors in running prose do not, so "sky" and "slate-300" are bare when you are talking about them as colors.
 - Bold is for a label as it appears on screen, like the **More** button, and for a term at the point the sentence defines it. It is not for emphasis. Keys go in `<kbd>`.
-- Link another page at its first mention, and again later where the reader would want to jump. The link text is the page title and the path is absolute: `[Card](/docs/components/card)`, `[Color](/docs/foundations/color)`. A section on another page takes its anchor: `[SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card)`.
+- Link another page at its first mention, and again later where the reader would want to jump. The link text is the page title, or the words in the sentence that name what's at the other end, and the link sits inside the sentence that explains the thing. The path is absolute: `[Card](/docs/components/card)`, `[Color](/docs/foundations/color)`. A section on another page takes its anchor: `[SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card)`.
 - No marketing adjectives. Nothing is powerful, seamless, or robust.
 - Second person is fine and normal. "Leave `sitsOn` off and you get..." reads better than a passive equivalent.
 

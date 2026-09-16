@@ -125,6 +125,17 @@ The `size` prop controls height, padding, and corner radius. The sizes are `xs`,
   <div class="not-prose"><Button block>Block button</Button></div>
 </Card>
 
+### Two buttons
+
+When a card, the floating action panel, or a [modal's action bar](/docs/components/modal#the-action-bar) ends in two buttons, the primary action goes on the right and fills the width. Give it `block` and write it last. The secondary button sits on the left at its own width.
+
+<Card>
+  <div class="not-prose flex gap-3">
+    <Button>Cancel</Button>
+    <Button color="sky" block>Save changes</Button>
+  </div>
+</Card>
+
 ### Link
 
 Pass an `href` to render an `<a>` instead of a `<button>`. Styling is identical.
