@@ -1,0 +1,145 @@
+---
+title: Alert
+order: 11
+---
+
+import Alert from '@ui/Alert.vue';
+import Card from '@ui/Card.vue';
+import AlertDismissExample from '@site/AlertDismissExample.vue';
+import AlertActionsExample from '@site/AlertActionsExample.vue';
+import AlertDescriptionExample from '@site/AlertDescriptionExample.vue';
+
+An alert is a message that sits in the page, for something the reader needs to know about the screen they are on. It fills the width of its container and stays until it is dismissed or its parent removes it. It has a `role` of `alert`, so a screen reader announces it when it appears.
+
+An alert sits on the label weight from [Color](/docs/foundations/color): a 100 fill, a 900 label, a 300 border, and a 500 icon. It is the same treatment a [Badge](/docs/components/badge) gets, at a size that holds a sentence.
+
+## Examples
+
+### Color
+
+The `color` prop sets the tint. The choices are `sky` (the default), `teal`, `amber`, `rose`, `violet`, and `slate`.
+
+<Card>
+  <div class="not-prose space-y-3">
+    <Alert>A sky alert, the default.</Alert>
+    <Alert color="teal">A teal alert.</Alert>
+    <Alert color="amber">An amber alert.</Alert>
+    <Alert color="rose">A rose alert.</Alert>
+    <Alert color="violet">A violet alert.</Alert>
+    <Alert color="slate">A slate alert.</Alert>
+  </div>
+</Card>
+
+The meanings come from [Color](/docs/foundations/color). Teal is success or completion. Amber is caution. Rose is failing or destructive. Sky is the primary thing on the screen. Violet is an accent with no status attached. Slate has no meaning at all.
+
+### Calm
+
+`calm` swaps the tinted fill for slate-100 and the border for slate-200, and keeps the color on the text and icon. The text moves from the 900 to the 950 of the hue, since the 900 loses its tint on a slate fill. The message still reads as its color, with less of it on the page.
+
+<Card>
+  <div class="not-prose space-y-3">
+    <Alert calm>A calm sky alert.</Alert>
+    <Alert calm color="amber">A calm amber alert.</Alert>
+    <Alert calm color="rose">A calm rose alert.</Alert>
+  </div>
+</Card>
+
+### Surface
+
+On a white or glass card the alert carries its 300 border and no shadow. On the page background, or anything slate-200 or darker, it takes a shadow and the border drops to the 50 of the fill. The shadow does the separating, so the border only has to finish the edge.
+
+It works that out from the [Card](/docs/components/card) it's inside. The page is the one surface with no component to announce it. That's what `sitsOn` is for. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+
+<div class="not-prose space-y-3">
+  <Alert sitsOn="background">A sky alert on the page background.</Alert>
+  <Alert sitsOn="background" color="rose">A rose alert on the page background.</Alert>
+  <Alert sitsOn="background" calm color="rose">A calm rose alert on the page background.</Alert>
+</div>
+
+### Dismissing
+
+The close button is on by default. Pressing it hides the alert and emits `close`. Bind `v-model` to bring the alert back, or to know from outside that it went. Left unbound, the alert tracks its own visibility.
+
+<Card>
+  <div class="not-prose">
+    <AlertDismissExample client:load />
+  </div>
+</Card>
+
+`dismissible` off removes the button. The alert then stays until its parent stops rendering it, for a message the reader has to act on rather than wave away.
+
+<Card>
+  <div class="not-prose">
+    <Alert color="amber" dismissible={false}>Your trial ends in <span class="font-extrabold">three days</span>.</Alert>
+  </div>
+</Card>
+
+### Actions
+
+The `actions` slot sits between the message and the close button. It holds a [Button](/docs/components/button) or two. Only `sm` buttons go in an alert. A larger one makes the alert taller than the ones around it, and stacked alerts should read as one height.
+
+The button takes the alert's color, so the two read as one thing. The alert announces its fill to the slot the way a [Card](/docs/components/card) does, so a slate button on a slate alert steps up to slate-300 instead of vanishing into the fill.
+
+<Card>
+  <div class="not-prose">
+    <AlertActionsExample />
+  </div>
+</Card>
+
+On a calm alert the button keeps the color the alert gave up.
+
+<Card>
+  <div class="not-prose">
+    <AlertActionsExample calm />
+  </div>
+</Card>
+
+### Description
+
+The `description` slot puts a body under the message. The message becomes the title, the icon and the buttons line up on it, and the description sits underneath in the 800 of the hue, starting where the title starts. Bold the part of the title that matters yourself. A list in the description gets its bullets back.
+
+<Card>
+  <div class="not-prose">
+    <AlertDescriptionExample />
+  </div>
+</Card>
+
+Both are slots rather than props, so part of the title can be bold, or carry a badge.
+
+### Icon
+
+The icon is a filled exclamation circle at the 500 of the alert's color. The `icon` slot replaces it. The slot takes the same color, so an icon dropped in needs no class of its own.
+
+<Card>
+  <div class="not-prose space-y-3">
+    <Alert color="teal">
+      <i slot="icon" aria-hidden="true" class="fa-solid fa-circle-check"></i>
+      Your message was delivered.
+    </Alert>
+    <Alert color="rose">
+      <i slot="icon" aria-hidden="true" class="fa-solid fa-triangle-exclamation"></i>
+      The message could not be sent.
+    </Alert>
+  </div>
+</Card>
+
+The icon is decorative, so it needs `aria-hidden`. The words carry the meaning.
+
+## Interaction
+
+An alert responds to nothing except its close button, which is a transparent [Button](/docs/components/button) at `sm`. It shows a fill on hover and answers <kbd>Enter</kbd> and <kbd>Space</kbd> like any button. There is no auto-dismiss. An alert that goes away on its own is a toast, and this system has none yet.
+
+## Contrast
+
+Every color clears WCAG AAA and APCA's Lc 75 mark for body text.
+
+| Fill        | Label       | WCAG 2.x | APCA   |
+| ----------- | ----------- | -------- | ------ |
+| sky-100     | sky-900     | 8.2:1    | Lc 82  |
+| teal-100    | teal-900    | 8.4:1    | Lc 83  |
+| amber-100   | amber-900   | 8.2:1    | Lc 83  |
+| rose-100    | rose-900    | 8.0:1    | Lc 78  |
+| violet-100  | violet-900  | 9.3:1    | Lc 83  |
+| slate-100   | slate-900   | 16.3:1   | Lc 98  |
+
+The 500 icon lands between 1.9:1 and 3.7:1 on its own tint, the same as a badge's icon, so it reinforces the message and never replaces it. A 100 fill barely separates from the surface, so the 300 border is part of the treatment. [Badge](/docs/components/badge#what-the-tint-costs) has the numbers for both.
