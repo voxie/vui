@@ -64,7 +64,7 @@ const trackClasses = computed(() => {
 	if (props.disabled) return dark.value ? 'bg-slate-800/50' : 'bg-slate-200';
 	if (model.value) return 'bg-sky-400 hover:bg-sky-500/80';
 	if (dark.value) return 'bg-slate-800 hover:bg-slate-900';
-	if (surface.value === 'sunken') return 'bg-slate-400/80 hover:bg-slate-400';
+	if (surface.value === 'sunken') return 'bg-slate-400/50 hover:bg-slate-400';
 	if (surface.value === 'default') return 'bg-slate-200 hover:bg-slate-300';
 	return 'bg-slate-300 hover:bg-slate-400/60';
 });

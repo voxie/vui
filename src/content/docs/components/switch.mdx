@@ -36,13 +36,13 @@ The two label columns are always the same width, taken from the longer of the tw
 
 ### Surface
 
-A switch works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. The on track is sky-400 on every surface. The off track is slate-300, and steps away from the surface where slate-300 would vanish into it. On white it lightens to slate-200. On `sunken` it goes to slate-400 at 80%. On `dark` it goes the other way, to slate-800, so the switch reads as a well in the panel rather than a lighter patch on it.
+A switch works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. The on track is sky-400 on every surface. The off track is slate-300, and steps away from the surface where slate-300 would vanish into it. On white it lightens to slate-200. On `sunken` it goes to slate-400 at 50%. On `dark` it goes the other way, to slate-800, so the switch reads as a well in the panel rather than a lighter patch on it.
 
 | Sitting on   | Which is     | Off track     |
 | ------------ | ------------ | ------------- |
 | `default`    | white        | slate-200     |
 | `glass`      | slate-50     | slate-300     |
-| `sunken`     | slate-300/30 | slate-400/80  |
+| `sunken`     | slate-300/30 | slate-400/50  |
 | `dark`       | slate-700    | slate-800     |
 | `background` | slate-200    | slate-300     |
 
@@ -105,7 +105,7 @@ The `size` prop sets the track, and in the labeled form the text and its padding
 
 ## Interaction
 
-Hovering deepens the track, sky-400 to sky-500 at 80% when on, slate-200 to slate-300 when off on white, slate-300 to slate-400 at 60% when off elsewhere, and slate-800 to slate-900 when off on `dark`, and stretches the thumb to 105% of its width. Pressing stretches it to 110%. Both stretches are `motion-safe`, so they don't run for someone who has asked for reduced motion, and a disabled or loading switch doesn't stretch at all.
+Hovering deepens the track, sky-400 to sky-500 at 80% when on, slate-200 to slate-300 when off on white, slate-300 to slate-400 at 60% when off on `glass` and `background`, slate-400 at 50% to solid slate-400 when off on `sunken`, and slate-800 to slate-900 when off on `dark`, and stretches the thumb to 105% of its width. Pressing stretches it to 110%. Both stretches are `motion-safe`, so they don't run for someone who has asked for reduced motion, and a disabled or loading switch doesn't stretch at all.
 
 The thumb takes 200ms to cross the track on an ease-out curve, quick and without a bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly). The label fades run 300ms.
 
@@ -127,7 +127,7 @@ Everything else is the browser's. <kbd>Tab</kbd> reaches the switch, and <kbd>Sp
 | slate-300 track            | slate-50    | 1.4:1    | Lc 20  |
 | slate-800 track            | dark        | 1.4:1    | Lc 0   |
 | white thumb                | slate-800   | 14.7:1   | Lc 104 |
-| slate-400/80 track         | sunken      | 1.9:1    | Lc 35  |
+| slate-400/50 track         | sunken      | 1.5:1    | Lc 20  |
 | slate-800 label at 40%     | sky-400     | 2.0:1    | Lc 26  |
 | slate-800 label at 40%     | slate-200   | 2.2:1    | Lc 39  |
 | slate-800 label at 40%     | slate-300   | 2.2:1    | Lc 34  |
