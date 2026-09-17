@@ -1,0 +1,34 @@
+---
+title: Icons
+order: 4
+---
+
+import IconTable from '@site/IconTable.vue';
+
+Icons come from Font Awesome Pro, self-hosted alongside the rest of the styles so every page has them with nothing to import. Most are solid. A few are regular, like the clipboard and the star, where an outline suits the weight of what sits around it.
+
+The Pro catalog is licensed here, so a Pro-only icon is as available as a free one. That license is commercial, so the font files stay out of any public repository.
+
+An icon is an `<i>` tag carrying two classes, the variant and the name.
+
+```html
+<i class="fa-solid fa-trash"></i>
+```
+
+Only classic solid and classic regular are installed. A `fa-light`, `fa-duotone`, or `fa-brands` class falls back to the solid glyph, so the icon comes out at the wrong weight while looking almost right. A sharp class renders nothing at all, and so does a brands-only name like `fa-shopify`. Neither case warns you.
+
+Size and color come from Tailwind utilities rather than Font Awesome's own `fa-lg` and `fa-2x`, so an icon moves on the same scale as the text beside it.
+
+```html
+<i class="fa-solid fa-trash text-sm text-slate-700"></i>
+```
+
+## Meaning
+
+Every icon the application uses, with the meaning its usage sites imply. That middle column is a record of what the code does today, not a rule. The last column is filled only where a rule exists, so most of it is still empty.
+
+An icon name appears once per variant, since the same glyph can carry different meanings solid and outline. A variant in red is one this site does not install, so its preview is blank and the icon renders nothing.
+
+Search covers the name, the variant, and both guidance columns, so "deprecated" finds every alias on its way out.
+
+<IconTable client:load />
