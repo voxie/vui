@@ -79,25 +79,25 @@ Everything else on this page applies to a boxed checkbox as well. Error recolors
 
 ### Surface
 
-A checkbox works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. An unchecked box is white, and what draws its boundary is what changes. A checked box is sky-300 with a sky-500 border on every surface.
+A checkbox works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. An unchecked box has no fill, so the surface shows through it and its boundary is what changes. A checked box is sky-300 with a sky-500 border on every surface.
 
 | Sitting on   | Which is     | Boundary          |
 | ------------ | ------------ | ----------------- |
 | `default`    | white        | slate-300 border  |
 | `glass`      | slate-50     | slate-300 border  |
 | `sunken`     | slate-300/30 | slate-400 border  |
-| `dark`       | slate-700    | slate-900 border  |
-| `background` | slate-200    | shadow, no border |
+| `dark`       | slate-700    | slate-500 border  |
+| `background` | slate-200    | slate-400 border  |
 
 <CheckboxSurfacesExample client:load />
 
 The label goes white on the dark surface, and the description slate-300. Everywhere else they are slate-800 and slate-500.
 
-A boxed checkbox takes the same border as its marker, and slate-300 on the page background, where the marker would take the shadow instead. The marker inside it never carries the shadow. Checked, the box goes white on every surface but `dark`, where it goes slate-800 so the white label stays readable.
+A boxed checkbox takes the same border as its marker, except on `dark`, where the box drops to slate-900. The marker inside it never carries the shadow. Checked, the box goes white on every surface but `dark`, where it goes slate-800 so the white label stays readable.
 
 <CheckboxBoxedSurfacesExample client:load />
 
-The page background is the only surface that gets the shadow, and the only one with no border. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+The page background is the only surface that gets the shadow. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
 
 ### Size
 
@@ -123,7 +123,7 @@ There is no `xs` or `xl`. [Input](/docs/components/input), [Select](/docs/compon
   </div>
 </Card>
 
-The border is there in the resting state too, so only its color changes and nothing moves when a form fails validation. On the page background the resting border is transparent rather than absent, for the same reason.
+The border is there in the resting state too, so only its color changes and nothing moves when a form fails validation.
 
 `hint` is the same line before anything goes wrong, at slate-600 behind an info mark. A checkbox can show both.
 
@@ -135,7 +135,7 @@ The border is there in the resting state too, so only its color changes and noth
 
 ### Disabled
 
-`disabled` swaps the white fill for slate-100 and drops the label to slate-500. A checked box that's disabled keeps its check, in slate-400, rather than losing the state along with the control.
+`disabled` fills the box slate-100 and drops the label to slate-500. A checked box that's disabled keeps its check, in slate-400, rather than losing the state along with the control.
 
 <Card surface="glass">
   <div class="not-prose flex flex-col gap-3">
@@ -169,7 +169,9 @@ Everything else is the browser's. <kbd>Tab</kbd> reaches the box and <kbd>Space<
 | sky-300 fill            | white      | 1.7:1    | Lc 29  |
 | slate-300 border        | white      | 1.5:1    | Lc 23  |
 | slate-400 border        | sunken     | 2.0:1    | Lc 33  |
-| slate-900 border        | dark       | 1.7:1    | Lc 8   |
+| slate-500 border        | dark       | 2.2:1    | Lc 19  |
+| slate-900 box border    | dark       | 1.7:1    | Lc 8   |
+| slate-400 border        | background | 2.1:1    | Lc 36  |
 | rose-300 border         | white      | 1.9:1    | Lc 37  |
 | slate-400 check         | slate-100  | 2.4:1    | Lc 45  |
 

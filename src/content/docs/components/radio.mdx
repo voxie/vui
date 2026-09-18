@@ -63,21 +63,21 @@ The label is `font-medium` and slate-800, a step lighter than the extrabold labe
 
 ### Surface
 
-A radio works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. An unpicked radio is white, and what draws its boundary is what changes. Picking it drops the fill, so a sky-500 ring and a sky-500 dot are all that's left and the surface shows through the gap between them.
+A radio works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. The circle has no fill, so the surface shows through it and its border is what changes. Picking it swaps the border for a sky-500 ring and lands a sky-500 dot inside.
 
 | Sitting on   | Which is     | Boundary          |
 | ------------ | ------------ | ----------------- |
 | `default`    | white        | slate-300 border  |
 | `glass`      | slate-50     | slate-300 border  |
 | `sunken`     | slate-300/30 | slate-400 border  |
-| `dark`       | slate-700    | slate-900 border  |
-| `background` | slate-200    | slate-300 border  |
+| `dark`       | slate-700    | slate-500 border  |
+| `background` | slate-200    | slate-400 border  |
 
 <RadioSurfacesExample client:load />
 
 The label goes white on the dark surface, and the description slate-300. Everywhere else they are slate-800 and slate-500.
 
-A boxed radio takes the same border as its circle. Picked, the box goes white on every surface but `dark`, where it goes slate-800 so the white label stays readable.
+A boxed radio takes the same border as its circle, except on `dark`, where the box drops to slate-900. Picked, the box goes white on every surface but `dark`, where it goes slate-800 so the white label stays readable.
 
 <RadioBoxedSurfacesExample client:load />
 
@@ -115,7 +115,7 @@ A group has one answer, so it has one message. Put `error` on the last radio in 
 
 ### Disabled
 
-`disabled` swaps the white fill for slate-100 and drops the label to slate-500. A picked radio that's disabled keeps its dot, in slate-400, rather than losing the answer along with the control.
+`disabled` fills the circle slate-100 and drops the label to slate-500. A picked radio that's disabled keeps its dot, in slate-400, rather than losing the answer along with the control.
 
 <Card surface="glass">
   <div class="not-prose flex flex-col gap-3">
@@ -148,8 +148,9 @@ Everything else is the browser's. A group is one tab stop, landing on whichever 
 | sky-500 ring and dot    | glass      | 2.6:1    | Lc 49  |
 | slate-300 border        | white      | 1.5:1    | Lc 23  |
 | slate-400 border        | sunken     | 2.0:1    | Lc 33  |
-| slate-900 border        | dark       | 1.7:1    | Lc 8   |
-| slate-300 border        | background | 1.2:1    | Lc 9   |
+| slate-500 border        | dark       | 2.2:1    | Lc 19  |
+| slate-900 box border    | dark       | 1.7:1    | Lc 8   |
+| slate-400 border        | background | 2.1:1    | Lc 36  |
 | rose-300 border         | white      | 1.9:1    | Lc 37  |
 | slate-400 dot           | slate-100  | 2.4:1    | Lc 45  |
 

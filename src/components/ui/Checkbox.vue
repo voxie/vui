@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId, watchEffect } from 'vue';
-import { useControlBoundary, useSurface, type Surface } from './surface.ts';
+import { useSurface, type Surface } from './surface.ts';
 
 type CheckboxSize = 'sm' | 'md' | 'lg';
 
@@ -53,7 +53,6 @@ const slots = defineSlots<{
 const model = defineModel<boolean | (string | number)[]>();
 
 const surface = useSurface(() => props.sitsOn);
-const boundary = useControlBoundary(() => props.sitsOn);
 
 // The whole row is the hover target, so the lift comes off the group rather
 // than the marker's own hover. A boxed row's border is the boundary, so the
@@ -63,12 +62,10 @@ const shadow = computed(() =>
 );
 
 // The resting border, a step darker than the shared boundary to hold against
-// the surface, and darker again where the surface is. The page background
-// keeps the boundary's shadow and transparent border.
+// the surface, and darker again where the surface is.
 const restingBorder = computed(() => {
-	if (surface.value === 'dark') return 'border-slate-900';
-	if (surface.value === 'sunken') return 'border-slate-400';
-	if (surface.value === 'background') return boundary.value.border;
+	if (surface.value === 'dark') return 'border-slate-500';
+	if (surface.value === 'sunken' || surface.value === 'background') return 'border-slate-400';
 	return 'border-slate-300';
 });
 
@@ -117,12 +114,12 @@ const sizeClasses = computed(() => {
 // The box rests transparent so the surface shows through, and goes white when
 // checked. On the dark surface white would swallow the white label, so it
 // takes the step below the panel instead.
-// The box takes the marker's border, one shade darker on hover. It carries no
-// shadow, so on the page background it draws slate-300 rather than nothing.
+// The box takes the marker's border, one shade darker on hover, except on
+// dark, where it drops to slate-900 so it sinks into the panel.
 const boxBorder = computed(() => {
 	if (surface.value === 'dark') return 'border-slate-900';
-	if (surface.value === 'sunken') return 'border-slate-400 hover:border-slate-500';
-	return 'border-slate-300 hover:border-slate-400';
+	if (surface.value === 'sunken' || surface.value === 'background') return [restingBorder.value, 'hover:border-slate-500'];
+	return [restingBorder.value, 'hover:border-slate-400'];
 });
 
 const boxClasses = computed(() => {
@@ -148,7 +145,7 @@ const markerClasses = computed(() => {
 	if (props.disabled) return 'border-slate-200 bg-slate-100 text-slate-400 shadow-none';
 	const on = checked.value || props.indeterminate;
 	const border = props.error ? 'border-rose-300' : on ? 'border-sky-500' : restingBorder.value;
-	return [on ? 'bg-sky-300 text-black' : `bg-white ${shadow.value}`, border];
+	return [on ? 'bg-sky-300 text-black' : shadow.value, border];
 });
 
 defineExpose({

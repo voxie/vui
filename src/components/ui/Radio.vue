@@ -53,8 +53,8 @@ const surface = useSurface(() => props.sitsOn);
 // A radio carries no shadow, so its border runs a step darker than the other
 // controls' to hold against the surface, and darker again where the surface is.
 const restingBorder = computed(() => {
-	if (surface.value === 'dark') return 'border-slate-900';
-	if (surface.value === 'sunken') return 'border-slate-400';
+	if (surface.value === 'dark') return 'border-slate-500';
+	if (surface.value === 'sunken' || surface.value === 'background') return 'border-slate-400';
 	return 'border-slate-300';
 });
 
@@ -97,10 +97,11 @@ const sizeClasses = computed(() => {
 // The box rests transparent so the surface shows through, and goes white when
 // picked. On the dark surface white would swallow the white label, so it takes
 // the step below the panel instead.
-// The box takes the circle's border, one shade darker on hover.
+// The box takes the circle's border, one shade darker on hover, except on
+// dark, where it drops to slate-900 so it sinks into the panel.
 const boxBorder = computed(() => {
-	if (surface.value === 'dark') return restingBorder.value;
-	if (surface.value === 'sunken') return [restingBorder.value, 'hover:border-slate-500'];
+	if (surface.value === 'dark') return 'border-slate-900';
+	if (surface.value === 'sunken' || surface.value === 'background') return [restingBorder.value, 'hover:border-slate-500'];
 	return [restingBorder.value, 'hover:border-slate-400'];
 });
 
@@ -122,14 +123,14 @@ const textClasses = computed(() => {
 	return { label: dark ? 'text-white' : 'text-slate-800', description: dark ? 'text-slate-300' : 'text-slate-500' };
 });
 
-// Picked is a ring rather than a fill. The border takes the size's ring width,
-// a dot lands inside it, and the white drops away so the surface shows through
-// the gap between the two.
+// The circle has no fill, so the surface shows through it. Picked is a ring
+// rather than a fill: the border takes the size's ring width and a dot lands
+// inside it.
 const markerClasses = computed(() => {
 	const ring = checked.value ? sizeClasses.value.ring : 'border';
 	if (props.disabled) return [ring, 'border-slate-200 bg-slate-100'];
-	if (props.error) return [ring, 'border-rose-300', checked.value ? '' : 'bg-white'];
-	return checked.value ? [ring, 'border-sky-500'] : [ring, 'bg-white', restingBorder.value];
+	if (props.error) return [ring, 'border-rose-300'];
+	return checked.value ? [ring, 'border-sky-500'] : [ring, restingBorder.value];
 });
 
 defineExpose({
