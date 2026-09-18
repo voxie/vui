@@ -157,8 +157,11 @@ const pillClasses = computed(() => {
 	const ownFill = checked.value && !bar?.indicatorReady.value ? 'bg-slate-200' : '';
 	if (disabled.value) return checked.value ? [ownFill, 'text-slate-500'] : 'text-slate-400';
 	if (checked.value) return [ownFill, 'text-slate-800'];
-	return 'text-slate-500 group-hover/radio:bg-slate-100 group-hover/radio:text-slate-700';
+	return 'text-slate-500 group-hover/radio:text-slate-700';
 });
+
+// Only an unpicked option does anything, so only it hovers and presses.
+const pillInert = computed(() => checked.value || disabled.value);
 
 defineExpose({
 	input,
@@ -186,10 +189,22 @@ defineExpose({
 		<span
 			data-radio-pill
 			:data-picked="checked"
-			class="relative z-10 flex items-center truncate rounded-full font-medium transition ease-out group-active/radio:duration-75"
-			:class="[pillSizeClasses, pillClasses, disabled || checked ? '' : 'motion-safe:group-active/radio:scale-[0.96]']"
+			class="relative z-10 flex items-center rounded-full font-medium transition ease-out"
+			:class="[pillSizeClasses, pillClasses]"
 		>
-			<slot>{{ props.label }}</slot>
+			<!-- The hover fill is a box of its own so the press can be a fixed 2px
+			     inset like Button's rather than a scale, the same as Tab. -->
+			<span
+				v-if="!pillInert"
+				aria-hidden="true"
+				class="absolute inset-0 -z-10 rounded-full transition-all ease-out group-hover/radio:bg-slate-100 group-active/radio:duration-75 motion-safe:group-active/radio:inset-0.5 motion-reduce:group-active/radio:opacity-70"
+			></span>
+			<span
+				class="relative truncate transition ease-out"
+				:class="pillInert ? '' : 'group-active/radio:duration-75 motion-safe:group-active/radio:scale-[0.96]'"
+			>
+				<slot>{{ props.label }}</slot>
+			</span>
 		</span>
 	</label>
 
