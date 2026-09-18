@@ -25,6 +25,7 @@ const position = reactive({
 	left: 'auto',
 	right: 'auto',
 	maxHeight: 'none',
+	borderRadius: '0.5rem',
 });
 
 const toggle = () => {
@@ -42,7 +43,13 @@ const place = () => {
 	// Measured from the control, not the wrapper: a flex parent can stretch the
 	// wrapper past the control, and the panel has to hang off the control.
 	const rootRect = root.value.getBoundingClientRect();
-	const rect = (root.value.firstElementChild ?? root.value).getBoundingClientRect();
+	const control = root.value.firstElementChild ?? root.value;
+	const rect = control.getBoundingClientRect();
+
+	// The panel takes the control's corners, so a menu under a `sm` button is
+	// as tight as the button. A control with square corners keeps the 8px.
+	const radius = getComputedStyle(control).borderTopLeftRadius;
+	position.borderRadius = radius && radius !== '0px' ? radius : '0.5rem';
 	const { offsetWidth: width, offsetHeight: height } = panel.value;
 
 	const overflowsRight = rect.left + width > window.innerWidth;
@@ -133,7 +140,7 @@ watch([open, () => props.placement, () => props.teleport], place, { flush: 'post
 			     the trigger's wrapper would take them as a second press. -->
 			<ul
 				ref="panel"
-				class="absolute z-50 m-0 list-none divide-y divide-solid divide-slate-200 overflow-y-auto rounded-lg border border-solid border-slate-200 bg-white p-0 shadow-xl"
+				class="absolute z-50 m-0 list-none divide-y divide-solid divide-slate-200 overflow-y-auto border border-solid border-slate-200 bg-white p-0 shadow-xl"
 				:style="position"
 				@click.stop="open = false"
 			>

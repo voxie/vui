@@ -51,7 +51,7 @@ The menu can't put anything inside your control, so two things are yours to set.
 
 Every row in the `items` slot is a `MenuItem`. Give it an `href` and it renders an `<a>`. Leave it off and it renders a `<button>`, and its `@click` is where the action goes. Either way a press closes the panel.
 
-A row is `text-xs`, semibold, black on white, with `24px` of padding at the sides and `16px` above and below. Its content is a flex row with the ends pushed apart, so a label written first and an icon written last land at the two edges. Rows are divided by a slate-200 line, and the panel clips the first and last to its corners.
+A row is `text-xs`, semibold, black on white, with `24px` of padding at the sides and `16px` above and below. Its content is a flex row with the ends pushed apart, so a label written first and an icon written last land at the two edges. Rows are divided by a slate-200 line, and the panel clips the first and last to its corners. The corners are the control's own, read when the panel opens, so a panel under a `sm` button is rounded to 8px and one under an `md` button to 12px. A control with square corners gets 8px.
 
 `disabled` fades a row to half and drops its pointer, so it neither presses nor closes the panel. A disabled row stays in the list so the reader can see the action exists.
 
