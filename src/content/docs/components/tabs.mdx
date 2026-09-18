@@ -4,33 +4,46 @@ order: 13
 ---
 
 import TabsExample from '@site/TabsExample.vue';
+import TabsToExample from '@site/TabsToExample.vue';
 import TabsSurfacesExample from '@site/TabsSurfacesExample.vue';
+import TabsKeepMountedExample from '@site/TabsKeepMountedExample.vue';
 
-Tabs is a row of choices in a track, with a white pill behind the one that is picked. Choosing another tab slides the pill over to it. It is two components. `Tabs` is the track, holds the `v-model`, and handles the keyboard. `Tab` is one choice inside it, and has a `value` and a label.
+Tabs is a row of choices in a track, with a white pill behind the one that is picked, and a block of content for each. Picking a tab slides the pill over to it and swaps the block below. It is four components. `Tabs` holds the `v-model` and the settings the others read. `TabList` is the track and handles the keyboard. `Tab` is one choice inside the track, with a `value` and a label. `TabPanel` is the block for one `value`, and shows while that tab is picked.
 
 ```vue
-<Tabs v-model="view" aria-label="Conversations">
-  <Tab value="all">All</Tab>
-  <Tab value="open">Open</Tab>
-  <Tab value="closed">Closed</Tab>
+<h3 id="to">To</h3>
+<Tabs v-model="to" size="lg">
+  <TabList aria-labelledby="to">
+    <Tab value="segments">Segments</Tab>
+    <Tab value="external">External List</Tab>
+    <Tab value="everyone">Everyone</Tab>
+  </TabList>
+
+  <TabPanel value="segments">…the segment picker…</TabPanel>
+  <TabPanel value="external">…the list field…</TabPanel>
+  <TabPanel value="everyone">…</TabPanel>
 </Tabs>
 ```
 
-The `v-model` is the `value` of the picked tab. Every tab is the same width, taken from the widest label, and the track fills whatever it is in.
+The `v-model` is the `value` of the picked tab. A tab and a panel with the same `value` are linked, and the ids and `aria-controls` and `aria-labelledby` between them are written for you. `Tabs` renders a plain `<div>` with no layout of its own, so the track and the panels go wherever the section needs them, and classes on it are yours. The track is a `<div role="tablist">`, each tab a `<button role="tab">`, and each panel a `<div role="tabpanel">`.
 
-The track is a `<div role="tablist">` and each tab is a `<button role="tab">`. Give the track a name with `aria-label`, or point `aria-labelledby` at a heading next to it. Tabs draws no panels. Show and hide the content for each tab yourself, off the `v-model`.
+Give the track a name. Point `aria-labelledby` at the heading above it, or pass `aria-label` where there is no heading.
+
+Use Tabs when a section of a screen has a few alternative blocks of content and only one shows at a time. Each tab names one block. Picking a tab swaps the block below the track without leaving the page. If picking one would take you to another page, it is a link, and it belongs in the [Navbar](/docs/components/navbar) or in the content. A choice that is only a value, with no block to reveal, is not a tab. Neither is a filter that narrows one list. Reach for [Radio](/docs/components/radio) for both.
+
+Tabs sit directly above the content they switch, the full width of the section, under a heading that names the question they answer. There is always a current tab. The first is picked by default, and the panels are never all hidden.
 
 ## Examples
 
-### Picking a tab
+### The To step
 
-Click a tab and the pill slides to it, and the `v-model` takes its `value`.
+The audience step of the campaign composer. The heading names the question, the track answers it, and each tab reveals the fields for that answer.
 
-<TabsExample client:load readout />
+<TabsToExample client:load />
 
 ### Surface
 
-Tabs works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. The track is the off track of a [Switch](/docs/components/switch#surface), surface for surface. It is slate-300, and steps away from the surface where slate-300 would vanish into it. On white it lightens to slate-200. On `sunken` it goes to slate-400 at 50%. On `dark` it goes the other way, to slate-800, so the tabs read as a well in the panel. The pill is white everywhere.
+Tabs works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. The track is the off track of a [Switch](/docs/components/switch#surface), surface for surface. It is slate-300, and steps away from the surface where slate-300 would vanish into it. On white it lightens to slate-200. On `sunken` it goes to slate-400 at 50%. On `dark` it goes the other way, to slate-800, so the tabs read as a well in the panel. The pill is white everywhere. The panels have no fill of their own and sit straight on the surface.
 
 | Sitting on   | Which is     | Track         |
 | ------------ | ------------ | ------------- |
@@ -50,7 +63,7 @@ The page background is the surface nothing can announce. That's what `sitsOn` is
 
 ### Size
 
-The `size` prop sets the height of the track, and the text and padding of each tab. The sizes are `sm`, `md` (the default), and `lg`. Each is the height of the labeled [Switch](/docs/components/switch#size) and of a [Button](/docs/components/button#size) at the same size, so the three sit level in a toolbar. At `md` and `lg` the tabs sit 4px apart, the same as the padding around them, since the [space between things never exceeds the space to the edge](/docs/patterns/page-structure). At `sm` the padding is 2px and the tabs touch.
+The `size` prop on `Tabs` sets the height of the track, and the text and padding of each tab. The sizes are `sm`, `md` (the default), and `lg`. Each is the height of the labeled [Switch](/docs/components/switch#size) and of a [Button](/docs/components/button#size) at the same size, so the three sit level in a toolbar. At `md` and `lg` the tabs sit 4px apart, the same as the padding around them, since the [space between things never exceeds the space to the edge](/docs/patterns/page-structure). At `sm` the padding is 2px and the tabs touch.
 
 <div class="not-prose flex flex-col gap-4">
   <TabsExample client:load size="sm" />
@@ -66,7 +79,7 @@ The `size` prop sets the height of the track, and the text and padding of each t
 
 ### Disabled
 
-`disabled` on the track flattens it to slate-200 and the pill to slate-50, drops every label to slate-400, and ignores presses. The pill stays where it was, so a disabled set of tabs still shows which one is picked. On `dark` the track is slate-800 at 50%, the pill slate-500, and the labels slate-500 with the picked one slate-300.
+`disabled` on `Tabs` flattens the track to slate-200 and the pill to slate-50, drops every label to slate-400, and ignores presses. The pill stays where it was, so a disabled set of tabs still shows which one is picked, and its panel stays up. On `dark` the track is slate-800 at 50%, the pill slate-500, and the labels slate-500 with the picked one slate-300.
 
 <TabsExample client:load disabled />
 
@@ -74,13 +87,23 @@ The `size` prop sets the height of the track, and the text and padding of each t
 
 <TabsExample client:load disabledTab />
 
+### Keeping a panel mounted
+
+A panel is in the DOM only while its tab is picked. Switch away and whatever was inside it is gone, along with anything typed into it. Pass `keepMounted` on a `TabPanel` to keep it in the DOM while hidden, so its fields hold their state.
+
+<TabsKeepMountedExample client:load />
+
+```html
+<TabPanel value="sms" keep-mounted>…</TabPanel>
+```
+
 ## Interaction
 
 Hovering an unpicked tab fills it with slate-400 at 40%, slate-500 at 30% on `sunken`, and slate-700 on `dark`. Pressing it pulls that fill in by 2px on every side and shrinks the label to 96%, the same press as a [Button](/docs/components/button). It is an inset and not a scale, so a tab that has grown wide with the track presses the same as a narrow one. The shrink runs `motion-safe`, and with reduced motion the fill dims to 70% instead. The picked tab and a disabled tab don't hover or press. Clicking the picked tab does nothing, and the cursor stays an arrow over it.
 
 The pill takes 200ms to slide from one tab to the next on an ease-out curve, quick and without a bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly). The label colors cross over in the same 200ms.
 
-<kbd>Tab</kbd> lands on the picked tab and nowhere else in the track. From there <kbd>←</kbd> and <kbd>→</kbd> move to the next tab and pick it as they go, wrapping at either end, and <kbd>Home</kbd> and <kbd>End</kbd> jump to the first and last. Disabled tabs are skipped. Until something is picked, every tab is in the tab order. Focus draws a blue outline around the tab, two pixels wide at a two pixel offset, and only for keyboard focus. Clicking a tab doesn't ring it.
+<kbd>Tab</kbd> lands on the picked tab and nowhere else in the track, and a second <kbd>Tab</kbd> lands on the panel it reveals, whatever is inside it. From the track, <kbd>←</kbd> and <kbd>→</kbd> move to the next tab and pick it as they go, wrapping at either end, and <kbd>Home</kbd> and <kbd>End</kbd> jump to the first and last. Disabled tabs are skipped. Until something is picked, every tab is in the tab order. Focus draws a blue outline around the tab, two pixels wide at a two pixel offset, and only for keyboard focus. Clicking a tab doesn't ring it. The panel takes the same outline at a four pixel offset when it has the focus.
 
 Until the page has hydrated, the picked tab paints its own white in place of the pill, so server-rendered HTML shows a selection and nothing flashes when the pill takes over.
 

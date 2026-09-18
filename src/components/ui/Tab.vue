@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
-import { TabsKey } from './tabs.ts';
+import { TabListKey, TabsKey } from './tabs.ts';
 
 const props = withDefaults(
 	defineProps<{
@@ -13,16 +13,18 @@ const props = withDefaults(
 	},
 );
 
-const tabs = inject(TabsKey, null);
+const tabs = inject(TabsKey);
+if (!tabs) throw new Error('Tab has to be inside a TabList, inside Tabs.');
+const list = inject(TabListKey, null);
 
-const selected = computed(() => tabs?.current.value === props.value);
-const disabled = computed(() => props.disabled || Boolean(tabs?.disabled.value));
-const dark = computed(() => tabs?.surface.value === 'dark');
+const selected = computed(() => tabs.current.value === props.value);
+const disabled = computed(() => props.disabled || tabs.disabled.value);
+const dark = computed(() => tabs.surface.value === 'dark');
 
 // Padding and text from the labeled Switch at each size. Height comes from
 // the track.
 const sizeClasses = computed(() => {
-	const size = tabs?.size.value ?? 'md';
+	const size = tabs.size.value;
 	if (size === 'sm') return { radius: 'rounded-md', label: 'px-3 text-xs' };
 	if (size === 'lg') return { radius: 'rounded-lg', label: 'px-5 text-sm' };
 	return { radius: 'rounded-lg', label: 'px-4 text-xs' };
@@ -32,7 +34,7 @@ const sizeClasses = computed(() => {
 // track, and go light only on dark.
 const textClasses = computed(() => {
 	if (disabled.value) {
-		if (tabs?.disabled.value && selected.value) return dark.value ? 'text-slate-300' : 'text-slate-400';
+		if (tabs.disabled.value && selected.value) return dark.value ? 'text-slate-300' : 'text-slate-400';
 		return dark.value ? 'text-slate-500' : 'text-slate-400';
 	}
 	if (selected.value) return 'text-slate-800';
@@ -44,24 +46,24 @@ const inert = computed(() => selected.value || disabled.value);
 
 const hoverClasses = computed(() => {
 	if (dark.value) return 'group-hover/tab:bg-slate-700';
-	if (tabs?.surface.value === 'sunken') return 'group-hover/tab:bg-slate-500/30';
+	if (tabs.surface.value === 'sunken') return 'group-hover/tab:bg-slate-500/30';
 	return 'group-hover/tab:bg-slate-400/40';
 });
 
 // Only while the sliding indicator hasn't measured this tab yet. The same
 // white and shadow, so nothing flashes when the indicator takes over.
 const ownBackground = computed(() => {
-	if (!selected.value || tabs?.indicatorReady.value) return '';
+	if (!selected.value || list?.indicatorReady.value) return '';
 	if (disabled.value) return dark.value ? 'bg-slate-500' : 'bg-slate-50';
 	return 'bg-white shadow-md shadow-slate-800/30';
 });
 
 // One tab holds the tab stop and the arrow keys reach the rest. With nothing
 // selected yet every tab is reachable.
-const tabindex = computed(() => (selected.value || tabs?.current.value === undefined ? 0 : -1));
+const tabindex = computed(() => (selected.value || tabs.current.value === undefined ? 0 : -1));
 
 const onClick = () => {
-	if (!disabled.value) tabs?.select(props.value);
+	if (!disabled.value) tabs.select(props.value);
 };
 </script>
 
@@ -69,6 +71,8 @@ const onClick = () => {
 	<button
 		type="button"
 		role="tab"
+		:id="tabs.tabId(props.value)"
+		:aria-controls="tabs.panelId(props.value)"
 		:aria-selected="selected"
 		:disabled="disabled"
 		:tabindex="tabindex"
