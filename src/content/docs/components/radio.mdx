@@ -7,20 +7,31 @@ import Radio from '@ui/Radio.vue';
 import Card from '@ui/Card.vue';
 import RadioSurfacesExample from '@site/RadioSurfacesExample.vue';
 import RadioGroupExample from '@site/RadioGroupExample.vue';
+import RadioBoxedExample from '@site/RadioBoxedExample.vue';
 import RadioErrorExample from '@site/RadioErrorExample.vue';
 
 A radio is a native `<input type="radio">` with a drawn dot beside its label. The input itself is there, hidden to the eye and not to the browser, so it submits with a form, answers to the arrow keys, and announces itself as a radio.
 
 A radio never stands alone. Two or more share one `v-model` and one `name`, and the model holds the `value` of whichever is picked. The `name` is what makes them a group to the browser, and without it the arrow keys won't move between them.
 
+Most groups are `boxed`, which draws each option as a bordered row filling the width of its container. The bare radio is for a set that sits inside something else, like a table row or a dense settings list.
+
 ```html
-<Radio v-model="when" name="when-to-send" value="now" label="Send now" />
-<Radio v-model="when" name="when-to-send" value="later" label="Schedule for later" />
+<Radio v-model="when" name="when-to-send" value="now" label="Send now" boxed />
+<Radio v-model="when" name="when-to-send" value="later" label="Schedule for later" boxed />
 ```
 
 How a field goes together with its label, its description, and its messages is on the [Forms](/docs/patterns/forms) page.
 
 ## Examples
+
+### Boxed
+
+`boxed` draws the row as a bordered box that fills its container. The box rests transparent with a slate-200 border, so the surface shows through, and goes white with a sky-500 border when picked. The circle centers on the block rather than on the first line, so a description pushes it down to the middle of the row. Stack boxed rows with `gap-2`.
+
+<RadioBoxedExample client:load />
+
+Everything else on this page applies to a boxed radio as well. Error recolors the box's border along with the circle, disabled quiets the label, and the sizes set the padding along with the circle.
 
 ### A group
 
@@ -114,7 +125,7 @@ Nothing happens on hover. A radio has no shadow to deepen.
 
 Pressing shrinks the circle to 90% for the length of the press, and leaves the label where it is. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
 
-Focus draws a blue outline around the circle, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it.
+Focus draws a blue outline around the circle, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it. A boxed radio draws the outline around the box instead, and its border steps to slate-300 on hover.
 
 Everything else is the browser's. A group is one tab stop, landing on whichever radio is picked. The arrow keys move through the set and pick as they go, wrapping at either end.
 

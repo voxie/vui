@@ -28,10 +28,14 @@ const props = withDefaults(
 		error?: string | string[];
 		hint?: string;
 		disabled?: boolean;
+		// Draws the whole row as a bordered box that fills its container, the
+		// usual form for a set of options. The circle centers on the block.
+		boxed?: boolean;
 	}>(),
 	{
 		size: 'md',
 		disabled: false,
+		boxed: false,
 	},
 );
 
@@ -60,6 +64,8 @@ const input = ref<HTMLInputElement | null>(null);
 
 const checked = computed(() => model.value === props.value);
 
+const hasDescription = computed(() => Boolean(props.description || slots.description));
+
 const hasText = computed(
 	() => Boolean(props.label || slots.default || props.description || slots.description),
 );
@@ -77,13 +83,26 @@ const describedBy = computed(() => {
 });
 
 // `ring` is the picked border, which is 1px at sm. A 2px ring on a 12px
-// circle would leave the dot with no gap around it.
+// circle would leave the dot with no gap around it. `box` is the boxed row's
+// padding, deeper when a description makes the row two lines.
 const sizeClasses = computed(() => {
 	if (props.size === 'sm')
-		return { marker: 'h-3 w-3', dot: 'h-1.5 w-1.5', ring: 'border', gap: 'gap-2', label: 'text-xs leading-4', description: 'text-xs leading-4' };
+		return { marker: 'h-3 w-3', dot: 'h-1.5 w-1.5', ring: 'border', gap: 'gap-2', boxGap: 'gap-3', box: hasDescription.value ? 'px-3 py-3' : 'px-3 py-1.5', label: 'text-xs leading-4', description: 'text-xs leading-4' };
 	if (props.size === 'lg')
-		return { marker: 'h-5 w-5', dot: 'h-3 w-3', ring: 'border-2', gap: 'gap-2.5', label: 'text-base leading-6', description: 'text-sm leading-5' };
-	return { marker: 'h-4 w-4', dot: 'h-2 w-2', ring: 'border-2', gap: 'gap-2.5', label: 'text-sm leading-5', description: 'text-xs leading-4' };
+		return { marker: 'h-5 w-5', dot: 'h-3 w-3', ring: 'border-2', gap: 'gap-2.5', boxGap: 'gap-4', box: hasDescription.value ? 'px-5 py-5' : 'px-5 py-2.5', label: 'text-base leading-6', description: 'text-sm leading-5' };
+	return { marker: 'h-4 w-4', dot: 'h-2 w-2', ring: 'border-2', gap: 'gap-2.5', boxGap: 'gap-4', box: hasDescription.value ? 'px-4 py-4' : 'px-4 py-2', label: 'text-sm leading-5', description: 'text-xs leading-4' };
+});
+
+// The box rests transparent so the surface shows through, and goes white when
+// picked. On the dark surface white would swallow the white label, so it takes
+// the step below the panel instead.
+const boxClasses = computed(() => {
+	if (!props.boxed) return ['w-fit items-start', sizeClasses.value.gap];
+	const base = ['w-full items-center rounded-xl border border-solid transition ease-out', sizeClasses.value.box, sizeClasses.value.boxGap];
+	if (props.disabled) return [...base, 'border-slate-200'];
+	if (props.error) return [...base, 'border-rose-300', checked.value ? 'bg-white' : ''];
+	if (checked.value) return [...base, 'border-sky-500', surface.value === 'dark' ? 'bg-slate-800' : 'bg-white'];
+	return [...base, restingBorder.value, 'hover:border-slate-300'];
 });
 
 // The label is slate-800 everywhere but the dark surface, where it would sit
@@ -114,8 +133,8 @@ defineExpose({
 <template>
 	<div class="font-sans">
 		<label
-			class="group/radio relative flex w-fit items-start"
-			:class="[sizeClasses.gap, props.disabled ? 'cursor-not-allowed' : 'cursor-pointer']"
+			class="group/radio relative flex outline-blue-600"
+			:class="[boxClasses, props.disabled ? 'cursor-not-allowed' : 'cursor-pointer', props.boxed ? 'has-focus-visible:outline-2 has-focus-visible:outline-offset-2' : '']"
 		>
 			<input
 				ref="input"
@@ -131,11 +150,17 @@ defineExpose({
 
 			<!-- The circle is 4px shorter than its label's line box at every size, so
 			     2px of top margin centers it on the first line and leaves it there
-			     when the text wraps. -->
+			     when the text wraps. A boxed row centers it on the block instead,
+			     and the focus outline moves to the box. -->
 			<span
 				aria-hidden="true"
-				class="grid shrink-0 place-items-center rounded-full border-solid transition ease-out outline-blue-600 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 motion-safe:group-active/radio:scale-90 group-active/radio:duration-75"
-				:class="[sizeClasses.marker, markerClasses, hasText ? 'mt-0.5' : '']"
+				class="grid shrink-0 place-items-center rounded-full border-solid transition ease-out outline-blue-600 motion-safe:group-active/radio:scale-90 group-active/radio:duration-75"
+				:class="[
+					sizeClasses.marker,
+					markerClasses,
+					hasText && !props.boxed ? 'mt-0.5' : '',
+					props.boxed ? '' : 'peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2',
+				]"
 			>
 				<span
 					v-if="checked"

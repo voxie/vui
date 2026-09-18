@@ -31,11 +31,15 @@ const props = withDefaults(
 		// where only some are on. It's a display state, so the model is untouched
 		// until someone presses it.
 		indeterminate?: boolean;
+		// Draws the whole row as a bordered box that fills its container, the
+		// usual form for a set of options. The box centers on the block.
+		boxed?: boolean;
 	}>(),
 	{
 		size: 'md',
 		disabled: false,
 		indeterminate: false,
+		boxed: false,
 	},
 );
 
@@ -52,10 +56,19 @@ const surface = useSurface(() => props.sitsOn);
 const boundary = useControlBoundary(() => props.sitsOn);
 
 // The whole row is the hover target, so the lift comes off the group rather
-// than the marker's own hover.
+// than the marker's own hover. A boxed row's border is the boundary, so the
+// marker inside it carries no shadow.
 const shadow = computed(() =>
-	surface.value === 'background' ? 'shadow group-hover/checkbox:shadow-md' : 'shadow-none',
+	surface.value === 'background' && !props.boxed ? 'shadow group-hover/checkbox:shadow-md' : 'shadow-none',
 );
+
+// The box carries no shadow, so the page background can't rely on one to lift
+// it and takes the slate-300 border the sunken surface takes.
+const restingBorder = computed(() =>
+	surface.value === 'background' ? 'border-slate-300' : boundary.value.border,
+);
+
+const hasDescription = computed(() => Boolean(props.description || slots.description));
 
 const errorId = useId();
 const descriptionId = useId();
@@ -87,13 +100,27 @@ const describedBy = computed(() => {
 });
 
 // The marker is the line-height of its own label, so the two line up on the
-// first line however far the text wraps.
+// first line however far the text wraps. `box` is the boxed row's padding,
+// deeper when a description makes the row two lines.
 const sizeClasses = computed(() => {
 	if (props.size === 'sm')
-		return { marker: 'h-4 w-4 rounded', mark: 'text-2xs', gap: 'gap-2', label: 'text-xs leading-4', description: 'text-xs leading-4' };
+		return { marker: 'h-4 w-4 rounded', mark: 'text-2xs', gap: 'gap-2', boxGap: 'gap-3', box: hasDescription.value ? 'px-3 py-3' : 'px-3 py-1.5', label: 'text-xs leading-4', description: 'text-xs leading-4' };
 	if (props.size === 'lg')
-		return { marker: 'h-6 w-6 rounded-lg', mark: 'text-sm', gap: 'gap-3', label: 'text-base leading-6', description: 'text-sm leading-5' };
-	return { marker: 'h-5 w-5 rounded-md', mark: 'text-xs', gap: 'gap-2.5', label: 'text-sm leading-5', description: 'text-xs leading-4' };
+		return { marker: 'h-6 w-6 rounded-lg', mark: 'text-sm', gap: 'gap-3', boxGap: 'gap-4', box: hasDescription.value ? 'px-5 py-5' : 'px-5 py-2.5', label: 'text-base leading-6', description: 'text-sm leading-5' };
+	return { marker: 'h-5 w-5 rounded-md', mark: 'text-xs', gap: 'gap-2.5', boxGap: 'gap-4', box: hasDescription.value ? 'px-4 py-4' : 'px-4 py-2', label: 'text-sm leading-5', description: 'text-xs leading-4' };
+});
+
+// The box rests transparent so the surface shows through, and goes white when
+// checked. On the dark surface white would swallow the white label, so it
+// takes the step below the panel instead.
+const boxClasses = computed(() => {
+	if (!props.boxed) return ['w-fit items-start', sizeClasses.value.gap];
+	const base = ['w-full items-center rounded-xl border border-solid transition ease-out', sizeClasses.value.box, sizeClasses.value.boxGap];
+	const on = checked.value || props.indeterminate;
+	if (props.disabled) return [...base, 'border-slate-200'];
+	if (props.error) return [...base, 'border-rose-300', on ? 'bg-white' : ''];
+	if (on) return [...base, 'border-sky-500', surface.value === 'dark' ? 'bg-slate-800' : 'bg-white'];
+	return [...base, restingBorder.value, 'hover:border-slate-300'];
 });
 
 // The label is slate-800 everywhere but the dark surface, where it would sit
@@ -121,8 +148,8 @@ defineExpose({
 <template>
 	<div class="font-sans">
 		<label
-			class="group/checkbox relative flex w-fit items-start"
-			:class="[sizeClasses.gap, props.disabled ? 'cursor-not-allowed' : 'cursor-pointer']"
+			class="group/checkbox relative flex outline-blue-600"
+			:class="[boxClasses, props.disabled ? 'cursor-not-allowed' : 'cursor-pointer', props.boxed ? 'has-focus-visible:outline-2 has-focus-visible:outline-offset-2' : '']"
 		>
 			<input
 				ref="input"
@@ -136,10 +163,15 @@ defineExpose({
 				class="peer sr-only"
 			/>
 
+			<!-- A boxed row moves the focus outline to the box. -->
 			<span
 				aria-hidden="true"
-				class="grid shrink-0 place-items-center border border-solid transition ease-out outline-blue-600 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 motion-safe:group-active/checkbox:scale-90 group-active/checkbox:duration-75"
-				:class="[sizeClasses.marker, markerClasses]"
+				class="grid shrink-0 place-items-center border border-solid transition ease-out outline-blue-600 motion-safe:group-active/checkbox:scale-90 group-active/checkbox:duration-75"
+				:class="[
+					sizeClasses.marker,
+					markerClasses,
+					props.boxed ? '' : 'peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2',
+				]"
 			>
 				<i
 					v-if="props.indeterminate || checked"

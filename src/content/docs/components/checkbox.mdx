@@ -7,6 +7,7 @@ import Checkbox from '@ui/Checkbox.vue';
 import Card from '@ui/Card.vue';
 import CheckboxSurfacesExample from '@site/CheckboxSurfacesExample.vue';
 import CheckboxGroupExample from '@site/CheckboxGroupExample.vue';
+import CheckboxBoxedExample from '@site/CheckboxBoxedExample.vue';
 import CheckboxIndeterminateExample from '@site/CheckboxIndeterminateExample.vue';
 
 A checkbox is a native `<input type="checkbox">` with a drawn box beside its label. The input itself is there, hidden to the eye and not to the browser, so it submits with a form, answers to <kbd>Space</kbd>, and announces itself as a checkbox.
@@ -51,6 +52,14 @@ Bind it to an array for a set, and give each box a `value`. Checking one adds it
 ```
 
 A set gets a `<fieldset>` and a `<legend>`, so the question above the options is read out with each of them. Stack the boxes with `gap-2`, or `gap-3` when they carry descriptions.
+
+### Boxed
+
+`boxed` draws the row as a bordered box that fills its container, the same form a [Radio](/docs/components/radio#boxed) takes for a set of options. The box rests transparent with a slate-200 border, so the surface shows through, and goes white with a sky-500 border when checked. The marker centers on the block rather than on the first line. Stack boxed rows with `gap-2`.
+
+<CheckboxBoxedExample client:load />
+
+Everything else on this page applies to a boxed checkbox as well. Error recolors the box's border along with the marker, disabled quiets the label, and the sizes set the padding along with the marker. On the page background the box takes a slate-300 border and the marker inside it drops its shadow.
 
 ### Indeterminate
 
@@ -136,7 +145,7 @@ On the page background, hovering anywhere in the row deepens the shadow from `sh
 
 Pressing shrinks the box to 90% for the length of the press, and leaves the label where it is. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
 
-Focus draws a blue outline around the box, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it.
+Focus draws a blue outline around the box, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it. A boxed checkbox draws the outline around the whole row instead, and its border steps to slate-300 on hover.
 
 Everything else is the browser's. <kbd>Tab</kbd> reaches the box and <kbd>Space</kbd> toggles it. Boxes in a set are each their own tab stop, unlike a set of radios.
 
