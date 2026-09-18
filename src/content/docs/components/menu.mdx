@@ -1,0 +1,125 @@
+---
+title: Menu
+order: 15
+---
+
+import MenuExample from '@site/MenuExample.vue';
+import MenuRowsExample from '@site/MenuRowsExample.vue';
+
+A menu is a short list of actions behind one control. Press the control and a white panel drops under it holding a row per action. Pick one and the panel goes. Its main job is the overflow menu at the end of a list row, where three or four actions have to fit behind a single button.
+
+The component is a wrapper and one sub-component. `Menu` holds the control in its default slot, positions the panel, and opens and closes it. `MenuItem` is a row in the panel.
+
+```vue
+<Menu placement="right">
+  <template #default="{ open }">
+    <Button outline aria-label="Actions" aria-haspopup="true" :aria-expanded="open">
+      <i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
+    </Button>
+  </template>
+
+  <template #items>
+    <MenuItem href="/campaigns/12/edit">
+      Edit
+      <i class="fa-solid fa-pen" aria-hidden="true"></i>
+    </MenuItem>
+    <MenuItem @click="duplicate">
+      Duplicate
+      <i class="fa-solid fa-copy" aria-hidden="true"></i>
+    </MenuItem>
+    <MenuItem disabled>
+      Delete
+      <i class="fa-solid fa-trash" aria-hidden="true"></i>
+    </MenuItem>
+  </template>
+</Menu>
+```
+
+This is a menu of actions, not a way to pick a value. A control that sets a field is a [Select](/docs/components/select).
+
+## Examples
+
+### The control
+
+Whatever you put in the default slot is the control, and a press anywhere on it toggles the panel. Most of the time that's a [Button](/docs/components/button) holding an ellipsis, with an `aria-label` since the icon says nothing on its own.
+
+<MenuExample client:load />
+
+The menu can't put anything inside your control, so two things are yours to set. The slot hands you `open` for both. `aria-haspopup="true"` says the button opens something, and `:aria-expanded="open"` says whether it's showing. The explicit `#default` template is what lets the slot be destructured.
+
+### Items
+
+Every row in the `items` slot is a `MenuItem`. Give it an `href` and it renders an `<a>`. Leave it off and it renders a `<button>`, and its `@click` is where the action goes. Either way a press closes the panel.
+
+A row is `text-xs`, semibold, black on white, with `24px` of padding at the sides and `16px` above and below. Its content is a flex row with the ends pushed apart, so a label written first and an icon written last land at the two edges. Rows are divided by a slate-200 line, and the panel clips the first and last to its corners.
+
+`disabled` fades a row to half and drops its pointer, so it neither presses nor closes the panel. A disabled row stays in the list so the reader can see the action exists.
+
+The panel is a `<ul>` and each `MenuItem` renders its own `<li>`, so a screen reader announces how many rows there are. Anything in the slot that isn't a `MenuItem` needs its own `<li>`.
+
+### Placement
+
+The `placement` prop sets which edge of the control the panel lines up with. The choices are `left` (the default) and `right`. A menu at the end of a row wants `right`, so the panel grows back into the row rather than off the edge of the page.
+
+<MenuExample client:load placement="right" />
+
+The prop is a preference. A panel that would run off the right edge of the window lines up right whatever you asked for, and one that would run off the left edge lines up left.
+
+### In a list row
+
+The shape the product uses most. A short outline button ends each row, and the panel lines up with its right edge.
+
+<MenuRowsExample client:load />
+
+### Rendering at the end of body
+
+The panel is positioned inside the wrapper, so an ancestor that clips its overflow clips the panel too. A scrolling table is the usual one. `teleport` renders the panel at the end of `<body>` instead, at the same spot on screen, where nothing can clip it.
+
+Open the two menus below. The first is clipped by its box. The second has `teleport` and isn't.
+
+<div class="not-prose flex flex-col gap-4">
+  <MenuExample client:load clipped />
+  <MenuExample client:load clipped teleport />
+</div>
+
+A teleported panel is placed from where the control is on screen and moves with it as the page scrolls. It's still the menu's child in Vue, so it still closes on a click outside, on <kbd>Esc</kbd>, and on a row being pressed.
+
+### Long menus
+
+The panel grows to fit its rows until `16px` short of the window edge, then scrolls. The example below holds seventeen rows.
+
+<MenuExample client:load extra={15} />
+
+A panel opening near the bottom of the window flips to open upward when there's more room above the control than below it. It flips only then, so a panel that fits nowhere at least takes the larger space.
+
+### Disabled
+
+`disabled` fades the whole thing to half and stops the control from opening it. Disable the button inside as well, so it doesn't press and can't be reached with <kbd>Tab</kbd>.
+
+<MenuExample client:load disabled />
+
+## Interaction
+
+The panel opens on click and closes on a second click of the control, on a click anywhere outside, on <kbd>Esc</kbd>, or on a row being pressed. Nothing happens on hover. A pointer crossing a list would open menus by accident, and a touchscreen has no hover at all.
+
+It sits `8px` under the control, or `8px` above it when it has flipped, with a slate-200 border and a large shadow.
+
+`open` is two-way. Bind it with `v-model:open` to drive the menu from outside, or read it to know when the panel is showing.
+
+Every row is a real `<button>` or `<a>`, so once the panel is open its rows join the tab order. There are no arrow keys and no `role="menu"`, deliberately. This is a disclosure, a button revealing a short list of controls, and <kbd>Tab</kbd> moves through everything. `role="menu"` would commit it to application-menu semantics and the keyboard contract that comes with them.
+
+Closing with <kbd>Esc</kbd> hands focus back to the control that opened it, when focus was inside.
+
+## Contrast
+
+| Element              | On        | WCAG 2.x |
+| -------------------- | --------- | -------- |
+| black label          | white     | 21:1     |
+| black label, hover   | slate-50  | 20.1:1   |
+| black label, pressed | slate-100 | 19.2:1   |
+| disabled label       | white     | 3.9:1    |
+| slate-200 divider    | white     | 1.2:1    |
+
+The labels clear AA with room to spare, at rest and in both states. The disabled row runs at 3.9:1, which is under AA for text. Disabled controls are exempt, and the row also loses its pointer, so the fade is never the only cue.
+
+The divider is far under, and it isn't asked to carry meaning. The rows are told apart by their padding and the panel is told apart from the page by its border and shadow, not by the line between rows.
