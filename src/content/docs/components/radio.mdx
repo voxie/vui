@@ -8,6 +8,7 @@ import Card from '@ui/Card.vue';
 import RadioSurfacesExample from '@site/RadioSurfacesExample.vue';
 import RadioGroupExample from '@site/RadioGroupExample.vue';
 import RadioBoxedExample from '@site/RadioBoxedExample.vue';
+import RadioBoxedSurfacesExample from '@site/RadioBoxedSurfacesExample.vue';
 import RadioErrorExample from '@site/RadioErrorExample.vue';
 
 A radio is a native `<input type="radio">` with a drawn dot beside its label. The input itself is there, hidden to the eye and not to the browser, so it submits with a form, answers to the arrow keys, and announces itself as a radio.
@@ -27,7 +28,7 @@ How a field goes together with its label, its description, and its messages is o
 
 ### Boxed
 
-`boxed` draws the row as a bordered box that fills its container. The box rests transparent with a slate-200 border, so the surface shows through, and goes white with a sky-500 border when picked. The circle centers on the block rather than on the first line, so a description pushes it down to the middle of the row. Stack boxed rows with `gap-2`.
+`boxed` draws the row as a bordered box that fills its container. The box rests transparent with a slate-300 border, so the surface shows through, and goes white with a sky-500 border when picked. The circle centers on the block rather than on the first line, so a description pushes it down to the middle of the row. Stack boxed rows with `gap-2`.
 
 <RadioBoxedExample client:load />
 
@@ -66,17 +67,21 @@ A radio works out what it is sitting on for itself, by asking the [Card](/docs/c
 
 | Sitting on   | Which is     | Boundary          |
 | ------------ | ------------ | ----------------- |
-| `default`    | white        | slate-200 border  |
-| `glass`      | slate-50     | slate-200 border  |
-| `sunken`     | slate-300/30 | slate-300 border  |
-| `dark`       | slate-700    | slate-200 border  |
+| `default`    | white        | slate-300 border  |
+| `glass`      | slate-50     | slate-300 border  |
+| `sunken`     | slate-300/30 | slate-400 border  |
+| `dark`       | slate-700    | slate-900 border  |
 | `background` | slate-200    | slate-300 border  |
 
 <RadioSurfacesExample client:load />
 
 The label goes white on the dark surface, and the description slate-300. Everywhere else they are slate-800 and slate-500.
 
-A radio carries no shadow on any surface, so the page background takes a border like the rest of them. Slate-300, the step sunken takes for the same reason, since slate-200 has the surface almost on top of it. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+A boxed radio takes the same border as its circle. Picked, the box goes white on every surface but `dark`, where it goes slate-800 so the white label stays readable.
+
+<RadioBoxedSurfacesExample client:load />
+
+A radio carries no shadow on any surface, so its border runs a step darker than a [Checkbox](/docs/components/checkbox)'s to hold against the surface, and the page background takes a border like the rest of them. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
 
 ### Size
 
@@ -125,7 +130,7 @@ Nothing happens on hover. A radio has no shadow to deepen.
 
 Pressing shrinks the circle to 90% for the length of the press, and leaves the label where it is. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
 
-Focus draws a blue outline around the circle, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it. A boxed radio draws the outline around the box instead, and its border steps to slate-300 on hover.
+Focus draws a blue outline around the circle, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it. A boxed radio draws the outline around the box instead, and its border steps one shade darker on hover.
 
 Everything else is the browser's. A group is one tab stop, landing on whichever radio is picked. The arrow keys move through the set and pick as they go, wrapping at either end.
 
@@ -141,14 +146,16 @@ Everything else is the browser's. A group is one tab stop, landing on whichever 
 | rose-800 message        | glass      | 7.6:1    | Lc 82  |
 | sky-500 ring and dot    | white      | 2.7:1    | Lc 52  |
 | sky-500 ring and dot    | glass      | 2.6:1    | Lc 49  |
-| slate-200 border        | white      | 1.2:1    | Lc 12  |
+| slate-300 border        | white      | 1.5:1    | Lc 23  |
+| slate-400 border        | sunken     | 2.0:1    | Lc 33  |
+| slate-900 border        | dark       | 1.7:1    | Lc 8   |
 | slate-300 border        | background | 1.2:1    | Lc 9   |
 | rose-300 border         | white      | 1.9:1    | Lc 37  |
 | slate-400 dot           | slate-100  | 2.4:1    | Lc 45  |
 
 The label, the description, and the messages clear AA.
 
-The dot being there is what carries the answer, and a dot is a shape rather than a color, so the state survives without it. The colors themselves don't clear. Sky-500 against a white card is 2.7:1 for the ring and for the dot, short of the 3:1 WCAG asks of a control's boundary. The unpicked circle has the same problem at 1.2:1, and so does the rose-300 error border at 1.9:1, which is why the message under the row carries the error rather than the color.
+The dot being there is what carries the answer, and a dot is a shape rather than a color, so the state survives without it. The colors themselves don't clear. Sky-500 against a white card is 2.7:1 for the ring and for the dot, short of the 3:1 WCAG asks of a control's boundary. The unpicked circle has the same problem at 1.5:1, and so does the rose-300 error border at 1.9:1, which is why the message under the row carries the error rather than the color.
 
 The ring thickens when the radio is picked, at `md` and `lg`, so the weight moves as well as the color.
 

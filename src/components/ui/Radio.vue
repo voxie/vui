@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId } from 'vue';
-import { useControlBoundary, useSurface, type Surface } from './surface.ts';
+import { useSurface, type Surface } from './surface.ts';
 
 type RadioSize = 'sm' | 'md' | 'lg';
 type RadioValue = string | number | boolean;
@@ -49,13 +49,14 @@ const slots = defineSlots<{
 const model = defineModel<RadioValue | undefined>();
 
 const surface = useSurface(() => props.sitsOn);
-const boundary = useControlBoundary(() => props.sitsOn);
 
-// A radio carries no shadow, so the page background can't rely on one to lift
-// it and takes the slate-300 border the sunken surface takes.
-const restingBorder = computed(() =>
-	surface.value === 'background' ? 'border-slate-300' : boundary.value.border,
-);
+// A radio carries no shadow, so its border runs a step darker than the other
+// controls' to hold against the surface, and darker again where the surface is.
+const restingBorder = computed(() => {
+	if (surface.value === 'dark') return 'border-slate-900';
+	if (surface.value === 'sunken') return 'border-slate-400';
+	return 'border-slate-300';
+});
 
 const errorId = useId();
 const descriptionId = useId();
@@ -96,13 +97,20 @@ const sizeClasses = computed(() => {
 // The box rests transparent so the surface shows through, and goes white when
 // picked. On the dark surface white would swallow the white label, so it takes
 // the step below the panel instead.
+// The box takes the circle's border, one shade darker on hover.
+const boxBorder = computed(() => {
+	if (surface.value === 'dark') return restingBorder.value;
+	if (surface.value === 'sunken') return [restingBorder.value, 'hover:border-slate-500'];
+	return [restingBorder.value, 'hover:border-slate-400'];
+});
+
 const boxClasses = computed(() => {
 	if (!props.boxed) return ['w-fit items-start', sizeClasses.value.gap];
 	const base = ['w-full items-center rounded-xl border border-solid transition ease-out', sizeClasses.value.box, sizeClasses.value.boxGap];
 	if (props.disabled) return [...base, 'border-slate-200'];
 	if (props.error) return [...base, 'border-rose-300', checked.value ? 'bg-white' : ''];
 	if (checked.value) return [...base, 'border-sky-500', surface.value === 'dark' ? 'bg-slate-800' : 'bg-white'];
-	return [...base, restingBorder.value, 'hover:border-slate-300'];
+	return [...base, boxBorder.value];
 });
 
 // The label is slate-800 everywhere but the dark surface, where it would sit

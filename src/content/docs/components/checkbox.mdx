@@ -8,6 +8,7 @@ import Card from '@ui/Card.vue';
 import CheckboxSurfacesExample from '@site/CheckboxSurfacesExample.vue';
 import CheckboxGroupExample from '@site/CheckboxGroupExample.vue';
 import CheckboxBoxedExample from '@site/CheckboxBoxedExample.vue';
+import CheckboxBoxedSurfacesExample from '@site/CheckboxBoxedSurfacesExample.vue';
 import CheckboxIndeterminateExample from '@site/CheckboxIndeterminateExample.vue';
 
 A checkbox is a native `<input type="checkbox">` with a drawn box beside its label. The input itself is there, hidden to the eye and not to the browser, so it submits with a form, answers to <kbd>Space</kbd>, and announces itself as a checkbox.
@@ -55,11 +56,11 @@ A set gets a `<fieldset>` and a `<legend>`, so the question above the options is
 
 ### Boxed
 
-`boxed` draws the row as a bordered box that fills its container, the same form a [Radio](/docs/components/radio#boxed) takes for a set of options. The box rests transparent with a slate-200 border, so the surface shows through, and goes white with a sky-500 border when checked. The marker centers on the block rather than on the first line. Stack boxed rows with `gap-2`.
+`boxed` draws the row as a bordered box that fills its container, the same form a [Radio](/docs/components/radio#boxed) takes for a set of options. The box rests transparent with a slate-300 border, so the surface shows through, and goes white with a sky-500 border when checked. The marker centers on the block rather than on the first line. Stack boxed rows with `gap-2`.
 
 <CheckboxBoxedExample client:load />
 
-Everything else on this page applies to a boxed checkbox as well. Error recolors the box's border along with the marker, disabled quiets the label, and the sizes set the padding along with the marker. On the page background the box takes a slate-300 border and the marker inside it drops its shadow.
+Everything else on this page applies to a boxed checkbox as well. Error recolors the box's border along with the marker, disabled quiets the label, and the sizes set the padding along with the marker. On the page background the marker inside the box drops its shadow.
 
 ### Indeterminate
 
@@ -82,15 +83,19 @@ A checkbox works out what it is sitting on for itself, by asking the [Card](/doc
 
 | Sitting on   | Which is     | Boundary          |
 | ------------ | ------------ | ----------------- |
-| `default`    | white        | slate-200 border  |
-| `glass`      | slate-50     | slate-200 border  |
-| `sunken`     | slate-300/30 | slate-300 border  |
-| `dark`       | slate-700    | slate-200 border  |
+| `default`    | white        | slate-300 border  |
+| `glass`      | slate-50     | slate-300 border  |
+| `sunken`     | slate-300/30 | slate-400 border  |
+| `dark`       | slate-700    | slate-900 border  |
 | `background` | slate-200    | shadow, no border |
 
 <CheckboxSurfacesExample client:load />
 
 The label goes white on the dark surface, and the description slate-300. Everywhere else they are slate-800 and slate-500.
+
+A boxed checkbox takes the same border as its marker, and slate-300 on the page background, where the marker would take the shadow instead. The marker inside it never carries the shadow. Checked, the box goes white on every surface but `dark`, where it goes slate-800 so the white label stays readable.
+
+<CheckboxBoxedSurfacesExample client:load />
 
 The page background is the only surface that gets the shadow, and the only one with no border. That's what `sitsOn` is for, since nothing on the page background can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
 
@@ -145,7 +150,7 @@ On the page background, hovering anywhere in the row deepens the shadow from `sh
 
 Pressing shrinks the box to 90% for the length of the press, and leaves the label where it is. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
 
-Focus draws a blue outline around the box, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it. A boxed checkbox draws the outline around the whole row instead, and its border steps to slate-300 on hover.
+Focus draws a blue outline around the box, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing the row doesn't ring it. A boxed checkbox draws the outline around the whole row instead, and its border steps one shade darker on hover.
 
 Everything else is the browser's. <kbd>Tab</kbd> reaches the box and <kbd>Space</kbd> toggles it. Boxes in a set are each their own tab stop, unlike a set of radios.
 
@@ -162,12 +167,14 @@ Everything else is the browser's. <kbd>Tab</kbd> reaches the box and <kbd>Space<
 | rose-800 message        | glass      | 7.6:1    | Lc 82  |
 | sky-500 border          | white      | 2.7:1    | Lc 52  |
 | sky-300 fill            | white      | 1.7:1    | Lc 29  |
-| slate-200 border        | white      | 1.2:1    | Lc 12  |
+| slate-300 border        | white      | 1.5:1    | Lc 23  |
+| slate-400 border        | sunken     | 2.0:1    | Lc 33  |
+| slate-900 border        | dark       | 1.7:1    | Lc 8   |
 | rose-300 border         | white      | 1.9:1    | Lc 37  |
 | slate-400 check         | slate-100  | 2.4:1    | Lc 45  |
 
 The label, the description, and the messages clear AA.
 
-The mark is what carries the state. Black on sky-300 is 12.6:1, so a checked box reads as checked from its shape and not from its color. The fill underneath it doesn't clear anything. Sky-300 against a white card is 1.7:1, and the sky-500 border that edges it is 2.7:1, both short of the 3:1 WCAG asks of a control's boundary. The unchecked box has the same problem at 1.2:1, and so does the rose-300 error border at 1.9:1, which is why the message under the row carries the error rather than the color.
+The mark is what carries the state. Black on sky-300 is 12.6:1, so a checked box reads as checked from its shape and not from its color. The fill underneath it doesn't clear anything. Sky-300 against a white card is 1.7:1, and the sky-500 border that edges it is 2.7:1, both short of the 3:1 WCAG asks of a control's boundary. The unchecked box has the same problem at 1.5:1, and so does the rose-300 error border at 1.9:1, which is why the message under the row carries the error rather than the color.
 
 The disabled check runs slate-400 on slate-100 at 2.4:1. Disabled controls are exempt from the contrast rules, and it is deliberately quiet.

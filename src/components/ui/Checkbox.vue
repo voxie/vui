@@ -62,11 +62,15 @@ const shadow = computed(() =>
 	surface.value === 'background' && !props.boxed ? 'shadow group-hover/checkbox:shadow-md' : 'shadow-none',
 );
 
-// The box carries no shadow, so the page background can't rely on one to lift
-// it and takes the slate-300 border the sunken surface takes.
-const restingBorder = computed(() =>
-	surface.value === 'background' ? 'border-slate-300' : boundary.value.border,
-);
+// The resting border, a step darker than the shared boundary to hold against
+// the surface, and darker again where the surface is. The page background
+// keeps the boundary's shadow and transparent border.
+const restingBorder = computed(() => {
+	if (surface.value === 'dark') return 'border-slate-900';
+	if (surface.value === 'sunken') return 'border-slate-400';
+	if (surface.value === 'background') return boundary.value.border;
+	return 'border-slate-300';
+});
 
 const hasDescription = computed(() => Boolean(props.description || slots.description));
 
@@ -113,6 +117,14 @@ const sizeClasses = computed(() => {
 // The box rests transparent so the surface shows through, and goes white when
 // checked. On the dark surface white would swallow the white label, so it
 // takes the step below the panel instead.
+// The box takes the marker's border, one shade darker on hover. It carries no
+// shadow, so on the page background it draws slate-300 rather than nothing.
+const boxBorder = computed(() => {
+	if (surface.value === 'dark') return 'border-slate-900';
+	if (surface.value === 'sunken') return 'border-slate-400 hover:border-slate-500';
+	return 'border-slate-300 hover:border-slate-400';
+});
+
 const boxClasses = computed(() => {
 	if (!props.boxed) return ['w-fit items-start', sizeClasses.value.gap];
 	const base = ['w-full items-center rounded-xl border border-solid transition ease-out', sizeClasses.value.box, sizeClasses.value.boxGap];
@@ -120,7 +132,7 @@ const boxClasses = computed(() => {
 	if (props.disabled) return [...base, 'border-slate-200'];
 	if (props.error) return [...base, 'border-rose-300', on ? 'bg-white' : ''];
 	if (on) return [...base, 'border-sky-500', surface.value === 'dark' ? 'bg-slate-800' : 'bg-white'];
-	return [...base, restingBorder.value, 'hover:border-slate-300'];
+	return [...base, boxBorder.value];
 });
 
 // The label is slate-800 everywhere but the dark surface, where it would sit
@@ -135,7 +147,7 @@ const textClasses = computed(() => {
 const markerClasses = computed(() => {
 	if (props.disabled) return 'border-slate-200 bg-slate-100 text-slate-400 shadow-none';
 	const on = checked.value || props.indeterminate;
-	const border = props.error ? 'border-rose-300' : on ? 'border-sky-500' : boundary.value.border;
+	const border = props.error ? 'border-rose-300' : on ? 'border-sky-500' : restingBorder.value;
 	return [on ? 'bg-sky-300 text-black' : `bg-white ${shadow.value}`, border];
 });
 
