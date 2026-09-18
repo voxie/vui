@@ -143,8 +143,7 @@ const markerClasses = computed(() => {
 	return checked.value ? [ring, 'border-sky-500'] : [ring, restingBorder.value];
 });
 
-// The pill hugs its label inside a cell that takes an even share of the bar,
-// so the labels space out evenly and the fill stays the label's size.
+// The pill hugs its label, and the bar spaces the pills out evenly.
 const pillSizeClasses = computed(() => {
 	if (size.value === 'sm') return 'h-6 px-2 text-xs';
 	if (size.value === 'lg') return 'h-8 px-3 text-base';
@@ -172,8 +171,8 @@ defineExpose({
 <template>
 	<label
 		v-if="inBar"
-		class="group/radio relative flex min-w-0 flex-1 items-center justify-center rounded-full font-sans outline-blue-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
-		:class="disabled ? 'cursor-not-allowed' : 'cursor-pointer'"
+		class="group/radio relative flex min-w-0 items-center justify-center rounded-full font-sans outline-blue-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
+		:class="disabled ? 'cursor-not-allowed' : checked ? 'cursor-default' : 'cursor-pointer'"
 	>
 		<input
 			ref="input"

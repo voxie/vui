@@ -122,7 +122,7 @@ provide(RadioBarKey, {
 		<div
 			ref="root"
 			role="radiogroup"
-			class="relative flex w-full items-stretch border border-solid transition ease-out"
+			class="relative flex w-full items-stretch justify-evenly border border-solid transition ease-out"
 			:class="[sizeClasses, trackClasses, props.disabled ? 'cursor-not-allowed' : '']"
 			@change="onChange"
 		>
