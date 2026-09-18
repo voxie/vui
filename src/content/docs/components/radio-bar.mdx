@@ -75,7 +75,7 @@ The `size` prop on the bar sets the track and every option in it. The sizes are 
 
 Hovering an unpicked option fills its pill slate-100 and lifts its label to slate-700. The picked option does nothing on hover, since there is nothing left for it to do.
 
-Pressing shrinks the pill to 96% for the length of the press. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
+Picking an option slides the pill to it over 200ms, stretching or shrinking to the new label's width on the way. Pressing shrinks the label to 96% for the length of the press. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
 
 Focus draws a blue outline around the option's cell, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing it doesn't ring it.
 

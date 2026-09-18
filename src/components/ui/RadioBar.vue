@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, useId } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, onUpdated, provide, ref, useId } from 'vue';
 import { useControlBoundary, type Surface } from './surface.ts';
 import { RadioBarKey, type RadioBarSize } from './radioBar.ts';
 
@@ -53,21 +53,87 @@ const trackClasses = computed(() => {
 	return ['bg-white', boundary.value.border, boundary.value.shadow];
 });
 
+const root = ref<HTMLElement | null>(null);
+const indicatorReady = ref(false);
+const indicatorStyle = ref({ left: '0px', top: '0px', width: '0px', height: '0px' });
+
+// Measured from the picked option's pill rather than laid out beside it, so
+// the fill can slide between labels of different widths. Rects rather than
+// offsets, since each pill's offsetParent is its own label.
+const updateIndicator = () => {
+	const pill = root.value?.querySelector<HTMLElement>('[data-radio-pill][data-picked="true"]');
+	if (!pill || !pill.offsetWidth) {
+		indicatorReady.value = false;
+		return;
+	}
+	const track = root.value!.getBoundingClientRect();
+	const rect = pill.getBoundingClientRect();
+	const next = {
+		left: `${rect.left - track.left - root.value!.clientLeft}px`,
+		top: `${rect.top - track.top - root.value!.clientTop}px`,
+		width: `${rect.width}px`,
+		height: `${rect.height}px`,
+	};
+	const prev = indicatorStyle.value;
+	if (next.left !== prev.left || next.top !== prev.top || next.width !== prev.width || next.height !== prev.height) {
+		indicatorStyle.value = next;
+	}
+	indicatorReady.value = true;
+};
+
+let observer: ResizeObserver | undefined;
+
+// The pills as well as the track: a label that changes length moves every
+// option after it without the track changing size.
+const observe = () => {
+	if (!observer || !root.value) return;
+	observer.observe(root.value);
+	root.value.querySelectorAll<HTMLElement>('[data-radio-pill]').forEach((pill) => observer!.observe(pill));
+};
+
+onMounted(() => {
+	if (typeof ResizeObserver !== 'undefined') observer = new ResizeObserver(updateIndicator);
+	observe();
+	updateIndicator();
+});
+
+onUpdated(() => {
+	observe();
+	updateIndicator();
+});
+
+// The pick lives in each radio's model, not here, so the input's change event
+// is what says the pill moved.
+const onChange = () => nextTick(updateIndicator);
+
+onBeforeUnmount(() => observer?.disconnect());
+
 provide(RadioBarKey, {
 	size: computed(() => props.size),
 	disabled: computed(() => props.disabled),
 	invalid,
 	describedBy: computed(() => (invalid.value ? errorId : undefined)),
+	indicatorReady,
 });
 </script>
 
 <template>
 	<div class="font-sans">
 		<div
+			ref="root"
 			role="radiogroup"
-			class="flex w-full items-stretch border border-solid transition ease-out"
+			class="relative flex w-full items-stretch border border-solid transition ease-out"
 			:class="[sizeClasses, trackClasses, props.disabled ? 'cursor-not-allowed' : '']"
+			@change="onChange"
 		>
+			<!-- Hidden until it has been measured. Before that the picked option
+			     paints its own fill, so server-rendered HTML shows a pick. -->
+			<div
+				v-show="indicatorReady"
+				aria-hidden="true"
+				class="absolute z-0 rounded-full bg-slate-200 transition-all duration-200 ease-out"
+				:style="indicatorStyle"
+			></div>
 			<slot />
 		</div>
 

@@ -146,15 +146,17 @@ const markerClasses = computed(() => {
 // The pill hugs its label inside a cell that takes an even share of the bar,
 // so the labels space out evenly and the fill stays the label's size.
 const pillSizeClasses = computed(() => {
-	if (size.value === 'sm') return 'h-6 rounded-md px-1.5 text-xs';
-	if (size.value === 'lg') return 'h-8 rounded-lg px-2.5 text-base';
-	return 'h-7 rounded-lg px-2 text-sm';
+	if (size.value === 'sm') return 'h-6 px-2 text-xs';
+	if (size.value === 'lg') return 'h-8 px-3 text-base';
+	return 'h-7 px-2.5 text-sm';
 });
 
 // The bar is white on every surface, so the pill's colors don't move with it.
+// The picked fill is the bar's sliding pill once it has measured this one.
 const pillClasses = computed(() => {
-	if (disabled.value) return checked.value ? 'bg-slate-200 text-slate-500' : 'text-slate-400';
-	if (checked.value) return 'bg-slate-200 text-slate-800';
+	const ownFill = checked.value && !bar?.indicatorReady.value ? 'bg-slate-200' : '';
+	if (disabled.value) return checked.value ? [ownFill, 'text-slate-500'] : 'text-slate-400';
+	if (checked.value) return [ownFill, 'text-slate-800'];
 	return 'text-slate-500 group-hover/radio:bg-slate-100 group-hover/radio:text-slate-700';
 });
 
@@ -167,7 +169,7 @@ defineExpose({
 <template>
 	<label
 		v-if="inBar"
-		class="group/radio relative flex min-w-0 flex-1 items-center justify-center rounded-md font-sans outline-blue-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
+		class="group/radio relative flex min-w-0 flex-1 items-center justify-center rounded-full font-sans outline-blue-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
 		:class="disabled ? 'cursor-not-allowed' : 'cursor-pointer'"
 	>
 		<input
@@ -182,7 +184,9 @@ defineExpose({
 			class="sr-only"
 		/>
 		<span
-			class="flex items-center truncate font-medium transition ease-out group-active/radio:duration-75"
+			data-radio-pill
+			:data-picked="checked"
+			class="relative z-10 flex items-center truncate rounded-full font-medium transition ease-out group-active/radio:duration-75"
 			:class="[pillSizeClasses, pillClasses, disabled || checked ? '' : 'motion-safe:group-active/radio:scale-[0.96]']"
 		>
 			<slot>{{ props.label }}</slot>
