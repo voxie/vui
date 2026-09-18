@@ -47,8 +47,8 @@ provide(TabsKey, {
 // gives it up to keep the tabs centered.
 const sizeClasses = computed(() => {
 	if (props.size === 'sm') return { track: 'h-8 rounded-lg px-0.5 pt-0.5 pb-px', thumb: 'rounded-md' };
-	if (props.size === 'lg') return { track: 'h-12 rounded-xl gap-2 px-1 pt-1 pb-0.75', thumb: 'rounded-lg' };
-	return { track: 'h-10 rounded-xl gap-2 px-1 pt-1 pb-0.75', thumb: 'rounded-lg' };
+	if (props.size === 'lg') return { track: 'h-12 rounded-xl gap-1 px-1 pt-1 pb-0.75', thumb: 'rounded-lg' };
+	return { track: 'h-10 rounded-xl gap-1 px-1 pt-1 pb-0.75', thumb: 'rounded-lg' };
 });
 
 // The Switch off track, surface for surface: a step darker on sunken, and

@@ -50,7 +50,7 @@ The page background is the surface nothing can announce. That's what `sitsOn` is
 
 ### Size
 
-The `size` prop sets the height of the track, and the text and padding of each tab. The sizes are `sm`, `md` (the default), and `lg`. Each is the height of the labeled [Switch](/docs/components/switch#size) and of a [Button](/docs/components/button#size) at the same size, so the three sit level in a toolbar.
+The `size` prop sets the height of the track, and the text and padding of each tab. The sizes are `sm`, `md` (the default), and `lg`. Each is the height of the labeled [Switch](/docs/components/switch#size) and of a [Button](/docs/components/button#size) at the same size, so the three sit level in a toolbar. At `md` and `lg` the tabs sit 4px apart, the same as the padding around them, since the [space between things never exceeds the space to the edge](/docs/patterns/page-structure). At `sm` the padding is 2px and the tabs touch.
 
 <div class="not-prose flex flex-col gap-4">
   <TabsExample client:load size="sm" />
