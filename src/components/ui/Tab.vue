@@ -74,7 +74,7 @@ const onClick = () => {
 		:tabindex="tabindex"
 		:data-value="props.value"
 		class="group/tab relative z-10 flex h-full items-center justify-center font-semibold whitespace-nowrap transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
-		:class="[sizeClasses.radius, sizeClasses.label, textClasses, ownBackground, disabled ? 'cursor-not-allowed' : 'cursor-pointer']"
+		:class="[sizeClasses.radius, sizeClasses.label, textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected ? 'cursor-default' : 'cursor-pointer']"
 		@click="onClick"
 	>
 		<!-- The hover fill is a box of its own so the press can be a fixed 2px

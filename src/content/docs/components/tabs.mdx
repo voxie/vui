@@ -76,7 +76,7 @@ The `size` prop sets the height of the track, and the text and padding of each t
 
 ## Interaction
 
-Hovering an unpicked tab fills it with slate-400 at 40%, slate-500 at 30% on `sunken`, and slate-700 on `dark`. Pressing it pulls that fill in by 2px on every side and shrinks the label to 96%, the same press as a [Button](/docs/components/button). It is an inset and not a scale, so a tab that has grown wide with the track presses the same as a narrow one. The shrink runs `motion-safe`, and with reduced motion the fill dims to 70% instead. The picked tab and a disabled tab don't hover or press. Clicking the picked tab does nothing.
+Hovering an unpicked tab fills it with slate-400 at 40%, slate-500 at 30% on `sunken`, and slate-700 on `dark`. Pressing it pulls that fill in by 2px on every side and shrinks the label to 96%, the same press as a [Button](/docs/components/button). It is an inset and not a scale, so a tab that has grown wide with the track presses the same as a narrow one. The shrink runs `motion-safe`, and with reduced motion the fill dims to 70% instead. The picked tab and a disabled tab don't hover or press. Clicking the picked tab does nothing, and the cursor stays an arrow over it.
 
 The pill takes 200ms to slide from one tab to the next on an ease-out curve, quick and without a bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly). The label colors cross over in the same 200ms.
 
