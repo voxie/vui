@@ -8,7 +8,13 @@ import TabsToExample from '@site/TabsToExample.vue';
 import TabsSurfacesExample from '@site/TabsSurfacesExample.vue';
 import TabsKeepMountedExample from '@site/TabsKeepMountedExample.vue';
 
-Tabs is a row of choices in a track, with a white pill behind the one that is picked, and a block of content for each. Picking a tab slides the pill over to it and swaps the block below. It is four components. `Tabs` holds the `v-model` and the settings the others read. `TabList` is the track and handles the keyboard. `Tab` is one choice inside the track, with a `value` and a label. `TabPanel` is the block for one `value`, and shows while that tab is picked.
+Use Tabs when a section of a screen has a few alternative blocks of content and only one shows at a time. Each tab names one block. Picking a tab swaps the block below the track without leaving the page. If picking one would take you to another page, it is a link, and it belongs in the [Navbar](/docs/components/navbar) or in the content. A choice that is only a value, with no block to reveal, is not a tab. Neither is a filter that narrows one list. Reach for [Radio](/docs/components/radio) for both.
+
+Tabs sit directly above the content they switch, the full width of the section, under a heading that names the question they answer. There is always a current tab. The first is picked by default, and the panels are never all hidden.
+
+On screen, Tabs is a row of choices in a track, with a white pill behind the one that is picked. Picking another slides the pill over to it and swaps the block below.
+
+It is four components. `Tabs` holds the `v-model` and the settings the others read. `TabList` is the track and handles the keyboard. `Tab` is one choice inside the track, with a `value` and a label. `TabPanel` is the block for one `value`, and shows while that tab is picked.
 
 ```vue
 <h3 id="to">To</h3>
@@ -28,10 +34,6 @@ Tabs is a row of choices in a track, with a white pill behind the one that is pi
 The `v-model` is the `value` of the picked tab. A tab and a panel with the same `value` are linked, and the ids and `aria-controls` and `aria-labelledby` between them are written for you. `Tabs` renders a plain `<div>` with no layout of its own, so the track and the panels go wherever the section needs them, and classes on it are yours. The track is a `<div role="tablist">`, each tab a `<button role="tab">`, and each panel a `<div role="tabpanel">`.
 
 Give the track a name. Point `aria-labelledby` at the heading above it, or pass `aria-label` where there is no heading.
-
-Use Tabs when a section of a screen has a few alternative blocks of content and only one shows at a time. Each tab names one block. Picking a tab swaps the block below the track without leaving the page. If picking one would take you to another page, it is a link, and it belongs in the [Navbar](/docs/components/navbar) or in the content. A choice that is only a value, with no block to reveal, is not a tab. Neither is a filter that narrows one list. Reach for [Radio](/docs/components/radio) for both.
-
-Tabs sit directly above the content they switch, the full width of the section, under a heading that names the question they answer. There is always a current tab. The first is picked by default, and the panels are never all hidden.
 
 ## Examples
 
