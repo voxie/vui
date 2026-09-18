@@ -71,16 +71,16 @@ const onClick = () => {
 		:disabled="disabled"
 		:tabindex="tabindex"
 		:data-value="props.value"
-		class="relative z-10 flex h-full items-center justify-center font-semibold whitespace-nowrap transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
-		:class="[
-			sizeClasses,
-			textClasses,
-			hoverClasses,
-			ownBackground,
-			disabled ? 'cursor-not-allowed' : 'cursor-pointer motion-safe:active:scale-95 motion-safe:active:duration-100',
-		]"
+		class="group/tab relative z-10 flex h-full items-center justify-center font-semibold whitespace-nowrap transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
+		:class="[sizeClasses, textClasses, hoverClasses, ownBackground, disabled ? 'cursor-not-allowed' : 'cursor-pointer']"
 		@click="onClick"
 	>
-		<slot />
+		<!-- The label and not the tab, which is as wide as the track allows. -->
+		<span
+			class="transition ease-out"
+			:class="disabled ? '' : 'group-active/tab:duration-75 motion-safe:group-active/tab:scale-[0.96]'"
+		>
+			<slot />
+		</span>
 	</button>
 </template>
