@@ -1,0 +1,112 @@
+---
+title: Tabs
+order: 13
+---
+
+import TabsExample from '@site/TabsExample.vue';
+import TabsSurfacesExample from '@site/TabsSurfacesExample.vue';
+
+Tabs is a row of choices in a track, with a white pill behind the one that is picked. Choosing another tab slides the pill over to it. It is two components. `Tabs` is the track, holds the `v-model`, and handles the keyboard. `Tab` is one choice inside it, and has a `value` and a label.
+
+```vue
+<Tabs v-model="view" aria-label="Conversations">
+  <Tab value="all">All</Tab>
+  <Tab value="open">Open</Tab>
+  <Tab value="closed">Closed</Tab>
+</Tabs>
+```
+
+The `v-model` is the `value` of the picked tab. Every tab is the same width, taken from the widest label, and the track fills whatever it is in.
+
+The track is a `<div role="tablist">` and each tab is a `<button role="tab">`. Give the track a name with `aria-label`, or point `aria-labelledby` at a heading next to it. Tabs draws no panels. Show and hide the content for each tab yourself, off the `v-model`.
+
+## Examples
+
+### Picking a tab
+
+Click a tab and the pill slides to it, and the `v-model` takes its `value`.
+
+<TabsExample client:load readout />
+
+### Surface
+
+Tabs works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. The track is the off track of a [Switch](/docs/components/switch#surface), surface for surface. It is slate-300, and steps away from the surface where slate-300 would vanish into it. On white it lightens to slate-200. On `sunken` it goes to slate-400 at 50%. On `dark` it goes the other way, to slate-800, so the tabs read as a well in the panel. The pill is white everywhere.
+
+| Sitting on   | Which is     | Track         |
+| ------------ | ------------ | ------------- |
+| `default`    | white        | slate-200     |
+| `glass`      | slate-50     | slate-300     |
+| `sunken`     | slate-300/30 | slate-400/50  |
+| `dark`       | slate-700    | slate-800     |
+| `background` | slate-200    | slate-300     |
+
+<TabsSurfacesExample client:load />
+
+The unpicked labels are slate-600, and slate-300 on `dark` where they sit on the slate-800 track. The picked label is slate-800 on its white pill everywhere.
+
+The track has a shallow inset shadow and a 1px bottom border in white, so it reads as pressed into the surface. The border is solid white on `default` and `glass`, white at 40% on `background`, white at 30% on `sunken`, and white at 10% on `dark`.
+
+The page background is the surface nothing can announce. That's what `sitsOn` is for. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+
+### Size
+
+The `size` prop sets the height of the track, and the text and padding of each tab. The sizes are `sm`, `md` (the default), and `lg`. Each is the height of the labeled [Switch](/docs/components/switch#size) and of a [Button](/docs/components/button#size) at the same size, so the three sit level in a toolbar.
+
+<div class="not-prose flex flex-col gap-4">
+  <TabsExample client:load size="sm" />
+  <TabsExample client:load size="md" />
+  <TabsExample client:load size="lg" />
+</div>
+
+| Size | Track | Text      |
+| ---- | ----- | --------- |
+| `sm` | 32px  | `text-xs` |
+| `md` | 40px  | `text-xs` |
+| `lg` | 48px  | `text-sm` |
+
+### Disabled
+
+`disabled` on the track flattens it to slate-200 and the pill to slate-50, drops every label to slate-400, and ignores presses. The pill stays where it was, so a disabled set of tabs still shows which one is picked. On `dark` the track is slate-800 at 50%, the pill slate-500, and the labels slate-500 with the picked one slate-300.
+
+<TabsExample client:load disabled />
+
+`disabled` on a single `Tab` greys that one out and skips it. Clicks do nothing and the arrow keys pass over it.
+
+<TabsExample client:load disabledTab />
+
+## Interaction
+
+Hovering an unpicked tab fills it with slate-400 at 40%, slate-500 at 30% on `sunken`, and slate-700 on `dark`. The picked tab has no hover. Pressing any tab shrinks it to 95%, and pressing the picked one shrinks the pill with it. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion, and a disabled tab doesn't shrink at all.
+
+The pill takes 200ms to slide from one tab to the next on an ease-out curve, quick and without a bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly). The label colors cross over in the same 200ms.
+
+<kbd>Tab</kbd> lands on the picked tab and nowhere else in the track. From there <kbd>←</kbd> and <kbd>→</kbd> move to the next tab and pick it as they go, wrapping at either end, and <kbd>Home</kbd> and <kbd>End</kbd> jump to the first and last. Disabled tabs are skipped. Until something is picked, every tab is in the tab order. Focus draws a blue outline around the tab, two pixels wide at a two pixel offset, and only for keyboard focus. Clicking a tab doesn't ring it.
+
+Until the page has hydrated, the picked tab paints its own white in place of the pill, so server-rendered HTML shows a selection and nothing flashes when the pill takes over.
+
+## Contrast
+
+| Element                    | On            | WCAG 2.x | APCA   |
+| -------------------------- | ------------- | -------- | ------ |
+| slate-800 label            | white pill    | 14.7:1   | Lc 101 |
+| slate-600 label            | slate-200     | 6.1:1    | Lc 72  |
+| slate-600 label            | slate-300     | 5.1:1    | Lc 61  |
+| slate-600 label            | slate-400/50  | 4.2:1    | Lc 50  |
+| slate-600 label            | hovered tab   | 4.6:1    | Lc 56  |
+| slate-300 label            | slate-800     | 9.9:1    | Lc 77  |
+| white pill                 | slate-200     | 1.2:1    | Lc 13  |
+| white pill                 | slate-300     | 1.5:1    | Lc 26  |
+| white pill                 | slate-400/50  | 1.8:1    | Lc 38  |
+| white pill                 | slate-800     | 14.7:1   | Lc 104 |
+| slate-200 track            | white         | 1.2:1    | Lc 11  |
+| slate-300 track            | slate-50      | 1.4:1    | Lc 20  |
+| slate-400/50 track         | sunken        | 1.4:1    | Lc 16  |
+| slate-800 track            | dark          | 1.4:1    | Lc 0   |
+| slate-400 label            | slate-200     | 2.1:1    | Lc 37  |
+| slate-400 label            | slate-50 pill | 2.5:1    | Lc 48  |
+
+Every label clears AA on every surface, and the picked one clears AAA on its pill. The slate-600 label on the `sunken` track is the closest call at 4.2:1.
+
+The pill is what says which tab is picked, and on the light surfaces it doesn't clear on color. White on the slate-200 track is 1.2:1, short of the 3:1 WCAG asks of a control's boundary. The pill's shadow lifts it off the track, and the picked label is two steps darker than the rest, so the state survives without the color. On `dark` the white pill clears at 14.7:1.
+
+The disabled labels run at 2.1:1 and 2.5:1. Disabled controls are exempt from the contrast rules, and they are deliberately quiet.
