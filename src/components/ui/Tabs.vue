@@ -158,26 +158,14 @@ const onKeydown = (event: KeyboardEvent) => {
 		@keydown="onKeydown"
 	>
 		<!-- Hidden until it has been measured. Before that the selected Tab paints
-		     its own white, so server-rendered HTML shows a selection. The fill is a
-		     box inside the measured one, so the press can be a fixed 2px inset like
-		     Button's rather than a scale, which a wide tab would exaggerate. -->
+		     its own white, so server-rendered HTML shows a selection. -->
 		<div
 			v-show="indicatorReady"
 			aria-hidden="true"
-			class="group/pill absolute z-0 transition-all duration-200 ease-out"
+			class="absolute z-0 transition-all duration-200 ease-out"
+			:class="[sizeClasses.thumb, thumbClasses]"
 			:style="indicatorStyle"
-		>
-			<div
-				class="absolute inset-0 transition-all ease-out"
-				:class="[
-					sizeClasses.thumb,
-					thumbClasses,
-					props.disabled
-						? ''
-						: 'group-has-[~[aria-selected=true]:active]/pill:duration-75 motion-safe:group-has-[~[aria-selected=true]:active]/pill:inset-0.5 motion-reduce:group-has-[~[aria-selected=true]:active]/pill:opacity-70',
-				]"
-			></div>
-		</div>
+		></div>
 		<slot />
 	</div>
 </template>
