@@ -1,0 +1,102 @@
+---
+title: Radio Bar
+order: 10
+---
+
+import RadioBarExample from '@site/RadioBarExample.vue';
+import RadioBarSurfacesExample from '@site/RadioBarSurfacesExample.vue';
+
+A radio bar is a set of [Radio](/docs/components/radio) options laid out in one line, inside a bordered track the height of an [Input](/docs/components/input). Each option drops its circle and draws as a centered label, and the picked one sits on a slate-200 pill. The radios inside are the same component as everywhere else, so they keep their `name`, their `value`, their `v-model`, and the browser's arrow keys.
+
+```html
+<RadioBar>
+  <Radio v-model="unit" name="unit" value="min" label="Min" />
+  <Radio v-model="unit" name="unit" value="hr" label="Hr" />
+  <Radio v-model="unit" name="unit" value="day" label="D" />
+  <Radio v-model="unit" name="unit" value="week" label="Wk" />
+</RadioBar>
+```
+
+The bar fills the width of its container, and the options divide that width evenly. A bar next to an Input of the same `size` sits level with it.
+
+<RadioBarExample client:load />
+
+How a field goes together with its label, its description, and its messages is on the [Forms](/docs/patterns/forms) page.
+
+## Examples
+
+### Options
+
+Every `Radio` inside the bar becomes an option. Its `label` is all that shows, so the description, the messages, and `sitsOn` on the radio itself are ignored inside a bar. Put `error` and `hint` on the bar instead.
+
+### Surface
+
+A bar works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. It takes the Input's edge rather than the Radio's, since the two sit side by side. The track is white on every surface, so the labels and the pill don't change with it.
+
+| Sitting on   | Which is     | Boundary          |
+| ------------ | ------------ | ----------------- |
+| `default`    | white        | slate-200 border  |
+| `glass`      | slate-50     | slate-200 border  |
+| `sunken`     | slate-300/30 | slate-300 border  |
+| `dark`       | slate-700    | slate-200 border  |
+| `background` | slate-200    | shadow            |
+
+<RadioBarSurfacesExample client:load />
+
+Pass `sitsOn` on the page background, since nothing there can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+
+### Size
+
+The `size` prop on the bar sets the track and every option in it. The sizes are `sm`, `md` (the default), and `lg`, at 32, 40, and 48px tall, which are the Input's `sm`, `md`, and `lg`. The labels run text-xs, text-sm, and text-base.
+
+<div class="not-prose flex flex-col gap-4">
+  <RadioBarExample client:load size="sm" />
+  <RadioBarExample client:load size="md" />
+  <RadioBarExample client:load size="lg" />
+</div>
+
+### Error and hint
+
+`error` takes the message to show under the bar. It recolors the track's border, marks the line with a warning icon, sets `aria-invalid` on every option, and points each one's `aria-describedby` at the message. Pass an array for more than one message.
+
+<RadioBarExample client:load error="Pick a unit." />
+
+`hint` is the same line before anything goes wrong, at slate-600 behind an info mark.
+
+<RadioBarExample client:load hint="Re-entry is measured from the last message a contact received." />
+
+### Disabled
+
+`disabled` on the bar fills the track slate-100 and drops the labels to slate-400. The picked option keeps its pill, with its label at slate-500, rather than losing the answer along with the control.
+
+<RadioBarExample client:load disabled />
+
+## Interaction
+
+Hovering an unpicked option fills its pill slate-100 and lifts its label to slate-700. The picked option does nothing on hover, since there is nothing left for it to do.
+
+Pressing shrinks the pill to 96% for the length of the press. The shrink is `motion-safe`, so it doesn't run for someone who has asked for reduced motion.
+
+Focus draws a blue outline around the option's cell, two pixels wide at a two pixel offset, and only for keyboard focus. Pressing it doesn't ring it.
+
+Everything else is the browser's. A bar is one tab stop, landing on whichever option is picked. The arrow keys move through the set and pick as they go, wrapping at either end.
+
+## Contrast
+
+| Element              | On         | WCAG 2.x | APCA   |
+| -------------------- | ---------- | -------- | ------ |
+| slate-800 label      | slate-200  | 11.9:1   | Lc 91  |
+| slate-500 label      | white      | 4.8:1    | Lc 70  |
+| slate-700 label      | slate-100  | 8.6:1    | Lc 84  |
+| slate-200 pill       | white      | 1.2:1    | Lc 10  |
+| slate-200 border     | white      | 1.2:1    | Lc 10  |
+| slate-300 border     | sunken     | 1.4:1    | Lc 20  |
+| rose-300 border      | glass      | 1.8:1    | Lc 35  |
+| rose-800 message     | glass      | 7.6:1    | Lc 82  |
+| slate-500 label      | slate-200  | 3.9:1    | Lc 55  |
+
+The labels and the messages clear AA.
+
+The pill carries the answer, and at 1.2:1 against the white track it doesn't clear on its own. The picked label steps from slate-500 to slate-800 alongside it, so the weight of the text moves as well as the fill behind it.
+
+The disabled label runs slate-500 on slate-200 at 3.9:1. Disabled controls are exempt from the contrast rules, and it is deliberately quiet.

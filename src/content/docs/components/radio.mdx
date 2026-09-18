@@ -15,7 +15,7 @@ A radio is a native `<input type="radio">` with a drawn dot beside its label. Th
 
 A radio never stands alone. Two or more share one `v-model` and one `name`, and the model holds the `value` of whichever is picked. The `name` is what makes them a group to the browser, and without it the arrow keys won't move between them.
 
-Most groups are `boxed`, which draws each option as a bordered row filling the width of its container. The bare radio is for a set that sits inside something else, like a table row or a dense settings list.
+Most groups are `boxed`, which draws each option as a bordered row filling the width of its container. The bare radio is for a set that sits inside something else, like a table row or a dense settings list. A [Radio Bar](/docs/components/radio-bar) lays a set out in one line, each option a label in a shared track the height of an Input.
 
 ```html
 <Radio v-model="when" name="when-to-send" value="now" label="Send now" boxed />
