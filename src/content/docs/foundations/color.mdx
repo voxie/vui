@@ -7,7 +7,7 @@ import Card from '@ui/Card.vue';
 import Button from '@ui/Button.vue';
 import Badge from '@ui/Badge.vue';
 
-The palette is Tailwind's, unchanged, and every color goes by its real name: `sky`, `teal`, `slate`. There are no semantic aliases like `primary` or `danger` in the code. A component takes `color="sky"`, not `color="primary"`, so what you read in a class list is what you see on screen.
+Voxie's color palette relies on Tailwind under the hood. The colors are used unchanged but we focus in on a limited subset of colors for most uses. Every color goes by its real name: `sky`, `teal`, `slate`. There are no semantic aliases like `primary` or `danger` in the code. A component takes `color="sky"`, not `color="primary"`, so what you read in a class list is what you see on screen.
 
 Meaning lives in the guidance below, not in the token name.
 
@@ -15,7 +15,7 @@ Meaning lives in the guidance below, not in the token name.
 
 Almost everything on screen is slate. It's the page, the panels, the text, and most of the buttons. The other colors are exceptions you reach for deliberately.
 
-Slate is a ladder of surfaces, lightest to darkest. The page sits in the middle of the range, so panels can rise above it or sink below it:
+Slate is a ladder of surfaces, lightest to darkest. The page sits in the middle of the range, so panels can rise above or sink below it:
 
 <Card class="not-prose grid grid-cols-[max-content_max-content_1fr] gap-x-6 gap-y-3 items-center">
   <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-white"></div>
@@ -41,7 +41,7 @@ Slate is a ladder of surfaces, lightest to darkest. The page sits in the middle 
 
 ### Neutrals step, they don't jump
 
-A neutral element sits about one rung away from whatever is behind it. A slate [Button](/docs/components/button) reads what it is sitting on from the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) around it, and takes `sitsOn` only where nothing above it can answer.
+A neutral element sits about one rung away from whatever is behind it. A slate [Button](/docs/components/button) reads what it is sitting on from the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) wrapping it, and takes `sitsOn` only where nothing above it can answer.
 
 | Behind it    | Neutral element | On hover  |
 | ------------ | --------------- | --------- |
@@ -57,9 +57,9 @@ Hover moves one more rung in the same direction, further from the background. On
 
 An accent shows up at one of two weights. Which one depends on whether you can press it.
 
-**Controls**, anything pressable, rest at 300. Hover is one step darker at 400, and the label is black. [Button](/docs/components/button) is the one that matters today.
+**Controls**, which are anything pressable, rest at 300. Hover is one step darker at 400, and the label is black. [Button](/docs/components/button) is the one that matters today.
 
-**Labels**, anything that only gets read, run on the **tint**. That is a 100 fill, the 900 of the same hue for the text, a 300 border, and a 500 icon. [Badge](/docs/components/badge) is the one that matters today.
+**Labels**, which are read only, use **tints**. That is a 100 fill, the 900 of the same hue for the text, a 300 border, and a 500 icon. [Badge](/docs/components/badge) is the one that matters today.
 
 <Card class="not-prose grid grid-cols-[max-content_max-content_1fr] sm:grid-cols-[max-content_max-content_max-content_1fr] gap-x-4 sm:gap-x-6 gap-y-4 items-center">
   <span class="text-2xs font-extrabold tracking-wide uppercase text-slate-500">Control</span>
@@ -108,16 +108,16 @@ An accent shows up at one of two weights. Which one depends on whether you can p
   <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">Accent, with no status attached. Use it sparingly. Current uses: AI, segments, badge callouts.</span>
 </Card>
 
-A control is one thing on a screen and has to be found, so it takes the saturated rung. A label repeats and has to sit still while you read past it, so it takes the tint. The tint also measures better at the size labels live at. [Contrast](#contrast) has the numbers.
+A control needs to stand out on screen, so it takes the saturated rung. A label repeats and has to sit still while you read past it, so it takes the tint. The tint also measures better at the smaller label sizes. See [Contrast](#contrast) for details.
 
 Two things hold across both families:
 
 - **One weight per family, for all five accents.** No accent appears at any other value in a component. That's what keeps a screen with four colors on it from looking like four different products.
 - **Accents don't care what they sit on**, unlike slate. A sky button is sky-300 on a white card and on the dark navigation bar. A control at 300 is saturated enough to separate from any neutral behind it. A label at 100 isn't, which is why the tint carries a 300 border rather than a bare fill.
 
-Be reserved and tasteful with color. Avoid rainbow screens with tons of colors. This matters most on data-rich screens like tables and charts. Color goes sparingly on the most important details of a page. If everything has a color, nothing is important, and the page looks like a unicorn took a dump on it. That can't always be avoided, for instance a chart with ten keys that have to be told apart, but try your best.
+Be reserved and tasteful with color. Avoid rainbow screens with tons of colors. This matters most on data-rich screens like tables and charts. Color goes sparingly on the most important details of a page. If everything has a color, nothing is important, and the page looks like a mess. That can't always be avoided, for instance a chart with ten keys that have to be told apart, but try your best.
 
-The palette is these five. For the chart with ten keys, [Badge](/docs/components/badge) carries seven more tints on the label weight: `lime`, `orange`, `green`, `blue`, `fuchsia`, `pink`, and `emerald`. They exist to extend the range of difference between badges, nothing more. None of them carries a meaning. Outside a legend or a column of tags there's no reason to reach for one.
+The palette is sky, teal, amber, rose, violet. For the chart with ten keys, [Badge](/docs/components/badge) carries seven more tints on the label weight: `lime`, `orange`, `green`, `blue`, `fuchsia`, `pink`, and `emerald`. They exist to extend the range of difference between badges, nothing more. None of them carries a meaning. Outside a legend or a column of tags there's no reason to reach for one.
 
 <div class="not-prose space-y-4">
   <Card class="space-y-4">
