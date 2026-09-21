@@ -1,0 +1,84 @@
+---
+title: Popover
+order: 16
+---
+
+import PopoverExample from '@site/PopoverExample.vue';
+
+A popover opens a small white panel beside a control. The panel holds text or interactive content. Clicking the control opens it on mouse, keyboard, and touch.
+
+`Popover` holds the trigger in its default slot. Bind `triggerProps` to one focusable [Button](/docs/components/button) so its expanded state and panel relationship reach assistive technology. The `content` slot receives `close` and `isOpen`. A plain string can use the `content` prop instead.
+
+```vue
+<Popover label="Delivery details" arrow>
+  <template #default="{ triggerProps }">
+    <Button v-bind="triggerProps">Delivery details</Button>
+  </template>
+  <template #content="{ close }">
+    <p>Messages wait until the recipient's local sending window opens.</p>
+    <Button @click="close()">Got it</Button>
+  </template>
+</Popover>
+```
+
+## Examples
+
+### Content
+
+The panel has a white surface, 16px padding, 8px corners, and a shadow. Components inside it inherit the white surface even when the trigger sits on a dark card. Its width follows the content up to 320px. Longer content scrolls when it reaches the available height.
+
+<PopoverExample client:load />
+
+### Hover
+
+`hover` adds mouse hover without taking away click or touch. This example waits 300ms before opening. Moving onto the panel keeps it open. Clicking the trigger keeps it open after the pointer leaves.
+
+<PopoverExample client:load hover arrow />
+
+`openDelay` defaults to `0` and applies to hover. `closeDelay` defaults to `150` and gives the pointer time to cross the gap. Click, keyboard, and dismissal respond immediately. Hover leaves keyboard focus where it was.
+
+[Base UI distinguishes popovers from tooltips](https://base-ui.com/react/components/tooltip#alternatives-to-tooltips) by the trigger's purpose. An info control that opens its own content is a popover. A tooltip supplies a supplementary hint for a control with another purpose. This component uses a dialog role and supports controls inside its content.
+
+### Placement
+
+`placement` defaults to `bottom`. The other sides are `top`, `left`, and `right`. Each side accepts `-start` or `-end` alignment. `auto`, `auto-start`, and `auto-end` choose the side with the most space.
+
+<PopoverExample client:load placement="right" arrow />
+
+The panel sits 8px from the control. It flips and shifts to stay within the available space, then follows the trigger on scroll and resize. `locked` stops side flipping for an explicit placement. `arrow` adds an arrow that follows the final side. `arrowPadding` keeps it away from the corners and defaults to `8`.
+
+### Clipping
+
+`teleport` defaults to `true`, rendering the panel at the end of the document body. The trigger below sits in a box that clips its contents. Its panel remains visible outside that box.
+
+<PopoverExample client:load clipped arrow />
+
+Set `:teleport="false"` to render beside the trigger in the document. Ancestor overflow can then clip it. `zIndex` defaults to `50`.
+
+### Controlled state
+
+`v-model:open` reads and changes the open state. The `open` and `close` events report visibility changes. Opening from outside leaves focus where it is.
+
+<PopoverExample client:load controlled />
+
+### Disabled
+
+`disabled` prevents opening and closes an open panel. Disable the trigger button as well so it leaves the tab order. An empty `content` prop also prevents opening when there is no `content` slot.
+
+<PopoverExample client:load disabled />
+
+## Interaction
+
+Clicking the trigger moves focus to the first control inside the panel, or to the panel itself when it holds only text. Pressing the trigger again closes it. A click outside, focus moving outside, or <kbd>Esc</kbd> also closes it. Closing from inside returns focus to the trigger. Clicking elsewhere keeps focus on the destination.
+
+<kbd>Tab</kbd> moves through the panel's controls, then continues after the trigger. <kbd>Shift</kbd> + <kbd>Tab</kbd> from the first control closes the panel and returns to the trigger. The panel does not trap focus.
+
+The panel takes its accessible name from the trigger. Set `label` when the panel needs a different name. An icon-only trigger still needs its own `aria-label`.
+
+`disableClickAway` keeps outside pointer presses from closing the panel. Focus leaving and <kbd>Esc</kbd> still dismiss it. `interactive` defaults to `true`. Set it to `false` to close when the panel is clicked.
+
+## Migration
+
+This component replaces `vx-popover`. The default trigger slot, `content` prop, content slot, placement values, and optional arrow carry over. Replace `show` with `v-model:open` and bind the default slot's `triggerProps` to the trigger. The content slot still exposes `close` and `isOpen`.
+
+The default hover close delay is now 150ms and the default stacking level is 50. Focus alone does not open the panel. Activate the trigger with <kbd>Enter</kbd> or <kbd>Space</kbd> instead.
