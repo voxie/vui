@@ -6,6 +6,9 @@ order: 2
 import Card from '@ui/Card.vue';
 import Button from '@ui/Button.vue';
 import Badge from '@ui/Badge.vue';
+import ChartPalette from '@site/ChartPalette.vue';
+import ChartKeySets from '@site/ChartKeySets.vue';
+import NamedSets from '@site/NamedSets.vue';
 
 Voxie's color palette relies on Tailwind under the hood. The colors are used unchanged but we focus in on a limited subset of colors for most uses. Every color goes by its real name: `sky`, `teal`, `slate`. There are no semantic aliases like `primary` or `danger` in the code. A component takes `color="sky"`, not `color="primary"`, so what you read in a class list is what you see on screen.
 
@@ -59,7 +62,7 @@ An accent shows up at one of two weights. Which one depends on whether you can p
 
 **Controls**, which are anything pressable, rest at 300. Hover is one step darker at 400, and the label is black. [Button](/docs/components/button) is the one that matters today.
 
-**Labels**, which are read only, use **tints**. That is a 100 fill, the 900 of the same hue for the text, a 300 border, and a 500 icon. [Badge](/docs/components/badge) is the one that matters today.
+**Labels**, which are read only, use **tints**. That is a 100 fill, the 900 of the same hue for the text, a 300 border, and a 500 icon. [Badge](/docs/components/badge) and [Alert](/docs/components/alert) both run on it.
 
 <Card class="not-prose grid grid-cols-[max-content_max-content_1fr] sm:grid-cols-[max-content_max-content_max-content_1fr] gap-x-4 sm:gap-x-6 gap-y-4 items-center">
   <span class="text-2xs font-extrabold tracking-wide uppercase text-slate-500">Control</span>
@@ -115,7 +118,7 @@ Two things hold across both families:
 - **One weight per family, for all five accents.** No accent appears at any other value in a component. That's what keeps a screen with four colors on it from looking like four different products.
 - **Accents don't care what they sit on**, unlike slate. A sky button is sky-300 on a white card and on the dark navigation bar. A control at 300 is saturated enough to separate from any neutral behind it. A label at 100 isn't, which is why the tint carries a 300 border rather than a bare fill.
 
-Be reserved and tasteful with color. Avoid rainbow screens with tons of colors. This matters most on data-rich screens like tables and charts. Color goes sparingly on the most important details of a page. If everything has a color, nothing is important, and the page looks like a mess. That can't always be avoided, for instance a chart with ten keys that have to be told apart, but try your best.
+Be reserved and tasteful with color. Avoid rainbow screens with tons of colors. This matters most on data-rich screens like tables and charts. Color goes sparingly on the most important details of a page. If everything has a color, nothing is important, and the page looks like a mess. That can't always be avoided, for instance [a chart with ten keys](#color-by-count) that have to be told apart, but try your best.
 
 The palette is sky, teal, amber, rose, violet. For the chart with ten keys, [Badge](/docs/components/badge) carries seven more tints on the label weight: `lime`, `orange`, `green`, `blue`, `fuchsia`, `pink`, and `emerald`. They exist to extend the range of difference between badges, nothing more. None of them carries a meaning. Outside a legend or a column of tags there's no reason to reach for one.
 
@@ -177,13 +180,13 @@ Text sitting on a surface uses four colors, and only four.
   </div>
 </Card>
 
-slate-700 is the default. Body copy on a surface sits at 700, never black or slate-950. Those are for labels on a fill. It has room to spare on every surface: 10.4:1 on white, 9.9:1 on glass, 8.4:1 on the page background, and 7.9:1 on the sunken surface.
+**slate-700** is the default. Body copy on a surface sits at 700, never black or slate-950. Those are for labels on a fill. It has room to spare on every surface: 10.4:1 on white, 9.9:1 on glass, 8.4:1 on the page background, and 7.9:1 on the sunken surface.
 
-slate-800 is a step forward, not the default. Headings take it. So does anything that has to cut through a paragraph rather than sit in it: strong, bold, code, and quotes.
+**slate-800** is a step forward, not the default. Headings take it. So does anything that has to cut through a paragraph rather than sit in it: strong, bold, code, and quotes.
 
-slate-500 is a step back for supporting copy, not a disabled state. It clears AA on white (4.8:1) and on glass (4.6:1). On the sunken surface it drops to 3.7:1, and on the page background to 3.9:1. On those two, use it only at large sizes, or move the text onto a card.
+**slate-500** is a step back for supporting copy, not a disabled state. It clears AA on white (4.8:1) and on glass (4.6:1). On the sunken surface it drops to 3.7:1, and on the page background to 3.9:1. On those two, use it only at large sizes, or move the text onto a card.
 
-sky-700 marks links. It sits at 700, not the accents' 300, because a link has to be legible as text. It clears AA everywhere, down to 4.5:1 on the sunken surface. sky-600 is the tempting alternative, and it falls short at 4.0:1 on white, under the 4.5:1 AA asks.
+**sky-700** marks links. It sits at 700, not the accents' 300, because a link has to be legible as text. It clears AA everywhere, down to 4.5:1 on the sunken surface. sky-600 is the tempting alternative, and it falls short at 4.0:1 on white, under the 4.5:1 AA asks.
 
 None of this needs setting by hand. `body` carries slate-700 in the base layer, and prose is pointed at all four, so text inherits the right color on its own. Reach for a utility only to step something back to slate-500. The one surface that flips the rule is the dark card, which sets its own light text.
 
@@ -243,6 +246,63 @@ The soft step between a neutral and its background lands between 1.1:1 and 1.4:1
 - The label carries the contrast. Never build a neutral control whose meaning depends on noticing the fill.
 - When a neutral control has to read as a control at a glance, give it `shadow` or `outline` for a real edge.
 - Never signal state with a one-rung neutral shift. Nobody will see it.
+
+## Charts
+
+A categorical chart colors its keys by how many there are, not by what they are. The exception is a chart whose key names match a [named set](#named-sets), which colors it instead.
+
+### The chart palette
+
+Every hue carries three steps, copied from Tailwind. Change what a chart draws by picking a different step, never by editing or interpolating a value. A new hue arrives with all three steps.
+
+<ChartPalette />
+
+### Which step gets drawn
+
+The **mark** is the slice, bar, line, or circle. The **label background** sits behind a legend pill, a chip, or a connecting flow. Both come from one lookup, so a mark and its label are always one hue.
+
+The label background is always 300, with a black label like any other [label on a fill](#labels-on-a-fill).
+
+### Color by count
+
+Each count gets a fixed set, tuned for contrast.
+
+<ChartKeySets />
+
+Counts clamp to 1 through 12. Zero, or a count that isn't a number, falls to one.
+
+Past twelve keys, roll the extras into the last one and label it **Other**. The twelve-key set ends in slate, so that bucket comes out grey and the eleven keys worth reading keep their hues.
+
+Each row is its own set rather than a prefix of the next, and hues get inserted mid-sequence. Teal is sixth of seven and seventh of eight. Sky is the whole one-key set, gone from two through eleven, back at twelve. So a chart that gains a key does not keep its colors. Contrast across the set beats one series holding its color. Where a color has to mean the same thing on every card, use a [named set](#named-sets).
+
+Two rules hold across the table. Every set is a subsequence of one canonical order, spectral with slate last, so blue always precedes amber and slate is always last. And counts 2 through 12 only add. The one break is 1 to 2, where sky drops out for blue.
+
+One key is sky, since a single series has nothing to hold contrast against and sky reads lighter under a card's ink. A single-series chart takes it rather than a hardcoded blue. Two or more keys start at blue. Slate arrives at five, where a set gets a "rest of them" bucket, and is last from there on.
+
+## Named sets
+
+A named set binds a hue to a meaning, so a suspended group is rose on every card that draws one rather than rose where it lands fourth. Named sets are the exception to [coloring by count](#color-by-count), for the dimensions a reader already has a prior about.
+
+A set names hues only. The step stays the chart's call, since a 4px circle on a map and a 40px band on a bar chart want different weights.
+
+### Closed sets and catch-all sets
+
+The kind decides when a set can claim a chart.
+
+| Kind      | Claims a chart when                                       | Use it when                 |
+| --------- | --------------------------------------------------------- | --------------------------- |
+| Closed    | every key is recognized, and no two hit the same member    | the set enumerates a column |
+| Catch-all | one key is recognized, and the rest go to the sink         | the set reads the data      |
+
+A closed set's members are the only values its column holds, so an unrecognized key means a different column and the set stands down. Two names on one member fail it too, since that draws two slices in one hue.
+
+A catch-all set's sink is not a value in the data. A flow diagram might have seven keys of which two are the set's, and folding the rest into one hue is the answer.
+
+### The sets
+
+A matched key takes the swatch color and the name beside it. A set with a sink member is a catch-all, and the rest are closed.
+
+<NamedSets />
 
 ## Naming
 

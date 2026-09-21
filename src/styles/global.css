@@ -1,5 +1,10 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+/* The chart keys read their colors from `var(--color-<hue>-<step>)` at runtime,
+   and the theme only emits a variable for a step some class uses. This keeps the
+   three chart steps for every chart hue. See src/data/chartColors.ts. */
+@source inline("bg-{sky,blue,violet,fuchsia,pink,rose,orange,amber,lime,green,emerald,teal,slate}-{300,400,500}");
+
 
 @theme {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
