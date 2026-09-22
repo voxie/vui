@@ -59,10 +59,19 @@ const promptTemplate = [
   promptClosing,
 ].join('\n\n');
 
+// Hand-written page, so the list the layout renders is hand-written too. Keep
+// it in step with the h2s below.
+const headings = [
+  { depth: 2, slug: 'the-pages', text: 'The pages' },
+  { depth: 2, slug: 'running-a-trial', text: 'Running a trial' },
+  { depth: 2, slug: 'review-checklist', text: 'Review Checklist' },
+  { depth: 2, slug: 'resetting', text: 'Resetting' },
+];
+
 const checks = ['Does it use real Tailwind color names, or did it reach for <code>bg-primary</code>?', 'Do neutrals sit one rung from their background, and does each button carry the right <code>surface</code> for the card it is in?', 'Do all five accents stay at 300?', 'Is the default body size <code>text-sm</code>?', 'Does every input, select, checkbox, radio, badge and dialog in the markup reach for the documented component, rather than hand-styled markup that resembles it? Is the navbar in the shell a Navbar, with its sections and rows as NavbarAction and NavbarActionItem?', 'Does the dense inbox get a dense treatment, and the wizard a roomy one?', 'Do the empty, loading, and error states get the same care as the happy path?'];
 ---
 
-<Layout title="Test Pages">
+<Layout title="Test Pages" headings={headings}>
   <h1>Test Pages</h1>
 
   <p>
@@ -71,7 +80,7 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
 
   <p>They were picked by layout archetype rather than by feature, so the set spans what the product actually has to lay out: a dense two-pane inbox, a wizard at the opposite density, tables that reflow to cards, a settings column, and a page collecting the states everything else falls into.</p>
 
-  <h2>The pages</h2>
+  <h2 id="the-pages">The pages</h2>
 
   <ul class="not-prose space-y-3">
     {
@@ -92,7 +101,7 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
     }
   </ul>
 
-  <h2>Running a trial</h2>
+  <h2 id="running-a-trial">Running a trial</h2>
 
   <p>Point an agent at one page with a brief along these lines. The brief has the agent copy the fixtures into <code>src/pages/trial/</code> with <code>npm run trial</code> and style the copy, which serves at <code>/trial/…</code> beside the raw page. The folder is ignored by git, so a trial can't be committed by accident.</p>
 
@@ -171,13 +180,13 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
     });
   </script>
 
-  <h2>Review Checklist</h2>
+  <h2 id="review-checklist">Review Checklist</h2>
 
   <ul>
     {checks.map((check) => <li set:html={check} />)}
   </ul>
 
-  <h2>Resetting</h2>
+  <h2 id="resetting">Resetting</h2>
 
   <p>
     A trial lives in <code>src/pages/trial/</code> and nowhere else. <code>rm -rf src/pages/trial</code> throws it away, and <code>npm run trial -- --fresh</code> does the same and copies the fixtures again. The fixtures under <code>src/pages/test-pages/</code> are ordinary source, so edit and commit them freely.

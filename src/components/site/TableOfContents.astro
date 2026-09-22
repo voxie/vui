@@ -1,0 +1,79 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+	headings?: MarkdownHeading[];
+}
+
+// The page title is rendered outside the content as the only h1, so the
+// sections start at h2. Deeper than h3 is noise in a list this narrow.
+const { headings = [] } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{/* The outer box is the sidebar's width, gutter included, and renders on every
+    page, list or not, so the content never shifts between pages. The list
+    itself is wider and overflows the box to the right, but no further than the
+    column's free space: half of what's left after the 60rem group and padding,
+    plus the box's own inner width. Sticks at the content's top padding, capped
+    to the viewport so a long list scrolls. */}
+<nav data-toc-box class="hidden lg:block not-prose w-56 shrink-0 pl-12 xl:pl-16 self-start sticky top-16 xl:top-24 text-sm text-slate-700">
+	{
+		items.length > 0 && (
+			<div
+				data-toc
+				class="w-64 lg:max-w-[max(11rem,50cqw_-_19rem)] xl:max-w-[max(10rem,50cqw_-_20rem)] max-h-[calc(100dvh-4rem)] xl:max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-y-contain pb-8"
+			>
+				<h3 class="font-extrabold text-slate-800">On this page</h3>
+				<ul class="mt-3 border-l border-l-slate-400/50">
+					{items.map((h) => (
+						<li>
+							<a
+								href={`#${h.slug}`}
+								data-toc-link
+								class:list={[
+									'relative block px-4 py-1 -ml-px border-l border-transparent hover:text-sky-700 transition-colors duration-100',
+									'aria-[current=true]:text-sky-700 aria-[current=true]:border-sky-500',
+									h.depth === 3 && 'pl-7',
+								]}
+							>
+								{h.text}
+							</a>
+						</li>
+					))}
+				</ul>
+			</div>
+		)
+	}
+</nav>
+
+<script>
+	// Marks the heading nearest the top of the scroll column. The document
+	// doesn't scroll, so the observer needs the column as its root.
+	const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
+	const root = document.querySelector<HTMLElement>('[data-scroll-root]');
+	if (links.length && root) {
+		const byId = new Map(links.map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
+		const headings = [...byId.keys()].map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
+
+		const setCurrent = (id: string) => {
+			for (const [key, a] of byId) {
+				if (key === id) a.setAttribute('aria-current', 'true');
+				else a.removeAttribute('aria-current');
+			}
+		};
+
+		const update = () => {
+			const line = root.getBoundingClientRect().top + 96;
+			let current = headings[0];
+			for (const h of headings) {
+				if (h.getBoundingClientRect().top <= line) current = h;
+				else break;
+			}
+			if (current) setCurrent(current.id);
+		};
+
+		root.addEventListener('scroll', update, { passive: true });
+		update();
+	}
+</script>

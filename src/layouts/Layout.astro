@@ -13,12 +13,15 @@ import '../styles/fontawesome/css/regular.min.css';
 import '../styles/global.css';
 
 import Sidebar from '@site/Sidebar.astro';
+import TableOfContents from '@site/TableOfContents.astro';
+import type { MarkdownHeading } from 'astro';
 
 interface Props {
 	title: string;
+	headings?: MarkdownHeading[];
 }
 
-const { title } = Astro.props;
+const { title, headings } = Astro.props;
 ---
 
 <html lang="en">
@@ -36,10 +39,10 @@ const { title } = Astro.props;
 		    then bounces the content only, and the nav stays put at every size. */}
 		<div class="flex flex-col md:flex-row h-dvh">
 			<Sidebar />
-			<div class="flex-1 min-w-0 min-h-0 overflow-y-auto overscroll-y-contain">
+			<div data-scroll-root class="@container flex-1 min-w-0 min-h-0 overflow-y-auto overscroll-y-contain scroll-smooth">
 				<main
 					class="prose prose-slate leading-relaxed max-w-none p-5 sm:p-8 lg:py-16 xl:py-24
-						prose-headings:font-extrabold prose-headings:text-slate-800 prose-th:font-extrabold
+						prose-headings:font-extrabold prose-headings:text-slate-800 prose-headings:scroll-mt-8 lg:prose-headings:scroll-mt-16 prose-th:font-extrabold
 						prose-h1:text-2xl xl:prose-h1:text-3xl prose-h1:leading-tight
 						prose-h2:text-xl prose-h2:leading-snug
 						prose-h3:text-base prose-h3:leading-snug
@@ -47,8 +50,14 @@ const { title } = Astro.props;
 						prose-strong:text-slate-800 prose-code:text-slate-800 prose-blockquote:text-slate-800
 						prose-lead:text-slate-500 prose-a:text-sky-700 prose-hr:border-slate-300"
 				>
-					<div class="max-w-2xl mx-auto 2xl:translate-x-[-5%]">
-						<slot />
+					{/* The content and the table of contents travel as one centered group.
+					    The list's box is the sidebar's width, gutter included, so the
+					    content lands on the window's center line. */}
+					<div class="max-w-2xl mx-auto lg:max-w-none lg:flex lg:justify-center">
+						<div class="min-w-0 lg:w-full lg:max-w-2xl">
+							<slot />
+						</div>
+						<TableOfContents headings={headings} />
 					</div>
 				</main>
 			</div>
