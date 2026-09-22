@@ -27,7 +27,6 @@ const matches = computed(() => {
 		<Input
 			v-model="query"
 			type="search"
-			size="sm"
 			sits-on="background"
 			placeholder="Search icons"
 			aria-label="Search icons"
