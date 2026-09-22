@@ -13,7 +13,7 @@ An agent working in a Voxie codebase has no way to know the conventions on its o
 
 Each skill is a page under `/skills/`. To use it, point your agent at it before the work starts.
 
-1. Open the skill for the job at hand, such as [Create Component](/skills/create-component).
+1. Open the skill for the job at hand.
 2. Give your agent the URL, or paste the page's contents into the prompt, and tell it to follow the instructions before making changes.
 3. Review the result against the docs the skill is based on. A skill is a summary. The docs page for a component is the source of truth.
 
@@ -21,5 +21,4 @@ Skills are written for tools like Claude Code, Cursor, and Copilot, and they are
 
 ## What's here
 
-- [Create Component](/skills/create-component). How to add a new component to the system and its docs page.
-- [Accessibility Review](/skills/accessibility-review). How to check a screen or component against the system's accessibility rules.
+Nothing yet. Skills are coming soon.
