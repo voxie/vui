@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@lib/base';
 // Source: resources/js/components/contacts/contact/ContactList.vue, with
 // ContactListFilters.vue and ContactRow.vue flattened in.
 import AppShell from './_AppShell.astro';
@@ -144,7 +145,7 @@ const rowActions = ['View', 'Unsubscribe', 'Reset', 'Delete'];
 				<option value="last_name:asc">Last name A–Z</option>
 			</select>
 
-			<a href="/test-pages/contact-detail" data-test="new-contact">
+			<a href={withBase('/test-pages/contact-detail')} data-test="new-contact">
 				New Contact
 				<i class="fa-solid fa-circle-plus"></i>
 			</a>
@@ -168,7 +169,7 @@ const rowActions = ['View', 'Unsubscribe', 'Reset', 'Delete'];
 				contacts.map((contact) => (
 					<tr data-test="contact-row">
 						<th scope="row" data-test="row-title">
-							<a href="/test-pages/contact-detail">{contact.name}</a>
+							<a href={withBase('/test-pages/contact-detail')}>{contact.name}</a>
 						</th>
 
 						<td>
@@ -222,7 +223,7 @@ const rowActions = ['View', 'Unsubscribe', 'Reset', 'Delete'];
 									))}
 								</ul>
 							</div>
-							<a href="/test-pages/contact-detail" data-test="edit">
+							<a href={withBase('/test-pages/contact-detail')} data-test="edit">
 								Edit
 								<i class="fa-solid fa-file-pen" />
 							</a>

@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@lib/base';
 // The documentation layout and not TestPageLayout: this page is about the
 // fixtures, not one of them, so it keeps the sidebar.
 import { getCollection } from 'astro:content';
@@ -87,7 +88,7 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
       testPages.map((page) => (
         <li class="leading-snug">
           <a
-            href={page.href}
+            href={withBase(page.href)}
             class="text-sky-700 font-semibold hover:text-black"
           >
             {page.title}

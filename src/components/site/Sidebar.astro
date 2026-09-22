@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import VoxieMark from '@site/VoxieMark.vue';
+import { withBase } from '@lib/base';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
@@ -26,20 +27,21 @@ const groups = [
     label: section.charAt(0).toUpperCase() + section.slice(1),
     links: docs
       .filter((entry) => entry.id.split('/')[0] === section)
-      .map((entry) => ({ href: `/docs/${entry.id}`, title: entry.data.title })),
+      .map((entry) => ({ href: withBase(`/docs/${entry.id}`), title: entry.data.title })),
   })),
   {
     label: 'Skills',
-    links: skills.map((entry) => ({ href: `/skills/${entry.id}`, title: entry.data.title })),
+    links: skills.map((entry) => ({ href: withBase(`/skills/${entry.id}`), title: entry.data.title })),
   },
   // The overview and nothing under it: the fixtures are pages to open, not
   // documentation to browse.
-  { label: 'Test Pages', links: [{ href: '/test-pages', title: 'Overview' }] },
+  { label: 'Test Pages', links: [{ href: withBase('/test-pages'), title: 'Overview' }] },
 ];
 
-// Trailing slash stripped so hrefs above compare equal; the home page keeps its
-// single slash rather than collapsing to ''.
-const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+// Normalized to one trailing slash so it compares equal to the hrefs above,
+// which `withBase` builds slashed.
+const currentPath = Astro.url.pathname.replace(/\/*$/, '/');
+const home = withBase('/');
 
 function linkClass(href: string) {
   let defaults = 'block px-2 py-0.5 border-l border-l-slate-400/50';
@@ -53,7 +55,7 @@ function linkClass(href: string) {
 {/* Below `md` the two columns can't both fit, so the nav collapses to a select
     above the content. The content scrolls beneath it, so it needs no sticky. */}
 <div class="md:hidden shrink-0 flex items-center gap-3 p-5 bg-slate-200 border-b border-slate-300">
-  <a href="/" aria-label="Voxie UI home" class="shrink-0 h-full"><VoxieMark class="h-full! w-auto" /></a>
+  <a href={home} aria-label="Voxie UI home" class="shrink-0 h-full"><VoxieMark class="h-full! w-auto" /></a>
   <label class="relative block flex-1">
     <span class="sr-only">Browse documentation</span>
     <select
@@ -61,7 +63,7 @@ function linkClass(href: string) {
       class="w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm font-medium text-slate-800"
     >
       {/* Home matches no option; without this the first doc would read as selected. */}
-      {currentPath === '/' && <option value="" hidden selected>Browse…</option>}
+      {currentPath === home && <option value="" hidden selected>Browse…</option>}
       {
         groups.map((group) => (
           <optgroup label={group.label}>
@@ -83,7 +85,7 @@ function linkClass(href: string) {
 <aside
   class="hidden md:block w-56 shrink-0 h-dvh overflow-y-auto overscroll-y-contain p-8 bg-slate-300/30 border-r border-r-white/50 shadow-inner"
 >
-  <a href="/" class="inline-flex items-center gap-1.5 text-sm font-extrabold hover:opacity-50 transition tracking-widest">
+  <a href={home} class="inline-flex items-center gap-1.5 text-sm font-extrabold hover:opacity-50 transition tracking-widest">
     <VoxieMark class="w-6" />
     VUI
   </a>

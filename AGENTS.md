@@ -1,3 +1,4 @@
+| `@lib/*`    | `src/lib/*`            | `import { withBase } from '@lib/base'`     |
 ## Development
 
 When starting the dev server, use background mode:
@@ -26,6 +27,7 @@ Import across directories through the aliases in `tsconfig.json`, never with `..
 | `@site/*`   | `src/components/site/*`| `import Sidebar from '@site/Sidebar.astro'` |
 | `@layouts/*`| `src/layouts/*`        | `import Layout from '@layouts/Layout.astro'`|
 | `@data/*`   | `src/data/*`           | `import { testPages } from '@data/testPages'`|
+| `@lib/*`    | `src/lib/*`            | `import { withBase } from '@lib/base'`      |
 
 `@ui` and `@site` are deliberately separate so the design-system / site-chrome split above reads at the import line. Same-directory siblings still use `./`.
 

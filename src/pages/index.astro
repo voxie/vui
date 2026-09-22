@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '@layouts/Layout.astro';
 import Card from '@ui/Card.vue';
 import Button from '@ui/Button.vue';
+import { withBase } from '@lib/base';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
@@ -27,7 +28,7 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
     >
       <h3 class="mb-1 text-base font-extrabold leading-snug text-slate-800">Docs</h3>
       <p class="text-xs text-slate-500 leading-snug grow mb-4">Foundations, components, patterns and guidance.</p>
-      <Button href="/docs/foundations/look-and-feel">Look and Feel <i class="fa-solid fa-arrow-right"></i></Button>
+      <Button href={withBase('/docs/foundations/look-and-feel')}>Look and Feel <i class="fa-solid fa-arrow-right"></i></Button>
     </Card>
 
     <Card
@@ -36,7 +37,7 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
     >
       <h3 class="mb-1 text-base font-extrabold leading-snug text-slate-800">Skills</h3>
       <p class="text-xs text-slate-500 leading-snug grow mb-4">The same docs written as instructions for AI agents.</p>
-      <Button href="/skills/intro">Skills Intro <i class="fa-solid fa-arrow-right"></i></Button>
+      <Button href={withBase('/skills/intro')}>Skills Intro <i class="fa-solid fa-arrow-right"></i></Button>
     </Card>
 
     <Card
@@ -45,7 +46,7 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
     >
       <h3 class="mb-1 text-base font-extrabold leading-snug text-slate-800">Test&nbsp;Pages</h3>
       <p class="text-xs text-slate-500 leading-snug grow mb-4">A set of real Voxie screens, stripped of every class, for testing guidance and rules.</p>
-      <Button href="/test-pages">Overview <i class="fa-solid fa-arrow-right"></i></Button>
+      <Button href={withBase('/test-pages')}>Overview <i class="fa-solid fa-arrow-right"></i></Button>
     </Card>
   </div>
 </Layout>

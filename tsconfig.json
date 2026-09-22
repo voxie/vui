@@ -20,7 +20,8 @@
       "@ui/*": ["src/components/ui/*"],
       "@site/*": ["src/components/site/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@data/*": ["src/data/*"]
+      "@data/*": ["src/data/*"],
+      "@lib/*": ["src/lib/*"]
     }
   }
 }

@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@lib/base';
 // Source: resources/js/components/message-hub/MessageHub.vue, with
 // message-hub-threads/MessageHubThreadsSidebar.vue,
 // message-hub-threads/MessageHubThreadSidebarRow.vue, MessageHubConversationNav.vue and
@@ -236,7 +237,7 @@ const composerActions = [
 							Unassigned
 							<i class="fa-solid fa-chevron-down"></i>
 						</button>
-						<a href="/test-pages/contact-detail">
+						<a href={withBase('/test-pages/contact-detail')}>
 							View Contact
 							<i class="fa-solid fa-square-arrow-up-right"></i>
 						</a>

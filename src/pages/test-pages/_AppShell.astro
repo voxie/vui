@@ -2,6 +2,7 @@
 // The application chrome, mirroring `navbar/AppNavbar.vue` in the voxie repo,
 // flattened to plain markup. Shared so it gets styled once, as the real app is.
 import TestPageLayout from '@layouts/TestPageLayout.astro';
+import { withBase } from '@lib/base';
 
 interface Props {
 	title: string;
@@ -15,7 +16,7 @@ const { title, source, fullBleed = false } = Astro.props;
 const navItems = [
 	{
 		name: 'Analytics',
-		href: '/test-pages/analytics-dashboard',
+		href: withBase('/test-pages/analytics-dashboard'),
 		items: ['Dashboard', 'Contacts', 'Entry Points', 'Outbound Messages'],
 	},
 	{
@@ -25,12 +26,12 @@ const navItems = [
 	},
 	{
 		name: 'Contacts',
-		href: '/test-pages/contacts-list',
+		href: withBase('/test-pages/contacts-list'),
 		items: ['All Contacts', 'Segments', 'External Lists', 'Tags', 'Custom Attributes', 'Imports'],
 	},
 	{
 		name: 'Messaging',
-		href: '/test-pages/campaigns-list',
+		href: withBase('/test-pages/campaigns-list'),
 		items: ['Message Hub', 'Quick Blast', 'Campaigns', 'Reserved Dates', 'Snippets'],
 	},
 	{ name: 'Support', href: '#', items: [] },
@@ -39,16 +40,16 @@ const navItems = [
 
 <TestPageLayout title={title} source={source}>
 	<nav data-test="app-navbar" aria-label="Main">
-		<a href="/test-pages" data-test="navbar-logo">
+		<a href={withBase('/test-pages')} data-test="navbar-logo">
 			<span>Voxie</span>
 		</a>
 
-		<a href="/test-pages/message-hub" data-test="navbar-message-hub">
+		<a href={withBase('/test-pages/message-hub')} data-test="navbar-message-hub">
 			<i class="fa-solid fa-messages"></i>
 			Message Hub
 		</a>
 
-		<a href="/test-pages/quick-blast" data-test="navbar-quick-blast">
+		<a href={withBase('/test-pages/quick-blast')} data-test="navbar-quick-blast">
 			<i class="fa-solid fa-rocket-launch"></i>
 			Quick Blast
 		</a>
@@ -84,7 +85,7 @@ const navItems = [
 				<i class="fa-solid fa-gear"></i>
 			</button>
 			<ul>
-				<li><a href="/test-pages/settings-security">Security</a></li>
+				<li><a href={withBase('/test-pages/settings-security')}>Security</a></li>
 				<li><a href="#">Profile</a></li>
 				<li><a href="#">Team</a></li>
 				<li><a href="#">Billing</a></li>

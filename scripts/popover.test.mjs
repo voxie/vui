@@ -7,7 +7,7 @@ try {
 	const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 	const errors = [];
 	page.on('pageerror', error => errors.push(error.message));
-	await page.goto(`${process.argv[2] ?? 'http://localhost:4322'}/docs/components/popover`);
+	await page.goto(`${process.argv[2] ?? 'http://localhost:4322'}/vui/docs/components/popover/`);
 	await page.waitForFunction(() => !document.querySelector('astro-island[ssr]'));
 	const triggers = page.getByRole('button', { name: /^(Open popover|Hover or click to open|Open to the right|Open beyond the container|Popover disabled)$/ });
 	const panel = page.getByRole('dialog', { name: 'Delivery details' });

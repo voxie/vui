@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@lib/base';
 // Source: resources/js/components/contacts/contact/ContactDetails.vue plus
 // form/ContactForm.vue, form/ContactFormDetails.vue, ContactFormSubscriptions.vue,
 // ContactFormTags.vue and ContactFormCustomAttributes.vue.
@@ -48,7 +49,7 @@ const customAttributes = [
 >
 	<header data-test="page-header">
 		<p data-test="subtitle">
-			<a href="/test-pages/contacts-list">
+			<a href={withBase('/test-pages/contacts-list')}>
 				<i class="fa-solid fa-arrow-left"></i>
 				All Contacts
 			</a>
@@ -272,7 +273,7 @@ const customAttributes = [
 			</section>
 
 			<footer data-test="sticky-footer">
-				<a href="/test-pages/contacts-list">Cancel</a>
+				<a href={withBase('/test-pages/contacts-list')}>Cancel</a>
 				<button type="submit" data-test="contact-save">Update Contact</button>
 			</footer>
 		</form>

@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@lib/base';
 // Sources: resources/js/components/general/EmptyState.vue, PageLoading.vue,
 // LoadingBars.vue, LoadingSpinner.vue, ImpersonationAlert.vue, TeamSuspendedAlert.vue,
 // PageCallout.vue, the modal set under components/modals/, and the toast registrations
@@ -99,7 +100,7 @@ const badges = [
 
 		<div data-test="empty-state">
 			<p>No contacts found.</p>
-			<a href="/test-pages/contact-detail">
+			<a href={withBase('/test-pages/contact-detail')}>
 				New Contact
 				<i class="fa-solid fa-circle-plus"></i>
 			</a>
@@ -153,7 +154,7 @@ const badges = [
 		<div data-test="error-state" data-variant="not-found">
 			<h3>404</h3>
 			<p>That page doesn't exist, or you don't have access to it.</p>
-			<a href="/test-pages">Back to test pages</a>
+			<a href={withBase('/test-pages')}>Back to test pages</a>
 		</div>
 	</section>
 

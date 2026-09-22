@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@lib/base';
 // Source: resources/js/components/quick-blast/QuickBlast.vue plus QuickBlastType.vue,
 // QuickBlastTo.vue, QuickBlastWhat.vue and QuickBlastWhen.vue, with
 // general/StepFormHeading.vue for the heading.
@@ -203,7 +204,7 @@ const segments = [
 		</section>
 
 		<footer data-test="sticky-footer">
-			<a href="/test-pages/campaigns-list">Cancel</a>
+			<a href={withBase('/test-pages/campaigns-list')}>Cancel</a>
 			<button type="button" data-test="save-draft">Save Draft</button>
 			<button type="submit" data-test="send" disabled>
 				Send Quick Blast
