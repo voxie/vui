@@ -9,8 +9,8 @@ A page is made up of two layout sections. The [Navbar](/docs/components/navbar) 
 
 Tailwind's `container` plus a max width and padding determine the main content width.
 
-```
-container mx-auto px-4 sm:px-6 md:px-8 max-w-(--breakpoint-xl)
+```html
+<main class="container mx-auto px-4 sm:px-6 md:px-8 max-w-(--breakpoint-xl)">
 ```
 
 Screens like Message Hub and the workflow builder are exceptions. They drop the max width, because the user needs maximum space for complex or heavy work.
@@ -19,8 +19,8 @@ Headings should always sit with their content inside cards. Page titles are the 
 
 The space between cards is the same on every layout. It never exceeds the padding between the container and the edge of the window.
 
-```
-gap-4 md:gap-6 xl:gap-8
+```html
+<div class="gap-4 md:gap-6 xl:gap-8">
 ```
 
 Every layout below is live. **View Full Screen** will let you preview the layout at production scale.
@@ -29,8 +29,8 @@ Every layout below is live. **View Full Screen** will let you preview the layout
 
 Most pages use a left-aligned 12-column grid that gets filled with content cards. Examples are dashboards, item lists, and analytics.
 
-```
-grid grid-cols-12 gap-4 md:gap-6 xl:gap-8
+```html
+<div class="grid grid-cols-12 gap-4 md:gap-6 xl:gap-8">
 ```
 
 The grid sits at the main content level in the markup, not on the html body. That way it can be dropped in when a page needs it. This also allows content padding and gaps to be managed separately from the navbar.
@@ -43,8 +43,8 @@ The grid sits at the main content level in the markup, not on the html body. Tha
 
 Create pages use a centered, single column layout for a focused flow experience. These are the only pages that do so. Examples include creating a campaign, a segment, or a contact. The column is a flex stack with its cards centered. Each card is full width up to `md`, then capped at `max-w-2xl`. A page description sits on the page background, directly under the heading. The cards usually have a `glass` surface, because they hold form inputs.
 
-```
-w-full md:max-w-2xl
+```html
+<Card class="w-full md:max-w-2xl">
 ```
 
 That card width is shared with the small cards on sidebar pages, so a form looks the same wherever it appears.
@@ -57,8 +57,8 @@ That card width is shared with the small cards on sidebar pages, so a form looks
 
 Some pages require sidebars. Examples include edit screen, analytics, and settings. The sidebar and the content sit in a flex row from `md` up. Below that the sidebar stacks above the content. The sidebar has a fixed width of `w-48` at `md` and `w-56` at `lg`. The content column takes the remaining width.
 
-```
-flex flex-col md:flex-row
+```html
+<div class="flex flex-col md:flex-row">
 ```
 
 Small content cards in this layout match the width of the ones in the create screens for consistency. They use the same `w-full md:max-w-2xl` and sit at the left of the content column. Some content requires more space. In those instances the cards fill the full width of the content column with `w-full`.

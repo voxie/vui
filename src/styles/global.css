@@ -50,3 +50,8 @@
 h1 {
   text-box: trim-both cap alphabetic;
 }
+/* Layout.astro paints inline code slate-800 with `prose-code:`, which also
+   reaches the code inside a pre and hides it on Shiki's dark background. */
+.prose pre code {
+  color: inherit;
+}
