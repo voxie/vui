@@ -1,0 +1,214 @@
+<script setup lang="ts">
+// Sources: resources/js/components/general/EmptyState.vue, PageLoading.vue,
+// LoadingBars.vue, LoadingSpinner.vue, ImpersonationAlert.vue, TeamSuspendedAlert.vue,
+// PageCallout.vue, the modal set under components/modals/, and the toast registrations
+// in toaster/AppToastManager.vue. Not a page from the app: a catalogue of the
+// states every other page can fall into.
+import { withBase } from '@lib/base';
+
+const alerts = [
+	{
+		color: 'info',
+		icon: 'fa-circle-info',
+		message: 'Contact will be in Northside Auto — Austin.',
+	},
+	{
+		color: 'success',
+		icon: 'fa-circle-check',
+		message: 'Updated successfully.',
+	},
+	{
+		color: 'warning',
+		icon: 'fa-triangle-exclamation',
+		message: 'This message is over one segment. Each contact will be billed twice.',
+	},
+	{
+		color: 'danger',
+		icon: 'fa-circle-exclamation',
+		message: 'There was an error communicating with the platform.',
+	},
+];
+
+const toasts = [
+	{ type: 'success', message: 'Saved successfully.' },
+	{ type: 'error', message: 'There was an error communicating with the platform.' },
+	{ type: 'info', message: '12 contacts imported.' },
+];
+
+const badges = [
+	'Draft',
+	'Scheduled',
+	'Live',
+	'Completed',
+	'Paused',
+	'Archived',
+	'Unread',
+	'Opted In',
+	'Opted Out',
+	'No Preference',
+];
+</script>
+
+<template>
+	<header data-test="page-header">
+		<h1>States</h1>
+		<p>Every state the other pages fall into, on one page.</p>
+	</header>
+
+	<section>
+		<h2>Banners</h2>
+
+		<aside data-test="impersonation-alert">
+			<i class="fa-solid fa-user-secret"></i>
+			You are impersonating <strong>Northside Auto Group</strong>.
+			<button type="button">Stop impersonating</button>
+		</aside>
+
+		<aside data-test="team-suspended-alert">
+			<i class="fa-solid fa-ban"></i>
+			This team is suspended. Messaging is disabled until billing is resolved.
+			<a href="#">Go to Billing</a>
+		</aside>
+	</section>
+
+	<section>
+		<h2>Alerts</h2>
+		<aside v-for="alert in alerts" :key="alert.color" data-test="alert" :data-color="alert.color">
+			<i :class="`fa-solid ${alert.icon}`"></i>
+			<p>{{ alert.message }}</p>
+			<button type="button" aria-label="Dismiss">
+				<i class="fa-solid fa-xmark"></i>
+			</button>
+		</aside>
+	</section>
+
+	<section>
+		<h2>Empty states</h2>
+
+		<div data-test="empty-state">
+			<p>No results for current search, try adjusting your filters.</p>
+			<button type="button" data-test="reset-button">
+				Reset All
+				<i class="fa-solid fa-circle-xmark"></i>
+			</button>
+		</div>
+
+		<div data-test="empty-state">
+			<p>No contacts found.</p>
+			<a :href="withBase('/test-pages/contact-detail')">
+				New Contact
+				<i class="fa-solid fa-circle-plus"></i>
+			</a>
+		</div>
+
+		<div data-test="empty-state" data-variant="conversation">
+			<p>No message history</p>
+		</div>
+	</section>
+
+	<section>
+		<h2>Loading</h2>
+
+		<div data-test="page-loading">
+			<i class="fa-solid fa-spinner" aria-hidden="true"></i>
+			<span>Loading</span>
+		</div>
+
+		<div data-test="loading-bars" aria-label="Loading">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+
+		<!-- Skeleton rows — a list mid-fetch. -->
+		<ol data-test="skeleton-list" aria-hidden="true">
+			<li><span data-test="skeleton-line"></span><span data-test="skeleton-line"></span></li>
+			<li><span data-test="skeleton-line"></span><span data-test="skeleton-line"></span></li>
+			<li><span data-test="skeleton-line"></span><span data-test="skeleton-line"></span></li>
+		</ol>
+
+		<button type="button" data-test="loading-button" disabled>
+			<i class="fa-solid fa-spinner"></i>
+			Saving
+		</button>
+	</section>
+
+	<section>
+		<h2>Errors</h2>
+
+		<div data-test="error-state">
+			<i class="fa-solid fa-triangle-exclamation"></i>
+			<h3>Something went wrong</h3>
+			<p>We couldn't load this list. Try again in a moment.</p>
+			<button type="button" data-test="retry">
+				Retry
+				<i class="fa-solid fa-rotate-right"></i>
+			</button>
+		</div>
+
+		<div data-test="error-state" data-variant="not-found">
+			<h3>404</h3>
+			<p>That page doesn't exist, or you don't have access to it.</p>
+			<a :href="withBase('/test-pages')">Back to test pages</a>
+		</div>
+	</section>
+
+	<section>
+		<h2>Badges</h2>
+		<ul data-test="badge-list">
+			<li
+				v-for="badge in badges"
+				:key="badge"
+				data-test="badge"
+				:data-status="badge.toLowerCase().replace(/ /g, '-')"
+			>
+				{{ badge }}
+			</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>Toasts</h2>
+		<ol data-test="toast-manager">
+			<li v-for="toast in toasts" :key="toast.type" data-test="toast" :data-type="toast.type">
+				{{ toast.message }}
+				<button type="button" aria-label="Dismiss">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+			</li>
+		</ol>
+	</section>
+
+	<section>
+		<h2>Modal</h2>
+
+		<!-- Rendered inline rather than as an overlay so it can be styled without JS. -->
+		<div data-test="modal-backdrop">
+			<div data-test="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+				<header>
+					<h3 id="modal-title">Delete this campaign?</h3>
+					<button type="button" aria-label="Close">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</header>
+
+				<div data-test="modal-body">
+					<p>
+						<strong>Labor Day Weekend Blast</strong> and its 48,903 queued messages
+						will be removed. This cannot be undone.
+					</p>
+					<label for="confirm">Type DELETE to confirm</label>
+					<input id="confirm" name="confirm" type="text" />
+				</div>
+
+				<footer data-test="modal-footer">
+					<button type="button">Cancel</button>
+					<button type="button" data-test="confirm-delete">
+						Delete Campaign
+						<i class="fa-solid fa-trash"></i>
+					</button>
+				</footer>
+			</div>
+		</div>
+	</section>
+</template>

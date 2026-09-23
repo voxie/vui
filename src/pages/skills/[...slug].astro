@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '@layouts/Layout.astro';
+import Card from '@ui/Card.vue';
 
 export async function getStaticPaths() {
 	const skills = await getCollection('skills');
@@ -14,7 +15,8 @@ const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 ---
 
-<Layout title={entry.data.title} headings={headings}>
-	<h1 class="">{entry.data.title}</h1>
+<Layout title={entry.data.name} headings={headings}>
+	<h1>{entry.data.name}</h1>
+	<Card class="not-prose text-sm text-slate-500 mb-12 leading-relaxed">{entry.data.description}</Card>
 	<Content />
 </Layout>

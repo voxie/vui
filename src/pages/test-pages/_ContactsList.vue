@@ -1,0 +1,231 @@
+<script setup lang="ts">
+// Source: resources/js/components/contacts/contact/ContactList.vue, with
+// ContactListFilters.vue and ContactRow.vue flattened in.
+import { withBase } from '@lib/base';
+
+const contacts = [
+	{
+		id: 4821,
+		name: 'Marisol Trevino',
+		phone: '(512) 555-0184',
+		marketing: 'Opted In',
+		transactional: 'Opted In',
+		preferred: true,
+		preferredGroup: 'Northside Auto — Austin',
+		added: '2 hours ago',
+		addedExact: 'Aug 22, 2026 6:41 AM',
+	},
+	{
+		id: 4820,
+		name: 'Dev Ramachandran',
+		phone: '(312) 555-0142',
+		marketing: 'Opted In',
+		transactional: 'No Preference',
+		preferred: false,
+		preferredGroup: null,
+		added: '1 day ago',
+		addedExact: 'Aug 21, 2026 9:12 AM',
+	},
+	{
+		id: 4819,
+		name: 'Kelechi Obi',
+		phone: '(646) 555-0119',
+		marketing: 'Opted Out',
+		transactional: 'Opted In',
+		preferred: true,
+		preferredGroup: 'Northside Auto — Brooklyn',
+		added: '3 days ago',
+		addedExact: 'Aug 19, 2026 4:03 PM',
+	},
+	{
+		id: 4818,
+		name: 'Hallie Brandt-Nguyen',
+		phone: '(206) 555-0177',
+		marketing: 'No Preference',
+		transactional: 'No Preference',
+		preferred: false,
+		preferredGroup: null,
+		added: '6 days ago',
+		addedExact: 'Aug 16, 2026 11:58 AM',
+	},
+	{
+		id: 4817,
+		name: '(415) 555-0163',
+		phone: '(415) 555-0163',
+		marketing: 'Opted In',
+		transactional: 'Opted In',
+		preferred: false,
+		preferredGroup: null,
+		added: '2 weeks ago',
+		addedExact: 'Aug 8, 2026 8:20 AM',
+	},
+];
+
+const rowActions = ['View', 'Unsubscribe', 'Reset', 'Delete'];
+</script>
+
+<template>
+	<header data-test="page-header">
+		<h1>Contacts</h1>
+	</header>
+
+	<section data-test="page-controls">
+		<div data-test="contact-filters">
+			<button type="button" aria-expanded="true">
+				<span>Find Contacts</span>
+				<span data-test="filters-count">
+					2 filters
+					<i class="fa-solid fa-circle-xmark"></i>
+				</span>
+			</button>
+
+			<form data-test="filters-form">
+				<div>
+					<label for="filter-search">
+						Keyword Search
+						<button type="button" data-test="reset-field">Reset</button>
+					</label>
+					<input
+						id="filter-search"
+						name="filter[search]"
+						type="text"
+						placeholder="Search"
+						maxlength="191"
+						value="trevino"
+					/>
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</div>
+
+				<div>
+					<label for="filter-marketing">Marketing Subscription</label>
+					<select id="filter-marketing" name="filter[marketing_subscription_status]">
+						<option value="">Status</option>
+						<option value="opt_in" selected>Opt-in</option>
+						<option value="opt_out">Opt-out</option>
+						<option value="unknown">No preference</option>
+					</select>
+				</div>
+
+				<div>
+					<label for="filter-tag">Tag</label>
+					<select id="filter-tag" name="filter[tag_name]">
+						<option value="">Name</option>
+						<option value="vip">vip</option>
+						<option value="service-due">service-due</option>
+						<option value="lease-expiring">lease-expiring</option>
+					</select>
+				</div>
+
+				<fieldset>
+					<legend>Preferred</legend>
+					<label>
+						<input type="checkbox" name="is_preferred" checked />
+						Is Preferred
+					</label>
+					<label>
+						<input type="checkbox" name="not_preferred" />
+						Not Preferred
+					</label>
+				</fieldset>
+
+				<button type="button" data-test="filters-reset">Reset</button>
+				<button type="submit" data-test="filters-apply">Apply</button>
+			</form>
+		</div>
+
+		<div data-test="page-controls-right">
+			<label for="sort">Sort</label>
+			<select id="sort" name="sort">
+				<option value="id:desc" selected>Newest first</option>
+				<option value="id:asc">Oldest first</option>
+				<option value="last_name:asc">Last name A–Z</option>
+			</select>
+
+			<a :href="withBase('/test-pages/contact-detail')" data-test="new-contact">
+				New Contact
+				<i class="fa-solid fa-circle-plus"></i>
+			</a>
+		</div>
+	</section>
+
+	<table data-test="contacts-table">
+		<thead>
+			<tr>
+				<th scope="col">Name</th>
+				<th scope="col">Phone</th>
+				<th scope="col">Marketing</th>
+				<th scope="col">Transactional</th>
+				<th scope="col">Preferred</th>
+				<th scope="col">Added</th>
+				<th scope="col"><span>Actions</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr v-for="contact in contacts" :key="contact.id" data-test="contact-row">
+				<th scope="row" data-test="row-title">
+					<a :href="withBase('/test-pages/contact-detail')">{{ contact.name }}</a>
+				</th>
+
+				<td>
+					<span data-test="label">Phone:</span>
+					{{ contact.phone }}
+				</td>
+
+				<td>
+					<span data-test="label">Marketing:</span>
+					<span data-test="badge" :data-status="contact.marketing">
+						{{ contact.marketing }}
+					</span>
+				</td>
+
+				<td>
+					<span data-test="label">Transactional:</span>
+					<span data-test="badge" :data-status="contact.transactional">
+						{{ contact.transactional }}
+					</span>
+				</td>
+
+				<td>
+					<span data-test="label">Preferred:</span>
+					<span v-if="contact.preferred" :title="contact.preferredGroup ?? undefined">
+						<i class="fa-solid fa-star"></i>
+						<span>{{ contact.preferredGroup }}</span>
+					</span>
+					<i v-else class="fa-regular fa-star"></i>
+				</td>
+
+				<td>
+					<span data-test="label">Added:</span>
+					<span :title="contact.addedExact">{{ contact.added }}</span>
+				</td>
+
+				<td data-test="row-buttons">
+					<div data-test="dropdown">
+						<button type="button" aria-label="More actions" aria-expanded="false">
+							<i class="fa-solid fa-ellipsis"></i>
+						</button>
+						<ul>
+							<li v-for="action in rowActions" :key="action">
+								<button type="button" :data-test="action.toLowerCase()">
+									{{ action }}
+								</button>
+							</li>
+						</ul>
+					</div>
+					<a :href="withBase('/test-pages/contact-detail')" data-test="edit">
+						Edit
+						<i class="fa-solid fa-file-pen"></i>
+					</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<footer data-test="pagination">
+		<button type="button" data-test="load-more-btn">
+			Load More
+			<i class="fa-solid fa-spinner"></i>
+		</button>
+		<p>5/1,284</p>
+	</footer>
+</template>

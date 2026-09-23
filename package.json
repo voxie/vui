@@ -14,7 +14,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "trial": "node scripts/trial.mjs"
+    "trial": "node scripts/trial.mjs",
+    "link-skills": "node scripts/link-skills.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.7",

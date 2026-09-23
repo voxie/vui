@@ -20,9 +20,13 @@ Browse them at `/test-pages`.
   button, `VxBadge` → `<span data-test="badge">`, `VxSelectable` →
   `<select>`. The existing library carries its own visual opinions, so leaving
   it in would prejudge the exercise.
-- **Vue reactivity removed.** No `v-if`, no `v-for` over API data, no stores or
-  services. Each page is a static Astro page with its data inlined at the top of
-  the frontmatter.
+- **Vue reactivity removed.** No stores, services, or API data. Each page is a
+  Vue file with its data inlined in `<script setup>`, looping over that data
+  with `v-for` and nothing more. A thin `.astro` page mounts it. The markup is
+  Vue rather than Astro so the design-system components an agent swaps in share
+  one tree: Astro renders a nested Vue component as a separate app, so a Button
+  written into an `.astro` file can't read the Card or Navbar around it, and a
+  Navbar can't measure or fold its actions.
 - **Production `data-test` attributes kept.** They are the best available
   semantic hint for what an element is now that the classes are gone —
   `data-test="stat-card"`, `data-test="sticky-footer"`, `data-test="badge"`.
@@ -54,21 +58,42 @@ The brief an agent gets, its rules, and the review checklist live on `index.astr
 ## Layout
 
 `src/layouts/TestPageLayout.astro` is a bare shell — Tailwind and Inter, nothing
-else. `_AppShell.astro` holds the navigation bar and page container, shared
-across every page so the chrome gets styled once, the way it works in the real
-app. Both start unstyled.
+else. `_AppShell.astro` holds the page container and mounts `_AppNavbar.vue`,
+the navigation bar. Both are shared across every page so the chrome gets styled
+once, the way it works in the real app. Everything starts unstyled.
+
+Each page is two files: `_PascalCase.vue` with the markup and data, and
+`kebab-case.astro`, which mounts it inside the shell with `client:load`. An
+agent styles the Vue file.
+
+`src/styles/global.css` carries `@source "../pages/trial"`. The trial folder is
+gitignored and Tailwind skips ignored files when it scans, so without that line
+a styled trial page loses every class not already used somewhere else.
 
 `index.astro` is the exception: it carries a little styling of its own so the
 list stays readable.
 
 ## Running a trial
 
-A trial never touches these files. `npm run trial` copies every page and the
-shell into `src/pages/trial/`, rewriting the links between pages so the copy
-stays self-contained, and the agent styles that copy. It serves at `/trial/…`
-next to the raw page at `/test-pages/…`. The folder is in `.gitignore`, so a
-trial can't be committed, and the fixtures here stay ordinary source that can be
-edited and committed like anything else.
+A trial never touches these files. `npm run trial -- --docs` or `npm run trial
+-- --skills` copies every page and the shell into `src/pages/trial/`, rewriting
+the links between pages so the copy stays self-contained, and the agent styles
+that copy. It serves at `/trial/…` next to the raw page at `/test-pages/…`. The
+folder is in `.gitignore`, so a trial can't be committed, and the fixtures here
+stay ordinary source that can be edited and committed like anything else.
 
-The script refuses to overwrite an existing trial. `npm run trial -- --fresh`
-starts over, and so does `rm -rf src/pages/trial`.
+The flag picks the reference. A docs trial has the agent read the docs pages. A
+skills trial symlinks the consumer skills from `skills/` into `.claude/skills/`,
+so Claude Code sees them here the way it does in a consuming repo, and the brief
+keeps the docs closed. Running the same page both ways shows what the skills
+lose. The links are ignored by git and go away with the trial.
+
+Start a docs trial in a fresh Claude Code session: run `npm run trial -- --docs`
+first, then open the session. Claude Code picks up a newly linked skill while a
+session is running, but a session that already loaded the skills during a skills
+trial may hold on to them after the docs trial unlinks the files. A new session
+reads `.claude/skills/` from scratch and sees only `docs-voice`.
+
+The script refuses to overwrite an existing trial. `npm run trial -- --fresh --docs`
+or `--fresh --skills` starts over, and `npm run trial -- --remove` deletes the trial and unlinks the
+skills. A bare `rm -rf src/pages/trial` leaves the links behind.

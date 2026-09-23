@@ -8,6 +8,7 @@ import { testPages } from '@data/testPages';
 import Card from '@ui/Card.vue';
 import Button from '@ui/Button.vue';
 import Select from '@ui/Select.vue';
+import TrialMode from '@site/TrialMode.vue';
 
 // The brief's reading list is the whole docs collection, grouped and ordered
 // the way the sidebar groups it, so a new page joins the brief on its own.
@@ -18,6 +19,7 @@ const rank = (section: string) => {
 };
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 
 const reading = [...new Set(docs.map((entry) => entry.id.split('/')[0]))]
   .sort((a, b) => rank(a) - rank(b) || a.localeCompare(b))
@@ -30,35 +32,65 @@ const reading = [...new Set(docs.map((entry) => entry.id.split('/')[0]))]
   }));
 
 // The brief is data so the card and the clipboard copy can't drift: the card
-// renders these lines, and `promptTemplate` is the same ones as plain text.
-// The page the brief points at is a token, swapped for the footer's pick on
-// both sides.
+// renders these lines, and each template is the same ones as plain text. The
+// page the brief points at is a token, swapped for the footer's pick on both
+// sides. Two briefs, since a trial runs on the docs or on the skills, never
+// both, so the two can be compared.
 const PAGE = '{{page}}';
 const promptOpening = (page: string) =>
   `Style ${page}. It's real production markup with every class stripped.`;
-// The brief points at the trial copy, never at the fixture itself.
+// The brief points at the trial copy, never at the fixture itself, and at the
+// Vue file holding the markup rather than the thin page that mounts it.
+const componentFile = (href: string) =>
+  '_' + href.split('/').pop()!.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase()) + '.vue';
 const pageOptions = testPages.map((page) => ({
-  value: `src/pages/trial${page.href.replace('/test-pages', '')}.astro`,
+  value: `src/pages/trial/${componentFile(page.href)}`,
   label: page.title,
 }));
-const promptReading = 'Read all of these first and treat them as binding:';
-const promptRules = [
-  "Run `npm run trial` first if src/pages/trial/ doesn't exist. It copies the raw fixtures there, and the copy is what you style. Never edit src/pages/test-pages/.",
+const sharedRules = [
   'Add classes freely. You may add wrapper elements and swap in the documented components wherever the markup maps to one: Card for a plain container, Button for a button, Input for a text input or textarea and its label, Select for a select, Checkbox and Radio for their inputs, Badge for a data-test="badge" span, Modal for the inline dialog, CharCounter for a length-limited field, Navbar with NavbarAction and NavbarActionItem for the app navbar.',
   "Prefer a component over restyling the raw element. If a component doesn't fit, say why in the gap list rather than working around it silently.",
   "Don't create new components.",
   "Don't remove or rename semantic elements, data-test attributes, or copy, and don't change the data.",
-  "_AppShell.astro is shared by every test page, so it gets styled once and only for what every page needs: the navbar and the page container. Anything one page needs, like a background color, goes on that page's main content wrapper. Its dropdowns are rendered open so their contents are visible; the Navbar component decides that itself, so let it.",
-  "When the docs don't answer something, make the call, but keep a running list of every gap you hit.",
+  "The markup is in Vue files so the components compose in one tree, the way they do in the product. Style the Vue file. The .astro page beside it only mounts it, and a component written straight into an .astro file is rendered as its own app and can't read the Card or Navbar around it. Where a component exists, use it rather than hand-styled markup that resembles it.",
+  "_AppNavbar.vue and _AppShell.astro are shared by every test page, so they get styled once and only for what every page needs: the navbar and the page container. Anything one page needs, like a background color, goes on that page's main content wrapper. The navbar's dropdowns are rendered open so their contents are visible; the Navbar component decides that itself, so let it.",
 ];
 const promptClosing = 'Then self-review against the checklist in src/pages/test-pages/index.astro and report the gap list.';
 
-const promptTemplate = [
-  promptOpening(PAGE),
-  [promptReading, ...reading.map((group) => `- ${group.dir} ${group.files}`)].join('\n'),
-  ['Rules:', ...promptRules.map((rule) => `- ${rule}`)].join('\n'),
-  promptClosing,
-].join('\n\n');
+const briefs = {
+  docs: {
+    reading: 'Read all of these first and treat them as binding:',
+    list: reading.map((group) => ({ code: group.dir, text: group.files })),
+    rules: [
+      "Run `npm run trial -- --docs` first if src/pages/trial/ doesn't exist. It copies the raw fixtures there, and the copy is what you style. Never edit src/pages/test-pages/.",
+      'The vui-* skills are not part of this trial. If any are loaded, ignore them.',
+      ...sharedRules,
+      "When the docs don't answer something, make the call, but keep a running list of every gap you hit.",
+    ],
+  },
+  skills: {
+    reading: 'The vui-* skills are installed in this repo for the trial. They are your only reference:',
+    list: skills.map((entry) => ({ code: entry.id, text: entry.data.description })),
+    rules: [
+      "Run `npm run trial -- --skills` first if src/pages/trial/ doesn't exist. It copies the raw fixtures there and links the skills in, and the copy is what you style. Never edit src/pages/test-pages/.",
+      "Don't open anything under src/content/docs/. The skills stand in for the docs, and the trial measures how well they do.",
+      ...sharedRules,
+      "When the skills don't answer something, make the call, but keep a running list of every gap you hit.",
+    ],
+  },
+};
+
+const promptTemplates = Object.fromEntries(
+  Object.entries(briefs).map(([mode, brief]) => [
+    mode,
+    [
+      promptOpening(PAGE),
+      [brief.reading, ...brief.list.map((item) => `- ${item.code} ${item.text}`)].join('\n'),
+      ['Rules:', ...brief.rules.map((rule) => `- ${rule}`)].join('\n'),
+      promptClosing,
+    ].join('\n\n'),
+  ]),
+);
 
 // Hand-written page, so the list the layout renders is hand-written too. Keep
 // it in step with the h2s below.
@@ -106,31 +138,17 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
 
   <p>Point an agent at one page with a brief along these lines. The brief has the agent copy the fixtures into <code>src/pages/trial/</code> with <code>npm run trial</code> and style the copy, which serves at <code>/trial/…</code> beside the raw page. The folder is ignored by git, so a trial can't be committed by accident.</p>
 
-  {/* Padding moves onto the body so the footer can reach the card's edges, the
-      way the one in a Modal does. The brief is white on the card's glass, so it
-      reads as the thing being handed over. */}
+  <p>A trial runs on one reference or the other. A docs trial has the agent read the documentation pages. A skills trial links the <code>vui-*</code> skills into <code>.claude/skills/</code>, the way a consuming repo sees them, and keeps the docs closed. Run the same page both ways to see what the skills lose.</p>
+
+  <p>Start a docs trial in a fresh Claude Code session. Run <code>npm run trial -- --docs</code> first, then open the session. Claude Code picks up a newly linked skill while a session is running, but a session that already loaded the skills during a skills trial may hold on to them after the docs trial unlinks the files. A new session reads <code>.claude/skills/</code> from scratch and sees only <code>docs-voice</code>.</p>
+
+  {/* The choices come first, so the brief below reads as the result of them.
+      Padding moves onto each block so the brief can reach the card's edges,
+      the way a Modal's footer does. The brief is white on the card's glass, so
+      it reads as the thing being handed over. */}
   <Card surface="glass" padding="none">
-    <div class="rounded-t-2xl bg-white p-8">
-      <p class="mt-0" data-prompt-opening>{promptOpening(pageOptions[0].value)}</p>
-
-      <p>{promptReading}</p>
-
-      <ul>
-        {reading.map((group) => <li><code>{group.dir}</code> {group.files}</li>)}
-      </ul>
-
-      <h3>Rules:</h3>
-      <ul>
-        {promptRules.map((rule) => <li>{rule}</li>)}
-      </ul>
-
-      <p class="mb-0">{promptClosing}</p>
-    </div>
-
-    {/* The Modal footer, borrowed: same border, stacked rather than turning into
-        a row, since the pick reads as a step before the copy. Padding matches
-        the brief above it so the two share one edge. */}
-    <div class="not-prose flex flex-col gap-3 border-t border-solid border-slate-100 p-8">
+    <div class="not-prose flex flex-col gap-4 border-b border-solid border-slate-100 p-8">
+      <TrialMode client:load />
       <Select
         block
         sits-on="glass"
@@ -144,17 +162,45 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
         <span data-copy-label>Copy prompt</span>
       </Button>
     </div>
+
+    <div class="rounded-b-2xl bg-white p-8">
+      <p class="mt-0" data-prompt-opening>{promptOpening(pageOptions[0].value)}</p>
+
+      {Object.entries(briefs).map(([mode, brief]) => (
+        <div data-brief={mode} hidden={mode !== 'docs'}>
+          <p>{brief.reading}</p>
+          <ul>
+            {brief.list.map((item) => <li><code>{item.code}</code> {item.text}</li>)}
+          </ul>
+          <h3>Rules:</h3>
+          <ul>
+            {brief.rules.map((rule) => <li>{rule}</li>)}
+          </ul>
+        </div>
+      ))}
+
+      <p class="mb-0">{promptClosing}</p>
+    </div>
   </Card>
 
-  {/* Neither control is hydrated, so the picking and the copying are wired up
-      here rather than in a Vue island. */}
-  <script define:vars={{ promptTemplate, openingTemplate: promptOpening(PAGE), PAGE }}>
+  {/* The select and the button aren't hydrated, and the radios are native
+      inputs whose change bubbles out of the island, so everything is wired here. */}
+  <script define:vars={{ promptTemplates, openingTemplate: promptOpening(PAGE), PAGE }}>
     const button = document.querySelector('[data-copy-prompt]');
     const icon = button?.querySelector('[data-copy-icon]');
     const label = button?.querySelector('[data-copy-label]');
     const select = document.querySelector('[data-prompt-page]');
     const opening = document.querySelector('[data-prompt-opening]');
+    const modeBar = document.querySelector('[data-prompt-mode]');
+    const briefs = document.querySelectorAll('[data-brief]');
     let reset;
+
+    const mode = () => modeBar?.querySelector('input:checked')?.value ?? 'docs';
+
+    // The radios are native inputs inside the island, so their change bubbles here.
+    modeBar?.addEventListener('change', () => {
+      for (const brief of briefs) brief.hidden = brief.dataset.brief !== mode();
+    });
 
     // Held long enough to read, then the button goes back to its resting label.
     function say(iconClass, text) {
@@ -173,7 +219,7 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
 
     button?.addEventListener('click', async () => {
       try {
-        await navigator.clipboard.writeText(promptTemplate.replace(PAGE, select.value));
+        await navigator.clipboard.writeText(promptTemplates[mode()].replace(PAGE, select.value));
         say('fa-solid fa-check', 'Copied');
       } catch {
         say('fa-solid fa-triangle-exclamation', 'Copy failed');
@@ -190,7 +236,7 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
   <h2 id="resetting">Resetting</h2>
 
   <p>
-    A trial lives in <code>src/pages/trial/</code> and nowhere else. <code>rm -rf src/pages/trial</code> throws it away, and <code>npm run trial -- --fresh</code> does the same and copies the fixtures again. The fixtures under <code>src/pages/test-pages/</code> are ordinary source, so edit and commit them freely.
+    A trial lives in <code>src/pages/trial/</code> and nowhere else. <code>npm run trial -- --remove</code> throws it away and unlinks the skills, and <code>npm run trial -- --fresh --docs</code> or <code>--fresh --skills</code> does the same and copies the fixtures again. The linked skills sit in <code>.claude/skills/</code> beside <code>docs-voice</code> and are ignored by git. The fixtures under <code>src/pages/test-pages/</code> are ordinary source, so edit and commit them freely.
   </p>
 
   <p>

@@ -9,11 +9,16 @@ const docs = defineCollection({
 	}),
 });
 
+// The same files Claude Code loads as skills, so the site and the agent never drift.
 const skills = defineCollection({
-	loader: glob({ pattern: '**/*.md', base: './src/content/skills' }),
+	loader: glob({
+		pattern: '*/SKILL.md',
+		base: './skills',
+		generateId: ({ entry }) => entry.split('/')[0],
+	}),
 	schema: z.object({
-		title: z.string(),
-		order: z.number().default(0),
+		name: z.string(),
+		description: z.string(),
 	}),
 });
 

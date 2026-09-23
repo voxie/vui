@@ -1,8 +1,11 @@
 ---
-// The application chrome, mirroring `navbar/AppNavbar.vue` in the voxie repo,
-// flattened to plain markup. Shared so it gets styled once, as the real app is.
+// The application chrome: the navigation bar and the page container. Shared so
+// it gets styled once, as the real app is. The bar lives in `_AppNavbar.vue`,
+// and each page body is a Vue file too, so the design-system components can
+// compose in one tree when they're swapped in. Astro renders a nested Vue
+// component as a separate app, which is what a Navbar or a Card can't survive.
 import TestPageLayout from '@layouts/TestPageLayout.astro';
-import { withBase } from '@lib/base';
+import AppNavbar from './_AppNavbar.vue';
 
 interface Props {
 	title: string;
@@ -12,88 +15,10 @@ interface Props {
 }
 
 const { title, source, fullBleed = false } = Astro.props;
-
-const navItems = [
-	{
-		name: 'Analytics',
-		href: withBase('/test-pages/analytics-dashboard'),
-		items: ['Dashboard', 'Contacts', 'Entry Points', 'Outbound Messages'],
-	},
-	{
-		name: 'Automation',
-		href: '#',
-		items: ['Automations', 'Flows', 'Workflow Builder'],
-	},
-	{
-		name: 'Contacts',
-		href: withBase('/test-pages/contacts-list'),
-		items: ['All Contacts', 'Segments', 'External Lists', 'Tags', 'Custom Attributes', 'Imports'],
-	},
-	{
-		name: 'Messaging',
-		href: withBase('/test-pages/campaigns-list'),
-		items: ['Message Hub', 'Quick Blast', 'Campaigns', 'Reserved Dates', 'Snippets'],
-	},
-	{ name: 'Support', href: '#', items: [] },
-];
 ---
 
 <TestPageLayout title={title} source={source}>
-	<nav data-test="app-navbar" aria-label="Main">
-		<a href={withBase('/test-pages')} data-test="navbar-logo">
-			<span>Voxie</span>
-		</a>
-
-		<a href={withBase('/test-pages/message-hub')} data-test="navbar-message-hub">
-			<i class="fa-solid fa-messages"></i>
-			Message Hub
-		</a>
-
-		<a href={withBase('/test-pages/quick-blast')} data-test="navbar-quick-blast">
-			<i class="fa-solid fa-rocket-launch"></i>
-			Quick Blast
-		</a>
-
-		<ul>
-			{
-				navItems.map((item) => (
-					<li>
-						<a href={item.href}>{item.name}</a>
-						{item.items.length > 0 && (
-							<ul>
-								{item.items.map((child) => (
-									<li>
-										<a href="#">{child}</a>
-									</li>
-								))}
-							</ul>
-						)}
-					</li>
-				))
-			}
-		</ul>
-
-		<div data-test="navbar-context-switch">
-			<button type="button">
-				Northside Auto Group
-				<i class="fa-solid fa-chevron-down"></i>
-			</button>
-		</div>
-
-		<div data-test="navbar-settings">
-			<button type="button" aria-label="Settings">
-				<i class="fa-solid fa-gear"></i>
-			</button>
-			<ul>
-				<li><a href={withBase('/test-pages/settings-security')}>Security</a></li>
-				<li><a href="#">Profile</a></li>
-				<li><a href="#">Team</a></li>
-				<li><a href="#">Billing</a></li>
-				<li><a href="#">Integrations</a></li>
-				<li><a href="#">Sign Out</a></li>
-			</ul>
-		</div>
-	</nav>
+	<AppNavbar client:load />
 
 	{
 		fullBleed ? (

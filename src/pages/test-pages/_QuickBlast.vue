@@ -1,0 +1,206 @@
+<script setup lang="ts">
+// Source: resources/js/components/quick-blast/QuickBlast.vue plus QuickBlastType.vue,
+// QuickBlastTo.vue, QuickBlastWhat.vue and QuickBlastWhen.vue, with
+// general/StepFormHeading.vue for the heading.
+import { withBase } from '@lib/base';
+
+const steps = [
+	{ key: 'type', label: 'Type', state: 'complete', summary: 'Marketing' },
+	{
+		key: 'to',
+		label: 'To',
+		state: 'complete',
+		summary: '2 segments · 8,412 contacts',
+	},
+	{ key: 'what', label: 'What', state: 'active', summary: null },
+	{ key: 'when', label: 'When', state: 'upcoming', summary: null },
+];
+
+const audienceTypes = [
+	{
+		label: 'Marketing',
+		description:
+			'Promotions, offers, and anything designed to sell. Only goes to contacts who opted in to marketing.',
+		icon: 'fa-bullhorn',
+		selected: true,
+	},
+	{
+		label: 'Transactional',
+		description:
+			'Appointment reminders, order updates, and service notices. Goes to contacts who have not opted out.',
+		icon: 'fa-receipt',
+		selected: false,
+	},
+];
+
+const segments = [
+	{ name: 'Service Due — 30 Days', count: '5,204' },
+	{ name: 'Lease Expiring Q4', count: '3,208' },
+];
+</script>
+
+<template>
+	<header data-test="step-form-heading">
+		<i class="fa-solid fa-rocket-launch"></i>
+		<h1>Quick Blast</h1>
+		<p>The fastest way to send a single message to multiple people.</p>
+	</header>
+
+	<nav data-test="sticky-nav" aria-label="Steps">
+		<ol>
+			<li v-for="(step, index) in steps" :key="step.key" :data-state="step.state">
+				<a :href="`#step-${step.key}`" :aria-current="step.state === 'active' ? 'step' : undefined">
+					<span data-test="step-number">{{ index + 1 }}</span>
+					<span data-test="step-label">{{ step.label }}</span>
+				</a>
+			</li>
+		</ol>
+	</nav>
+
+	<form data-test="quick-blast">
+		<section id="step-type" data-test="step" data-state="complete">
+			<h2>
+				<span data-test="step-number">1</span>
+				Type
+				<i class="fa-solid fa-circle-check" data-test="step-complete"></i>
+			</h2>
+			<p data-test="step-summary">Marketing</p>
+
+			<fieldset>
+				<legend>What kind of message is this?</legend>
+				<label
+					v-for="type in audienceTypes"
+					:key="type.label"
+					data-test="option-tile"
+					:data-selected="type.selected ? 'true' : undefined"
+				>
+					<input type="radio" name="type" :checked="type.selected" />
+					<i :class="`fa-solid ${type.icon}`"></i>
+					<span data-test="option-label">{{ type.label }}</span>
+					<span data-test="option-description">{{ type.description }}</span>
+				</label>
+			</fieldset>
+
+			<button type="button" data-test="continue">
+				Continue
+				<i class="fa-solid fa-arrow-right"></i>
+			</button>
+		</section>
+
+		<section id="step-to" data-test="step" data-state="complete">
+			<h2>
+				<span data-test="step-number">2</span>
+				To
+				<i class="fa-solid fa-circle-check" data-test="step-complete"></i>
+			</h2>
+			<p data-test="step-summary">2 segments · 8,412 contacts</p>
+
+			<div data-test="audience-tabs" role="tablist">
+				<button type="button" role="tab" aria-selected="true">Segments</button>
+				<button type="button" role="tab" aria-selected="false">Tags</button>
+				<button type="button" role="tab" aria-selected="false">External Lists</button>
+				<button type="button" role="tab" aria-selected="false">Manual</button>
+			</div>
+
+			<ul data-test="selected-segments">
+				<li v-for="segment in segments" :key="segment.name">
+					<span>{{ segment.name }}</span>
+					<span data-test="badge">{{ segment.count }}</span>
+					<button type="button" :aria-label="`Remove ${segment.name}`">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</li>
+			</ul>
+
+			<label for="add-segment">Add a segment</label>
+			<select id="add-segment" name="segment">
+				<option value="">Search segments</option>
+				<option value="vip">VIP Customers</option>
+				<option value="lapsed">Lapsed — 12 Months</option>
+			</select>
+
+			<button type="button" data-test="continue">
+				Continue
+				<i class="fa-solid fa-arrow-right"></i>
+			</button>
+		</section>
+
+		<section id="step-what" data-test="step" data-state="active">
+			<h2>
+				<span data-test="step-number">3</span>
+				What
+			</h2>
+
+			<label for="message-body">Message</label>
+			<!-- `v-pre` keeps the dynamic-field braces as literal text. -->
+			<textarea id="message-body" name="body" rows="5" v-pre>Hi {{first_name}} — your Bronco Sport is due for its 30k service. Reply YES and we'll grab you the first open slot this week. Reply STOP to opt out.</textarea>
+
+			<div data-test="composer-toolbar">
+				<button type="button">
+					<i class="fa-solid fa-brackets-curly"></i>
+					Dynamic Field
+				</button>
+				<button type="button">
+					<i class="fa-solid fa-bolt"></i>
+					Snippet
+				</button>
+				<button type="button">
+					<i class="fa-solid fa-image"></i>
+					Add Media
+				</button>
+				<button type="button">
+					<i class="fa-solid fa-sparkles"></i>
+					Rewrite with AI
+				</button>
+			</div>
+
+			<p data-test="segment-count">168 / 160 characters · 2 segments · est. $168.24</p>
+			<p data-test="error">
+				This message is over one segment. Each contact will be billed twice.
+			</p>
+
+			<aside data-test="preview">
+				<h3>Preview</h3>
+				<article data-test="message-cloud" data-direction="outbound">
+					<p data-test="message-cloud-body">
+						Hi Marisol — your Bronco Sport is due for its 30k service. Reply YES and
+						we'll grab you the first open slot this week. Reply STOP to opt out.
+					</p>
+				</article>
+			</aside>
+
+			<button type="button" data-test="continue">
+				Continue
+				<i class="fa-solid fa-arrow-right"></i>
+			</button>
+		</section>
+
+		<section id="step-when" data-test="step" data-state="upcoming">
+			<h2>
+				<span data-test="step-number">4</span>
+				When
+			</h2>
+
+			<fieldset disabled>
+				<legend>When should this send?</legend>
+				<label>
+					<input type="radio" name="when" checked />
+					Send now
+				</label>
+				<label>
+					<input type="radio" name="when" />
+					Schedule for later
+				</label>
+			</fieldset>
+		</section>
+
+		<footer data-test="sticky-footer">
+			<a :href="withBase('/test-pages/campaigns-list')">Cancel</a>
+			<button type="button" data-test="save-draft">Save Draft</button>
+			<button type="submit" data-test="send" disabled>
+				Send Quick Blast
+				<i class="fa-solid fa-paper-plane"></i>
+			</button>
+		</footer>
+	</form>
+</template>

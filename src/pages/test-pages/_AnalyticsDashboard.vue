@@ -1,0 +1,208 @@
+<script setup lang="ts">
+// Source: resources/js/components/analytics/AnalyticsDashboard.vue plus
+// partial/AnalyticsStatCard.vue, partial/AnalyticsControls.vue, AnalyticsSidebar.vue
+// and partial/exportable-table/ExportableTable.vue.
+
+const stats = [
+	{
+		title: 'New Preferred Contacts',
+		subtitle: 'Aug 1 – Aug 22',
+		value: '4,182',
+		delta: '+12.4%',
+		direction: 'up',
+		span: 'wide',
+	},
+	{
+		title: 'Marketing Opt-In Rate',
+		subtitle: 'Aug 1 – Aug 22',
+		value: '68.3%',
+		delta: '+2.1%',
+		direction: 'up',
+		span: 'wide',
+	},
+	{
+		title: 'Outbound Messages',
+		subtitle: 'Aug 1 – Aug 22',
+		value: '128,940',
+		delta: '−3.1%',
+		direction: 'down',
+		span: 'wide',
+	},
+	{
+		title: 'Conversion Rate',
+		subtitle: 'Aug 1 – Aug 22',
+		value: '—',
+		delta: null,
+		direction: null,
+		span: 'wide',
+	},
+];
+
+const legend = [
+	'Marketing',
+	'Transactional',
+	'Acquisition',
+	'Re-Acquisition',
+	'Automated',
+];
+
+const tableRows = [
+	['Spring Service Reminder', 'Marketing', '12,441', '11,908', '1,204', '10.1%', '$248.82'],
+	['Lease Expiring — 60 Day', 'Marketing', '3,092', '3,004', '488', '16.2%', '$61.84'],
+	['Labor Day Weekend Blast', 'Marketing', '48,903', '47,116', '3,942', '8.4%', '$978.06'],
+	['Appointment Reminders', 'Transactional', '22,410', '22,301', '—', '—', '$448.20'],
+	['Welcome Series — Step 1', 'Automated', '9,714', '9,502', '1,881', '19.8%', '$194.28'],
+];
+
+const sidebarSections = [
+	{ label: 'Dashboard', href: '#', active: true },
+	{ label: 'Contacts', href: '#' },
+	{ label: 'Preferred Contacts', href: '#' },
+	{ label: 'Entry Points', href: '#' },
+	{ label: 'Outbound Messages', href: '#' },
+	{ label: 'Franchise Hub', href: '#' },
+];
+</script>
+
+<template>
+	<div data-test="analytics-layout">
+		<nav data-test="analytics-sidebar" aria-label="Analytics">
+			<ul>
+				<li v-for="section in sidebarSections" :key="section.label">
+					<a :href="section.href" :aria-current="section.active ? 'page' : undefined">
+						{{ section.label }}
+					</a>
+				</li>
+			</ul>
+		</nav>
+
+		<div data-test="analytics-content">
+			<header data-test="page-header">
+				<h1>Dashboard</h1>
+
+				<div data-test="analytics-controls">
+					<label for="range">Date range</label>
+					<select id="range" name="range">
+						<option value="last_7_days">Last 7 days</option>
+						<option value="last_30_days" selected>Last 30 days</option>
+						<option value="last_90_days">Last 90 days</option>
+						<option value="custom">Custom</option>
+					</select>
+
+					<label for="group">Location</label>
+					<select id="group" name="group">
+						<option value="">All locations</option>
+						<option value="austin">Austin</option>
+						<option value="brooklyn">Brooklyn</option>
+						<option value="seattle">Seattle</option>
+					</select>
+
+					<button type="button" data-test="export">
+						Export
+						<i class="fa-solid fa-arrow-down-to-line"></i>
+					</button>
+				</div>
+			</header>
+
+			<section data-test="stat-cards">
+				<article
+					v-for="stat in stats"
+					:key="stat.title"
+					data-test="stat-card"
+					:data-empty="stat.value === '—' ? 'true' : undefined"
+				>
+					<h2>{{ stat.title }}</h2>
+					<p data-test="subtitle">{{ stat.subtitle }}</p>
+
+					<button type="button" data-test="explain" aria-label="What is this?">
+						<i class="fa-solid fa-circle-question"></i>
+					</button>
+
+					<p data-test="number">{{ stat.value }}</p>
+
+					<p v-if="stat.delta" data-test="difference" :data-direction="stat.direction">
+						<i
+							:class="
+								stat.direction === 'up'
+									? 'fa-solid fa-arrow-up'
+									: 'fa-solid fa-arrow-down'
+							"
+						></i>
+						{{ stat.delta }} vs previous period
+					</p>
+
+					<a href="#" data-test="details">
+						Details
+						<i class="fa-solid fa-square-arrow-up-right"></i>
+					</a>
+				</article>
+			</section>
+
+			<section data-test="chart" data-chart="time-series">
+				<h2>Messages Sent Over Time</h2>
+				<p data-test="subtitle">Last 30 days, by audience type</p>
+
+				<ul data-test="legend">
+					<li v-for="item in legend" :key="item">
+						<span data-test="legend-swatch" aria-hidden="true"></span>
+						{{ item }}
+					</li>
+				</ul>
+
+				<!-- Chart body is an empty frame — the system styles the container, not the plot. -->
+				<figure data-test="chart-body" aria-label="Time series chart placeholder">
+					<figcaption>Messages sent per day, August 2026</figcaption>
+				</figure>
+			</section>
+
+			<section data-test="chart" data-chart="categorical">
+				<h2>Contacts by Entry Point</h2>
+				<p data-test="subtitle">Last 30 days</p>
+				<figure data-test="chart-body" aria-label="Categorical chart placeholder">
+					<figcaption>Contact count by entry point</figcaption>
+				</figure>
+			</section>
+
+			<section data-test="exportable-table">
+				<header>
+					<h2>Campaign Performance</h2>
+					<button type="button">
+						Export CSV
+						<i class="fa-solid fa-file-csv"></i>
+					</button>
+				</header>
+
+				<table>
+					<thead>
+						<tr>
+							<th scope="col">Campaign</th>
+							<th scope="col">Type</th>
+							<th scope="col">Sent</th>
+							<th scope="col">Delivered</th>
+							<th scope="col">Replies</th>
+							<th scope="col">Reply Rate</th>
+							<th scope="col">Cost</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="row in tableRows" :key="row[0]">
+							<th scope="row">{{ row[0] }}</th>
+							<td v-for="(cell, index) in row.slice(1)" :key="index">{{ cell }}</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th scope="row">Total</th>
+							<td>—</td>
+							<td>96,560</td>
+							<td>93,831</td>
+							<td>7,515</td>
+							<td>8.0%</td>
+							<td>$1,931.20</td>
+						</tr>
+					</tfoot>
+				</table>
+			</section>
+		</div>
+	</div>
+</template>

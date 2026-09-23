@@ -4,7 +4,7 @@ import VoxieMark from '@site/VoxieMark.vue';
 import { withBase } from '@lib/base';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
-const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+const skills = (await getCollection('skills')).sort((a, b) => a.id.localeCompare(b.id));
 
 // Directory names don't sort into a reading order, and the sections build on
 // each other: components use foundations, patterns use components. Unlisted
@@ -31,7 +31,10 @@ const groups = [
   })),
   {
     label: 'Skills',
-    links: skills.map((entry) => ({ href: withBase(`/skills/${entry.id}`), title: entry.data.title })),
+    links: [
+      { href: withBase('/skills'), title: 'Intro' },
+      ...skills.map((entry) => ({ href: withBase(`/skills/${entry.id}`), title: entry.data.name })),
+    ],
   },
   // The overview and nothing under it: the fixtures are pages to open, not
   // documentation to browse.

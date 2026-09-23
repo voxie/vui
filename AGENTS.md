@@ -14,7 +14,8 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - `src/components/ui/` — design-system components. Always Vue SFCs (`.vue`). Each should have a docs page under `src/content/docs/components/`.
 - `src/components/site/` — components used only to build this docs site (navigation, chrome). Not part of the design system; never document them in the docs collection. May be `.astro`.
 - `src/content/docs/` — human-facing design documentation (MDX): foundations, patterns, components, guidance. Directory structure determines URLs under `/docs/...`.
-- `src/content/skills/` — AI-oriented skills/instructions (Markdown), served under `/skills/...`.
+- `skills/` — skills shipped to consumers of the design system, one `<name>/SKILL.md` per skill. `scripts/link-skills.mjs` symlinks them into a consuming repo's `.claude/skills/`, and the site renders them under `/skills/...`.
+- `.claude/skills/` — skills for working on this repo only (e.g. `docs-voice`). Never shipped, never documented on the site.
 - Content collections are defined in `src/content.config.ts`. Use collections for repeatable content; regular Astro pages only for unique pages like the homepage.
 
 ## Imports

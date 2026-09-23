@@ -15,7 +15,7 @@ import {
 } from 'vue';
 import Button from './Button.vue';
 import SurfaceProvider from './SurfaceProvider.vue';
-import { useSurface, type Surface } from './surface.ts';
+import { provideSurface, useSurface, type Surface } from './surface.ts';
 
 defineOptions({
 	// Named so an action can spot another action among its items. Comparing
@@ -59,6 +59,9 @@ const props = withDefaults(
 const emit = defineEmits<{ 'update:open': [open: boolean] }>();
 
 const surface = useSurface(() => props.sitsOn);
+// Handed on to the Button the action renders, so `sitsOn` holds where no bar
+// above can answer, such as an action rendered on its own.
+provideSurface(() => surface.value);
 
 const slots = useSlots();
 

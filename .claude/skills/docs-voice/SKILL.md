@@ -1,6 +1,6 @@
 ---
 name: docs-voice
-description: The house writing style for this repo's prose. Read this before writing or editing any MDX page under src/content/docs, any file in src/content/skills, or any prose-heavy comment in a component. Also use it for a cleanup, tightening, or copy-edit pass on an existing page ("clean up the button doc", "this reads long", "fix the voice"). Covers the hard rules (say only what helps someone use it, no em dashes, one idea per sentence, no reveal constructions, no "we"), the split between behavior and the author's direction, the voice, page structure, and how to run a cleanup pass.
+description: The house writing style for this repo's prose. Read this before writing or editing any MDX page under src/content/docs, any SKILL.md under skills/, or any prose-heavy comment in a component. Also use it for a cleanup, tightening, or copy-edit pass on an existing page ("clean up the button doc", "this reads long", "fix the voice"). Covers the hard rules (say only what helps someone use it, no em dashes, one idea per sentence, no reveal constructions, no "we"), the split between behavior and the author's direction, the voice, page structure, and how to run a cleanup pass.
 ---
 
 # Docs voice

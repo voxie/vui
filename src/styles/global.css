@@ -4,6 +4,9 @@
    and the theme only emits a variable for a step some class uses. This keeps the
    three chart steps for every chart hue. See src/data/chartColors.ts. */
 @source inline("bg-{sky,blue,violet,fuchsia,pink,rose,orange,amber,lime,green,emerald,teal,slate}-{300,400,500}");
+/* The trial folder is gitignored, and Tailwind skips ignored files when it
+   scans, so a styled trial page would lose every class not used elsewhere. */
+@source "../pages/trial";
 
 
 @theme {
