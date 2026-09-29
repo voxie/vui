@@ -99,7 +99,7 @@ Slate is the default fill and follows the one-rung table above. Reach for a colo
 
 ## Icons
 
-Font Awesome Pro, classic solid by default, classic regular for a few outlines like the clipboard and the star. An icon is `<i class="fa-solid fa-users"></i>`. Size and color come from Tailwind text utilities, never `fa-lg` or `fa-2x`. Light, duotone, sharp, and brands are not installed and fall back silently or render nothing. The font files are licensed and stay out of public repos, so a prototype vendors them locally rather than linking a kit.
+Font Awesome Pro, classic solid by default, classic regular for a few outlines like the clipboard and the star. An icon is `<i class="fa-solid fa-users"></i>`. Size and color come from Tailwind text utilities, never `fa-lg` or `fa-2x`. Brands is for a third-party logo, like `<i class="fa-brands fa-shopify"></i>`. Light, thin, duotone, and sharp stay unused so icons keep one weight.
 
 ## Review checklist
 

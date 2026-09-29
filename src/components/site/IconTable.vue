@@ -3,11 +3,7 @@
 // the variant and both guidance columns.
 import { computed, ref } from 'vue';
 import Input from '@ui/Input.vue';
-import { icons, type Variant } from './icons';
-
-// Only these two families ship with the site, so a row on any other renders an
-// empty preview. See the Icons page.
-const INSTALLED: Variant[] = ['solid', 'regular'];
+import { icons } from './icons';
 
 const query = ref('');
 
@@ -68,12 +64,7 @@ const matches = computed(() => {
 					<td class="py-3 pe-6">
 						<code class="font-mono whitespace-nowrap text-slate-800">{{ icon.name }}</code>
 					</td>
-					<td
-						class="py-3 pe-6 whitespace-nowrap"
-						:class="INSTALLED.includes(icon.variant) ? 'text-slate-500' : 'text-rose-700'"
-					>
-						{{ icon.variant }}
-					</td>
+					<td class="py-3 pe-6 whitespace-nowrap text-slate-500">{{ icon.variant }}</td>
 					<td class="py-3 pe-6">{{ icon.represents }}</td>
 					<td class="py-3">{{ icon.avoid }}</td>
 				</tr>
