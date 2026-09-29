@@ -1,43 +1,57 @@
-# Astro Starter Kit: Minimal
+# Voxie UI (vui)
+
+The Voxie design system: a set of Vue components built on Tailwind, the docs that explain how to use them, and skills that teach AI agents the same rules.
+
+Published at https://voxie.github.io/vui.
+
+## What's in the repo
+
+- **Components** live in `src/components/ui/`. Each is a Vue single-file component styled with plain Tailwind color classes, never semantic aliases. Every component has a docs page.
+- **Docs** live in `src/content/docs/` as MDX, split into foundations, components, and patterns. The folder structure sets the URL under `/docs/...`.
+- **Skills** live in `skills/`, one `SKILL.md` per skill. They restate the docs as instructions Claude Code loads on its own when a task matches. The site also renders them under `/skills/...`.
+- **Test pages** live in `src/pages/test-pages/`. They are real product screens stripped of all styling, used as fixtures to check how well the docs and skills guide an agent. See the README in that folder.
+
+## Getting started
+
+Requires Node 24 and pnpm 11. Versions are pinned in `package.json` under `engines`.
 
 ```sh
-npm create astro@latest -- --template minimal
+pnpm install
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The site serves at `http://localhost:4321/vui/`. The `/vui` base path is on in dev as well as production, so a link that forgets the prefix breaks locally instead of only on GitHub Pages.
 
-## 🚀 Project Structure
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | Start the dev server |
+| `pnpm build` | Build the static site into `dist/` |
+| `pnpm preview` | Serve the built site locally |
+| `pnpm trial -- --docs` | Copy the test pages into a gitignored trial folder for styling against the docs |
+| `pnpm trial -- --skills` | Same, but link the skills in and style against those instead |
+| `pnpm trial -- --remove` | Delete the trial and unlink the skills |
+| `pnpm link-skills [dir]` | Symlink the skills into a consuming repo's `.claude/skills/` |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Using the skills in another repo
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+Add vui as a git submodule and run the link script on install, so the links refresh whenever the submodule moves:
+
+```json
+{
+  "scripts": {
+    "prepare": "git submodule update --init && node vui/scripts/link-skills.mjs"
+  }
+}
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+The script adds a symlink in `.claude/skills/` for each skill and removes links for skills that no longer exist. Commit the symlinks so a fresh checkout has them. To update, bump the submodule and reinstall.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Tools that read a URL rather than a local file can be pointed at the skill pages on the site instead.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Deploying
 
-## 🧞 Commands
+Pushing to `main` builds the site and deploys it to GitHub Pages through `.github/workflows/deploy.yml`.
 
-All commands are run from the root of the project, from a terminal:
+## Contributing
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+`CLAUDE.md` describes the architecture, the import aliases, and the writing rules for docs. Read `.claude/skills/docs-voice/SKILL.md` before writing or editing any prose under `src/content/` or `skills/`.
