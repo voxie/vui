@@ -1,6 +1,7 @@
 ---
 // Bare shell for the test pages. No styling of its own beyond Tailwind and the
-// font, so a page renders as raw semantic HTML. Don't add layout or color here.
+// font and the document defaults Layout.astro sets, so a page renders as raw
+// semantic HTML. Don't add layout here.
 import '@fontsource-variable/inter/wght.css';
 import '../styles/global.css';
 
@@ -12,7 +13,7 @@ interface Props {
 const { title, source } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="en" class="scrollbar-thumb-slate-400 scrollbar-track-transparent">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,7 +23,7 @@ const { title, source } = Astro.props;
 		{/* Font Awesome Pro via a hosted kit, same as the documentation layout. */}
 		<script src="https://kit.fontawesome.com/ec399ebc2e.js" crossorigin="anonymous" is:inline></script>
 	</head>
-	<body>
+	<body class="bg-slate-200 text-slate-700 tabular-nums">
 		<slot />
 	</body>
 </html>

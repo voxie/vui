@@ -31,7 +31,7 @@ Slate is a ladder of surfaces, lightest to darkest. The page sits in the middle 
 
   <div class="h-10 w-16 rounded-lg border border-slate-900/10 bg-slate-200"></div>
   <code class="text-xs">slate-200</code>
-  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">The page background. Everything else is measured against this.</span>
+  <span class="col-span-3 -mt-2 text-sm sm:col-span-1 sm:mt-0">The page background, carried on <code class="text-xs">body</code>. Everything else is measured against this.</span>
 
   <div class="rounded-lg bg-slate-300"><div class="h-10 w-16 rounded-[inherit] border border-slate-900/10 bg-slate-300/30"></div></div>
   <code class="text-xs">slate-300/30</code>
@@ -188,7 +188,7 @@ Text sitting on a surface uses four colors, and only four.
 
 **sky-700** marks links. It sits at 700, not the accents' 300, because a link has to be legible as text. It clears AA everywhere, down to 4.5:1 on the sunken surface. sky-600 is the tempting alternative, and it falls short at 4.0:1 on white, under the 4.5:1 AA asks.
 
-None of this needs setting by hand. `body` carries slate-700 in the base layer, and prose is pointed at all four, so text inherits the right color on its own. Reach for a utility only to step something back to slate-500. The one surface that flips the rule is the dark card, which sets its own light text.
+None of this needs setting by hand. `body` carries `text-slate-700`, and prose is pointed at all four, so text inherits the right color on its own. Reach for a utility only to step something back to slate-500. The one surface that flips the rule is the dark card, which sets its own light text.
 
 ### Labels on a fill
 

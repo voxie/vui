@@ -29,19 +29,6 @@
 }
 
 @layer base {
-  html {
-    /* The platform default is a warm gray that reads brown against slate. Set
-       here rather than per scroll container, since the property inherits. */
-    scrollbar-color: var(--color-slate-400) transparent;
-  }
-
-  body {
-    color: var(--color-slate-700);
-    /* Tabular figures, so numbers hold their column. No slashed-zero: Fontsource
-       packages Google's Inter, which strips the `zero` feature. */
-    font-variant-numeric: tabular-nums;
-  }
-
   /* not-prose drops prose's element rules but not the line-height declared on
      .prose itself, which keeps inheriting in. Base layer, so leading-* wins. */
   .prose .not-prose {

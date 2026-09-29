@@ -15,7 +15,9 @@ interface Props {
 const { title, headings } = Astro.props;
 ---
 
-<html lang="en">
+{/* Scrollbar color inherits, so it's set once here rather than per scroll
+    container. The platform default is a warm gray that reads brown against slate. */}
+<html lang="en" class="scrollbar-thumb-slate-400 scrollbar-track-transparent">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
@@ -26,7 +28,9 @@ const { title, headings } = Astro.props;
 		{/* Font Awesome Pro via a hosted kit; the Pro files can't live in a public repo. */}
 		<script src="https://kit.fontawesome.com/ec399ebc2e.js" crossorigin="anonymous" is:inline></script>
 	</head>
-	<body class="bg-slate-200">
+	{/* Tabular figures, so numbers hold their column. No slashed-zero: Fontsource
+	    packages Google's Inter, which strips the `zero` feature. */}
+	<body class="bg-slate-200 text-slate-700 tabular-nums">
 		{/* The document doesn't scroll; the main column does. Elastic overscroll
 		    then bounces the content only, and the nav stays put at every size. */}
 		<div class="flex flex-col md:flex-row h-dvh">
