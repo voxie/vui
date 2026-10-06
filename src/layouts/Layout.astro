@@ -4,6 +4,7 @@ import '../styles/global.css';
 
 import Sidebar from '@site/Sidebar.astro';
 import TableOfContents from '@site/TableOfContents.astro';
+import SearchPalette from '@site/SearchPalette.vue';
 import { withBase } from '@lib/base';
 import type { MarkdownHeading } from 'astro';
 
@@ -58,5 +59,7 @@ const { title, headings } = Astro.props;
 				</main>
 			</div>
 		</div>
+		{/* Client only: a Teleport has nowhere to render on the server. */}
+		<SearchPalette client:only="vue" indexUrl={withBase('/search-index.json')} />
 	</body>
 </html>
