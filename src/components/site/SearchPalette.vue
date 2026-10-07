@@ -237,7 +237,7 @@ onBeforeUnmount(() => {
 											:data-index="indexOf(hit)"
 											:aria-selected="indexOf(hit) === active"
 											class="group/hit flex items-center gap-3 rounded-lg px-3 py-2 text-slate-700 hover:no-underline"
-											:class="indexOf(hit) === active ? 'bg-sky-100 text-sky-900' : ''"
+											:class="indexOf(hit) === active ? 'bg-sky-50 text-sky-900' : ''"
 											@mousemove="active = indexOf(hit)"
 											@click.prevent="go(hit)"
 										>
