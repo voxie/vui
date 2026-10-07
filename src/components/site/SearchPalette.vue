@@ -224,7 +224,7 @@ onBeforeUnmount(() => {
 							</p>
 						</template>
 						<template v-else>
-							<div v-for="group in groups" :key="group.section + group.page" class="mb-2 last:mb-0">
+							<div v-for="group in groups" :key="group.section + group.page" class="mb-1 last:mb-0">
 								<h3 v-if="terms.length" class="px-3 py-1.5 text-xs font-extrabold text-slate-800">
 									{{ group.page }}
 									<span class="font-normal text-slate-400"> · {{ group.section }}</span>
@@ -236,13 +236,13 @@ onBeforeUnmount(() => {
 											role="option"
 											:data-index="indexOf(hit)"
 											:aria-selected="indexOf(hit) === active"
-											class="group/hit flex items-center gap-3 rounded-lg px-3 py-2 text-slate-700 hover:no-underline"
+											class="group/hit flex items-center gap-3 rounded-(--hit-radius) p-(--hit-padding) text-slate-700 [--hit-padding:--spacing(2.5)] [--hit-radius:calc(var(--radius-md)+var(--hit-padding))] hover:no-underline"
 											:class="indexOf(hit) === active ? 'bg-sky-50 text-sky-900' : ''"
 											@mousemove="active = indexOf(hit)"
 											@click.prevent="go(hit)"
 										>
 											<span
-												class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs"
+												class="flex size-9 shrink-0 items-center justify-center rounded-[calc(var(--hit-radius)-var(--hit-padding)+3px)] border text-xs"
 												:class="
 													indexOf(hit) === active
 														? 'border-sky-300 bg-sky-300 text-black'
@@ -270,7 +270,7 @@ onBeforeUnmount(() => {
 													>{{ hit.section }}</span
 												>
 											</span>
-											<span class="text-xs" :class="indexOf(hit) === active ? 'text-sky-700' : 'invisible'">
+											<span class="text-xs px-1" :class="indexOf(hit) === active ? 'text-sky-700' : 'invisible'">
 												<i aria-hidden="true" class="fa-solid fa-arrow-turn-down-left"></i>
 											</span>
 										</a>
