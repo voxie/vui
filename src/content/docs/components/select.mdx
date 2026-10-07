@@ -11,6 +11,8 @@ A select is a native `<select>` in the house shell. The picker that opens is the
 
 A select usually sits on a `glass` [Card](/docs/components/card) or on the page background. Almost never on a white default card. The exception is a white card nested inside another card.
 
+Anything that looks like a select is held to the same rules, whether or not it is one. A hand-written `<select>` in site chrome, or a button that opens a menu and is drawn as a field, takes the select's height, radius, padding, edge, chevron, and focus ring at the size it matches. Reach for the component first. Where it can't be the component, copy the select at one of its [sizes](#size) rather than approximating it.
+
 How a field goes together with its label, its description, and its messages is on the [Forms](/docs/patterns/forms) page.
 
 ## Examples
