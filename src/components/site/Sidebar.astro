@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import VoxieMark from '@site/VoxieMark.vue';
+import Select from '@ui/Select.vue';
 import { withBase } from '@lib/base';
 
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
@@ -59,35 +60,30 @@ function linkClass(href: string) {
     above the content. The content scrolls beneath it, so it needs no sticky. */}
 <div class="md:hidden shrink-0 flex items-center gap-3 p-5 bg-slate-200 border-b border-slate-300">
   <a href={home} aria-label="Voxie UI home" class="shrink-0 h-full"><VoxieMark class="h-full! w-auto" /></a>
-  <label class="relative block flex-1">
-    <span class="sr-only">Browse documentation</span>
-    <select
-      data-docs-nav
-      class="w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm font-medium text-slate-800"
-    >
-      {/* Home matches no option; without this the first doc would read as selected. */}
-      {currentPath === home && <option value="" hidden selected>Browse…</option>}
-      {
-        groups.map((group) => (
-          <optgroup label={group.label}>
-            {group.links.map((link) => (
-              <option value={link.href} selected={link.href === currentPath}>
-                {link.title}
-              </option>
-            ))}
-          </optgroup>
-        ))
-      }
-    </select>
-    <i
-      class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500 pointer-events-none"
-    ></i>
-  </label>
+  {/* Rendered static: the change handler below is all the behavior it needs.
+      Wrapped, since a class on Select lands on the select itself. */}
+  <div class="flex-1 min-w-0">
+  <Select data-docs-nav block sits-on="background" aria-label="Browse documentation">
+    {/* Home matches no option; without this the first doc would read as selected. */}
+    {currentPath === home && <option value="" hidden selected>Browse…</option>}
+    {
+      groups.map((group) => (
+        <optgroup label={group.label}>
+          {group.links.map((link) => (
+            <option value={link.href} selected={link.href === currentPath}>
+              {link.title}
+            </option>
+          ))}
+        </optgroup>
+      ))
+    }
+  </Select>
+  </div>
   <button
     type="button"
     data-search-open
     aria-label="Search"
-    class="shrink-0 flex size-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-500 hover:text-slate-800"
+    class="shrink-0 flex size-10 items-center justify-center rounded-xl bg-white text-slate-500 shadow hover:shadow-md hover:text-slate-800 transition outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
   >
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
@@ -104,7 +100,7 @@ function linkClass(href: string) {
   <button
     type="button"
     data-search-open
-    class="mt-6 flex w-full items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-400 shadow-xs hover:text-slate-800 hover:border-slate-400 transition"
+    class="mt-6 flex h-10 w-full items-center gap-2 rounded-xl bg-white px-4 text-sm text-slate-400 shadow hover:shadow-md hover:text-slate-800 transition outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
   >
     <i class="fa-solid fa-magnifying-glass text-xs"></i>
     <span class="flex-1 text-left">Search…</span>
