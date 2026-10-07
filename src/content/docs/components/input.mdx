@@ -5,10 +5,11 @@ order: 6
 
 import Input from '@ui/Input.vue';
 import Card from '@ui/Card.vue';
+import InputSurfacesExample from '@site/InputSurfacesExample.vue';
 
 An input is the text field, and the textarea. Passing `rows` turns it into the other. A textarea grows with what's typed into it, with no prop to ask for that.
 
-It follows [Select](/docs/components/select) for everything around the edge. A white fill, a slate-200 border that darkens a step on sunken, and a shadow only on the page background. It works that out from the [Card](/docs/components/card) it's inside, or from `sitsOn` where there's no card to ask. Like a select, it belongs on a `glass` card or on the page background rather than on a white one.
+It follows [Select](/docs/components/select) for everything around the edge. A white fill, a slate-200 border on white and glass, and a shadow with no border on sunken, dark, and the page background. It works that out from the [Card](/docs/components/card) it's inside, or from `sitsOn` where there's no card to ask. Like a select, it belongs on a `glass` card or on the page background rather than on a white one.
 
 An input fills the width it's given. Constrain it from the outside, with the column it sits in.
 
@@ -45,6 +46,14 @@ The `type` prop is passed through to the field. The choices are `text` (the defa
 </Card>
 
 `number` and `password` do more than pass the type along. They have their own sections below.
+
+### Surface
+
+An input works out what it is sitting on for itself, by asking the [Card](/docs/components/card) or [Navbar](/docs/components/navbar) it's inside. The fill stays white. The edge follows the [Select](/docs/components/select#surface) rule, a slate-200 border on white and glass, and a shadow with no border on sunken, dark, and the page background.
+
+<InputSurfacesExample />
+
+Pass `sitsOn` on the page background, since nothing there can announce it. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
 
 ### Size
 
@@ -173,7 +182,7 @@ The counter is muted while the field is unfocused.
 
 Focus draws a blue outline, two pixels wide at a two pixel offset. Unlike a [Button](/docs/components/button), a text field takes the ring on a click as well as on a keyboard focus, because that's what `:focus-visible` does for a field you can type into.
 
-On the page background, hover deepens the shadow from `shadow` to `shadow-md`. On a panel there's no shadow, so hover does nothing.
+On a shadowed surface, hover deepens the shadow from `shadow` to `shadow-md`. On white and glass there's no shadow, so hover does nothing.
 
 The numeric stepper and the counter both key off focus. The stepper fades in, and the counter comes out of its muted state.
 

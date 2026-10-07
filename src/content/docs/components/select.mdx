@@ -82,15 +82,15 @@ A select works out what it is sitting on for itself, by asking the [Card](/docs/
 | ------------ | ------------ | ----------------- |
 | `default`    | white        | slate-200 border  |
 | `glass`      | slate-50     | slate-200 border  |
-| `sunken`     | slate-300/30 | slate-300 border  |
-| `dark`       | slate-700    | slate-200 border  |
+| `sunken`     | slate-300/30 | shadow, no border |
+| `dark`       | slate-700    | shadow, no border |
 | `background` | slate-200    | shadow, no border |
 
-The page background is the only surface that gets the shadow, and the only one with no border. Nothing else lifts the control off it. Sunken darkens the border a step, since slate-200 has the surface almost on top of it.
+White and glass get the border. Sunken, dark, and the page background get the shadow and no border. Glass is a step off white, close enough that a border still reads as the edge. From sunken down the shadow does that job, and a border would only double it.
 
 <SelectSurfacesExample />
 
-It's also the one surface with no component to announce it. That's what `sitsOn` is for. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
+The page background is the one surface with no component to announce it. That's what `sitsOn` is for. An element that paints a background of its own can wrap its contents in [SurfaceProvider](/docs/components/card#a-surface-that-isnt-a-card) instead.
 
 ### Size
 
@@ -160,7 +160,7 @@ The border is there in the resting state too, so only its color changes and noth
 
 ### Disabled
 
-`disabled` swaps the white fill for slate-100 with slate-500 text. On the page background the shadow goes and a slate-200 border takes over, so the control still has an edge.
+`disabled` swaps the white fill for slate-100 with slate-500 text. On a shadowed surface the shadow goes and a slate-200 border takes over, so the control still has an edge.
 
 <Card surface="glass">
   <div class="not-prose">
@@ -173,7 +173,7 @@ The border is there in the resting state too, so only its color changes and noth
 
 ## Interaction
 
-On the page background, hover deepens the shadow from `shadow` to `shadow-md`. On a panel there is no shadow, so hover does nothing. There is no press state either, because the press opens the platform picker and the picker is what gives the feedback.
+On a shadowed surface, hover deepens the shadow from `shadow` to `shadow-md`. On white and glass there is no shadow, so hover does nothing. There is no press state either, because the press opens the platform picker and the picker is what gives the feedback.
 
 Focus draws a blue outline, two pixels wide at a two pixel offset, and only for keyboard focus. Clicking the control doesn't ring it.
 
@@ -197,4 +197,4 @@ Everything else is the browser's. <kbd>Space</kbd> or <kbd>Enter</kbd> opens the
 
 The option text and the error message clear AA comfortably. The label is slate-800 and clears it by a wide margin. The chevron sits at slate-500, which clears AA at 4.8:1, and it is decorative in any case. The description is slate-500 too, which holds on white and glass and falls to 3.9:1 on the page background.
 
-The boundary doesn't. The border runs 1.2:1 against the white fill, or 1.5:1 on sunken, well short of the 3:1 WCAG asks of a control's boundary. The fill itself is only 1.05:1 against a glass card. On the page background the fill separates a little better at 1.23:1, with the shadow to help. The error state has the same problem, at 1.9:1 for the rose-300 border, which is why the message under the control carries the meaning rather than the color.
+The boundary doesn't. The border runs 1.2:1 against the white fill, well short of the 3:1 WCAG asks of a control's boundary. The fill itself is only 1.05:1 against a glass card. On the page background the fill separates a little better at 1.23:1, with the shadow to help. The error state has the same problem, at 1.9:1 for the rose-300 border, which is why the message under the control carries the meaning rather than the color.
