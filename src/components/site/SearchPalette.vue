@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
 											role="option"
 											:data-index="indexOf(hit)"
 											:aria-selected="indexOf(hit) === active"
-											class="group/hit flex items-center gap-3 rounded-(--hit-radius) p-(--hit-padding) text-slate-700 [--hit-padding:--spacing(2.5)] [--hit-radius:calc(var(--radius-md)+var(--hit-padding))] hover:no-underline"
+											class="group/hit flex scroll-my-2 items-center gap-3 rounded-(--hit-radius) p-(--hit-padding) text-slate-700 [--hit-padding:--spacing(2.5)] [--hit-radius:calc(var(--radius-md)+var(--hit-padding))] hover:no-underline"
 											:class="indexOf(hit) === active ? 'bg-sky-50 text-sky-900' : ''"
 											@mousemove="active = indexOf(hit)"
 											@click.prevent="go(hit)"
