@@ -237,7 +237,7 @@ onBeforeUnmount(() => {
 											:data-index="indexOf(hit)"
 											:aria-selected="indexOf(hit) === active"
 											class="group/hit flex items-center gap-3 rounded-lg px-3 py-2 text-slate-700 hover:no-underline"
-											:class="indexOf(hit) === active ? 'bg-sky-500 text-white' : ''"
+											:class="indexOf(hit) === active ? 'bg-sky-100 text-sky-900' : ''"
 											@mousemove="active = indexOf(hit)"
 											@click.prevent="go(hit)"
 										>
@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
 												class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs"
 												:class="
 													indexOf(hit) === active
-														? 'border-sky-400 bg-sky-400/40 text-white'
+														? 'border-sky-300 bg-sky-300 text-black'
 														: 'border-slate-200 bg-slate-50 text-slate-500'
 												"
 											>
@@ -254,27 +254,25 @@ onBeforeUnmount(() => {
 											<span class="min-w-0 flex-1">
 												<span
 													class="block truncate font-semibold"
-													:class="indexOf(hit) === active ? '[&_mark]:text-white' : 'text-slate-800'"
+													:class="indexOf(hit) === active ? 'text-sky-950 [&_mark]:text-sky-700' : 'text-slate-800'"
 													v-html="highlight(hit.heading ?? hit.page)"
 												></span>
 												<span
 													v-if="terms.length && hit.text"
 													class="block truncate text-xs"
-													:class="indexOf(hit) === active ? 'text-sky-100 [&_mark]:text-white' : 'text-slate-500'"
+													:class="indexOf(hit) === active ? 'text-sky-800 [&_mark]:text-sky-700' : 'text-slate-500'"
 													v-html="highlight(snippet(hit.text))"
 												></span>
 												<span
 													v-else-if="!terms.length"
 													class="block truncate text-xs"
-													:class="indexOf(hit) === active ? 'text-sky-100' : 'text-slate-500'"
+													:class="indexOf(hit) === active ? 'text-sky-800' : 'text-slate-500'"
 													>{{ hit.section }}</span
 												>
 											</span>
-											<i
-												aria-hidden="true"
-												class="fa-solid fa-arrow-turn-down-left text-xs"
-												:class="indexOf(hit) === active ? 'text-sky-100' : 'invisible'"
-											></i>
+											<span class="text-xs" :class="indexOf(hit) === active ? 'text-sky-700' : 'invisible'">
+												<i aria-hidden="true" class="fa-solid fa-arrow-turn-down-left"></i>
+											</span>
 										</a>
 									</li>
 								</ul>
