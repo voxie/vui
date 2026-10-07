@@ -141,11 +141,17 @@ const textClasses = computed(() => {
 	return { label: dark ? 'text-white' : 'text-slate-800', description: dark ? 'text-slate-300' : 'text-slate-500' };
 });
 
+// An unchecked box is white on white and glass. The darker surfaces show
+// through it instead.
+const restingFill = computed(() =>
+	surface.value === 'sunken' || surface.value === 'dark' || surface.value === 'background' ? '' : 'bg-white',
+);
+
 const markerClasses = computed(() => {
 	if (props.disabled) return 'border-slate-200 bg-slate-100 text-slate-400 shadow-none';
 	const on = checked.value || props.indeterminate;
 	const border = props.error ? 'border-rose-300' : on ? 'border-sky-500' : restingBorder.value;
-	return [on ? 'bg-sky-300 text-black' : shadow.value, border];
+	return [on ? 'bg-sky-300 text-black' : [shadow.value, restingFill.value], border];
 });
 
 defineExpose({

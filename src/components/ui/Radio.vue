@@ -133,14 +133,18 @@ const textClasses = computed(() => {
 	return { label: dark ? 'text-white' : 'text-slate-800', description: dark ? 'text-slate-300' : 'text-slate-500' };
 });
 
-// The circle has no fill, so the surface shows through it. Picked is a ring
-// rather than a fill: the border takes the size's ring width and a dot lands
-// inside it.
+// The circle is white on white and glass, and the darker surfaces show
+// through it. Picked is a ring rather than a fill: the border takes the size's
+// ring width and a dot lands inside it.
+const restingFill = computed(() =>
+	surface.value === 'sunken' || surface.value === 'dark' || surface.value === 'background' ? '' : 'bg-white',
+);
+
 const markerClasses = computed(() => {
 	const ring = checked.value ? sizeClasses.value.ring : 'border';
 	if (props.disabled) return [ring, 'border-slate-200 bg-slate-100'];
-	if (props.error) return [ring, 'border-rose-300'];
-	return checked.value ? [ring, 'border-sky-500'] : [ring, restingBorder.value];
+	if (props.error) return [ring, 'border-rose-300', restingFill.value];
+	return checked.value ? [ring, 'border-sky-500'] : [ring, restingBorder.value, restingFill.value];
 });
 
 // The pill hugs its label, and the bar spaces the pills out evenly.
