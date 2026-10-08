@@ -66,7 +66,7 @@ const sections = [
 					class="flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 group"
 					aria-label="Voxie"
 				>
-					<VoxieMark class=" group-hover:text-sky-600"/>
+					<VoxieMark class="transition-colors ease-out group-hover:text-sky-600" />
 				</a>
 			</NavbarAction>
 

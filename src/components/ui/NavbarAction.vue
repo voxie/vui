@@ -195,7 +195,14 @@ const labelColor = computed(() => {
 const markerClasses = () => {
 	if (props.nested || !props.marker) return '';
 	const shape = 'relative after:absolute after:inset-x-0 after:bottom-0 after:h-1.5 after:rounded-t-lg';
-	if (marked()) return `${shape} after:block after:bg-sky-500`;
+	// Faded out while its own panel is open, where it would stick out beside the
+	// panel; the open panel says where you are instead. Back at once when it
+	// closes, so it never lags behind the panel.
+	if (marked()) {
+		const shown =
+			hasDropdown() && dropdownOpen.value ? 'after:opacity-0' : 'after:opacity-100 motion-safe:after:duration-0';
+		return `${shape} after:block after:bg-sky-500 motion-safe:after:transition-opacity ${shown}`;
+	}
 
 	// In a narrow bar the panel covers the full width, so the marker is what ties
 	// it back to the hamburger. With room it sits under its own section.
