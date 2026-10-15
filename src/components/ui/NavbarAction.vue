@@ -323,11 +323,18 @@ const markerClasses = () => {
 		</component>
 
 		<Transition
-			enter-from-class="opacity-0"
-			enter-to-class="opacity-100"
-			leave-from-class="opacity-100"
-			leave-to-class="opacity-0"
+			:enter-from-class="props.nested ? 'grid-rows-[0fr]' : 'opacity-0'"
+			:enter-active-class="props.nested ? '[&>div]:overflow-hidden' : ''"
+			:enter-to-class="props.nested ? 'grid-rows-[1fr]' : 'opacity-100'"
+			:leave-from-class="props.nested ? 'grid-rows-[1fr]' : 'opacity-100'"
+			:leave-active-class="props.nested ? '[&>div]:overflow-hidden' : ''"
+			:leave-to-class="props.nested ? 'grid-rows-[0fr]' : 'opacity-0'"
 		>
+			<!-- A top-level panel fades. A nested one slides, as a grid whose one row
+			     goes from nothing to its content, so the height animates without being
+			     measured. No opacity on the slide: that makes a stacking context, which
+			     paints the panel over the focus ring of the row above it. The content
+			     is clipped only while it moves. -->
 			<!-- The top-level panel is clipped, so slotted content with a scrollbar or
 			     square corners keeps to its shape; clip rather than hidden, so it is not
 			     a scroll container of its own. A nested panel is inline with little
@@ -340,16 +347,18 @@ const markerClasses = () => {
 				v-if="hasDropdown() && dropdownOpen"
 				surface="default"
 				data-navbar-panel
-				class="rounded-lg bg-white motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear"
+				class="rounded-lg bg-white"
 				:class="
 					props.nested
-						? 'w-full '
+						? 'grid w-full motion-safe:transition-[grid-template-rows] motion-safe:duration-200 motion-safe:ease-out'
 						: [
-								'-translate-y-1.5 absolute top-full start-4 w-[calc(100%-32px)] overflow-clip shadow-lg @min-[40rem]/navbar:start-0 @min-[40rem]/navbar:w-auto',
+								'-translate-y-1.5 absolute top-full start-4 w-[calc(100%-32px)] overflow-clip shadow-lg motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear @min-[40rem]/navbar:start-0 @min-[40rem]/navbar:w-auto',
 								props.placement === 'right' ? '@min-[40rem]/navbar:start-auto @min-[40rem]/navbar:end-0' : '',
 							]
 				"
 			>
+				<!-- The grid's one child, which is what the slide sizes. -->
+				<div :class="{ 'min-h-0': props.nested }">
 				<div v-if="$slots.dropdown">
 					<slot name="dropdown" />
 				</div>
@@ -370,6 +379,7 @@ const markerClasses = () => {
 						v-bind="isAction(item) ? { nested: true, open: !narrow } : { nested: props.nested }"
 					/>
 				</ul>
+				</div>
 			</SurfaceProvider>
 		</Transition>
 	</component>
