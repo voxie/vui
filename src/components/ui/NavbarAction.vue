@@ -328,7 +328,10 @@ const markerClasses = () => {
 			leave-from-class="opacity-100"
 			leave-to-class="opacity-0"
 		>
-			<!-- The panel is white whatever the bar is, so a Button among the rows is
+			<!-- Clipped, so slotted content with a scrollbar or square corners keeps
+			     to the panel's shape; clip rather than hidden, so the panel is not a
+			     scroll container of its own.
+			     The panel is white whatever the bar is, so a Button among the rows is
 			     on `default`. A boundary of its own and not a `provide` up in this
 			     component: the label and the panel are both mounted here, and they sit
 			     on different things. -->
@@ -336,7 +339,7 @@ const markerClasses = () => {
 				v-if="hasDropdown() && dropdownOpen"
 				surface="default"
 				data-navbar-panel
-				class="rounded-lg bg-white motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear"
+				class="overflow-clip rounded-lg bg-white motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear"
 				:class="
 					props.nested
 						? 'w-full '
