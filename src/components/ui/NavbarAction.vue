@@ -338,7 +338,8 @@ const markerClasses = () => {
 			<!-- The top-level panel is clipped, so slotted content with a scrollbar or
 			     square corners keeps to its shape; clip rather than hidden, so it is not
 			     a scroll container of its own. A nested panel is inline with little
-			     padding, where a clip would cut a focus ring.
+			     padding, where a clip would cut a focus ring. Raised, or the marker of
+			     a later section paints over it.
 			     The panel is white whatever the bar is, so a Button among the rows is
 			     on `default`. A boundary of its own and not a `provide` up in this
 			     component: the label and the panel are both mounted here, and they sit
@@ -352,7 +353,7 @@ const markerClasses = () => {
 					props.nested
 						? 'grid w-full motion-safe:transition-[grid-template-rows] motion-safe:duration-200 motion-safe:ease-out'
 						: [
-								'-translate-y-1.5 absolute top-full start-4 w-[calc(100%-32px)] overflow-clip shadow-lg motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear @min-[40rem]/navbar:start-0 @min-[40rem]/navbar:w-auto',
+								'-translate-y-1.5 absolute top-full start-4 z-10 w-[calc(100%-32px)] overflow-clip shadow-lg motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear @min-[40rem]/navbar:start-0 @min-[40rem]/navbar:w-auto',
 								props.placement === 'right' ? '@min-[40rem]/navbar:start-auto @min-[40rem]/navbar:end-0' : '',
 							]
 				"
