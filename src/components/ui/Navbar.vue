@@ -277,7 +277,7 @@ const heightClasses = 'h-16 @min-[40rem]/navbar:h-20';
 		     The hamburger's tightening is a margin on the button instead. -->
 		<nav
 				v-bind="$attrs"
-				class="relative flex max-w-full items-center gap-4 px-4 shadow-sm @min-[40rem]/navbar:px-6 @min-[48rem]/navbar:px-8"
+				class="relative flex max-w-full items-center gap-4 px-4 shadow-sm @min-[40rem]/navbar:px-6"
 				:class="[surfaceClasses, heightClasses]"
 			>
 			<!-- A logo is not a list item, so the side slots stay plain boxes. The
