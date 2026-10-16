@@ -360,8 +360,8 @@ const markerClasses = () => {
 					     Anything in this slot that isn't an item needs its own `li`. -->
 					<ul
 						v-if="$slots.items"
-						class="flex flex-col items-start "
-						:class="props.nested ? 'pt-2 pb-2 px-4' : 'py-3 px-3'"
+						class="flex flex-col items-start"
+						:class="props.nested ? 'pt-2 pb-2 px-4' : 'py-3 px-3 @max-[40rem]/navbar:gap-2'"
 					>
 						<!-- An action among the items is a submenu: it opens inline rather
 						     than dropping a second panel. -->
