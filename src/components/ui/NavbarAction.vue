@@ -291,12 +291,12 @@ const markerClasses = () => {
 			<span
 				v-else
 				class="flex items-center group-focus-visible/item-pointer:outline-2 group-focus-visible/item-pointer:outline-offset-4 group-focus-visible/item-pointer:outline-blue-600"
-				:class="props.nested ? 'w-full justify-between rounded-lg pe-2.5' : 'gap-2 rounded-md'"
+				:class="props.nested ? 'w-full justify-between rounded-sm pe-2.5' : 'gap-2 rounded-sm'"
 			>
 				<span
 					class="flex items-center gap-2"
 					:class="{
-						'rounded-lg px-2.5 py-1.5 text-slate-900! group-hover/item-pointer:bg-sky-100': props.nested,
+						'rounded-sm px-2.5 py-1.5 text-slate-900! group-hover/item-pointer:bg-sky-100': props.nested,
 						'pointer-events-auto w-full': element() === 'div',
 					}"
 				>
