@@ -182,7 +182,7 @@ onBeforeUnmount(() => {
 // A link goes somewhere, a menu opens: the arrow says which, and turns at every
 // level once the menu is open.
 const arrowIcon = computed(() => {
-	if (props.href) return 'fa-solid fa-angle-right';
+	if (props.href) return 'fa-solid fa-arrow-right';
 	return dropdownOpen.value ? 'fa-solid fa-angle-up' : 'fa-solid fa-angle-down';
 });
 
