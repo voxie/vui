@@ -66,7 +66,7 @@ The prop sets the bar's background and announces it to everything inside the bar
 
 ### Sections
 
-A `NavbarAction` is either a link or a menu, and the arrow at its end says which. Give it an `href` and it renders an `<a>` with an arrow pointing right. Give it an `items` slot and it renders a `<button>` with a chevron. That chevron opens a panel underneath, and points up for as long as the panel is showing. `hideArrow` drops the arrow if a particular action is better off without one.
+A `NavbarAction` is either a link or a menu, and the chevron at its end says which. Give it an `href` and it renders a plain `<a>`. Give it an `items` slot and it renders a `<button>` with a chevron. That chevron opens a panel underneath, and points up for as long as the panel is showing.
 
 The rows in an `items` slot are `NavbarActionItem`s. Give a row an `href` and it renders an `<a>`. Leave it off and it renders a `<button>`.
 
@@ -74,13 +74,13 @@ For a panel that isn't a list of rows, use the `dropdown` slot instead of `items
 
 `icon` takes Font Awesome classes as a string, like `icon="fa-solid fa-robot"`, and sets them on an `<i>` ahead of the label.
 
-In the bars above, open **More**. The chevrons are the menus, and Support is the one with an arrow.
+In the bars above, open **More**. The chevrons are the menus, and Support, with none, is the link.
 
 A menu drops from the left edge of its action. `placement="right"` lines it up with the right edge instead, which is what anything near the right end of the bar needs. Under 40rem the setting is ignored, since a menu takes the full width of the bar there.
 
 ### An action around your own control
 
-Put a [Button](/docs/components/button) or a link in an action's label and the action stops being the control. It renders a `<div>`, draws no arrow, and lets what's inside take the focus, the cursor, and the press. This is the shape the side slots use, and the only way to put a button in an action, since a button can't sit inside a button.
+Put a [Button](/docs/components/button) or a link in an action's label and the action stops being the control. It renders a `<div>`, draws no chevron, and lets what's inside take the focus, the cursor, and the press. This is the shape the side slots use, and the only way to put a button in an action, since a button can't sit inside a button.
 
 The action still positions the panel, carries the marker, and toggles the menu when the control is pressed. It can't put anything inside your control, so three things move to you: the chevron, `aria-haspopup`, and `aria-expanded`.
 

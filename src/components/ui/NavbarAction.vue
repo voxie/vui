@@ -40,7 +40,6 @@ const props = withDefaults(
 		/* Set by Navbar or by a parent action; not something to pass by hand. */
 		nested?: boolean;
 		marker?: boolean;
-		hideArrow?: boolean;
 		// `li` on the bar and in a menu, where actions normally live. `div` for
 		// somewhere that isn't a list, such as the bar's right slot.
 		as?: 'li' | 'div';
@@ -51,7 +50,6 @@ const props = withDefaults(
 		open: false,
 		nested: false,
 		marker: true,
-		hideArrow: false,
 		as: 'li',
 	},
 );
@@ -179,10 +177,8 @@ onBeforeUnmount(() => {
 	document.removeEventListener('keydown', onKeydown);
 });
 
-// A link goes somewhere, a menu opens: the arrow says which, and turns at every
-// level once the menu is open.
-const arrowIcon = computed(() => {
-	if (props.href) return 'fa-solid fa-arrow-right';
+// Only a menu carries a chevron, which turns at every level once it is open.
+const chevronIcon = computed(() => {
 	return dropdownOpen.value ? 'fa-solid fa-angle-up' : 'fa-solid fa-angle-down';
 });
 
@@ -277,9 +273,9 @@ const markerClasses = () => {
 				<!-- A step under the label. The arrow is punctuation and not a word: at
 				     the label's own size it competes with it for the reading. -->
 				<i
-					v-if="!props.hideArrow"
+					v-if="hasDropdown()"
 					class="fa-width-auto text-2xs"
-					:class="arrowIcon"
+					:class="chevronIcon"
 					aria-hidden="true"
 				></i>
 			</Button>
@@ -315,9 +311,9 @@ const markerClasses = () => {
 				     under the label at every depth — a button in a side slot has to set
 				     the same size on the arrow it carries. -->
 				<i
-					v-if="!props.hideArrow && element() !== 'div'"
+					v-if="hasDropdown() && element() !== 'div'"
 					class="fa-width-auto text-2xs"
-					:class="[arrowIcon, { 'text-slate-900': props.nested }]"
+					:class="[chevronIcon, { 'text-slate-900': props.nested }]"
 					aria-hidden="true"
 				></i>
 			</span>
