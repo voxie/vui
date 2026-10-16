@@ -1,20 +1,24 @@
 <script setup lang="ts">
 // The icon reference for the Icons foundations page. Search runs over the name,
-// the variant and both guidance columns.
+// the variant and both guidance columns. Every word in the query has to appear
+// somewhere, in any order; hyphens read as spaces so "icon right" finds icon-up-right.
 import { computed, ref } from 'vue';
 import Input from '@ui/Input.vue';
 import { icons } from './icons';
 
 const query = ref('');
 
+const normalize = (text: string) => text.toLowerCase().replace(/[-_]/g, ' ');
+
 const matches = computed(() => {
-	const needle = query.value.trim().toLowerCase();
-	if (!needle) return icons;
-	return icons.filter((icon) =>
-		`${icon.name} ${icon.variant} ${icon.represents} ${icon.avoid ?? ''}`
-			.toLowerCase()
-			.includes(needle),
-	);
+	const terms = normalize(query.value).split(/\s+/).filter(Boolean);
+	if (!terms.length) return icons;
+	return icons.filter((icon) => {
+		const haystack = normalize(
+			`${icon.name} ${icon.variant} ${icon.represents} ${icon.avoid ?? ''}`,
+		);
+		return terms.every((term) => haystack.includes(term));
+	});
 });
 </script>
 
