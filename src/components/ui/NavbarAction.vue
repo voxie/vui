@@ -93,9 +93,6 @@ const labelNodes = () => flatten(slots.default?.({ open: dropdownOpen.value }) ?
 
 const items = () => flatten(slots.items?.() ?? []);
 
-// A submenu arrives open while the menu holds fewer than three of them. With
-// three or more, open they would run the menu off the screen, so they arrive
-// closed; in a narrow bar they always do.
 const SUBMENUS_OPEN_BELOW = 3;
 const submenusOpen = () => !narrow.value && items().filter(isAction).length < SUBMENUS_OPEN_BELOW;
 
@@ -202,9 +199,6 @@ const labelColor = computed(() => {
 const markerClasses = () => {
 	if (props.nested || !props.marker) return '';
 	const shape = 'relative after:absolute after:inset-x-0 after:bottom-0 after:h-1.5 after:rounded-t-lg';
-	// Faded out while its own panel is open, where it would stick out beside the
-	// panel; the open panel says where you are instead. Back at once when it
-	// closes, so it never lags behind the panel.
 	if (marked()) {
 		const shown =
 			hasDropdown() && dropdownOpen.value ? 'after:opacity-0' : 'after:opacity-100 motion-safe:after:duration-0';
@@ -227,7 +221,7 @@ const markerClasses = () => {
 		:is="props.as"
 		ref="root"
 		class="flex h-full @min-[40rem]/navbar:relative"
-		:class="props.nested ? 'w-full flex-col items-start @min-[64rem]/navbar:min-w-[224px]' : 'items-center'"
+		:class="props.nested ? 'w-full flex-col items-start' : 'items-center'"
 	>
 		<component
 			:is="element()"
@@ -330,63 +324,54 @@ const markerClasses = () => {
 		</component>
 
 		<Transition
-			:enter-from-class="props.nested ? 'grid-rows-[0fr]' : 'opacity-0'"
-			:enter-active-class="props.nested ? '[&>div]:overflow-hidden' : ''"
-			:enter-to-class="props.nested ? 'grid-rows-[1fr]' : 'opacity-100'"
-			:leave-from-class="props.nested ? 'grid-rows-[1fr]' : 'opacity-100'"
-			:leave-active-class="props.nested ? '[&>div]:overflow-hidden' : ''"
-			:leave-to-class="props.nested ? 'grid-rows-[0fr]' : 'opacity-0'"
+			enter-from-class="opacity-0"
+			enter-to-class="opacity-100"
+			leave-from-class="opacity-100"
+			leave-to-class="opacity-0"
 		>
-			<!-- A top-level panel fades. A nested one slides, as a grid whose one row
-			     goes from nothing to its content, so the height animates without being
-			     measured. No opacity on the slide: that makes a stacking context, which
-			     paints the panel over the focus ring of the row above it. The content
-			     is clipped only while it moves. -->
-			<!-- The top-level panel is clipped, so slotted content with a scrollbar or
-			     square corners keeps to its shape; clip rather than hidden, so it is not
-			     a scroll container of its own. A nested panel is inline with little
-			     padding, where a clip would cut a focus ring. Raised, or the marker of
-			     a later section paints over it.
-			     The panel is white whatever the bar is, so a Button among the rows is
+			<!-- The panel is white whatever the bar is, so a Button among the rows is
 			     on `default`. A boundary of its own and not a `provide` up in this
 			     component: the label and the panel are both mounted here, and they sit
 			     on different things. -->
 			<SurfaceProvider
-				v-if="hasDropdown() && dropdownOpen"
+				v-if="hasDropdown() && (props.nested || dropdownOpen)"
 				surface="default"
 				data-navbar-panel
+				:inert="props.nested && !dropdownOpen ? true : undefined"
 				class="rounded-lg bg-white"
 				:class="
 					props.nested
-						? 'grid w-full motion-safe:transition-[grid-template-rows] motion-safe:duration-200 motion-safe:ease-out'
+						? [
+								'grid w-full motion-safe:transition-[grid-template-rows,visibility] motion-safe:duration-200 motion-safe:ease-out',
+								dropdownOpen ? 'grid-rows-[1fr]' : 'invisible grid-rows-[0fr]',
+							]
 						: [
 								'-translate-y-1.5 absolute top-full start-4 z-10 w-[calc(100%-32px)] overflow-clip shadow-lg motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear @min-[40rem]/navbar:start-0 @min-[40rem]/navbar:w-auto',
 								props.placement === 'right' ? '@min-[40rem]/navbar:start-auto @min-[40rem]/navbar:end-0' : '',
 							]
 				"
 			>
-				<!-- The grid's one child, which is what the slide sizes. -->
-				<div :class="{ 'min-h-0': props.nested }">
-				<div v-if="$slots.dropdown">
-					<slot name="dropdown" />
-				</div>
+				<div :class="{ 'min-h-0 overflow-clip': props.nested }">
+					<div v-if="$slots.dropdown">
+						<slot name="dropdown" />
+					</div>
 
-				<!-- A menu is a list too, so a screen reader can say how long it is.
-				     Anything in this slot that isn't an item needs its own `li`. -->
-				<ul
-					v-if="$slots.items"
-					class="flex flex-col items-start "
-					:class="props.nested ? 'pt-1 pb-2 px-4' : 'py-3 px-3'"
-				>
-					<!-- An action among the items is a submenu: it opens inline rather
-					     than dropping a second panel. -->
-					<component
-						v-for="(item, index) in items()"
-						:is="item"
-						:key="item.key ?? `item-${index}`"
-						v-bind="isAction(item) ? { nested: true, open: submenusOpen() } : { nested: props.nested }"
-					/>
-				</ul>
+					<!-- A menu is a list too, so a screen reader can say how long it is.
+					     Anything in this slot that isn't an item needs its own `li`. -->
+					<ul
+						v-if="$slots.items"
+						class="flex flex-col items-start "
+						:class="props.nested ? 'pt-2 pb-2 px-4' : 'py-3 px-3'"
+					>
+						<!-- An action among the items is a submenu: it opens inline rather
+						     than dropping a second panel. -->
+						<component
+							v-for="(item, index) in items()"
+							:is="item"
+							:key="item.key ?? `item-${index}`"
+							v-bind="isAction(item) ? { nested: true, open: submenusOpen() } : { nested: props.nested }"
+						/>
+					</ul>
 				</div>
 			</SurfaceProvider>
 		</Transition>
