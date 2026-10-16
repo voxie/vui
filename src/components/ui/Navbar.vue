@@ -293,7 +293,7 @@ const heightClasses = 'h-16 @min-[40rem]/navbar:h-20';
 			<ul
 				ref="rowEl"
 				class="flex h-full min-w-0 grow items-center [&>*]:shrink-0"
-				:class="{ '[&>*:last-child]:-ms-2': hamburger() }"
+				:class="{ '[&>*:last-child]:-ms-2': hamburger() && $slots.left }"
 			>
 				<component
 					v-for="(node, index) in barNodes()"
