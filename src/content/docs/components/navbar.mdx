@@ -127,7 +127,7 @@ While a menu is open, its panel covers the marker under it, as in the bar above.
 
 ### Menus inside menus
 
-Put a `NavbarAction` inside an `items` slot and it becomes a section of that menu rather than a second panel, a heading with its own rows indented under it. In a bar wider than 40rem those sections are open. In a narrower bar they collapse, and the chevron flips as they open.
+Put a `NavbarAction` inside an `items` slot and it becomes a section of that menu rather than a second panel, a heading with its own rows indented under it. In a bar wider than 40rem those sections are open, as long as the menu holds fewer than three of them. With three or more they start collapsed, since open they would run the menu off the screen, and in a narrower bar they always do. The chevron flips as they open.
 
 A collapsed section holding the current page takes the page's bar onto its own heading, and gives it back to the row when opened.
 

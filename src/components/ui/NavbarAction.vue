@@ -92,6 +92,13 @@ watch(
 const labelNodes = () => flatten(slots.default?.({ open: dropdownOpen.value }) ?? []);
 
 const items = () => flatten(slots.items?.() ?? []);
+
+// A submenu arrives open while the menu holds fewer than three of them. With
+// three or more, open they would run the menu off the screen, so they arrive
+// closed; in a narrow bar they always do.
+const SUBMENUS_OPEN_BELOW = 3;
+const submenusOpen = () => !narrow.value && items().filter(isAction).length < SUBMENUS_OPEN_BELOW;
+
 const isAction = (node: VNode) =>
 	typeof node.type === 'object' && (node.type as { name?: string }).name === 'NavbarAction';
 
@@ -372,12 +379,12 @@ const markerClasses = () => {
 					:class="props.nested ? 'pt-1 pb-2 px-4' : 'py-3 px-3'"
 				>
 					<!-- An action among the items is a submenu: it opens inline rather
-					     than dropping a second panel, so it arrives already open. -->
+					     than dropping a second panel. -->
 					<component
 						v-for="(item, index) in items()"
 						:is="item"
 						:key="item.key ?? `item-${index}`"
-						v-bind="isAction(item) ? { nested: true, open: !narrow } : { nested: props.nested }"
+						v-bind="isAction(item) ? { nested: true, open: submenusOpen() } : { nested: props.nested }"
 					/>
 				</ul>
 				</div>
