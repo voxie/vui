@@ -13,7 +13,7 @@ Published at https://voxie.github.io/vui.
 
 ## Getting started
 
-Requires Node 24 and pnpm 11. Versions are pinned in `package.json` under `engines`.
+Requires Node 24 and pnpm 12. Versions are pinned in `package.json` under `engines`.
 
 ```sh
 pnpm install
