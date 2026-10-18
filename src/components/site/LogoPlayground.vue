@@ -3,8 +3,10 @@ import { computed, ref } from 'vue';
 import Logo from '@ui/Logo.vue';
 import Card from '@ui/Card.vue';
 import Button from '@ui/Button.vue';
+import Switch from '@ui/Switch.vue';
 
-const axis = ref<'width' | 'height'>('width');
+const sizeByHeight = ref(false);
+const axis = computed(() => sizeByHeight.value ? 'height' : 'width');
 const size = ref(70);
 const fixedRadius = ref(false);
 const radius = ref(8);
@@ -16,7 +18,7 @@ const width = computed(() => axis.value === 'width' ? size.value : size.value * 
 const height = computed(() => width.value * 32 / 35);
 const snippet = computed(() => `<Logo style="${axis.value}: ${size.value}px; ${axis.value === 'width' ? 'height' : 'width'}: auto;"${fixedRadius.value ? ` :radius="${radius.value}"` : ''} />`);
 function reset() {
-  axis.value = 'width';
+  sizeByHeight.value = false;
   size.value = 70;
   fixedRadius.value = false;
   radius.value = 8;
@@ -26,25 +28,22 @@ function reset() {
 <template>
   <div class="not-prose space-y-5">
     <Card padding="spacious">
-      <div class="grid gap-5 sm:grid-cols-2">
-        <label class="grid gap-2 text-sm font-semibold">
-          Size by
-          <select v-model="axis" class="rounded-lg border border-slate-300 bg-white p-2">
-            <option value="width">Width</option>
-            <option value="height">Height</option>
-          </select>
-        </label>
+      <div class="grid gap-5">
+        <div class="grid justify-items-start gap-2">
+          <span class="text-sm font-semibold">Size by</span>
+          <Switch v-model="sizeByHeight" off="Width" on="Height" aria-label="Size by height" />
+        </div>
         <label class="grid gap-2 text-sm font-semibold">
           {{ axis === 'width' ? 'Width' : 'Height' }} · {{ size }}px
           <input v-model.number="size" type="range" min="16" max="160" step="1" class="w-full accent-sky-600" />
         </label>
-        <label class="flex items-center gap-2 text-sm font-semibold">
-          <input v-model="fixedRadius" type="checkbox" class="accent-sky-600" />
-          Fixed pixel radius
-        </label>
-        <label class="grid gap-2 text-sm font-semibold" :class="{ 'opacity-50': !fixedRadius }">
+        <div class="grid justify-items-start gap-2">
+          <span class="text-sm font-semibold">Radius mode</span>
+          <Switch v-model="fixedRadius" off="Relative" on="Fixed" aria-label="Fixed radius" />
+        </div>
+        <label v-if="fixedRadius" class="grid gap-2 text-sm font-semibold">
           Radius · {{ radius }}px
-          <input v-model.number="radius" type="range" min="0" max="40" step="1" :disabled="!fixedRadius" class="w-full accent-sky-600" />
+          <input v-model.number="radius" type="range" min="0" max="40" step="1" class="w-full accent-sky-600" />
         </label>
       </div>
       <div class="mt-6 flex min-h-64 items-center justify-center rounded-xl bg-slate-200 p-8" role="img" aria-label="Live Voxie logo preview">
