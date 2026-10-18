@@ -14,7 +14,7 @@ defineProps<{
     <span
       v-bind="$attrs"
       aria-hidden="true"
-      class="voxie-mark relative inline-block aspect-[35/32] bg-current align-middle"
+      class="voxie-logo relative inline-block aspect-[35/32] bg-current align-middle"
       :style="{ borderRadius: radius == null ? '22.857142857% / 25%' : `${radius}px` }"
     >
       <svg
@@ -46,7 +46,7 @@ defineProps<{
 
 <style scoped>
 @layer components {
-  .voxie-mark {
+  .voxie-logo {
     width: 35px;
   }
 }

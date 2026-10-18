@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import VoxieMark from '@ui/VoxieMark.vue';
+import Logo from '@ui/Logo.vue';
 import Card from '@ui/Card.vue';
 import Button from '@ui/Button.vue';
 
@@ -14,7 +14,7 @@ const dimensions = computed(() => axis.value === 'width'
   : { width: 'auto', height: `${size.value}px` });
 const width = computed(() => axis.value === 'width' ? size.value : size.value * 35 / 32);
 const height = computed(() => width.value * 32 / 35);
-const snippet = computed(() => `<VoxieMark style="${axis.value}: ${size.value}px; ${axis.value === 'width' ? 'height' : 'width'}: auto;"${fixedRadius.value ? ` :radius="${radius.value}"` : ''} />`);
+const snippet = computed(() => `<Logo style="${axis.value}: ${size.value}px; ${axis.value === 'width' ? 'height' : 'width'}: auto;"${fixedRadius.value ? ` :radius="${radius.value}"` : ''} />`);
 function reset() {
   axis.value = 'width';
   size.value = 70;
@@ -47,8 +47,8 @@ function reset() {
           <input v-model.number="radius" type="range" min="0" max="40" step="1" :disabled="!fixedRadius" class="w-full accent-sky-600" />
         </label>
       </div>
-      <div class="mt-6 flex min-h-64 items-center justify-center rounded-xl bg-slate-200 p-8 pb-12" role="img" aria-label="Live Voxie mark preview">
-        <VoxieMark data-preview-mark :style="dimensions" :radius="markRadius" />
+      <div class="mt-6 flex min-h-64 items-center justify-center rounded-xl bg-slate-200 p-8" role="img" aria-label="Live Voxie logo preview">
+        <Logo data-preview-mark :style="dimensions" :radius="markRadius" />
       </div>
       <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
         <p>Body {{ width.toFixed(1) }} × {{ height.toFixed(1) }}px · {{ fixedRadius ? `${radius}px requested radius` : `${(width * 8 / 35).toFixed(1)}px proportional radius` }}</p>
@@ -63,7 +63,7 @@ function reset() {
       <Card>
         <div class="flex flex-wrap items-end gap-8 py-6">
           <div v-for="preset in [24, 35, 48, 70, 105]" :key="preset" class="grid justify-items-center gap-6">
-            <VoxieMark :style="{ width: `${preset}px` }" :radius="markRadius" />
+            <Logo :style="{ width: `${preset}px` }" :radius="markRadius" />
             <span class="text-xs text-slate-500">{{ preset }}px</span>
           </div>
         </div>
