@@ -1,0 +1,111 @@
+---
+title: Voxie Mark
+order: 25
+---
+
+import VoxieMark from '@ui/VoxieMark.vue';
+import VoxieMarkPlayground from '@site/VoxieMarkPlayground.vue';
+import Card from '@ui/Card.vue';
+
+The Voxie mark has a rounded body, a white symbol, and a speech-bubble tail. The body keeps a 35:32 aspect ratio when sized by one dimension. The symbol and tail scale with it.
+
+```vue
+import VoxieMark from '@ui/VoxieMark.vue';
+
+<VoxieMark />
+```
+
+## Examples
+
+### Size and radius playground
+
+Choose width or height to resize the mark. Turn on **Fixed pixel radius** to keep the corners at a specific radius while the size changes. The comparison row uses the same radius setting at several widths.
+
+<VoxieMarkPlayground client:load />
+
+### Sizing
+
+The default body is 35px wide and 32px tall. Set one CSS dimension and leave the other on `auto` to preserve its proportions. Width and height are controlled through CSS, with no dedicated props.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-8 pb-3">
+    <VoxieMark class="w-6 h-auto" />
+    <VoxieMark />
+    <VoxieMark class="h-10 w-auto" />
+    <VoxieMark class="w-20 h-auto" />
+  </div>
+</Card>
+
+```vue
+<VoxieMark class="w-6 h-auto" />
+<VoxieMark />
+<VoxieMark class="h-10 w-auto" />
+<VoxieMark class="w-20 h-auto" />
+```
+
+The tail extends below the body by one eighth of its height. Leave space below the mark so the tail stays visible. An ancestor with `overflow: hidden` can clip it.
+
+### Corner radius
+
+With no `radius` prop, the corners scale with the body. At the default size, the radius is 8px. Pass a number to set the radius in CSS pixels. A value of `0` makes the body corners square.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-end gap-8 pb-3">
+    <div class="grid justify-items-center gap-5">
+      <VoxieMark class="w-20" />
+      <span class="text-xs text-slate-500">Proportional</span>
+    </div>
+    <div class="grid justify-items-center gap-5">
+      <VoxieMark class="w-20" radius={8} />
+      <span class="text-xs text-slate-500">8px</span>
+    </div>
+    <div class="grid justify-items-center gap-5">
+      <VoxieMark class="w-20" radius={0} />
+      <span class="text-xs text-slate-500">0px</span>
+    </div>
+  </div>
+</Card>
+
+```vue
+<VoxieMark class="w-20" />
+<VoxieMark class="w-20" :radius="8" />
+<VoxieMark class="w-20" :radius="0" />
+```
+
+A fixed radius stays the same as the mark changes size. The browser limits large radii to fit the body. The tail keeps its relative position when the radius changes.
+
+### Color
+
+The body and tail default to sky-400. Text color classes change both. The symbol stays white.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-6 pb-3">
+    <VoxieMark />
+    <VoxieMark class="text-sky-600" />
+    <VoxieMark class="text-slate-800" />
+  </div>
+</Card>
+
+```vue
+<VoxieMark />
+<VoxieMark class="text-sky-600" />
+<VoxieMark class="text-slate-800" />
+```
+
+## Props
+
+| Prop | Type | Default | Behavior |
+| --- | --- | --- | --- |
+| `radius` | `number` or numeric `string` | Proportional | Sets the body’s corner radius in CSS pixels. Omit it to scale the corners with the mark. |
+
+Classes and styles apply to the body. Pass numeric radius values such as `8` or `"8"`; the component adds the `px` unit.
+
+## Accessibility
+
+The mark is decorative and hidden from assistive technology. Give a link containing only the mark an accessible name. A link with visible text can use that text as its name.
+
+```vue
+<a href="/" aria-label="Voxie home">
+  <VoxieMark class="w-8" />
+</a>
+```

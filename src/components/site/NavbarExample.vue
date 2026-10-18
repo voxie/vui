@@ -6,7 +6,7 @@ import Button from '@ui/Button.vue';
 import Navbar from '@ui/Navbar.vue';
 import NavbarAction from '@ui/NavbarAction.vue';
 import NavbarActionItem from '@ui/NavbarActionItem.vue';
-import VoxieMark from './VoxieMark.vue';
+import VoxieMark from '@ui/VoxieMark.vue';
 
 withDefaults(
 	defineProps<{
