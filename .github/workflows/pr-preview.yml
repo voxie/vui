@@ -1,0 +1,106 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: read
+
+# Shared with the Deploy workflow — both push to gh-pages.
+concurrency:
+  group: gh-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-24.04
+    environment:
+      name: preview
+      url: https://voxie.github.io/vui/pr-preview/pr-${{ github.event.number }}/
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      # Pinned to the versions in package.json `engines`.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12.14.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          cache: pnpm
+          node-version: 24.22.0
+
+      - name: Run Install
+        run: pnpm install --frozen-lockfile
+
+      # The preview is served from a subfolder, so every asset and absolute
+      # link has to be built against that path rather than /vui/.
+      - name: Run Build
+        run: pnpm run build
+        env:
+          BASE_PATH: /vui/pr-preview/pr-${{ github.event.number }}/
+
+      # Waiting holds the job open until Pages actually serves the preview, so
+      # the comment below never posts a link that 404s on arrival.
+      - name: Deploy Preview
+        id: preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: ./dist
+          wait-for-pages-deployment: true
+          comment: false
+
+      - name: Timestamp
+        id: ts
+        run: echo "now=$(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_OUTPUT"
+
+      # Reuses the header the action's own comment used, so this replaces that
+      # card in place rather than leaving two comments behind.
+      - name: Comment Preview Link
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: pr-preview
+          message: |
+            The latest preview for this pull request.
+
+            | Project | Deployment | Preview | Updated |
+            | :--- | :--- | :--- | :--- |
+            | **vui** | [🟢 Ready](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) | [Visit Preview](${{ steps.preview.outputs.preview-url }}) | ${{ steps.ts.outputs.now }} |
+
+  # Split out so closing a PR doesn't record a deployment pointing at the
+  # preview it just deleted.
+  cleanup:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Remove Preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          comment: false
+
+      - name: Timestamp
+        id: ts
+        run: echo "now=$(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_OUTPUT"
+
+      - name: Comment Preview Removed
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: pr-preview
+          message: |
+            The preview for this pull request has been removed.
+
+            | Project | Deployment | Preview | Updated |
+            | :--- | :--- | :--- | :--- |
+            | **vui** | ⚪ Removed | — | ${{ steps.ts.outputs.now }} |
