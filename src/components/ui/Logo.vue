@@ -3,10 +3,6 @@ defineOptions({
   // Keep the default color inherited so caller color classes take precedence.
   inheritAttrs: false,
 });
-
-defineProps<{
-  radius?: number | string;
-}>();
 </script>
 
 <template>
@@ -15,7 +11,6 @@ defineProps<{
       v-bind="$attrs"
       aria-hidden="true"
       class="voxie-logo relative inline-block aspect-[35/32] bg-current align-middle"
-      :style="{ borderRadius: radius == null ? '22.857142857% / 25%' : `${radius}px` }"
     >
       <svg
         viewBox="0 0 35 32"
@@ -42,6 +37,8 @@ defineProps<{
 @layer components {
   .voxie-logo {
     width: 35px;
+    /* Components layer so a rounded-* utility can override the default. */
+    border-radius: 22.857142857% / 25%;
   }
 }
 </style>

@@ -19,7 +19,7 @@ import Logo from '@ui/Logo.vue';
 
 ### Size and radius playground
 
-Choose width or height to resize the mark. Select **Fixed** under **Radius mode** to keep the corners at a specific radius while the size changes. The comparison row uses the same radius setting at several widths.
+Choose width or height to resize the mark. Select **Tailwind** under **Radius mode** to step through the `rounded-*` scale and keep the corners at that radius while the size changes. The comparison row uses the same radius setting at several widths.
 
 <LogoPlayground client:load />
 
@@ -47,7 +47,7 @@ The tail extends below the body by one eighth of its height. An ancestor with `o
 
 ### Corner radius
 
-The logo has a default radius that scales proportionally so it stays consistent across mixed uses. It is also designed to have it's radius match surrounding elements in UI. For example, if the Logo sits next to a button like it does in the navbar, we can set its radius to exactly match the button for a more cohesive design.
+The logo has a default radius that scales proportionally so it stays consistent across mixed uses. It is also designed to have its radius match surrounding elements in UI. For example, if the Logo sits next to a button like it does in the navbar, we can set its radius to exactly match the button for a more cohesive design. A Tailwind `rounded-*` class overrides the default, so the logo can use the same radius token as the button beside it.
 
 <Card>
   <div class="not-prose flex flex-wrap items-end gap-8">
@@ -56,23 +56,28 @@ The logo has a default radius that scales proportionally so it stays consistent 
       <span class="text-xs text-slate-500">Proportional</span>
     </div>
     <div class="grid justify-items-center gap-5">
-      <Logo class="w-20" radius={8} />
-      <span class="text-xs text-slate-500">8px</span>
+      <Logo class="w-20 rounded-xl" />
+      <span class="text-xs text-slate-500">rounded-xl</span>
     </div>
     <div class="grid justify-items-center gap-5">
-      <Logo class="w-20" radius={0} />
-      <span class="text-xs text-slate-500">0px</span>
+      <Logo class="w-20 rounded-md" />
+      <span class="text-xs text-slate-500">rounded-md</span>
+    </div>
+    <div class="grid justify-items-center gap-5">
+      <Logo class="w-20 rounded-none" />
+      <span class="text-xs text-slate-500">rounded-none</span>
     </div>
   </div>
 </Card>
 
 ```vue
 <Logo class="w-20" />
-<Logo class="w-20" :radius="8" />
-<Logo class="w-20" :radius="0" />
+<Logo class="w-20 rounded-xl" />
+<Logo class="w-20 rounded-md" />
+<Logo class="w-20 rounded-none" />
 ```
 
-A fixed radius stays the same as the mark changes size. The browser limits large radii to fit the body. The tail keeps its relative position when the radius changes.
+A class radius stays the same as the mark changes size. Use an arbitrary value such as `rounded-[7px]` for a size outside the scale. The browser limits large radii to fit the body. The tail keeps its relative position when the radius changes.
 
 ### Color
 
@@ -94,11 +99,7 @@ The body and tail default to sky-400. Text color classes change both. The symbol
 
 ## Props
 
-| Prop | Type | Default | Behavior |
-| --- | --- | --- | --- |
-| `radius` | `number` or numeric `string` | Proportional | Sets the body’s corner radius in CSS pixels. Omit it to scale the corners with the mark. |
-
-Classes and styles apply to the body. Pass numeric radius values such as `8` or `"8"`; the component adds the `px` unit.
+The component has no props. Classes and styles apply to the body. Size it with a width or height class and shape it with a `rounded-*` class.
 
 ## Accessibility
 
