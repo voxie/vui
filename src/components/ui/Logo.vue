@@ -27,18 +27,12 @@ defineProps<{
           d="M8 36V24H23.825L8 36Z"
           class="fill-current"
         />
-        <path
-          d="M11.2 11.2941L17.4999 22.2059"
-          stroke-width="5.68465"
-          stroke-linecap="round"
-          stroke="white"
-        />
-        <path
-          d="M23.7998 11.2942L23.7999 11.2941"
-          stroke-width="6.8"
-          stroke-linecap="round"
-          stroke="white"
-        />
+        
+        <!-- left v line -->
+        <path d="M11 11.5L17.5 21.5" stroke-width="5.5" stroke-linecap="round" stroke="white"/>
+        <!-- right dot -->
+        <path d="M24 11.5V11.5" stroke-width="6.5" stroke-linecap="round" stroke="white"/>
+
       </svg>
     </span>
   </span>
