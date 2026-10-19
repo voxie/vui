@@ -50,7 +50,9 @@ Tools that read a URL rather than a local file can be pointed at the skill pages
 
 ## Deploying
 
-Pushing to `main` builds the site and deploys it to GitHub Pages through `.github/workflows/deploy.yml`.
+Pushing to `main` builds the site and publishes it to the `gh-pages` branch through `.github/workflows/deploy.yml`. GitHub Pages serves that branch, so the repo's Pages source must be set to "Deploy from a branch" with `gh-pages` and `/ (root)`.
+
+Every pull request gets a preview at `https://voxie.github.io/vui/pr-preview/pr-<number>/` through `.github/workflows/pr-preview.yml`. It builds with `BASE_PATH` set to that subfolder, publishes into `pr-preview/` on the same branch, and posts the link as a comment on the PR. Closing the PR removes the preview. The production deploy keeps those folders in place, and both workflows share one concurrency group so their pushes never collide.
 
 ## Contributing
 
