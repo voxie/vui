@@ -6,7 +6,7 @@ import Button from '@ui/Button.vue';
 import Navbar from '@ui/Navbar.vue';
 import NavbarAction from '@ui/NavbarAction.vue';
 import NavbarActionItem from '@ui/NavbarActionItem.vue';
-import VoxieMark from './VoxieMark.vue';
+import Logo from '@ui/Logo.vue';
 
 withDefaults(
 	defineProps<{
@@ -66,7 +66,7 @@ const sections = [
 					class="flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 group"
 					aria-label="Voxie"
 				>
-					<VoxieMark class=" group-hover:text-sky-600"/>
+					<Logo class="transition-colors ease-out group-hover:text-sky-500" />
 				</a>
 			</NavbarAction>
 

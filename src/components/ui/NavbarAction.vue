@@ -40,7 +40,6 @@ const props = withDefaults(
 		/* Set by Navbar or by a parent action; not something to pass by hand. */
 		nested?: boolean;
 		marker?: boolean;
-		hideArrow?: boolean;
 		// `li` on the bar and in a menu, where actions normally live. `div` for
 		// somewhere that isn't a list, such as the bar's right slot.
 		as?: 'li' | 'div';
@@ -51,7 +50,6 @@ const props = withDefaults(
 		open: false,
 		nested: false,
 		marker: true,
-		hideArrow: false,
 		as: 'li',
 	},
 );
@@ -92,6 +90,10 @@ watch(
 const labelNodes = () => flatten(slots.default?.({ open: dropdownOpen.value }) ?? []);
 
 const items = () => flatten(slots.items?.() ?? []);
+
+const SUBMENUS_OPEN_BELOW = 3;
+const submenusOpen = () => !narrow.value && items().filter(isAction).length < SUBMENUS_OPEN_BELOW;
+
 const isAction = (node: VNode) =>
 	typeof node.type === 'object' && (node.type as { name?: string }).name === 'NavbarAction';
 
@@ -175,10 +177,8 @@ onBeforeUnmount(() => {
 	document.removeEventListener('keydown', onKeydown);
 });
 
-// A link goes somewhere, a menu opens: the arrow says which, and turns at every
-// level once the menu is open.
-const arrowIcon = computed(() => {
-	if (props.href) return 'fa-solid fa-angle-right';
+// Only a menu carries a chevron, which turns at every level once it is open.
+const chevronIcon = computed(() => {
 	return dropdownOpen.value ? 'fa-solid fa-angle-up' : 'fa-solid fa-angle-down';
 });
 
@@ -195,7 +195,11 @@ const labelColor = computed(() => {
 const markerClasses = () => {
 	if (props.nested || !props.marker) return '';
 	const shape = 'relative after:absolute after:inset-x-0 after:bottom-0 after:h-1.5 after:rounded-t-lg';
-	if (marked()) return `${shape} after:block after:bg-sky-500`;
+	if (marked()) {
+		const shown =
+			hasDropdown() && dropdownOpen.value ? 'after:opacity-0' : 'after:opacity-100 motion-safe:after:duration-0';
+		return `${shape} after:block after:bg-sky-500 motion-safe:after:transition-opacity ${shown}`;
+	}
 
 	// In a narrow bar the panel covers the full width, so the marker is what ties
 	// it back to the hamburger. With room it sits under its own section.
@@ -213,7 +217,7 @@ const markerClasses = () => {
 		:is="props.as"
 		ref="root"
 		class="flex h-full @min-[40rem]/navbar:relative"
-		:class="props.nested ? 'w-full flex-col items-start @min-[64rem]/navbar:min-w-[224px]' : 'items-center'"
+		:class="props.nested ? 'w-full flex-col items-start' : 'items-center'"
 	>
 		<component
 			:is="element()"
@@ -269,9 +273,9 @@ const markerClasses = () => {
 				<!-- A step under the label. The arrow is punctuation and not a word: at
 				     the label's own size it competes with it for the reading. -->
 				<i
-					v-if="!props.hideArrow"
+					v-if="hasDropdown()"
 					class="fa-width-auto text-2xs"
-					:class="arrowIcon"
+					:class="chevronIcon"
 					aria-hidden="true"
 				></i>
 			</Button>
@@ -283,12 +287,12 @@ const markerClasses = () => {
 			<span
 				v-else
 				class="flex items-center group-focus-visible/item-pointer:outline-2 group-focus-visible/item-pointer:outline-offset-4 group-focus-visible/item-pointer:outline-blue-600"
-				:class="props.nested ? 'w-full justify-between rounded-lg' : 'gap-2 rounded-md'"
+				:class="props.nested ? 'w-full justify-between rounded-sm pe-2.5' : 'gap-2 rounded-sm'"
 			>
 				<span
 					class="flex items-center gap-2"
 					:class="{
-						'rounded-lg px-2.5 py-1.5 text-slate-900! group-hover/item-pointer:bg-sky-100': props.nested,
+						'rounded-sm px-2.5 py-1.5 text-slate-900! group-hover/item-pointer:bg-sky-100': props.nested,
 						'pointer-events-auto w-full': element() === 'div',
 					}"
 				>
@@ -307,9 +311,9 @@ const markerClasses = () => {
 				     under the label at every depth — a button in a side slot has to set
 				     the same size on the arrow it carries. -->
 				<i
-					v-if="!props.hideArrow && element() !== 'div'"
+					v-if="hasDropdown() && element() !== 'div'"
 					class="fa-width-auto text-2xs"
-					:class="[arrowIcon, { 'text-slate-900': props.nested }]"
+					:class="[chevronIcon, { 'text-slate-900': props.nested }]"
 					aria-hidden="true"
 				></i>
 			</span>
@@ -326,39 +330,45 @@ const markerClasses = () => {
 			     component: the label and the panel are both mounted here, and they sit
 			     on different things. -->
 			<SurfaceProvider
-				v-if="hasDropdown() && dropdownOpen"
+				v-if="hasDropdown() && (props.nested || dropdownOpen)"
 				surface="default"
 				data-navbar-panel
-				class="rounded-lg bg-white motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear"
+				:inert="props.nested && !dropdownOpen ? true : undefined"
+				class="rounded-lg bg-white"
 				:class="
 					props.nested
-						? 'w-full '
+						? [
+								'grid w-full motion-safe:transition-[grid-template-rows,visibility] motion-safe:duration-200 motion-safe:ease-out',
+								dropdownOpen ? 'grid-rows-[1fr]' : 'invisible grid-rows-[0fr]',
+							]
 						: [
-								'-translate-y-1.5 absolute top-full start-4 w-[calc(100%-32px)] shadow-lg @min-[40rem]/navbar:start-0 @min-[40rem]/navbar:w-auto',
+								'-translate-y-1.5 absolute top-full start-4 z-10 w-[calc(100%-32px)] overflow-clip shadow-lg motion-safe:transition-opacity motion-safe:duration-100 motion-safe:ease-linear @min-[40rem]/navbar:start-0 @min-[40rem]/navbar:w-auto',
 								props.placement === 'right' ? '@min-[40rem]/navbar:start-auto @min-[40rem]/navbar:end-0' : '',
 							]
 				"
 			>
-				<div v-if="$slots.dropdown">
-					<slot name="dropdown" />
-				</div>
+				<div :class="{ 'min-h-0 overflow-clip': props.nested }">
+					<div v-if="$slots.dropdown">
+						<slot name="dropdown" />
+					</div>
 
-				<!-- A menu is a list too, so a screen reader can say how long it is.
-				     Anything in this slot that isn't an item needs its own `li`. -->
-				<ul
-					v-if="$slots.items"
-					class="flex flex-col items-start "
-					:class="props.nested ? 'pt-1 pb-2 px-4' : 'py-3 px-3'"
-				>
-					<!-- An action among the items is a submenu: it opens inline rather
-					     than dropping a second panel, so it arrives already open. -->
-					<component
-						v-for="(item, index) in items()"
-						:is="item"
-						:key="item.key ?? `item-${index}`"
-						v-bind="isAction(item) ? { nested: true, open: !narrow } : { nested: props.nested }"
-					/>
-				</ul>
+					<!-- A menu is a list too, so a screen reader can say how long it is.
+					     Anything in this slot that isn't an item needs its own `li`. -->
+					<ul
+						v-if="$slots.items"
+						class="flex flex-col items-start"
+						:class="props.nested ? 'pt-2 pb-2 px-4' : 'py-3 px-3 @max-[40rem]/navbar:gap-2'"
+					>
+						<!-- An action among the items is a submenu: it opens inline rather
+						     than dropping a second panel. -->
+						<component
+							v-for="(item, index) in items()"
+							:is="item"
+							:key="item.key ?? `item-${index}`"
+							v-bind="isAction(item) ? { nested: true, open: submenusOpen() } : { nested: props.nested }"
+						/>
+					</ul>
+				</div>
 			</SurfaceProvider>
 		</Transition>
 	</component>

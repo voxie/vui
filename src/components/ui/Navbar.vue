@@ -277,7 +277,7 @@ const heightClasses = 'h-16 @min-[40rem]/navbar:h-20';
 		     The hamburger's tightening is a margin on the button instead. -->
 		<nav
 				v-bind="$attrs"
-				class="relative flex max-w-full items-center gap-4 px-4 shadow-sm @min-[40rem]/navbar:px-6 @min-[48rem]/navbar:px-8"
+				class="relative flex max-w-full items-center gap-4 px-4 shadow-sm @min-[40rem]/navbar:px-6"
 				:class="[surfaceClasses, heightClasses]"
 			>
 			<!-- A logo is not a list item, so the side slots stay plain boxes. The
@@ -293,7 +293,7 @@ const heightClasses = 'h-16 @min-[40rem]/navbar:h-20';
 			<ul
 				ref="rowEl"
 				class="flex h-full min-w-0 grow items-center [&>*]:shrink-0"
-				:class="{ '[&>*:last-child]:-ms-2': hamburger() }"
+				:class="{ '[&>*:last-child]:-ms-2': hamburger() && $slots.left }"
 			>
 				<component
 					v-for="(node, index) in barNodes()"

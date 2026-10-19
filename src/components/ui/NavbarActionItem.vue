@@ -39,7 +39,7 @@ const element = computed(() => (props.href ? 'a' : 'button'));
 			<!-- On the label rather than the row, which runs the full width of the
 			     panel: the box the hover fill is already on. -->
 			<div
-				class="flex gap-2 rounded-lg px-3 py-1.5 text-left text-xs text-slate-900 group-hover/subitem:bg-sky-100 group-focus-visible/subitem:outline-2 group-focus-visible/subitem:outline-offset-4 group-focus-visible/subitem:outline-blue-600"
+				class="flex gap-2 rounded-sm px-3 py-1.5 text-left text-xs text-slate-900 group-hover/subitem:bg-sky-100 group-focus-visible/subitem:outline-2 group-focus-visible/subitem:outline-offset-4 group-focus-visible/subitem:outline-blue-600"
 				:class="{ 'font-semibold': props.active }"
 			>
 				<slot />
