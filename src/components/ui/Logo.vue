@@ -24,9 +24,9 @@ defineOptions({
         />
         
         <!-- left v line -->
-        <path d="M11 11.5L17.5 21.5" stroke-width="5.5" stroke-linecap="round" stroke="white"/>
+        <path d="M10.9 11.5L17.4 21.5" stroke-width="5.5" stroke-linecap="round" stroke="white"/>
         <!-- right dot -->
-        <path d="M24 11.5V11.5" stroke-width="6.5" stroke-linecap="round" stroke="white"/>
+        <path d="M23.6 11.6V11.6" stroke-width="6.7" stroke-linecap="round" stroke="white"/>
 
       </svg>
     </span>
@@ -38,7 +38,7 @@ defineOptions({
   .voxie-logo {
     width: 35px;
     /* Components layer so a rounded-* utility can override the default. */
-    border-radius: 22.857142857% / 25%;
+    border-radius: 25%;
   }
 }
 </style>
