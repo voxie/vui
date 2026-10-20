@@ -105,7 +105,8 @@ const rightDot = computed(() => {
 @layer components {
   .voxie-logo {
     width: 35px;
-    border-radius: 25%;
+    /* 8/35 by 8/32 so the percentage corners are circular on the 35:32 body. */
+    border-radius: 22.857142857% / 25%;
   }
 }
 </style>
