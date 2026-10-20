@@ -74,6 +74,8 @@ const rightDot = computed(() => {
         xmlns="http://www.w3.org/2000/svg"
         class="absolute inset-0 size-full overflow-visible"
       >
+
+        <!-- tail -->
         <path
           d="M8 36V24H23.825L8 36Z"
           class="fill-current"
