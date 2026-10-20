@@ -48,9 +48,16 @@ const leftPath = computed(() => {
   return `M${left.x} ${left.y}L${middle.x} ${middle.y}`;
 });
 
+// A zero-length path gets dropped by Figma on SVG import, so the dot is a
+// hairline starting at the dot position and running down the arm toward the vertex.
+const dotSpan = 3;
+
 const rightDot = computed(() => {
   const { right } = endpoints.value;
-  return `M${right.x} ${right.y}V${right.y}`;
+  const radians = (angle * Math.PI) / 180;
+  const dx = dotSpan * Math.sin(radians);
+  const dy = dotSpan * Math.cos(radians);
+  return `M${right.x} ${right.y}L${right.x - dx} ${right.y + dy}`;
 });
 </script>
 
