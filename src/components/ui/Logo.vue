@@ -7,15 +7,15 @@ defineOptions({
 });
 
 // Bottom vertex
-const middle = { x: 17.4, y: 21.5 };
+const middle = { x: 17.5, y: 22 };
 
 // Segment configuration
-const length = 11.5;
+const length = 12;
 // Golden-ratio slope
 const angle = 31.72; // Degrees from vertical
 
 // Stroke weights
-const strokeWidth = 5.5;
+const strokeWidth = 6;
 // Optical compensation: a round terminal reads lighter than a stroke of the
 // same width, so the dot is drawn ~20% heavier to look equal.
 const dotWidth = strokeWidth * 1.22;
