@@ -13,6 +13,12 @@ const middle = { x: 17.4, y: 21.5 };
 const length = 11.5;
 const angle = 33; // Degrees from vertical
 
+// Stroke weights
+const strokeWidth = 5.5;
+// Optical compensation: a round terminal reads lighter than a stroke of the
+// same width, so the dot is drawn ~20% heavier to look equal.
+const dotWidth = strokeWidth * 1.2;
+
 const endpoints = computed(() => {
   const radians = (angle * Math.PI) / 180;
 
@@ -63,7 +69,7 @@ const rightDot = computed(() => {
         <!-- Left V segment -->
         <path
           :d="leftPath"
-          stroke-width="5.5"
+          :stroke-width="strokeWidth"
           stroke-linecap="round"
           stroke="white"
         />
@@ -71,7 +77,7 @@ const rightDot = computed(() => {
         <!-- Separate right dot -->
         <path
           :d="rightDot"
-          stroke-width="6.7"
+          :stroke-width="dotWidth"
           stroke-linecap="round"
           stroke="white"
         />
