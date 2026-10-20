@@ -11,18 +11,19 @@ const middle = { x: 17.4, y: 21.5 };
 
 // Segment configuration
 const length = 11.5;
-const angle = 33; // Degrees from vertical
+// Golden-ratio slope
+const angle = 31.72; // Degrees from vertical
 
 // Stroke weights
 const strokeWidth = 5.5;
 // Optical compensation: a round terminal reads lighter than a stroke of the
 // same width, so the dot is drawn ~20% heavier to look equal.
-const dotWidth = strokeWidth * 1.2;
+const dotWidth = strokeWidth * 1.22;
 // The heavier dot's edge would reach past the left arm's cap by half the extra
 // weight, so its center is pulled in along the arm by that much. A full circle
 // aligned exactly still reads short, like an o on a baseline, so it overshoots
 // by about 2% of the mark's height.
-const dotOvershoot = 0.3;
+const dotOvershoot = 0.4;
 const dotInset = (dotWidth - strokeWidth) / 2 - dotOvershoot;
 
 const endpoints = computed(() => {
