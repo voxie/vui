@@ -7,7 +7,7 @@ defineOptions({
 });
 
 // Bottom vertex
-const middle = { x: 17.5, y: 22 };
+const middle = { x: 17.5, y: 21.5 };
 
 // Segment configuration
 const length = 12;
