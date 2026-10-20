@@ -1,0 +1,1 @@
+function e(e,t){if(!t.startsWith(`/`)||t.startsWith(`//`))return t;let n=e.replace(/\/+$/,``),r=t.search(/[?#]/),i=r===-1?t:t.slice(0,r),a=r===-1?``:t.slice(r);return n+(i.endsWith(`/`)||/\.[a-z0-9]+$/i.test(i)?i:i+`/`)+a}function t(t){return e(`/vui/pr-preview/pr-4/`,t)}export{t};
