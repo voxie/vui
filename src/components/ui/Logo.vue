@@ -1,7 +1,44 @@
+
 <script setup lang="ts">
+import { computed } from 'vue';
+
 defineOptions({
-  // Keep the default color inherited so caller color classes take precedence.
   inheritAttrs: false,
+});
+
+// Bottom vertex
+const middle = { x: 17.4, y: 21.5 };
+
+// Segment configuration
+const length = 11.5;
+const angle = 33; // Degrees from vertical
+
+const endpoints = computed(() => {
+  const radians = (angle * Math.PI) / 180;
+
+  const dx = length * Math.sin(radians);
+  const dy = length * Math.cos(radians);
+
+  return {
+    left: {
+      x: middle.x - dx,
+      y: middle.y - dy,
+    },
+    right: {
+      x: middle.x + dx,
+      y: middle.y - dy,
+    },
+  };
+});
+
+const leftPath = computed(() => {
+  const { left } = endpoints.value;
+  return `M${left.x} ${left.y}L${middle.x} ${middle.y}`;
+});
+
+const rightDot = computed(() => {
+  const { right } = endpoints.value;
+  return `M${right.x} ${right.y}V${right.y}`;
 });
 </script>
 
@@ -22,12 +59,22 @@ defineOptions({
           d="M8 36V24H23.825L8 36Z"
           class="fill-current"
         />
-        
-        <!-- left v line -->
-        <path d="M10.9 11.5L17.4 21.5" stroke-width="5.5" stroke-linecap="round" stroke="white"/>
-        <!-- right dot -->
-        <path d="M23.6 11.6V11.6" stroke-width="6.7" stroke-linecap="round" stroke="white"/>
 
+        <!-- Left V segment -->
+        <path
+          :d="leftPath"
+          stroke-width="5.5"
+          stroke-linecap="round"
+          stroke="white"
+        />
+
+        <!-- Separate right dot -->
+        <path
+          :d="rightDot"
+          stroke-width="6.7"
+          stroke-linecap="round"
+          stroke="white"
+        />
       </svg>
     </span>
   </span>
@@ -37,7 +84,6 @@ defineOptions({
 @layer components {
   .voxie-logo {
     width: 35px;
-    /* Components layer so a rounded-* utility can override the default. */
     border-radius: 25%;
   }
 }
