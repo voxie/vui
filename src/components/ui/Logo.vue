@@ -1,7 +1,63 @@
+
 <script setup lang="ts">
+import { computed } from 'vue';
+
 defineOptions({
-  // Keep the default color inherited so caller color classes take precedence.
   inheritAttrs: false,
+});
+
+// Bottom vertex
+const middle = { x: 17.5, y: 22 };
+
+// Segment configuration
+const length = 12;
+// Golden-ratio slope
+const angle = 31.72; // Degrees from vertical
+
+// Stroke weights
+const strokeWidth = 6;
+// Optical compensation: a round terminal reads lighter than a stroke of the
+// same width, so the dot is drawn ~20% heavier to look equal.
+const dotWidth = strokeWidth * 1.22;
+// The heavier dot's edge would reach past the left arm's cap by half the extra
+// weight, so its center is pulled in along the arm by that much. A full circle
+// aligned exactly still reads short, like an o on a baseline, so it overshoots
+// by about 2% of the mark's height.
+const dotOvershoot = 0.4;
+const dotInset = (dotWidth - strokeWidth) / 2 - dotOvershoot;
+
+const endpoints = computed(() => {
+  const radians = (angle * Math.PI) / 180;
+
+  const dotLength = length - dotInset;
+
+  return {
+    left: {
+      x: middle.x - length * Math.sin(radians),
+      y: middle.y - length * Math.cos(radians),
+    },
+    right: {
+      x: middle.x + dotLength * Math.sin(radians),
+      y: middle.y - dotLength * Math.cos(radians),
+    },
+  };
+});
+
+const leftPath = computed(() => {
+  const { left } = endpoints.value;
+  return `M${left.x} ${left.y}L${middle.x} ${middle.y}`;
+});
+
+// A zero-length path gets dropped by Figma on SVG import, so the dot is a
+// hairline starting at the dot position and running down the arm toward the vertex.
+const dotSpan = 0.002;
+
+const rightDot = computed(() => {
+  const { right } = endpoints.value;
+  const radians = (angle * Math.PI) / 180;
+  const dx = dotSpan * Math.sin(radians);
+  const dy = dotSpan * Math.cos(radians);
+  return `M${right.x} ${right.y}L${right.x - dx} ${right.y + dy}`;
 });
 </script>
 
@@ -18,16 +74,28 @@ defineOptions({
         xmlns="http://www.w3.org/2000/svg"
         class="absolute inset-0 size-full overflow-visible"
       >
+
+        <!-- tail -->
         <path
           d="M8 36V24H23.825L8 36Z"
           class="fill-current"
         />
-        
-        <!-- left v line -->
-        <path d="M11 11.5L17.5 21.5" stroke-width="5.5" stroke-linecap="round" stroke="white"/>
-        <!-- right dot -->
-        <path d="M24 11.5V11.5" stroke-width="6.5" stroke-linecap="round" stroke="white"/>
 
+        <!-- Left V segment -->
+        <path
+          :d="leftPath"
+          :stroke-width="strokeWidth"
+          stroke-linecap="round"
+          stroke="white"
+        />
+
+        <!-- Separate right dot -->
+        <path
+          :d="rightDot"
+          :stroke-width="dotWidth"
+          stroke-linecap="round"
+          stroke="white"
+        />
       </svg>
     </span>
   </span>
@@ -37,8 +105,7 @@ defineOptions({
 @layer components {
   .voxie-logo {
     width: 35px;
-    /* Components layer so a rounded-* utility can override the default. */
-    border-radius: 22.857142857% / 25%;
+    border-radius: 25%;
   }
 }
 </style>
