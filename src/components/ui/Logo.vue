@@ -6,30 +6,24 @@ defineOptions({
   inheritAttrs: false,
 });
 
-// Bottom vertex
-const middle = { x: 17.5, y: 21.5 };
+// Bottom vertex of the V.
+const middle = { x: 17.5, y: 22 };
 
-// Segment configuration
+// Slope in degrees from vertical.
+const angle = 30;
+// Length of each arm from the vertex. Length 12 and width 5.5 make a mark about half the size of the container.
 const length = 12;
-// Golden-ratio slope
-const angle = 31.72; // Degrees from vertical
-
-// Stroke weights
-const strokeWidth = 6;
-// Optical compensation: a round terminal reads lighter than a stroke of the
-// same width, so the dot is drawn ~20% heavier to look equal.
-const dotWidth = strokeWidth * 1.22;
-// The heavier dot's edge would reach past the left arm's cap by half the extra
-// weight, so its center is pulled in along the arm by that much. A full circle
-// aligned exactly still reads short, like an o on a baseline, so it overshoots
-// by about 2% of the mark's height.
-const dotOvershoot = 0.4;
-const dotInset = (dotWidth - strokeWidth) / 2 - dotOvershoot;
+const strokeWidth = 5.5;
+// Optical compensation: a round terminal reads lighter than a stroke of the same width, so the dot is drawn heavier
+// to look equal. Around 20% is a good starting point.
+const dotWidth = strokeWidth * 1.25;
+// At zero the dot is centered on the triangle's top-right vertex, so the heavier dot's edges reach past the left
+// arm's cap by half the extra weight. Raising this pulls the center straight in and down by that amount, tuned by
+// eye against the left cap.
+const dotOpticalOffset = 0;
 
 const endpoints = computed(() => {
   const radians = (angle * Math.PI) / 180;
-
-  const dotLength = length - dotInset;
 
   return {
     left: {
@@ -37,8 +31,8 @@ const endpoints = computed(() => {
       y: middle.y - length * Math.cos(radians),
     },
     right: {
-      x: middle.x + dotLength * Math.sin(radians),
-      y: middle.y - dotLength * Math.cos(radians),
+      x: middle.x + length * Math.sin(radians) - dotOpticalOffset,
+      y: middle.y - length * Math.cos(radians) + dotOpticalOffset,
     },
   };
 });
@@ -62,7 +56,7 @@ const rightDot = computed(() => {
 </script>
 
 <template>
-  <span class="contents text-sky-400">
+  <span class="contents text-sky-500">
     <span
       v-bind="$attrs"
       aria-hidden="true"
