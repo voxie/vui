@@ -17,8 +17,8 @@ const markRadius = computed(() => fixedRadius.value ? radiusClass.value : undefi
 const dimensions = computed(() => axis.value === 'width'
   ? { width: `${size.value}px`, height: 'auto' }
   : { width: 'auto', height: `${size.value}px` });
-const width = computed(() => axis.value === 'width' ? size.value : size.value * 35 / 32);
-const height = computed(() => width.value * 32 / 35);
+const width = computed(() => axis.value === 'width' ? size.value : size.value * 34 / 32);
+const height = computed(() => width.value * 32 / 34);
 const snippet = computed(() => `<Logo style="${axis.value}: ${size.value}px; ${axis.value === 'width' ? 'height' : 'width'}: auto;"${fixedRadius.value ? ` class="${radiusClass.value}"` : ''} />`);
 function reset() {
   sizeByHeight.value = false;
@@ -53,7 +53,7 @@ function reset() {
         <Logo data-preview-mark :style="dimensions" :class="markRadius" />
       </div>
       <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
-        <p>Body {{ width.toFixed(1) }} × {{ height.toFixed(1) }}px · {{ fixedRadius ? `${radiusClass} radius` : `${(width * 8 / 35).toFixed(1)}px proportional radius` }}</p>
+        <p>Body {{ width.toFixed(1) }} × {{ height.toFixed(1) }}px · {{ fixedRadius ? `${radiusClass} radius` : `${(width * 8 / 34).toFixed(1)}px proportional radius` }}</p>
         <Button size="sm" @click="reset">Reset</Button>
       </div>
       <pre class="mt-4 overflow-x-auto rounded-lg bg-slate-800 p-4 text-xs text-slate-100"><code>{{ snippet }}</code></pre>
@@ -64,7 +64,7 @@ function reset() {
       <p class="mb-4 text-sm">Each mark uses the selected radius mode. Labels show body width.</p>
       <Card>
         <div class="flex flex-wrap items-end gap-8 py-6">
-          <div v-for="preset in [24, 35, 48, 70, 105]" :key="preset" class="grid justify-items-center gap-6">
+          <div v-for="preset in [24, 34, 48, 70, 105]" :key="preset" class="grid justify-items-center gap-6">
             <Logo :style="{ width: `${preset}px` }" :class="markRadius" />
             <span class="text-xs text-slate-500">{{ preset }}px</span>
           </div>
