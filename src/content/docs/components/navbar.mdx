@@ -211,17 +211,17 @@ The bar's own pairings are the strongest in the system. White on slate-700 is 10
 | white label               | slate-700  | 10.4:1   | Lc 98  |
 | black label               | slate-50   | 20.1:1   | Lc 106 |
 | slate-900 menu row        | white      | 17.8:1   | Lc 105 |
-| slate-900 menu row hover  | sky-100    | 15.5:1   | Lc 95  |
-| sky-500 marker            | slate-700  | 3.8:1    | Lc 40  |
+| slate-900 menu row hover  | sky-100    | 16.0:1   | Lc 97  |
+| sky-500 marker            | slate-700  | 3.9:1    | Lc 41  |
 | slate-400 icon            | slate-700  | 3.9:1    | Lc 41  |
 | slate-500 open marker     | slate-700  | 2.2:1    | Lc 19  |
 | slate-300 open marker     | slate-50   | 1.4:1    | Lc 20  |
-| sky-500 item bar          | white      | 2.7:1    | Lc 40  |
+| sky-500 item bar          | white      | 2.6:1    | Lc 51  |
 
 The labels are the part that has to be read, and they have room to spare. Everything below them is a marker or an icon, and those are priced differently. WCAG asks 3:1 of a non-text element that carries meaning, not the 4.5:1 it asks of text.
 
-The section marker clears that at 3.8:1, and the icons at 3.9:1. Icons drop to 2.5:1 on the glass bar, but they're never the only thing saying what a section is. An action with an icon and no label is a guess. The two open markers are far under, at 2.2:1 and 1.4:1, and that's fine for a bar that only exists while the menu it belongs to is on screen saying the same thing.
+The section marker clears that at 3.9:1, and the icons at 3.9:1. Icons drop to 2.5:1 on the glass bar, but they're never the only thing saying what a section is. An action with an icon and no label is a guess. The two open markers are far under, at 2.2:1 and 1.4:1, and that's fine for a bar that only exists while the menu it belongs to is on screen saying the same thing.
 
-The item bar is the one that can't carry its own weight. At 2.7:1 against the panel it's just under the 3:1 a state indicator wants, so it isn't asked to work alone. The current row's label is also semibold, which survives at any contrast, and `aria-current` carries the same thing to a screen reader.
+The item bar is the one that can't carry its own weight. At 2.6:1 against the panel it's just under the 3:1 a state indicator wants, so it isn't asked to work alone. The current row's label is also semibold, which survives at any contrast, and `aria-current` carries the same thing to a screen reader.
 
 That pairing is the rule to keep if you build on this. A state that exists only as a color a shade off its background is a state some people can't see.

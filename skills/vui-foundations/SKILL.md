@@ -5,7 +5,7 @@ description: The Voxie UI (vui) visual rules for building or reviewing any scree
 
 # Voxie UI foundations
 
-Voxie is a dense product that should feel light and approachable. Soft shapes, quiet slate surfaces, a small set of accents used deliberately, and content that lifts off a grey page. Tailwind classes are the vocabulary. Use real color names (`bg-slate-200`, `text-sky-700`), never semantic aliases like `primary` or `danger`.
+Voxie is a dense product that should feel light and approachable. Soft shapes, quiet slate surfaces, a small set of accents used deliberately, and content that lifts off a grey page. Tailwind classes are the vocabulary, with two overrides: sky is Voxie's own ramp, and the radius scale runs larger than Tailwind's (`rounded-xl` is 14px, `rounded-2xl` is 18px). Use real color names (`bg-slate-200`, `text-sky-700`), never semantic aliases like `primary` or `danger`.
 
 The full reasoning and every measured value lives in the docs. This file is the working summary. When something here leaves room for doubt, the docs win: `/docs/foundations/color`, `/docs/foundations/typography`, `/docs/foundations/icons`, `/docs/components/button`, `/docs/components/card`.
 
