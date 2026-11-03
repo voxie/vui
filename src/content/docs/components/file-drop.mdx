@@ -1,0 +1,99 @@
+---
+title: File Drop
+order: 17
+---
+
+import Card from '@ui/Card.vue';
+import FileDrop from '@ui/FileDrop.vue';
+import FileDropExample from '@site/FileDropExample.vue';
+import FileDropStatesExample from '@site/FileDropStatesExample.vue';
+
+A file drop is a dashed area that takes one file, either dropped onto it or picked from the browser's file dialog. The whole area is the click target, so the **Browse computer** button inside it is a label for that, not a separate control. Once a file is chosen, the area gives way to a row with the file's name and a button to remove it.
+
+The component holds the file and nothing else. Reading it, counting rows, and checking its contents belong to the caller, which passes the result back through `validating`, `error`, and the default slot. How it sits in a step of a longer form is on the [Forms](/docs/patterns/forms#uploading-a-file) page.
+
+```html
+<FileDrop
+  v-model="file"
+  accept=".csv,text/csv"
+  icon="fa-file-csv"
+  :validating="validating"
+  :error="error"
+  @select="validate"
+>
+  <strong>Ready</strong> to upload with {{ rows }} rows
+</FileDrop>
+```
+
+## Examples
+
+### Choosing a file
+
+Drop a file on the area, or click anywhere in it to open the file dialog. Choosing a file sets `v-model` and emits `select` with the file. The example below waits a moment, then reports a row count.
+
+<FileDropExample client:load />
+
+The amber [Alert](/docs/components/alert) under the area states what the area takes. It shows only while no file is chosen.
+
+### Dragging over
+
+While a file is dragged over it, the border turns sky-500 and the fill turns white. At rest it's a slate-300 dashed border on slate-100.
+
+<Card surface="glass">
+  <div class="not-prose max-w-2xl">
+    <FileDrop />
+  </div>
+</Card>
+
+### Accepted types
+
+`accept` is passed to the file dialog, which filters what it lists. A dropped file never goes through the dialog, so the component checks it against the same list. The list takes extensions (`.csv`), exact types (`text/csv`), and wildcards (`image/*`), separated by commas. A file that matches nothing emits `reject` with the file and leaves `v-model` untouched, so the caller decides what to say. Drop a file that isn't a CSV on the first example to see it.
+
+### Icon
+
+`icon` is a Font Awesome class, drawn in sky-400 at rest and slate-400 next to the file name. It defaults to `fa-file`.
+
+<Card surface="glass">
+  <div class="not-prose grid max-w-2xl gap-4 sm:grid-cols-2">
+    <FileDrop icon="fa-file-csv" />
+    <FileDrop icon="fa-file-image" />
+  </div>
+</Card>
+
+### Validating, error, and ready
+
+Under the file row sits one [Alert](/docs/components/alert) at a time. `validating` shows a sky **Validating...** alert. `error` shows its text in a rose alert, and a long file name in it wraps rather than overflowing. With neither, the default slot shows in a sky alert, for what the caller found, like a row count. With no default slot, nothing shows.
+
+<FileDropStatesExample />
+
+### Removing
+
+The rose button on the file row's corner clears `v-model` and emits `remove`. The area comes back, and the same file can be chosen again.
+
+### Text
+
+The `title` slot replaces **Drag a file here**, and the `browse` slot replaces **Browse computer**.
+
+<Card surface="glass">
+  <div class="not-prose max-w-2xl">
+    <FileDrop icon="fa-file-csv">
+      <span slot="title">Drag a CSV here</span>
+    </FileDrop>
+  </div>
+</Card>
+
+### Disabled
+
+`disabled` fades the area to 60% opacity, ignores drops, and turns off the file dialog.
+
+<Card surface="glass">
+  <div class="not-prose max-w-2xl">
+    <FileDrop disabled />
+  </div>
+</Card>
+
+## Interaction
+
+The file input is stretched invisibly over the whole area. <kbd>Tab</kbd> lands on it, the area takes the blue focus ring, and <kbd>Enter</kbd> or <kbd>Space</kbd> opens the file dialog. The button inside is out of the tab order and hidden from screen readers, since the input already carries the job. The remove button is labeled **Remove file**.
+
+To open the dialog from somewhere else, call `open()` on a template ref to the component. It does nothing once a file is chosen, since the area has given way to the file row.

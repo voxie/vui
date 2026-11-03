@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useAttrs, useId } from 'vue';
+import Badge from './Badge.vue';
 import { useControlBoundary, type Surface } from './surface.ts';
 
 type SelectSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -25,6 +26,10 @@ const props = withDefaults(
 		// The message under the control. Present means the select is in error.
 		error?: string;
 		hint?: string;
+		// Marks the field required with a rose badge after the label. `label`
+		// spells out Required on the first required field in a form; `true` is
+		// the asterisk alone, for the rest.
+		required?: boolean | 'label';
 		disabled?: boolean;
 		block?: boolean;
 	}>(),
@@ -32,6 +37,7 @@ const props = withDefaults(
 		options: () => [],
 		size: 'md',
 		disabled: false,
+		required: false,
 		block: false,
 	},
 );
@@ -76,10 +82,15 @@ const sizeClasses = computed(() => {
 		<label
 			v-if="props.label"
 			:for="fieldId"
-			class="block font-extrabold text-slate-800"
+			class="flex items-center gap-1.5 font-extrabold text-slate-800"
 			:class="[sizeClasses.label, props.description ? '' : 'mb-1']"
 		>
 			{{ props.label }}
+			<Badge v-if="props.required" color="rose" size="2xs" :title="props.required === 'label' ? undefined : 'Required'">
+				<template v-if="props.required === 'label'">Required</template>
+				<span v-else class="sr-only">Required</span>
+				<i class="fa-solid fa-asterisk" aria-hidden="true"></i>
+			</Badge>
 		</label>
 
 		<div
@@ -99,6 +110,7 @@ const sizeClasses = computed(() => {
 				:id="fieldId"
 				v-model="model"
 				:disabled="props.disabled"
+				:required="props.required ? true : undefined"
 				:aria-invalid="props.error ? true : undefined"
 				:aria-describedby="describedBy"
 				class="relative block cursor-pointer appearance-none border border-solid bg-white font-sans leading-tight outline-blue-600 transition focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500 disabled:shadow-none disabled:hover:shadow-none"
