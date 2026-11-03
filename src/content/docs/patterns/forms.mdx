@@ -3,6 +3,7 @@ title: Forms
 order: 2
 ---
 
+import Badge from '@ui/Badge.vue';
 import Card from '@ui/Card.vue';
 import Input from '@ui/Input.vue';
 import Select from '@ui/Select.vue';
@@ -116,6 +117,38 @@ One line under the control, with a mark at the start of it. The error is rose-80
 </Card>
 
 Color alone doesn't carry the error, which is why the mark is there. `aria-invalid` and `aria-describedby` are set for you when `error` is passed.
+
+## Steps
+
+A long form splits into steps, one [glass card](/docs/patterns/page-structure#create-pages) each, stacked in the page's column. A step opens with its title, an `h3` in `text-xl`, extrabold, and slate-700. Under it is one `text-sm` line saying what the step is for, and the fields follow.
+
+### Optional steps
+
+When nothing in a step is required, a violet `sm` [Badge](/docs/components/badge) reading **Optional** sits above the title, with a `fa-pencil-slash` icon after the word. The title takes `mt-2` to clear it. Mark the step once rather than every field inside it. A required step has no badge.
+
+<Card surface="glass">
+  <div class="not-prose max-w-2xl">
+    <Badge color="violet" size="sm">Optional <i class="fa-solid fa-pencil-slash" aria-hidden="true"></i></Badge>
+    <h3 class="mt-2 text-xl font-extrabold text-slate-700">Tags</h3>
+    <p class="mb-4 text-sm text-slate-700">Should any tags be added to these contacts?</p>
+    <Input label="Tags" />
+  </div>
+</Card>
+
+```html
+<Badge color="violet" size="sm">
+  Optional
+  <i class="fa-solid fa-pencil-slash" aria-hidden="true"></i>
+</Badge>
+<h3 class="mt-2 text-xl font-extrabold text-slate-700">Tags</h3>
+<p class="text-sm">Should any tags be added to these contacts?</p>
+```
+
+Violet is the accent with no status attached, so the badge doesn't read as a warning or an error.
+
+### Uploading a file
+
+A step that takes a file uses [File Drop](/docs/components/file-drop), which accepts a file dragged onto it or picked from the file dialog. Under it, an amber [Alert](/docs/components/alert) states the type and size the step takes, and it goes away once a file is chosen. Once there's a file, the title changes from **Upload** to **Upload Preview**, and the line under it asks for a last check before the import runs.
 
 ## Actions
 
