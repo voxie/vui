@@ -42,18 +42,16 @@ const toggle = () => {
 };
 
 // The pill is the height of a Checkbox marker at each size. The labeled form
-// is the height of a Button, so the two sit level in a toolbar. The bottom
-// border takes 1px out of the box, so bottom padding gives it up to keep the
-// thumb centered.
+// is the height of a Button, so the two sit level in a toolbar.
 const sizeClasses = computed(() => {
 	if (labeled.value) {
-		if (props.size === 'sm') return { track: 'h-8 rounded-md px-0.5 pt-0.5 pb-px', thumb: 'rounded', label: 'px-3 text-xs' };
-		if (props.size === 'lg') return { track: 'h-12 rounded-xl px-1 pt-1 pb-0.75', thumb: 'rounded-md', label: 'px-5 text-sm' };
-		return { track: 'h-10 rounded-lg px-1 pt-1 pb-0.75', thumb: 'rounded', label: 'px-4 text-xs' };
+		if (props.size === 'sm') return { track: 'h-8 rounded-md px-0.5 py-0.5', thumb: 'rounded', label: 'px-3 text-xs' };
+		if (props.size === 'lg') return { track: 'h-12 rounded-xl px-1 py-1', thumb: 'rounded-md', label: 'px-5 text-sm' };
+		return { track: 'h-10 rounded-lg px-1 py-1', thumb: 'rounded', label: 'px-4 text-xs' };
 	}
-	if (props.size === 'sm') return { track: 'h-4 w-7 rounded-full px-0.5 pt-0.5 pb-px', thumb: 'rounded-full', label: '' };
-	if (props.size === 'lg') return { track: 'h-6 w-11 rounded-full px-0.5 pt-0.5 pb-px', thumb: 'rounded-full', label: '' };
-	return { track: 'h-5 w-9 rounded-full px-0.5 pt-0.5 pb-px', thumb: 'rounded-full', label: '' };
+	if (props.size === 'sm') return { track: 'h-4 w-7 rounded-full px-0.5 py-0.5', thumb: 'rounded-full', label: '' };
+	if (props.size === 'lg') return { track: 'h-6 w-11 rounded-full px-0.5 py-0.5', thumb: 'rounded-full', label: '' };
+	return { track: 'h-5 w-9 rounded-full px-0.5 py-0.5', thumb: 'rounded-full', label: '' };
 });
 
 const dark = computed(() => surface.value === 'dark');
@@ -69,21 +67,21 @@ const trackClasses = computed(() => {
 	return 'bg-slate-300 hover:bg-slate-400/60';
 });
 
-// A light bottom border, one opacity per surface. bg-clip-padding keeps the
-// fill out from under it, so it blends with the surface rather than the track.
-const edgeBorder: Record<Surface, string> = {
-	default: 'border-white',
-	glass: 'border-white',
-	sunken: 'border-white/30',
-	dark: 'border-white/10',
-	background: 'border-white/40',
+// A 1px highlight under the track, one opacity per surface. An outer shadow
+// rather than a border, so it sits outside the box and the padding stays symmetric.
+const edgeHighlight: Record<Surface, string> = {
+	default: 'shadow-[0_1px_0_0_#fff]',
+	glass: 'shadow-[0_1px_0_0_#fff]',
+	sunken: 'shadow-[0_1px_0_0_rgb(255_255_255/0.3)]',
+	dark: 'shadow-[0_1px_0_0_rgb(255_255_255/0.1)]',
+	background: 'shadow-[0_1px_0_0_rgb(255_255_255/0.4)]',
 };
 
 // The border plus an inset shadow, so the track reads as pressed into the
 // surface. Disabled keeps only the border.
 const trackEdge = computed(() => {
-	const border = `border-b bg-clip-padding ${edgeBorder[surface.value]}`;
-	return props.disabled ? border : `${border} inset-shadow-sm inset-shadow-black/10`;
+	const highlight = edgeHighlight[surface.value];
+	return props.disabled ? highlight : `${highlight} inset-shadow-sm inset-shadow-black/10`;
 });
 
 const thumbClasses = computed(() => {
