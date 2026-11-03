@@ -25,9 +25,9 @@ const dark = computed(() => tabs.surface.value === 'dark');
 // the track.
 const sizeClasses = computed(() => {
 	const size = tabs.size.value;
-	if (size === 'sm') return { radius: 'rounded-md', label: 'px-3 text-xs' };
+	if (size === 'sm') return { radius: 'rounded-sm', label: 'px-3 text-xs' };
 	if (size === 'lg') return { radius: 'rounded-lg', label: 'px-5 text-sm' };
-	return { radius: 'rounded-lg', label: 'px-4 text-xs' };
+	return { radius: 'rounded-md', label: 'px-4 text-xs' };
 });
 
 // The selected label sits on the white pill everywhere. The rest sit on the
