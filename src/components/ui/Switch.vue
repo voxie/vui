@@ -47,9 +47,9 @@ const toggle = () => {
 // thumb centered.
 const sizeClasses = computed(() => {
 	if (labeled.value) {
-		if (props.size === 'sm') return { track: 'h-8 rounded-md px-0.5 pt-0.5 pb-px', thumb: 'rounded-sm', label: 'px-3 text-xs' };
-		if (props.size === 'lg') return { track: 'h-12 rounded-xl px-1 pt-1 pb-0.75', thumb: 'rounded-lg', label: 'px-5 text-sm' };
-		return { track: 'h-10 rounded-lg px-1 pt-1 pb-0.75', thumb: 'rounded-md', label: 'px-4 text-xs' };
+		if (props.size === 'sm') return { track: 'h-8 rounded-md px-0.5 pt-0.5 pb-px', thumb: 'rounded', label: 'px-3 text-xs' };
+		if (props.size === 'lg') return { track: 'h-12 rounded-xl px-1 pt-1 pb-0.75', thumb: 'rounded-md', label: 'px-5 text-sm' };
+		return { track: 'h-10 rounded-lg px-1 pt-1 pb-0.75', thumb: 'rounded', label: 'px-4 text-xs' };
 	}
 	if (props.size === 'sm') return { track: 'h-4 w-7 rounded-full px-0.5 pt-0.5 pb-px', thumb: 'rounded-full', label: '' };
 	if (props.size === 'lg') return { track: 'h-6 w-11 rounded-full px-0.5 pt-0.5 pb-px', thumb: 'rounded-full', label: '' };

@@ -18,9 +18,9 @@ provide(TabListKey, { indicatorReady });
 // a toolbar. The bottom border takes 1px out of the box, so bottom padding
 // gives it up to keep the tabs centered.
 const sizeClasses = computed(() => {
-	if (tabs.size.value === 'sm') return { track: 'h-8 rounded-md px-0.5 pt-0.5 pb-px', thumb: 'rounded-sm' };
-	if (tabs.size.value === 'lg') return { track: 'h-12 rounded-xl gap-1 px-1 pt-1 pb-0.75', thumb: 'rounded-lg' };
-	return { track: 'h-10 rounded-lg gap-1 px-1 pt-1 pb-0.75', thumb: 'rounded-md' };
+	if (tabs.size.value === 'sm') return { track: 'h-8 rounded-md px-0.5 pt-0.5 pb-px', thumb: 'rounded' };
+	if (tabs.size.value === 'lg') return { track: 'h-12 rounded-xl gap-1 px-1 pt-1 pb-0.75', thumb: 'rounded-md' };
+	return { track: 'h-10 rounded-lg gap-1 px-1 pt-1 pb-0.75', thumb: 'rounded' };
 });
 
 // The Switch off track, surface for surface: a step darker on sunken, and
