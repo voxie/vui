@@ -106,7 +106,7 @@ const zoneClasses = computed(() => {
 <template>
 	<label
 		v-if="!file"
-		class="relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-8 text-center font-sans text-sm text-slate-700 outline-blue-600 transition has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2"
+		class="relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-8 text-center font-sans text-sm text-slate-700 outline-blue-600 transition has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
 		:class="zoneClasses"
 		@dragenter.prevent="onDragEnter"
 		@dragover.prevent
@@ -127,18 +127,16 @@ const zoneClasses = computed(() => {
 			class="fa-solid text-5xl text-sky-400"
 			:class="props.icon"
 		></i>
-		<div class="mt-3 font-semibold">
+		<span class="mt-3 block font-semibold">
 			<slot name="title">Drag a file here</slot>
-		</div>
-		<div class="mt-2 mb-3 text-slate-500">or</div>
+		</span>
+		<span class="mt-2 mb-3 block text-slate-500">or</span>
 		<Button
 			color="sky"
 			size="sm"
-			type="button"
 			tabindex="-1"
 			aria-hidden="true"
 			class="pointer-events-none"
-			:disabled="props.disabled"
 		>
 			<slot name="browse">Browse computer</slot>
 			<i
@@ -183,7 +181,7 @@ const zoneClasses = computed(() => {
 			v-else-if="props.error"
 			color="rose"
 			:dismissible="false"
-			class="break-all"
+			class="wrap-anywhere"
 		>
 			{{ props.error }}
 		</Alert>

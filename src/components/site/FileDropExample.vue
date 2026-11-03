@@ -11,13 +11,20 @@ const validating = ref(false);
 const error = ref<string>();
 const rows = ref(0);
 const rejected = ref<string>();
+let timer: number | undefined;
+
+function cancel(): void {
+	window.clearTimeout(timer);
+	validating.value = false;
+}
 
 function validate(chosen: File): void {
 	rejected.value = undefined;
 	error.value = undefined;
+	cancel();
 	validating.value = true;
 
-	window.setTimeout(() => {
+	timer = window.setTimeout(() => {
 		validating.value = false;
 		if (chosen.size > MAX_BYTES) {
 			error.value = 'Max file size is 1GiB.';
@@ -43,6 +50,7 @@ function reject(chosen: File): void {
 				:error="error"
 				@select="validate"
 				@reject="reject"
+				@remove="cancel"
 			>
 				<strong>Ready</strong> to upload with {{ rows.toLocaleString() }} rows
 			</FileDrop>
