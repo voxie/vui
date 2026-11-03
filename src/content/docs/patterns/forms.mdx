@@ -63,7 +63,7 @@ Every required field is marked, and optional fields are left unmarked. The mark 
 
 <Card surface="glass">
   <div class="not-prose grid max-w-lg gap-4">
-    <Input label="Name" required="label" />
+    <Input label="Name" description="Shown to contacts as the sender of every message." required="label" />
     <Input label="External ID" required />
     <Select label="Time zone" block required options={[{ value: 'america/new_york', label: 'Eastern Time' }, { value: 'america/chicago', label: 'Central Time' }]} />
     <Input label="Description" rows={2} />
@@ -71,7 +71,7 @@ Every required field is marked, and optional fields are left unmarked. The mark 
 </Card>
 
 ```html
-<Input label="Name" required="label" />
+<Input label="Name" description="Shown to contacts as the sender of every message." required="label" />
 <Input label="External ID" required />
 <Select label="Time zone" block required :options="timeZones" />
 <Input label="Description" :rows="2" />
