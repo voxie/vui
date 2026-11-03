@@ -120,11 +120,11 @@ Color alone doesn't carry the error, which is why the mark is there. `aria-inval
 
 ## Steps
 
-A long form splits into steps, one [glass card](/docs/patterns/page-structure#create-pages) each, stacked in the page's column. A step opens with its title, an `h3` in `text-xl`, extrabold, and slate-700. Under it is one `text-sm` slate-700 line saying what the step is for, and the fields follow.
+A long form splits into steps, one [glass card](/docs/patterns/page-structure#create-pages) each, stacked in the page's column. A step opens with its title, in `text-xl`, extrabold, and slate-700. The heading level follows where the step sits in the page, so it isn't fixed to one tag. Under the title is one `text-sm` slate-700 line saying what the step is for, and the fields follow.
 
-### Optional steps
+### Required and optional
 
-When nothing in a step is required, a violet `sm` [Badge](/docs/components/badge) reading **Optional** sits above the title, with a `fa-pencil-slash` icon after the word. The title takes `mt-2` to clear it. A required step has no badge.
+Mark whichever set is smaller, and leave the rest unmarked. When only one field or step in a form is required, it gets a rose **Required** [Badge](/docs/components/badge) with an `fa-asterisk` icon. When only one is optional, it gets a violet **Optional** badge with an `fa-pencil-slash` icon. The badge sits above the title or label. It's `sm` above a step title, which takes `mt-2` to clear it, and `xs` above a field label.
 
 <Card surface="glass">
   <div class="not-prose max-w-2xl">
@@ -144,6 +144,31 @@ When nothing in a step is required, a violet `sm` [Badge](/docs/components/badge
 </Badge>
 <h3 class="mt-2 text-xl font-extrabold text-slate-700">Tags</h3>
 <p class="text-sm text-slate-700">Should any tags be added to these contacts?</p>
+```
+
+In a form where most fields are optional, the one required field carries the badge instead.
+
+<Card surface="glass">
+  <div class="not-prose grid max-w-lg gap-4">
+    <div>
+      <Badge color="rose" size="xs">Required <i class="fa-solid fa-asterisk" aria-hidden="true"></i></Badge>
+      <div class="mt-2">
+        <Input label="Name" />
+      </div>
+    </div>
+    <Input label="External ID" />
+    <Input label="Description" rows={2} />
+  </div>
+</Card>
+
+```html
+<Badge color="rose" size="xs">
+  Required
+  <i class="fa-solid fa-asterisk" aria-hidden="true"></i>
+</Badge>
+<div class="mt-2">
+  <Input label="Name" />
+</div>
 ```
 
 ### Uploading a file

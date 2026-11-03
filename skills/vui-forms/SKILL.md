@@ -1,6 +1,6 @@
 ---
 name: vui-forms
-description: How a Voxie UI (vui) form field is built. Read this when adding an input, select, textarea, or any form to a Voxie screen, mockup, or prototype, or when reviewing one. Covers the five parts of a field, always-present labels, descriptions above the control, no placeholders, the compact inline exception, error and detail messages with marks, the two-button action row, optional steps, and file uploads.
+description: How a Voxie UI (vui) form field is built. Read this when adding an input, select, textarea, or any form to a Voxie screen, mockup, or prototype, or when reviewing one. Covers the five parts of a field, always-present labels, descriptions above the control, no placeholders, the compact inline exception, error and detail messages with marks, the two-button action row, required and optional markers, and file uploads.
 ---
 
 # Voxie UI forms
@@ -26,8 +26,8 @@ Top to bottom, a field is up to five parts:
 
 ## Steps
 
-- A long form splits into steps, one glass card each. A step opens with an `h3` title (`text-xl font-extrabold text-slate-700`), then one `text-sm text-slate-700` line saying what the step is for, then the fields.
-- **Optional steps.** When nothing in a step is required, put `<Badge color="violet" size="sm">Optional <i class="fa-solid fa-pencil-slash"></i></Badge>` above the title and give the title `mt-2`. Required steps have no badge.
+- A long form splits into steps, one glass card each. A step opens with its title (`text-xl font-extrabold text-slate-700`, at whatever heading level fits where it sits in the page), then one `text-sm text-slate-700` line saying what the step is for, then the fields.
+- **Required and optional.** Mark whichever set is smaller and leave the rest unmarked. When only one field or step is required, put `<Badge color="rose">Required <i class="fa-solid fa-asterisk"></i></Badge>` above it. When only one is optional, put `<Badge color="violet">Optional <i class="fa-solid fa-pencil-slash"></i></Badge>` above it. The badge is `sm` above a step title (which takes `mt-2`) and `xs` above a field label.
 - **File uploads.** Use `FileDrop` for a step that takes a file. It accepts a dragged file or a click to browse, and checks `accept` on drop too. Put an amber Alert under it stating the type and size, shown only while no file is chosen. Validation belongs to the caller, passed back through `validating`, `error`, and the default slot.
 
 ## Actions
@@ -41,4 +41,4 @@ When a form ends in two buttons, the primary goes on the right and fills the wid
 - Descriptions above the control, messages below with a mark.
 - The form card is glass and capped at `max-w-2xl`.
 - Two-button row: primary right and full width, secondary left.
-- Optional steps carry the violet `sm` **Optional** badge above the title. Required steps carry none.
+- Only the smaller set is marked: a rose **Required** badge when few are required, a violet **Optional** badge when few are optional.
