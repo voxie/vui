@@ -45,11 +45,11 @@ const element = computed(() => (props.href ? 'a' : 'button'));
 const surface = useSurface(() => props.sitsOn);
 
 const sizeClasses = computed(() => {
-	if (props.size === 'xs') return { radius: 'rounded-lg', element: 'px-2 text-xs h-6', content: 'gap-1' };
-	if (props.size === 'sm') return { radius: 'rounded-lg', element: 'px-3 text-xs h-8', content: 'gap-1.5' };
+	if (props.size === 'xs') return { radius: 'rounded', element: 'px-2 text-xs h-6', content: 'gap-1' };
+	if (props.size === 'sm') return { radius: 'rounded-md', element: 'px-3 text-xs h-8', content: 'gap-1.5' };
 	if (props.size === 'lg') return { radius: 'rounded-xl', element: 'px-5 text-sm h-12', content: 'gap-2' };
 	if (props.size === 'xl') return { radius: 'rounded-2xl', element: 'px-8 text-sm h-16', content: 'gap-2' };
-	return { radius: 'rounded-xl', element: 'px-4 text-xs h-10', content: 'gap-2' };
+	return { radius: 'rounded-lg', element: 'px-4 text-xs h-10', content: 'gap-2' };
 });
 
 // Hover lives on the fill layer, which is pointer-transparent, so every hover
