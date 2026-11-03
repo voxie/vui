@@ -105,10 +105,10 @@ const describedBy = computed(() => {
 // deeper when a description makes the row two lines.
 const sizeClasses = computed(() => {
 	if (props.size === 'sm')
-		return { marker: 'h-4 w-4 rounded', mark: 'text-2xs', gap: 'gap-2', boxGap: 'gap-3', box: hasDescription.value ? 'px-3 py-3' : 'px-3 py-1.5', label: 'text-xs leading-4', description: 'text-xs leading-4' };
+		return { marker: 'h-4 w-4 rounded-[4px]', mark: 'text-2xs', gap: 'gap-2', boxGap: 'gap-3', box: hasDescription.value ? 'px-3 py-3' : 'px-3 py-1.5', label: 'text-xs leading-4', description: 'text-xs leading-4' };
 	if (props.size === 'lg')
-		return { marker: 'h-6 w-6 rounded-lg', mark: 'text-sm', gap: 'gap-3', boxGap: 'gap-4', box: hasDescription.value ? 'px-5 py-5' : 'px-5 py-2.5', label: 'text-base leading-6', description: 'text-sm leading-5' };
-	return { marker: 'h-5 w-5 rounded-md', mark: 'text-xs', gap: 'gap-2.5', boxGap: 'gap-4', box: hasDescription.value ? 'px-4 py-4' : 'px-4 py-2', label: 'text-sm leading-5', description: 'text-xs leading-4' };
+		return { marker: 'h-6 w-6 rounded', mark: 'text-sm', gap: 'gap-3', boxGap: 'gap-4', box: hasDescription.value ? 'px-5 py-5' : 'px-5 py-2.5', label: 'text-base leading-6', description: 'text-sm leading-5' };
+	return { marker: 'h-5 w-5 rounded-sm', mark: 'text-xs', gap: 'gap-2.5', boxGap: 'gap-4', box: hasDescription.value ? 'px-4 py-4' : 'px-4 py-2', label: 'text-sm leading-5', description: 'text-xs leading-4' };
 });
 
 // The box rests transparent so the surface shows through, and goes white when

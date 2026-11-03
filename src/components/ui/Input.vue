@@ -115,14 +115,14 @@ const describedBy = computed(() => {
 // to add up.
 const sizeClasses = computed(() => {
 	if (props.size === 'xs')
-		return { field: 'rounded-lg text-xs', height: 'h-6', rows: 'py-[3.5px]', box: 'w-9 rounded-s-lg text-xs', boxWidth: 36, start: 'start-2', end: 'end-2', padding: 8, padY: 3.5, label: 'text-xs' };
+		return { field: 'rounded text-xs', height: 'h-6', rows: 'py-[3.5px]', box: 'w-9 rounded-s text-xs', boxWidth: 36, start: 'start-2', end: 'end-2', padding: 8, padY: 3.5, label: 'text-xs' };
 	if (props.size === 'sm')
-		return { field: 'rounded-lg text-xs', height: 'h-8', rows: 'py-[7.5px]', box: 'w-10 rounded-s-lg text-xs', boxWidth: 40, start: 'start-3', end: 'end-3', padding: 12, padY: 7.5, label: 'text-xs' };
+		return { field: 'rounded-md text-xs', height: 'h-8', rows: 'py-[7.5px]', box: 'w-10 rounded-s-md text-xs', boxWidth: 40, start: 'start-3', end: 'end-3', padding: 12, padY: 7.5, label: 'text-xs' };
 	if (props.size === 'lg')
 		return { field: 'rounded-xl text-sm', height: 'h-12', rows: 'py-[14.25px]', box: 'w-14 rounded-s-xl text-sm', boxWidth: 56, start: 'start-5', end: 'end-5', padding: 20, padY: 14.25, label: 'text-sm' };
 	if (props.size === 'xl')
 		return { field: 'rounded-2xl text-base', height: 'h-16', rows: 'py-[21px]', box: 'w-16 rounded-s-2xl text-base', boxWidth: 64, start: 'start-8', end: 'end-8', padding: 32, padY: 21, label: 'text-base' };
-	return { field: 'rounded-xl text-sm', height: 'h-10', rows: 'py-[10.25px]', box: 'w-12 rounded-s-xl text-sm', boxWidth: 48, start: 'start-4', end: 'end-4', padding: 16, padY: 10.25, label: 'text-sm' };
+	return { field: 'rounded-lg text-sm', height: 'h-10', rows: 'py-[10.25px]', box: 'w-12 rounded-s-lg text-sm', boxWidth: 48, start: 'start-4', end: 'end-4', padding: 16, padY: 10.25, label: 'text-sm' };
 });
 
 // Whatever is in a slot decides how far the value has to start or stop, so the
