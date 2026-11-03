@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useAttrs, useId } from 'vue';
+import Badge from './Badge.vue';
 import { useControlBoundary, type Surface } from './surface.ts';
 import CharCounter from './CharCounter.vue';
 
@@ -36,6 +37,10 @@ const props = withDefaults(
 		// One message or several. Present means the field is in error.
 		error?: string | string[];
 		hint?: string;
+		// Marks the field required with a rose badge after the label. `label`
+		// spells out Required on the first required field in a form; `true` is
+		// the asterisk alone, for the rest.
+		required?: boolean | 'label';
 		disabled?: boolean;
 		// Passing `rows` at all makes it a textarea, and `rows` is the height it
 		// starts at. A textarea grows with its content, so this is a floor.
@@ -55,6 +60,7 @@ const props = withDefaults(
 		type: 'text',
 		size: 'md',
 		disabled: false,
+		required: false,
 		togglePassword: false,
 		counter: false,
 		step: 1,
@@ -280,10 +286,15 @@ defineExpose({
 		<label
 			v-if="props.label"
 			:for="fieldId"
-			class="block font-sans font-extrabold text-slate-800"
+			class="flex items-center gap-1.5 font-sans font-extrabold text-slate-800"
 			:class="[sizeClasses.label, props.description ? '' : 'mb-1']"
 		>
 			{{ props.label }}
+			<Badge v-if="props.required" color="rose" size="2xs" :title="props.required === 'label' ? undefined : 'Required'">
+				<template v-if="props.required === 'label'">Required</template>
+				<span v-else class="sr-only">Required</span>
+				<i class="fa-solid fa-asterisk" aria-hidden="true"></i>
+			</Badge>
 		</label>
 
 		<div
@@ -316,6 +327,7 @@ defineExpose({
 				:inputmode="isNumeric ? (decimalPlaces === 0 ? 'numeric' : 'decimal') : undefined"
 				:pattern="inputPattern"
 				:disabled="props.disabled"
+				:required="props.required ? true : undefined"
 				:maxlength="props.counter ? undefined : props.maxlength"
 				:minlength="props.counter ? undefined : props.minlength"
 				:aria-invalid="errors.length ? true : undefined"
