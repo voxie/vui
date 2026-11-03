@@ -36,6 +36,17 @@ How a field goes together with its label, its description, and its messages is o
 
 Leaving `label` off is how a [compact field](/docs/patterns/forms#compact-fields) is written, and that's the only place it's right.
 
+### Required
+
+`required` marks the select with a rose `2xs` [Badge](/docs/components/badge) to the right of the label and sets `required` on the control. Pass `required="label"` on the first required field in a form, which spells out **Required**. Pass `required` on the rest, which shows the asterisk alone with a tooltip. The [Forms](/docs/patterns/forms#required) page has the rule.
+
+<Card surface="glass">
+  <div class="not-prose flex flex-wrap gap-4">
+    <Select label="Country" required="label" options={[{ value: 'us', label: 'United States' }, { value: 'ca', label: 'Canada' }]} />
+    <Select label="Time zone" required options={[{ value: 'america/new_york', label: 'Eastern Time' }, { value: 'america/chicago', label: 'Central Time' }]} />
+  </div>
+</Card>
+
 ### Options
 
 The `options` prop takes an array of `{ value, label }`. An option can also carry `disabled`.

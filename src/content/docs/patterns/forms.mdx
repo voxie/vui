@@ -3,7 +3,6 @@ title: Forms
 order: 2
 ---
 
-import Badge from '@ui/Badge.vue';
 import Card from '@ui/Card.vue';
 import Input from '@ui/Input.vue';
 import Select from '@ui/Select.vue';
@@ -57,6 +56,26 @@ The label is extrabold and slate-800, so a form column scans as a list of questi
     <Select label="Time zone" options={[{ value: 'et', label: 'Eastern Time' }, { value: 'ct', label: 'Central Time' }]} />
   </div>
 </Card>
+
+## Required
+
+Every required field is marked, and optional fields are left unmarked. The mark is a rose `2xs` [Badge](/docs/components/badge) to the right of the field's label, with an `fa-asterisk` icon. The first required field in a form spells out **Required** in the badge. Every required field after it carries the asterisk alone, with a tooltip that says Required. [Input](/docs/components/input#required) and [Select](/docs/components/select#required) render the badge from their `required` prop, so pass `required="label"` on the first and `required` on the rest.
+
+<Card surface="glass">
+  <div class="not-prose grid max-w-lg gap-4">
+    <Input label="Name" required="label" />
+    <Input label="External ID" required />
+    <Select label="Time zone" block required options={[{ value: 'america/new_york', label: 'Eastern Time' }, { value: 'america/chicago', label: 'Central Time' }]} />
+    <Input label="Description" rows={2} />
+  </div>
+</Card>
+
+```html
+<Input label="Name" required="label" />
+<Input label="External ID" required />
+<Select label="Time zone" block required :options="timeZones" />
+<Input label="Description" :rows="2" />
+```
 
 ## Descriptions
 
@@ -121,55 +140,6 @@ Color alone doesn't carry the error, which is why the mark is there. `aria-inval
 ## Steps
 
 A long form splits into steps, one [glass card](/docs/patterns/page-structure#create-pages) each, stacked in the page's column. A step opens with its title, in `text-xl`, extrabold, and slate-700. The heading level follows where the step sits in the page, so it isn't fixed to one tag. Under the title is one `text-sm` slate-700 line saying what the step is for, and the fields follow.
-
-### Required and optional
-
-Mark whichever set is smaller, and leave the rest unmarked. When only one field or step in a form is required, it gets a rose **Required** [Badge](/docs/components/badge) with an `fa-asterisk` icon. When only one is optional, it gets a violet **Optional** badge with an `fa-pencil-slash` icon. The badge sits above the title or label. It's `sm` above a step title, which takes `mt-2` to clear it, and `xs` above a field label.
-
-<Card surface="glass">
-  <div class="not-prose max-w-2xl">
-    <Badge color="violet" size="sm">Optional <i class="fa-solid fa-pencil-slash" aria-hidden="true"></i></Badge>
-    <h3 class="mt-2 text-xl font-extrabold text-slate-700">Tags</h3>
-    <p class="text-sm text-slate-700">Should any tags be added to these contacts?</p>
-    <div class="mt-4">
-      <Input label="Tags" />
-    </div>
-  </div>
-</Card>
-
-```html
-<Badge color="violet" size="sm">
-  Optional
-  <i class="fa-solid fa-pencil-slash" aria-hidden="true"></i>
-</Badge>
-<h3 class="mt-2 text-xl font-extrabold text-slate-700">Tags</h3>
-<p class="text-sm text-slate-700">Should any tags be added to these contacts?</p>
-```
-
-In a form where most fields are optional, the one required field carries the badge instead.
-
-<Card surface="glass">
-  <div class="not-prose grid max-w-lg gap-4">
-    <div>
-      <Badge color="rose" size="xs">Required <i class="fa-solid fa-asterisk" aria-hidden="true"></i></Badge>
-      <div class="mt-2">
-        <Input label="Name" />
-      </div>
-    </div>
-    <Input label="External ID" />
-    <Input label="Description" rows={2} />
-  </div>
-</Card>
-
-```html
-<Badge color="rose" size="xs">
-  Required
-  <i class="fa-solid fa-asterisk" aria-hidden="true"></i>
-</Badge>
-<div class="mt-2">
-  <Input label="Name" />
-</div>
-```
 
 ### Uploading a file
 
