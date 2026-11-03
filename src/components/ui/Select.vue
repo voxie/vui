@@ -66,14 +66,14 @@ const describedBy = computed(() => {
 // every size.
 const sizeClasses = computed(() => {
 	if (props.size === 'xs')
-		return { element: 'h-6 rounded-lg ps-2 pe-6 text-xs', icon: 'end-2 text-2xs', label: 'text-xs' };
+		return { element: 'h-6 rounded ps-2 pe-6 text-xs', icon: 'end-2 text-2xs', label: 'text-xs' };
 	if (props.size === 'sm')
-		return { element: 'h-8 rounded-lg ps-3 pe-8 text-xs', icon: 'end-3 text-2xs', label: 'text-xs' };
+		return { element: 'h-8 rounded-md ps-3 pe-8 text-xs', icon: 'end-3 text-2xs', label: 'text-xs' };
 	if (props.size === 'lg')
 		return { element: 'h-12 rounded-xl ps-5 pe-11 text-sm', icon: 'end-4 text-xs', label: 'text-sm' };
 	if (props.size === 'xl')
 		return { element: 'h-16 rounded-2xl ps-8 pe-14 text-base', icon: 'end-6 text-sm', label: 'text-base' };
-	return { element: 'h-10 rounded-xl ps-4 pe-10 text-sm', icon: 'end-3.5 text-xs', label: 'text-sm' };
+	return { element: 'h-10 rounded-lg ps-4 pe-10 text-sm', icon: 'end-3.5 text-xs', label: 'text-sm' };
 });
 </script>
 

@@ -10,7 +10,7 @@ import ChartPalette from '@site/ChartPalette.vue';
 import ChartKeySets from '@site/ChartKeySets.vue';
 import NamedSets from '@site/NamedSets.vue';
 
-Voxie's color palette relies on Tailwind under the hood. The colors are used unchanged but we focus in on a limited subset of colors for most uses. Every color goes by its real name: `sky`, `teal`, `slate`. There are no semantic aliases like `primary` or `danger` in the code. A component takes `color="sky"`, not `color="primary"`, so what you read in a class list is what you see on screen.
+Voxie's color palette relies on Tailwind under the hood. Sky is Voxie's own ramp, swapped in for Tailwind's at every step but 950. Every other color is Tailwind's, unchanged, and most screens use a limited subset of them. Every color goes by its real name: `sky`, `teal`, `slate`. There are no semantic aliases like `primary` or `danger` in the code. A component takes `color="sky"`, not `color="primary"`, so what you read in a class list is what you see on screen.
 
 Meaning lives in the guidance below, not in the token name.
 
@@ -186,7 +186,7 @@ Text sitting on a surface uses four colors, and only four.
 
 **slate-500** is a step back for supporting copy, not a disabled state. It clears AA on white (4.8:1) and on glass (4.6:1). On the sunken surface it drops to 3.7:1, and on the page background to 3.9:1. On those two, use it only at large sizes, or move the text onto a card.
 
-**sky-700** marks links. It sits at 700, not the accents' 300, because a link has to be legible as text. It clears AA everywhere, down to 4.5:1 on the sunken surface. sky-600 is the tempting alternative, and it falls short at 4.0:1 on white, under the 4.5:1 AA asks.
+**sky-700** marks links. It sits at 700, not the accents' 300, because a link has to be legible as text. It clears AA everywhere, down to 4.6:1 on the sunken surface. sky-600 is the tempting alternative, and it falls short at 3.8:1 on white, under the 4.5:1 AA asks.
 
 None of this needs setting by hand. `body` carries `text-slate-700`, and prose is pointed at all four, so text inherits the right color on its own. Reach for a utility only to step something back to slate-500. The one surface that flips the rule is the dark card, which sets its own light text.
 
@@ -203,7 +203,7 @@ A label sitting on a fill is black, not slate-800. A fill is a small, saturated 
 
 The tint is the one row that isn't black. Black on a 100 fill reads as body copy with a tinted box around it, so the label takes the 900 of the same hue, which also measures better.
 
-White on a light fill is never the answer. White on sky-300 lands at 1.67:1.
+White on a light fill is never the answer. White on sky-300 lands at 1.62:1.
 
 There is one exception. An element with no fill of its own sits directly on the panel, so on the dark surface it takes white. Black on slate-700 would be 2.0:1.
 
@@ -217,7 +217,7 @@ Controls, at 300 with a black label:
 
 | Fill       | Label | WCAG 2.x | APCA                                              |
 | ---------- | ----- | -------- | ------------------------------------------------- |
-| sky-300    | black | 12.6:1   | <span class="text-rose-700">Lc 75</span>          |
+| sky-300    | black | 13.0:1   | Lc 76                                             |
 | teal-300   | black | 14.3:1   | Lc 82                                             |
 | amber-300  | black | 14.5:1   | Lc 83                                             |
 | rose-300   | black | 10.9:1   | <span class="text-rose-700">Lc 67</span>          |
@@ -226,13 +226,13 @@ Controls, at 300 with a black label:
 | slate-300  | black | 14.2:1   | Lc 81                                             |
 | slate-600  | white | 7.6:1    | Lc 91                                             |
 
-The three in rose are a known gap, kept for now so the documentation matches what the product ships. They pass every WCAG check, and a contrast tool will call them AAA. WCAG 2.x is generous to dark text on saturated light fills, though. APCA prices sky, rose, and violet below what it wants for text at button size. Buttons run 12–14px, which is where that shortfall counts most.
+The two in rose are a known gap, kept for now so the documentation matches what the product ships. They pass every WCAG check, and a contrast tool will call them AAA. WCAG 2.x is generous to dark text on saturated light fills, though. APCA prices rose and violet below what it wants for text at button size. Buttons run 12–14px, which is where that shortfall counts most.
 
 Labels, on the tint:
 
 | Fill       | Label      | WCAG 2.x | APCA   |
 | ---------- | ---------- | -------- | ------ |
-| sky-100    | sky-900    | 8.2:1    | Lc 82  |
+| sky-100    | sky-900    | 8.9:1    | Lc 85  |
 | teal-100   | teal-900   | 8.4:1    | Lc 83  |
 | amber-100  | amber-900  | 8.2:1    | Lc 83  |
 | rose-100   | rose-900   | 8.0:1    | Lc 78  |
@@ -253,7 +253,7 @@ A categorical chart colors its keys by how many there are, not by what they are.
 
 ### The chart palette
 
-Every hue carries three steps, copied from Tailwind. Change what a chart draws by picking a different step, never by editing or interpolating a value. A new hue arrives with all three steps.
+Every hue carries three steps from its ramp. Change what a chart draws by picking a different step, never by editing or interpolating a value. A new hue arrives with all three steps.
 
 <ChartPalette />
 

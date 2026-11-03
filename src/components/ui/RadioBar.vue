@@ -42,9 +42,9 @@ const invalid = computed(() => Boolean(slots.error || errors.value.length));
 
 // The Input's heights at each size, with the Tab track's padding inside.
 const sizeClasses = computed(() => {
-	if (props.size === 'sm') return 'h-8 rounded-lg p-0.5';
+	if (props.size === 'sm') return 'h-8 rounded-md p-0.5';
 	if (props.size === 'lg') return 'h-12 rounded-xl p-1';
-	return 'h-10 rounded-xl p-1';
+	return 'h-10 rounded-lg p-1';
 });
 
 const trackClasses = computed(() => {

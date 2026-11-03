@@ -15,12 +15,11 @@ const indicatorStyle = ref({ left: '0px', top: '0px', width: '0px', height: '0px
 provide(TabListKey, { indicatorReady });
 
 // The track is the labeled Switch track at each size, so the two sit level in
-// a toolbar. The bottom border takes 1px out of the box, so bottom padding
-// gives it up to keep the tabs centered.
+// a toolbar.
 const sizeClasses = computed(() => {
-	if (tabs.size.value === 'sm') return { track: 'h-8 rounded-lg px-0.5 pt-0.5 pb-px', thumb: 'rounded-md' };
-	if (tabs.size.value === 'lg') return { track: 'h-12 rounded-xl gap-1 px-1 pt-1 pb-0.75', thumb: 'rounded-lg' };
-	return { track: 'h-10 rounded-xl gap-1 px-1 pt-1 pb-0.75', thumb: 'rounded-lg' };
+	if (tabs.size.value === 'sm') return { track: 'h-8 rounded-md px-0.5 py-0.5', thumb: 'rounded' };
+	if (tabs.size.value === 'lg') return { track: 'h-12 rounded-xl gap-1 px-1 py-1', thumb: 'rounded-md' };
+	return { track: 'h-10 rounded-lg gap-1 px-1 py-1', thumb: 'rounded' };
 });
 
 // The Switch off track, surface for surface: a step darker on sunken, and
@@ -33,19 +32,19 @@ const trackClasses = computed(() => {
 	return 'bg-slate-300';
 });
 
-// A light bottom border, one opacity per surface. bg-clip-padding keeps the
-// fill out from under it, so it blends with the surface rather than the track.
-const edgeBorder: Record<Surface, string> = {
-	default: 'border-white',
-	glass: 'border-white',
-	sunken: 'border-white/30',
-	dark: 'border-white/10',
-	background: 'border-white/40',
+// A 1px highlight under the track, one opacity per surface. An outer shadow
+// rather than a border, so it sits outside the box and the padding stays symmetric.
+const edgeHighlight: Record<Surface, string> = {
+	default: 'shadow-[0_1px_0_0_#fff]',
+	glass: 'shadow-[0_1px_0_0_#fff]',
+	sunken: 'shadow-[0_1px_0_0_rgb(255_255_255/0.3)]',
+	dark: 'shadow-[0_1px_0_0_rgb(255_255_255/0.1)]',
+	background: 'shadow-[0_1px_0_0_rgb(255_255_255/0.4)]',
 };
 
 const trackEdge = computed(() => {
-	const border = `border-b bg-clip-padding ${edgeBorder[tabs.surface.value]}`;
-	return tabs.disabled.value ? border : `${border} inset-shadow-sm inset-shadow-black/10`;
+	const highlight = edgeHighlight[tabs.surface.value];
+	return tabs.disabled.value ? highlight : `${highlight} inset-shadow-sm inset-shadow-black/10`;
 });
 
 const thumbClasses = computed(() => {
