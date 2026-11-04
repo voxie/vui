@@ -17,7 +17,7 @@ concurrency:
 jobs:
   deploy:
     if: github.event.action != 'closed'
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     environment:
       name: preview
       url: https://voxie.github.io/vui/pr-preview/pr-${{ github.event.number }}/
@@ -79,7 +79,7 @@ jobs:
   # preview it just deleted.
   cleanup:
     if: github.event.action == 'closed'
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     steps:
       - name: Checkout Code
