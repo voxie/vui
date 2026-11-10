@@ -1,11 +1,40 @@
 ---
 name: vui-layout
-description: How a Voxie UI (vui) page is laid out. Read this when building or reviewing a full screen, page shell, dashboard, create flow, or settings page that should match the Voxie product. Covers the navbar plus capped main content, the 12-column card grid, the centered single-column create page, the sidebar layout, card widths, and gap and padding rules.
+description: How a Voxie UI (vui) page is laid out. Read this when building or reviewing a full screen, page shell, dashboard, create flow, or settings page that should match the Voxie product. Covers the `VxPageLayout` component and its `layout` and `size` props, the navbar plus capped main content, the 12-column card grid, the centered single-column create page, the sidebar layout, card widths, and gap and padding rules.
 ---
 
 # Voxie UI page structure
 
 Two layout sections make a page. The navbar runs the full width of the window. The main content area has its width capped. Source of truth: `/docs/patterns/page-structure` and `/docs/components/navbar`.
+
+## The component
+
+In a Vue app with `@voxie/frontend-components`, the page is `VxPageLayout`. It renders the container, the padding, and the header. Pass the title and the content; never add padding or a second container around it, and never nest one layout in another. The raw HTML in the sections below is what the component renders, for prototypes without it.
+
+```vue
+<vx-page-layout layout="sidebar" size="xl" title="Campaigns" description="…">
+  <template v-slot:callout>…</template>     <!-- banner above the header, full page width -->
+  <template v-slot:subtitle>…</template>    <!-- grey line above the title, usually a back link -->
+  <template v-slot:actions>…</template>     <!-- right side of the header -->
+  <template v-slot:sidebar>…</template>     <!-- sidebar layout only -->
+  …content…
+</vx-page-layout>
+```
+
+| `layout` | Use it for |
+|---|---|
+| `base` (default) | A plain page: a list, a dashboard without a grid, a detail page with no section nav |
+| `dashboard` | Cards on the 12-column grid; children carry `col-span-*` |
+| `create` | A create form, centered under a centered heading. Create forms only, never a fallback for "no sidebar" |
+| `sidebar` | A detail or settings page with section links or filters |
+
+| `size` | Use it for |
+|---|---|
+| `xl` (default) | The normal page width, including a sidebar page whose sidebar is section navigation |
+| `2xl` | A sidebar page whose sidebar is a filter panel, like the analytics pages |
+| `full` | Screens that need the whole window, like Message Hub and the kiosk lists |
+
+The header renders only when a title, description, subtitle or actions is given. The title is the page's one `h1`. A back link goes in `subtitle`, never inside the title.
 
 ## The shell
 
@@ -57,6 +86,9 @@ Edit screens, analytics, settings. Sidebar and content in a flex row from `md` u
 Small cards in the content column are `w-full md:max-w-2xl`, aligned left, the same width as create-page cards. Content that needs room (tables, overviews) uses `w-full`. A settings page mixes both in one column.
 
 ## Review checklist
+
+- One `VxPageLayout` per page, with no padding or container added around it.
+- `create` only on a create form. `2xl` only beside a filter sidebar.
 
 - Navbar full width, main content capped with the container classes above.
 - Page title on the background, all other headings inside cards.

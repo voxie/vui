@@ -25,6 +25,25 @@ The space between cards is the same on every layout. It never exceeds the paddin
 
 Every layout below is live. **View Full Screen** will let you preview the layout at production scale.
 
+## The component
+
+In the product these layouts are one component, `VxPageLayout` from `@voxie/frontend-components`. It owns the container, the padding, and the header, and a page supplies only the title and the content. The `layout` prop picks the arrangement below. The choices are `base`, `dashboard`, `create`, and `sidebar`. The `size` prop picks the cap. The choices are `xl` (the default), `2xl`, and `full`.
+
+```vue
+<vx-page-layout layout="sidebar" title="Campaigns" description="…">
+  <template v-slot:subtitle>…</template>    <!-- grey line above the title, usually a back link -->
+  <template v-slot:actions>…</template>     <!-- right side of the header -->
+  <template v-slot:sidebar>…</template>     <!-- sidebar layout only -->
+  …content…
+</vx-page-layout>
+```
+
+`base` is the plain single column for a list, a detail page, or a dashboard that doesn't need the grid. `dashboard` is the 12-column grid below. `create` is for create forms only, since it centers the heading as well as the content. `sidebar` is the sidebar layout below.
+
+`xl` is the normal page width, including a sidebar page whose sidebar is section navigation. `2xl` is for a sidebar page whose sidebar is a filter panel, like the analytics pages, so the charts and tables beside the filters keep their room. `full` drops the cap for screens that need the whole window, like Message Hub and the kiosk lists.
+
+The page title is the one `h1` on the page. A back link goes in the `subtitle` slot, never inside the title, where it would become part of the heading's text.
+
 ## Base Layout
 
 Most pages use a left-aligned 12-column grid that gets filled with content cards. Examples are dashboards, item lists, and analytics.
