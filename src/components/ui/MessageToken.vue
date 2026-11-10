@@ -58,9 +58,13 @@ const mark = computed(() => (props.fallback === 'exit' ? 'fa-arrow-right-from-br
 const markLabel = computed(() => (props.fallback === 'exit' ? 'exits the flow when empty' : 'has a fallback'));
 const pressable = computed(() => props.press || Boolean(props.description));
 
-// An inline block, so a token wider than its line wraps inside one box.
-// text-box trims the line box to cap height and baseline, so the padding centers the capitals. Uneven padding is the fallback.
-const CHIP = 'inline-block max-w-full rounded-sm px-2 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:py-[0.4em] supports-[text-box:trim-both_cap_alphabetic]:[text-box:trim-both_cap_alphabetic] text-left font-token font-[350] tracking-[-0.2px] [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-tight break-words shadow-sm ring-1 shadow-slate-500/10';
+// A wrapping flex row, so a token wider than its line wraps inside one box. gap-x is the one space between icon, label, arrow and mark.
+// The row gap is leading-tight less the cap height, so trimmed rows sit a normal line apart. Uneven padding is the fallback for no text-box.
+const CHIP = 'inline-flex flex-wrap items-baseline gap-x-1.5 [baseline-source:last] max-w-full rounded-sm px-2 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:py-[0.4em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.55em] text-left font-token font-[350] tracking-[-0.2px] [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-tight break-words shadow-sm ring-1 shadow-slate-500/10';
+// A flex container takes no text-box, so each piece trims its own line to cap height and baseline and the padding centers the capitals.
+const PIECE = 'supports-[text-box:trim-both_cap_alphabetic]:[text-box:trim-both_cap_alphabetic]';
+// Binds the icon and the mark to their segment and passes the chip's gap down.
+const SEGMENT = 'flex min-w-0 items-baseline gap-[inherit]';
 const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-2 focus-visible:outline-2';
 </script>
 
@@ -76,13 +80,12 @@ const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-
 				@click="press && $emit('press')"
 			>
 				<template v-for="(segment, i) in segments" :key="i">
-					<template v-if="i > 0"><wbr /><span class="mx-1.5" :class="tone.mark">→</span><wbr /></template>
-					<!-- nowrap binds the icon and the mark to their segment. The segment itself can still break. -->
-					<span class="whitespace-nowrap">
+					<span v-if="i > 0" :class="[PIECE, tone.mark]">→</span>
+					<span :class="SEGMENT">
 						<!-- The kit swaps each <i> for an <svg>, so the icon is keyed to be replaced whole when it changes. -->
-						<span v-if="i === 0" :key="`${kind.icon} ${tone.mark}`" class="mr-[5px]"><i class="fa-solid fa-width-auto text-[.875em]" :class="[kind.icon, tone.mark]" aria-hidden="true"></i></span>
-						<span class="whitespace-normal">{{ segment }}</span>
-						<span v-if="mark && i === segments.length - 1" :key="mark" class="ml-[7px]"><i class="fa-solid fa-width-auto text-[.75em]" :class="[mark, tone.mark]" role="img" :aria-label="markLabel"></i></span>
+						<span v-if="i === 0" :key="`${kind.icon} ${tone.mark}`" :class="PIECE"><i class="fa-solid fa-width-auto text-[.875em]" :class="[kind.icon, tone.mark]" aria-hidden="true"></i></span>
+						<span class="min-w-0" :class="PIECE">{{ segment }}</span>
+						<span v-if="mark && i === segments.length - 1" :key="mark" :class="PIECE"><i class="fa-solid fa-width-auto text-[.75em]" :class="[mark, tone.mark]" role="img" :aria-label="markLabel"></i></span>
 					</span>
 				</template>
 			</component>
