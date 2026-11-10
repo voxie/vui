@@ -1,0 +1,80 @@
+---
+title: Disclosure
+order: 3
+---
+
+import DisclosureExample from '@site/DisclosureExample.vue';
+
+A disclosure is a control that opens and closes a block of content in place. The block sits in the flow of the page under its control, and pushes whatever follows it down while it is open. The control carries a chevron that shows which state the block is in, and the block opens and closes with a short transition instead of a jump.
+
+<div class="not-prose my-10">
+  <DisclosureExample client:load />
+</div>
+
+This is the shape of an expandable card on a settings page, a collapsible section in a sidebar, and a filter panel that folds away above a list. A panel that floats over the page instead of opening in it is a [Menu](/docs/components/menu) or a [Popover](/docs/components/popover), and the dropdowns on the [Navbar](/docs/components/navbar#sections) have a chevron rule of their own. [Tabs](/docs/components/tabs) are for a few alternative blocks where one is always showing. A disclosure has one block, and it can be closed.
+
+There is no component for it yet. The examples on this page are a [Card](/docs/components/card), a button, and the classes below. A collapsible container sits on the [sunken surface](/docs/components/card#surface).
+
+## The control
+
+The control is a `<button>` holding the label and the chevron, and the whole of it is the target. `aria-expanded` says whether the block is open, and `aria-controls` names the block, so a screen reader hears the state and what it belongs to. Nothing else pressable goes inside it, since a button can't sit inside a button.
+
+In the examples on this page the button sits inside the card's heading, so a closed section still has a heading.
+
+```html
+<h3>
+  <button type="button" aria-expanded="false" aria-controls="delivery-window">
+    <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+    Delivery window
+  </button>
+</h3>
+<div id="delivery-window" inert>…</div>
+```
+
+## The chevron
+
+The chevron shows the state the block is in, not the action a press would take. Closed, it points right or left. Open, it points down.
+
+Which way it points while closed depends on where it sits. At the start of the control, ahead of the label, it points right. At the end of the control, after the label, it points left. Either way it points in at the label, which names what would open. Open, it points down at the block from both positions.
+
+<div class="not-prose my-10 grid items-start gap-4 sm:grid-cols-2">
+  <DisclosureExample client:load label="Details" />
+  <DisclosureExample client:load label="Details" chevron="end" />
+</div>
+
+| Chevron sits at      | Closed           | Open            |
+| -------------------- | ---------------- | --------------- |
+| Start of the control | `fa-angle-right` | `fa-angle-down` |
+| End of the control   | `fa-angle-left`  | `fa-angle-down` |
+
+The icon is the `angle` family from [Icons](/docs/foundations/icons#reference), not `chevron`. Turn the closed icon a quarter turn to reach down, `rotate-90` for `fa-angle-right` and `-rotate-90` for `fa-angle-left`, rather than swapping it for `fa-angle-down`. One icon turning can animate, and two icons swapping can't.
+
+The chevron is slate-500 and one text size under the label. It darkens to slate-800 while the control is hovered, and the label holds its color. It is the one visible cue for the state, so it is never dropped. `aria-expanded` carries the same thing to a screen reader.
+
+## The transition
+
+Opening and closing are smooth. The block grows from nothing to its full height over 200ms on an ease-out curve, and shrinks back the same way. The chevron turns in the same 200ms, so the two finish together. Quick and gentle, with no bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly).
+
+<div class="not-prose my-10">
+  <DisclosureExample client:load surface="sunken" label="Advanced settings" open />
+</div>
+
+The height is a grid row rather than a measured number, so the block can hold anything and the transition never has to know how tall it is. The block is a `grid` whose one row runs from `0fr` to `1fr`, and the content inside it is `min-h-0` with `overflow-clip`, so it is cut off while the row is short.
+
+```html
+<div class="grid grid-rows-[0fr] invisible motion-safe:transition-[grid-template-rows,visibility] motion-safe:duration-200 motion-safe:ease-out">
+  <div class="min-h-0 overflow-clip">…</div>
+</div>
+```
+
+Opening swaps `grid-rows-[0fr]` for `grid-rows-[1fr]` and drops `invisible`. Visibility is in the transition too, so on the way closed it flips only once the row has shut, and on the way open it flips at once. The same shape opens the [nested sections](/docs/components/navbar#menus-inside-menus) of a Navbar menu.
+
+Every part of the transition is `motion-safe`. With reduced motion the block and the chevron snap between the two states.
+
+## Interaction
+
+A press on the control toggles the block. Nothing opens on hover.
+
+<kbd>Tab</kbd> lands on the control, and <kbd>Enter</kbd> or <kbd>Space</kbd> toggles it, as on any button. Focus draws a blue outline around the control, two pixels wide at a four pixel offset, and only for keyboard focus. Clicking doesn't ring it.
+
+The closed block is `inert`, so nothing inside it can be reached with <kbd>Tab</kbd>, pressed, or read by a screen reader until it opens. Without it, a closed block would still hold a stop in the tab order with nothing on screen to show for it.

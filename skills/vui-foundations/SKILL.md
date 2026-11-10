@@ -1,6 +1,6 @@
 ---
 name: vui-foundations
-description: The Voxie UI (vui) visual rules for building or reviewing any screen, mockup, or HTML prototype that should look like the Voxie product. Read this before choosing colors, surfaces, text styles, button styles, or icons. Covers the slate surface ladder, when an accent color is allowed and at which weight, text colors, the Inter type scale and weights, card and button shapes, and Font Awesome icon usage. Also use it to check a finished page against the system.
+description: The Voxie UI (vui) visual rules for building or reviewing any screen, mockup, or HTML prototype that should look like the Voxie product. Read this before choosing colors, surfaces, text styles, button styles, or icons. Covers the slate surface ladder, when an accent color is allowed and at which weight, text colors, the Inter type scale and weights, card and button shapes, Font Awesome icon usage, and the chevron and transition on a disclosure that opens content in place. Also use it to check a finished page against the system.
 ---
 
 # Voxie UI foundations
@@ -101,6 +101,10 @@ Slate is the default fill and follows the one-rung table above. Reach for a colo
 
 Font Awesome Pro, classic solid by default, classic regular for a few outlines like the clipboard and the star. An icon is `<i class="fa-solid fa-users"></i>`. Size and color come from Tailwind text utilities, never `fa-lg` or `fa-2x`. Brands is for a third-party logo, like `<i class="fa-brands fa-shopify"></i>`. Light, thin, duotone, and sharp stay unused so icons keep one weight.
 
+## Disclosures
+
+A control that opens and closes a block in place (an expandable card, a collapsible sidebar section, a filter panel) is a `<button>` with `aria-expanded` and `aria-controls`, and the block is `inert` while closed. A chevron on the button shows the current state, not the action. Closed, it points right when it sits ahead of the label (`fa-angle-right`) and left when it sits after it (`fa-angle-left`). Open, it points down. Turn the one icon a quarter turn (`rotate-90` or `-rotate-90`) rather than swapping icons. The block and the chevron both move over 200ms ease-out, `motion-safe` only, with the block's height as a grid row running `grid-rows-[0fr]` to `grid-rows-[1fr]` around a `min-h-0 overflow-clip` child. A collapsible container sits on the sunken surface. Full pattern: `/docs/patterns/disclosure`.
+
 ## Review checklist
 
 - Page is slate-200 with white or glass cards. Nothing white sits directly on white.
@@ -110,3 +114,4 @@ Font Awesome Pro, classic solid by default, classic regular for a few outlines l
 - One sky primary action per screen. Good is sky, not green.
 - Default text is `text-sm`. No all caps. Corners are `rounded-2xl` on cards, `rounded-xl` on default buttons.
 - Icons are `fa-solid` or `fa-regular` only, sized with text utilities.
+- A disclosure's chevron points right or left while closed and down while open, and its block opens over 200ms.

@@ -26,14 +26,26 @@ export const icons: Icon[] = [
 	{
 		name: "angle-down",
 		variant: "solid",
-		represents: "The open caret on a select or a multiselect, and the collapse indicator on a disclosure.",
+		represents: "The open caret on a select or a multiselect, and the open state of a disclosure.",
 		avoid: "Not chevron-down.",
+	},
+	{
+		name: "angle-left",
+		variant: "solid",
+		represents: "The closed state of a disclosure, when the chevron sits at the end of its control.",
+		avoid: "Not chevron-left. Back, which is arrow-left.",
+	},
+	{
+		name: "angle-right",
+		variant: "solid",
+		represents: "The closed state of a disclosure, when the chevron sits at the start of its control.",
+		avoid: "Not chevron-right. Forward, which is arrow-right.",
 	},
 	{
 		name: "angle-up",
 		variant: "solid",
 		represents: "The expanded state of a filter or a disclosure.",
-		avoid: "Not chevron-up.",
+		avoid: "Not chevron-up. An open disclosure, which is angle-down.",
 	},
 	{
 		name: "angles-up-down",
