@@ -52,7 +52,7 @@ const kind = computed(() => {
 });
 const tone = computed(() => TONES[kind.value.tone]);
 const segments = computed(() => (props.context ? [CONTEXTS[props.context].label] : parts.value.slice(1)));
-const mark = computed(() => (props.fallback === 'exit' ? 'fa-arrow-right-from-bracket' : props.fallback === 'next' ? 'fa-arrow-down-from-line' : null));
+const mark = computed(() => (props.fallback === 'exit' ? 'fa-right-from-bracket' : props.fallback === 'next' ? 'fa-square-arrow-right' : null));
 const markLabel = computed(() => (props.fallback === 'exit' ? 'exits the flow when empty' : 'has a fallback'));
 const pressable = computed(() => props.press || Boolean(props.description));
 
