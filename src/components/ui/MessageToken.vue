@@ -60,7 +60,7 @@ const pressable = computed(() => props.press || Boolean(props.description));
 
 // An inline block, so a token wider than its line wraps inside one box.
 // text-box trims the line box to cap height and baseline, so the padding centers the capitals. Uneven padding is the fallback.
-const CHIP = 'inline-block max-w-full rounded-sm px-2 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:py-[0.35em] supports-[text-box:trim-both_cap_alphabetic]:[text-box:trim-both_cap_alphabetic] text-left font-token font-[400] tracking-[-0.2px] [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-tight break-words shadow-sm ring-1 shadow-slate-500/10';
+const CHIP = 'inline-block max-w-full rounded-sm px-2 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:py-[0.4em] supports-[text-box:trim-both_cap_alphabetic]:[text-box:trim-both_cap_alphabetic] text-left font-token font-[350] tracking-[-0.2px] [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-tight break-words shadow-sm ring-1 shadow-slate-500/10';
 const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-2 focus-visible:outline-2';
 </script>
 
