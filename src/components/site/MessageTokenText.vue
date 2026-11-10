@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Demo only. Draws a message's `{{level→path}}` variables as tokens, with a
+// Demo only. Draws a message's `{{level=>path}}` variables as tokens, with a
 // fallback chain written `{{a ?? b ?? "text"}}` or `{{a ?? exit}}`.
 import { computed } from 'vue';
 import MessageToken from '@ui/MessageToken.vue';
@@ -7,12 +7,12 @@ import MessageToken from '@ui/MessageToken.vue';
 const props = defineProps<{ text: string; press?: boolean }>();
 
 const NAMES: Record<string, string> = {
-	'contact→first_name': 'First name',
-	'contact→last_name': 'Last name',
-	'team→team_name': 'Team name',
-	'group→group_name': 'Group name',
-	'group→custom_attributes→booking_link': 'Booking link',
-	'local→program_interest': 'Program interest',
+	'contact=>first_name': 'First name',
+	'contact=>last_name': 'Last name',
+	'team=>name': 'Team name',
+	'group=>name': 'Group name',
+	'group=>custom_attributes=>booking_link': 'Booking link',
+	'contact=>local=>custom_attributes=>program_interest': 'Program interest',
 };
 const SOURCES: Record<string, string> = {
 	contact: 'a contact field shared across contexts',
@@ -29,7 +29,7 @@ function token(inner: string) {
 	const exits = rest.at(-1) === 'exit';
 	const fallback = !rest.length ? undefined : exits && rest.length === 1 ? ('exit' as const) : ('next' as const);
 	const words = rest.map((step) => (step === 'exit' ? 'the flow exits' : (NAMES[step] ?? step)));
-	const description = `${NAMES[path] ?? path}, ${SOURCES[path.split('→')[0]] ?? 'a field'}.${words.length ? ` If empty: ${words.join(', then ')}.` : ''}`;
+	const description = `${NAMES[path] ?? path}, ${SOURCES[path.startsWith('contact=>local=>') ? 'local' : path.split('=>')[0]] ?? 'a field'}.${words.length ? ` If empty: ${words.join(', then ')}.` : ''}`;
 	return { path, fallback, description };
 }
 

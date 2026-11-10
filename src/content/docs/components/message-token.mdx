@@ -11,15 +11,15 @@ import MessageTokenContextExample from '@site/MessageTokenContextExample.vue';
 
 A message token is a merge variable drawn as a chip inside the text of a message. The icon says where the value comes from, and the text is the path to it.
 
-The `path` prop is the variable as the message builder writes it, with `→` between segments. The first segment is the level. The icon replaces it, so `contact→first_name` reads `first_name`.
+The `path` prop is the variable as the message builder writes it, without the braces. The builder's `{{contact=>first_name}}` is `path="contact=>first_name"`. The first segment is the level, and the icon replaces it. The chip draws the remaining segments with a colon between them. `contact=>first_name` reads `first_name`, and `group=>custom_attributes=>booking_link` reads `custom_attributes:booking_link`.
 
 ```vue
 <p class="text-sm leading-relaxed">
-  Hi <MessageToken path="contact→first_name" after="!" /> Thanks for asking about <MessageToken path="group→group_name" after="." />
+  Hi <MessageToken path="contact=>first_name" after="!" /> Thanks for asking about <MessageToken path="group=>name" after="." />
 </p>
 ```
 
-A token's text is Google Sans Code at 0.9em, so it follows the size of the text around it and sits a little smaller. Its icons are a step smaller again. Its leading is snug. Set the text at `leading-relaxed` so a one-line chip sits inside the line with room above and below.
+A token's text is Google Sans Code at 0.85em, so it follows the size of the text around it and sits a little smaller. Its icons are a step smaller again. The chip adds padding above and below its text. Set the text at `leading-relaxed` so a one-line chip sits inside the line with room above and below.
 
 ## Examples
 
@@ -49,34 +49,34 @@ The token is set in Google Sans Code with its `MONO` axis at 0, the proportional
   <div class="not-prose flex flex-col gap-4 text-sm leading-relaxed text-slate-800">
     <div class="flex items-baseline gap-4">
       <div class="w-32 shrink-0"><span class="block text-sm font-medium text-slate-900">Proportional</span><code class="block text-xs text-slate-500">MONO 0</code></div>
-      <div style="--token-mono: 0">Hi <MessageToken path="contact→first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group→group_name" after="." /> Want to tour our <MessageToken path="local→program_interest" /> classroom? <MessageToken path="group→custom_attributes→booking_link" fallback="exit" /></div>
+      <div style="--token-mono: 0">Hi <MessageToken path="contact=>first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group=>name" after="." /> Want to tour our <MessageToken path="contact=>local=>custom_attributes=>program_interest" /> classroom? <MessageToken path="group=>custom_attributes=>booking_link" fallback="exit" /></div>
     </div>
     <div class="flex items-baseline gap-4">
       <div class="w-32 shrink-0"><span class="block text-sm font-medium text-slate-900">Fixed-width</span><code class="block text-xs text-slate-500">MONO 1</code></div>
-      <div style="--token-mono: 1">Hi <MessageToken path="contact→first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group→group_name" after="." /> Want to tour our <MessageToken path="local→program_interest" /> classroom? <MessageToken path="group→custom_attributes→booking_link" fallback="exit" /></div>
+      <div style="--token-mono: 1">Hi <MessageToken path="contact=>first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group=>name" after="." /> Want to tour our <MessageToken path="contact=>local=>custom_attributes=>program_interest" /> classroom? <MessageToken path="group=>custom_attributes=>booking_link" fallback="exit" /></div>
     </div>
   </div>
 </Card>
 
 ### Level
 
-The level sets the icon and the color. `contact`, `team`, and `group` fields sit on slate. A `local` attribute is a contact field with a value per context, and it sits on amber with the location dot.
+The level sets the icon and the color. `contact`, `team`, and `group` fields sit on slate. A local attribute is a contact field with a value per context. Its path starts `contact=>local`, the icon replaces both segments, and it sits on amber with the location dot.
 
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
-    <MessageToken path="contact→first_name" />
-    <MessageToken path="team→team_name" />
-    <MessageToken path="group→group_name" />
-    <MessageToken path="local→program_interest" />
+    <MessageToken path="contact=>first_name" />
+    <MessageToken path="team=>name" />
+    <MessageToken path="group=>name" />
+    <MessageToken path="contact=>local=>membership_status" />
   </div>
 </Card>
 
-| Level     | Icon         | Color |
-| --------- | ------------ | ----- |
-| `contact` | Globe        | slate |
-| `team`    | Screen users | slate |
-| `group`   | Grid         | slate |
-| `local`   | Location dot | amber |
+| Level            | Icon         | Color |
+| ---------------- | ------------ | ----- |
+| `contact`        | Globe        | slate |
+| `team`           | Screen users | slate |
+| `group`          | Grid         | slate |
+| `contact=>local` | Location dot | amber |
 
 A level the component doesn't know draws as `contact`.
 
@@ -86,8 +86,8 @@ A level the component doesn't know draws as `contact`.
 
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
-    <MessageToken path="local→program_interest" />
-    <MessageToken path="local→program_interest" preferred />
+    <MessageToken path="contact=>local=>membership_status" />
+    <MessageToken path="contact=>local=>membership_status" preferred />
   </div>
 </Card>
 
@@ -97,9 +97,9 @@ Every segment after the level is drawn, with a colon between them. A token wider
 
 <Card>
   <div class="not-prose flex flex-wrap items-start gap-6 text-sm leading-relaxed">
-    <MessageToken path="group→custom_attributes→booking_link" />
+    <MessageToken path="group=>custom_attributes=>booking_link" />
     <div class="w-56 rounded border border-dashed border-slate-300 p-2">
-      <MessageToken path="group→custom_attributes→booking_link" />
+      <MessageToken path="group=>custom_attributes=>booking_link" />
     </div>
   </div>
 </Card>
@@ -110,10 +110,10 @@ Every segment after the level is drawn, with a colon between them. A token wider
 
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
-    <MessageToken path="contact→first_name" />
-    <MessageToken path="contact→first_name" fallback="next" />
-    <MessageToken path="group→custom_attributes→booking_link" fallback="exit" />
-    <MessageToken path="local→program_interest" fallback="next" />
+    <MessageToken path="contact=>first_name" />
+    <MessageToken path="contact=>first_name" fallback="next" />
+    <MessageToken path="group=>custom_attributes=>booking_link" fallback="exit" />
+    <MessageToken path="contact=>local=>custom_attributes=>program_interest" fallback="next" />
   </div>
 </Card>
 
@@ -122,7 +122,7 @@ Every segment after the level is drawn, with a colon between them. A token wider
 `before` and `after` take the punctuation touching a token, such as the `!` after a greeting or the parentheses around a name. They share the token's block, so a line never starts or ends on a stranded mark.
 
 <Card>
-  <div class="not-prose text-sm leading-relaxed text-slate-800">Hi <MessageToken path="contact→first_name" after="!" /> Your tour <MessageToken path="local→tour_date" before="(" after=")" /> is booked.</div>
+  <div class="not-prose text-sm leading-relaxed text-slate-800">Hi <MessageToken path="contact=>first_name" after="!" /> Your tour <MessageToken path="contact=>local=>custom_attributes=>tour_date" before="(" after=")" /> is booked.</div>
 </Card>
 
 ### Description
@@ -131,19 +131,19 @@ Every segment after the level is drawn, with a colon between them. A token wider
 
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
-    <MessageToken client:load path="contact→first_name" description="First name, a contact field shared across contexts." />
-    <MessageToken client:load path="local→program_interest" fallback="next" description={'Program interest, a local attribute read from this context. If empty: "preschool".'} />
+    <MessageToken client:load path="contact=>first_name" description="First name, a contact field shared across contexts." />
+    <MessageToken client:load path="contact=>local=>custom_attributes=>program_interest" fallback="next" description={'Program interest, a local attribute read from this context. If empty: "preschool".'} />
   </div>
 </Card>
 
 ### Press
 
-`press` makes the token a button that emits `press` and opens nothing, for an editor that opens something of its own. A pressed token keeps its focus ring, including after a mouse click. `selected` draws the same ring on a token inside the editor's selection.
+`press` makes the token a button that emits `press` and opens nothing, for an editor that opens something of its own. A `description` on the same token is ignored. A pressed token keeps its focus ring, including after a mouse click. `selected` draws the same ring on a token inside the editor's selection.
 
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
-    <MessageToken client:load path="contact→first_name" press />
-    <MessageToken client:load path="local→program_interest" press />
-    <MessageToken client:load path="group→group_name" press selected />
+    <MessageToken client:load path="contact=>first_name" press />
+    <MessageToken client:load path="contact=>local=>custom_attributes=>program_interest" press />
+    <MessageToken client:load path="group=>name" press selected />
   </div>
 </Card>

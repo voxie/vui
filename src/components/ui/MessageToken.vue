@@ -6,8 +6,8 @@ type Tone = 'shared' | 'local' | 'preferred';
 type Context = 'entry' | 'preferred' | 'corporate';
 
 const props = defineProps<{
-	// 'contact→first_name', 'group→custom_attributes→booking_link'. The first
-	// segment is the level, which the icon replaces.
+	// The builder's variable without its braces: 'contact=>first_name', 'contact=>local=>email'.
+	// The icon replaces the level, which is the first segment or 'contact=>local'.
 	path?: string;
 	// Draws a context's mark and name in place of a path.
 	context?: Context;
@@ -36,22 +36,23 @@ const LEVELS: Record<string, { icon: string; tone: Tone }> = {
 	contact: { icon: 'fa-globe', tone: 'shared' },
 	team: { icon: 'fa-screen-users', tone: 'shared' },
 	group: { icon: 'fa-grid-2-plus', tone: 'shared' },
-	local: { icon: 'fa-location-dot', tone: 'local' },
 };
+const LOCAL = { icon: 'fa-location-dot', tone: 'local' as const };
 const CONTEXTS: Record<Context, { icon: string; tone: Tone; label: string }> = {
 	entry: { icon: 'fa-location-dot', tone: 'local', label: 'Entry Context' },
 	preferred: { icon: 'fa-star', tone: 'preferred', label: 'Preferred' },
 	corporate: { icon: 'fa-crown', tone: 'local', label: 'Corporate' },
 };
 
-const parts = computed(() => (props.path ?? '').split('→'));
+const parts = computed(() => (props.path ?? '').split('=>').map((part) => part.trim()));
+const local = computed(() => parts.value[0] === 'contact' && parts.value[1] === 'local');
 const kind = computed(() => {
 	if (props.context) return CONTEXTS[props.context];
-	const level = LEVELS[parts.value[0]] ?? LEVELS.contact;
-	return level.tone === 'local' && props.preferred ? { icon: 'fa-star', tone: 'preferred' as const } : level;
+	if (local.value) return props.preferred ? { icon: 'fa-star', tone: 'preferred' as const } : LOCAL;
+	return LEVELS[parts.value[0]] ?? LEVELS.contact;
 });
 const tone = computed(() => TONES[kind.value.tone]);
-const segments = computed(() => (props.context ? [CONTEXTS[props.context].label] : parts.value.slice(1)));
+const segments = computed(() => (props.context ? [CONTEXTS[props.context].label] : parts.value.slice(local.value ? 2 : 1)));
 const mark = computed(() => (props.fallback === 'exit' ? 'fa-right-from-bracket' : props.fallback === 'next' ? 'fa-square-arrow-right' : null));
 const markLabel = computed(() => (props.fallback === 'exit' ? 'exits the flow when empty' : 'has a fallback'));
 const pressable = computed(() => props.press || Boolean(props.description));

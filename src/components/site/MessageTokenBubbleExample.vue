@@ -14,7 +14,7 @@ import { message } from './messageToken';
 					<span class="flex-1 text-sm leading-none font-semibold text-sky-800">Send</span>
 				</div>
 				<div class="flex flex-col gap-2 px-3 py-3">
-					<!-- Relaxed leading, so a snug token sits inside the line with air. -->
+					<!-- Relaxed leading, so a token sits inside the line with air. -->
 					<div class="rounded-l-lg rounded-tr-lg rounded-br border border-sky-200 bg-sky-100 px-3 py-2 text-sm leading-relaxed break-words whitespace-pre-wrap text-slate-800"><MessageTokenText :text="message" /></div>
 					<div class="flex flex-col gap-0.5 text-xs leading-tight text-slate-400">
 						<span>Marketing</span>
