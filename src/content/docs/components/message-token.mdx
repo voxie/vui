@@ -1,0 +1,132 @@
+---
+title: Message Token
+order: 18
+---
+
+import MessageToken from '@ui/MessageToken.vue';
+import Card from '@ui/Card.vue';
+import MessageTokenBubbleExample from '@site/MessageTokenBubbleExample.vue';
+import MessageTokenFieldExample from '@site/MessageTokenFieldExample.vue';
+import MessageTokenContextExample from '@site/MessageTokenContextExample.vue';
+
+A message token is a merge variable drawn as a chip inside the text of a message. The icon says where the value comes from, and the text is the path to it.
+
+The `path` prop is the variable as the message builder writes it, with `→` between segments. The first segment is the level. The icon replaces it, so `contact→first_name` reads `first_name`.
+
+```vue
+<p class="text-sm leading-relaxed">
+  Hi <MessageToken path="contact→first_name" after="!" /> Thanks for asking about <MessageToken path="group→group_name" after="." />
+</p>
+```
+
+A token takes the size of the text around it, in mono at snug leading. Set the text at `leading-relaxed` so a one-line chip sits inside the line with room above and below.
+
+## Examples
+
+### In a message preview
+
+The workflow builder's Send card previews its message with each variable drawn as a token. A click on one opens its description.
+
+<MessageTokenBubbleExample client:load />
+
+### In a message field
+
+The same message in the Send drawer's field. Here each token is a button. This example draws the field and is not an editor, so the text can't be typed into and a press does nothing.
+
+<MessageTokenFieldExample client:load />
+
+### As a context choice
+
+`context` draws a context's mark and name in place of a path. The choices are `entry`, `preferred`, and `corporate`. In a boxed [Radio](/docs/components/radio) it goes where the label would, so picking a context is picking the mark the card will carry.
+
+<MessageTokenContextExample client:load />
+
+### Level
+
+The level sets the icon and the color. `contact`, `team`, and `group` fields sit on slate. A `local` attribute is a contact field with a value per context, and it sits on amber with the location dot.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
+    <MessageToken path="contact→first_name" />
+    <MessageToken path="team→team_name" />
+    <MessageToken path="group→group_name" />
+    <MessageToken path="local→program_interest" />
+  </div>
+</Card>
+
+| Level     | Icon         | Color |
+| --------- | ------------ | ----- |
+| `contact` | Globe        | slate |
+| `team`    | Screen users | slate |
+| `group`   | Grid         | slate |
+| `local`   | Location dot | amber |
+
+A level the component doesn't know draws as `contact`.
+
+### Preferred
+
+`preferred` marks a local attribute read from the contact's preferred group rather than from the current context. The token turns violet and takes the star. It has no effect on the other levels.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
+    <MessageToken path="local→program_interest" />
+    <MessageToken path="local→program_interest" preferred />
+  </div>
+</Card>
+
+### Longer paths
+
+Every segment after the level is drawn, with an arrow between them. A token wider than its line wraps inside its one box. It breaks at an arrow, and mid-word only when a single segment is wider than the line.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-start gap-6 text-sm leading-relaxed">
+    <MessageToken path="group→custom_attributes→booking_link" />
+    <div class="w-56 rounded border border-dashed border-slate-300 p-2">
+      <MessageToken path="group→custom_attributes→booking_link" />
+    </div>
+  </div>
+</Card>
+
+### Fallback
+
+`fallback` adds a mark after the path, for a token that has something to do when its value is empty. `next` is the turn arrow, for a token followed by another variable or by text. `exit` is the exit arrow, for a token that exits the flow.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
+    <MessageToken path="contact→first_name" />
+    <MessageToken path="contact→first_name" fallback="next" />
+    <MessageToken path="group→custom_attributes→booking_link" fallback="exit" />
+    <MessageToken path="local→program_interest" fallback="next" />
+  </div>
+</Card>
+
+### Punctuation
+
+`before` and `after` take the punctuation touching a token, such as the `!` after a greeting or the parentheses around a name. They share the token's block, so a line never starts or ends on a stranded mark.
+
+<Card>
+  <div class="not-prose text-sm leading-relaxed text-slate-800">Hi <MessageToken path="contact→first_name" after="!" /> Your tour <MessageToken path="local→tour_date" before="(" after=")" /> is booked.</div>
+</Card>
+
+### Description
+
+`description` makes the token a button that opens a [Popover](/docs/components/popover) with that text. The fill steps one rung on hover, one more when pressed, and holds the hover rung while the panel is open.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
+    <MessageToken client:load path="contact→first_name" description="First name, a contact field shared across contexts." />
+    <MessageToken client:load path="local→program_interest" fallback="next" description={'Program interest, a local attribute read from this context. If empty: "preschool".'} />
+  </div>
+</Card>
+
+### Press
+
+`press` makes the token a button that emits `press` and opens nothing, for an editor that opens something of its own. A pressed token keeps its focus ring, including after a mouse click. `selected` draws the same ring on a token inside the editor's selection.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
+    <MessageToken client:load path="contact→first_name" press />
+    <MessageToken client:load path="local→program_interest" press />
+    <MessageToken client:load path="group→group_name" press selected />
+  </div>
+</Card>
