@@ -58,9 +58,8 @@ const mark = computed(() => (props.fallback === 'exit' ? 'fa-arrow-right-from-br
 const markLabel = computed(() => (props.fallback === 'exit' ? 'exits the flow when empty' : 'has a fallback'));
 const pressable = computed(() => props.press || Boolean(props.description));
 
-// An inline block, so a token wider than its line wraps inside one box. 6px on the
-// icon's side against 8px after the path, since the icon's box has its own bearing.
-const CHIP = 'inline-block max-w-full rounded-sm pl-1.5 pr-2 text-left font-token [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-snug break-words shadow-sm ring-1 shadow-slate-500/10';
+// An inline block, so a token wider than its line wraps inside one box.
+const CHIP = 'inline-block max-w-full rounded-sm px-2 text-left font-token font-[350] [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-snug break-words shadow-sm ring-1 shadow-slate-500/10';
 const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-2 focus-visible:outline-2';
 </script>
 
@@ -72,7 +71,7 @@ const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-
 				:is="pressable ? 'button' : 'span'"
 				:type="pressable ? 'button' : undefined"
 				v-bind="press ? {} : pressable ? triggerProps : {}"
-				:class="[CHIP, tone.chip, pressable ? [PRESS, tone.press] : '', press ? 'focus:outline-2' : '', selected ? 'outline-2' : '', open ? tone.open : '']"
+				:class="[CHIP, after ? 'mr-0.5' : '', tone.chip, pressable ? [PRESS, tone.press] : '', press ? 'focus:outline-2' : '', selected ? 'outline-2' : '', open ? tone.open : '']"
 				@click="press && $emit('press')"
 			>
 				<template v-for="(segment, i) in segments" :key="i">
@@ -80,9 +79,9 @@ const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-
 					<!-- nowrap binds the icon and the mark to their segment. The segment itself can still break. -->
 					<span class="whitespace-nowrap">
 						<!-- The kit swaps each <i> for an <svg>, so the icon is keyed to be replaced whole when it changes. -->
-						<span v-if="i === 0" :key="`${kind.icon} ${tone.mark}`" class="mr-[3px]"><i class="fa-solid text-[.875em]" :class="[kind.icon, tone.mark]" aria-hidden="true"></i></span>
+						<span v-if="i === 0" :key="`${kind.icon} ${tone.mark}`" class="mr-[5px]"><i class="fa-solid fa-width-auto text-[.875em]" :class="[kind.icon, tone.mark]" aria-hidden="true"></i></span>
 						<span class="whitespace-normal">{{ segment }}</span>
-						<span v-if="mark && i === segments.length - 1" :key="mark" class="ml-1.5"><i class="fa-solid text-[.75em]" :class="[mark, tone.mark]" role="img" :aria-label="markLabel"></i></span>
+						<span v-if="mark && i === segments.length - 1" :key="mark" class="ml-[7px]"><i class="fa-solid fa-width-auto text-[.75em]" :class="[mark, tone.mark]" role="img" :aria-label="markLabel"></i></span>
 					</span>
 				</template>
 			</component>
