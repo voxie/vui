@@ -59,7 +59,7 @@ const markLabel = computed(() => (props.fallback === 'exit' ? 'exits the flow wh
 const pressable = computed(() => props.press || Boolean(props.description));
 
 // An inline block, so a token wider than its line wraps inside one box.
-const CHIP = 'inline-block max-w-full rounded-sm px-2 text-left font-token font-[350] [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-snug break-words shadow-sm ring-1 shadow-slate-500/10';
+const CHIP = 'inline-block max-w-full rounded-sm px-2 py-0.25 text-left font-token font-[400] tracking-[-0.2px] [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-tight break-words shadow-sm ring-1 shadow-slate-500/10';
 const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-2 focus-visible:outline-2';
 </script>
 
