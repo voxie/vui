@@ -58,7 +58,7 @@ const pressable = computed(() => props.press || Boolean(props.description));
 
 // A wrapping flex row, so a token wider than its line wraps inside one box. gap-x is the quarter gap after a colon.
 // The row gap is leading-tight less the cap height, so trimmed rows sit a normal line apart. Uneven padding is the fallback for no text-box.
-const CHIP = 'inline-flex flex-wrap items-baseline gap-x-[1.5px] [baseline-source:last] max-w-full rounded-[4px] px-1.5 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:py-[0.45em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.55em] text-left font-token font-[400] tracking-[0.015em] [font-variation-settings:"MONO"_var(--token-mono,0)] text-[.85em] leading-tight break-words shadow-sm ring-1 shadow-slate-500/10';
+const CHIP = 'inline-flex flex-wrap items-baseline gap-x-[1.5px] [baseline-source:last] max-w-full rounded-[4px] px-1.5 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:py-[0.45em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.55em] text-left font-token font-[350] tracking-[0.015em] [font-variation-settings:"MONO"_var(--token-mono,0)] text-[.85em] leading-tight break-words shadow-sm ring-1 shadow-slate-500/10';
 // A flex container takes no text-box, so each piece trims its own line to cap height and baseline and the padding centers the capitals.
 const PIECE = 'supports-[text-box:trim-both_cap_alphabetic]:[text-box:trim-both_cap_alphabetic]';
 // Important because the kit's unlayered CSS sets height and vertical-align.
@@ -76,7 +76,7 @@ const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-
 				:is="pressable ? 'button' : 'span'"
 				:type="pressable ? 'button' : undefined"
 				v-bind="press ? {} : pressable ? triggerProps : {}"
-				:class="[CHIP, after ? 'mr-0.5' : '', tone.chip, pressable ? [PRESS, tone.press] : '', press ? 'focus:outline-2' : '', selected ? 'outline-2' : '', open ? tone.open : '']"
+				:class="[CHIP, before ? 'ml-0.5' : '', after ? 'mr-0.5' : '', tone.chip, pressable ? [PRESS, tone.press] : '', press ? 'focus:outline-2' : '', selected ? 'outline-2' : '', open ? tone.open : '']"
 				@click="press && $emit('press')"
 			>
 				<template v-for="(segment, i) in segments" :key="i">
