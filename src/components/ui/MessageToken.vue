@@ -60,7 +60,7 @@ const pressable = computed(() => props.press || Boolean(props.description));
 
 // An inline block, so a token wider than its line wraps inside one box. 6px on the
 // icon's side against 8px after the path, since the icon's box has its own bearing.
-const CHIP = 'inline-block max-w-full rounded-sm pl-1.5 pr-2 text-left font-mono leading-snug break-words shadow-sm ring-1 shadow-slate-500/10';
+const CHIP = 'inline-block max-w-full rounded-sm pl-1.5 pr-2 text-left font-token [font-variation-settings:"MONO"_var(--token-mono,0.51)] text-[.875em] leading-snug break-words shadow-sm ring-1 shadow-slate-500/10';
 const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-2 focus-visible:outline-2';
 </script>
 

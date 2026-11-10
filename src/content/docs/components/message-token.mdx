@@ -19,7 +19,7 @@ The `path` prop is the variable as the message builder writes it, with `→` bet
 </p>
 ```
 
-A token takes the size of the text around it, in mono at snug leading. Set the text at `leading-relaxed` so a one-line chip sits inside the line with room above and below.
+A token's text is Recursive at 0.875em, so it follows the size of the text around it and sits a step smaller. Its leading is snug. Set the text at `leading-relaxed` so a one-line chip sits inside the line with room above and below.
 
 ## Examples
 
@@ -40,6 +40,31 @@ The same message in the Send drawer's field. Here each token is a button. This e
 `context` draws a context's mark and name in place of a path. The choices are `entry`, `preferred`, and `corporate`. In a boxed [Radio](/docs/components/radio) it goes where the label would, so picking a context is picking the mark the card will carry.
 
 <MessageTokenContextExample client:load />
+
+### Typeface
+
+The token is set in Recursive, whose `MONO` axis runs from 0 (proportional) to 1 (fixed-width). The component reads the axis from `--token-mono` and defaults to 0.51, just past the point where the letterforms switch to their monospace shapes. The last row is the system monospace the token used before.
+
+<Card>
+  <div class="not-prose flex flex-col gap-4 text-sm leading-relaxed text-slate-800">
+    <div class="flex items-baseline gap-4">
+      <code class="w-28 shrink-0 text-xs text-slate-500">MONO 0</code>
+      <div style="--token-mono: 0">Hi <MessageToken path="contact→first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group→group_name" after="." /> Want to tour our <MessageToken path="local→program_interest" /> classroom? <MessageToken path="group→custom_attributes→booking_link" fallback="exit" /></div>
+    </div>
+    <div class="flex items-baseline gap-4">
+      <code class="w-28 shrink-0 text-xs text-slate-500">MONO 0.51</code>
+      <div style="--token-mono: 0.51">Hi <MessageToken path="contact→first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group→group_name" after="." /> Want to tour our <MessageToken path="local→program_interest" /> classroom? <MessageToken path="group→custom_attributes→booking_link" fallback="exit" /></div>
+    </div>
+    <div class="flex items-baseline gap-4">
+      <code class="w-28 shrink-0 text-xs text-slate-500">MONO 1</code>
+      <div style="--token-mono: 1">Hi <MessageToken path="contact→first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group→group_name" after="." /> Want to tour our <MessageToken path="local→program_interest" /> classroom? <MessageToken path="group→custom_attributes→booking_link" fallback="exit" /></div>
+    </div>
+    <div class="flex items-baseline gap-4">
+      <code class="w-28 shrink-0 text-xs text-slate-500">System mono</code>
+      <div style="--font-token: ui-monospace, SFMono-Regular, Menlo, monospace">Hi <MessageToken path="contact→first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group→group_name" after="." /> Want to tour our <MessageToken path="local→program_interest" /> classroom? <MessageToken path="group→custom_attributes→booking_link" fallback="exit" /></div>
+    </div>
+  </div>
+</Card>
 
 ### Level
 
