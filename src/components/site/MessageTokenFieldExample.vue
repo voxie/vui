@@ -5,7 +5,10 @@ import { ref } from 'vue';
 import Button from '@ui/Button.vue';
 import Card from '@ui/Card.vue';
 import MessageTokenText from './MessageTokenText.vue';
-import { message } from './messageToken';
+import { message as shared } from './messageToken';
+
+// Plain lines after the shared message, to compare line spacing with and without tokens.
+const message = `${shared} Tours run weekday mornings and take about thirty minutes. Bring any questions you have about schedules, tuition or enrollment, and we will walk you through everything in person.`;
 
 const count = ref(message.replace(/\s*\?\?[^}]*/g, '').length);
 </script>
@@ -16,7 +19,7 @@ const count = ref(message.replace(/\s*\?\?[^}]*/g, '').length);
 			<div class="px-1 py-2 text-sm text-slate-500">Message content</div>
 			<div class="rounded-lg border border-slate-200 bg-slate-50">
 				<div class="flex flex-col gap-2 p-4">
-					<div class="min-h-28 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm leading-relaxed break-words whitespace-pre-wrap text-slate-800"><MessageTokenText :text="message" press /></div>
+					<div class="min-h-28 w-full rounded-lg border border-slate-200 bg-white p-4 py-3 text-sm leading-relaxed break-words whitespace-pre-wrap text-slate-800"><MessageTokenText :text="message" press /></div>
 					<div class="flex items-center justify-between">
 						<p class="m-0 text-xs text-slate-500">{{ count }} characters</p>
 						<div class="flex items-center gap-0.5">
