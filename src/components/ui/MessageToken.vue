@@ -3,6 +3,8 @@
 // Shared by every token: one observer, and each pass batches its writes and reads into a single layout.
 type Token = () => HTMLElement | null;
 const lines = new Map<Element, { width?: number; tokens: Set<Token> }>();
+// Each wrapper's last size, since a chip's contents can grow on their own when an icon or a font arrives.
+const wrappers = new Map<Element, { size?: string; token: Token }>();
 const pending = new Set<Token>();
 let observer: ResizeObserver | undefined;
 
@@ -47,6 +49,13 @@ function watchLine(wrapper: HTMLElement, token: Token) {
 		observer = new ResizeObserver((entries) => {
 			const tokens: Token[] = [];
 			for (const entry of entries) {
+				// The first report hugs too, since an icon or a font can land between mount and the first frame. It settles when a hug measures the same.
+				const own = wrappers.get(entry.target);
+				if (own) {
+					const size = `${entry.contentRect.width} ${entry.contentRect.height}`;
+					if (own.size !== size) tokens.push(own.token);
+					own.size = size;
+				}
 				const watched = lines.get(entry.target);
 				if (!watched) continue;
 				// Only a width change can rewrap a chip. The first report records the width.
@@ -64,10 +73,14 @@ function watchLine(wrapper: HTMLElement, token: Token) {
 		observer.observe(line);
 	}
 	watched.tokens.add(token);
+	wrappers.set(wrapper, { token });
+	observer.observe(wrapper);
 	return line;
 }
 
-function unwatchLine(line: Element, token: Token) {
+function unwatchLine(wrapper: Element, line: Element, token: Token) {
+	wrappers.delete(wrapper);
+	observer?.unobserve(wrapper);
 	const watched = lines.get(line);
 	watched?.tokens.delete(token);
 	if (watched && !watched.tokens.size) {
@@ -158,7 +171,7 @@ onMounted(() => {
 	line = watchLine(wrapper.value!, token);
 	hug([token]);
 });
-onBeforeUnmount(() => line && unwatchLine(line, token));
+onBeforeUnmount(() => line && unwatchLine(wrapper.value!, line, token));
 watch([chip, segments, mark], () => nextTick(() => hug([token])));
 </script>
 
