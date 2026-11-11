@@ -100,6 +100,7 @@ type Context = 'entry' | 'preferred' | 'corporate';
 const props = defineProps<{
 	// The builder's variable without its braces: 'contact=>first_name', 'contact=>local=>email'.
 	// The icon replaces the level, which is the first segment or 'contact=>local'.
+	// A `custom_attributes` segment isn't drawn, so a `description` should name it.
 	path?: string;
 	// Draws a context's mark and name in place of a path.
 	context?: Context;
@@ -144,7 +145,11 @@ const kind = computed(() => {
 	return LEVELS[parts.value[0]] ?? LEVELS.contact;
 });
 const tone = computed(() => TONES[kind.value.tone]);
-const segments = computed(() => (props.context ? [CONTEXTS[props.context].label] : parts.value.slice(local.value ? 2 : 1)));
+const segments = computed(() => {
+	if (props.context) return [CONTEXTS[props.context].label];
+	const rest = parts.value.slice(local.value ? 2 : 1);
+	return rest.filter((part, i) => part !== 'custom_attributes' || i === rest.length - 1);
+});
 const mark = computed(() => (props.fallback === 'exit' ? 'fa-right-from-bracket' : props.fallback === 'next' ? 'fa-square-arrow-right' : null));
 const markLabel = computed(() => (props.fallback === 'exit' ? 'exits the flow when empty' : 'has a fallback'));
 const pressable = computed(() => props.press || Boolean(props.description));

@@ -6,8 +6,8 @@ import Card from '@ui/Card.vue';
 import MessageTokenText, { type Pressed } from './MessageTokenText.vue';
 import { message as shared } from './messageToken';
 
-// Plain lines after the shared message, to compare line spacing with and without tokens.
-const message = `${shared} Tours run weekday mornings and take about thirty minutes. Bring any questions you have about schedules, tuition or enrollment, and we will walk you through everything in person.`;
+// A nested custom attribute, then a plain line to compare line spacing with and without tokens.
+const message = `${shared} Tours run {{group=>custom_attributes=>campus_tours=>schedule}} and take about thirty minutes. Bring any questions you have about schedules, tuition or enrollment, and we will walk you through everything in person.`;
 
 const count = ref(message.replace(/\s*\?\?[^}]*/g, '').length);
 const field = ref<HTMLElement>();

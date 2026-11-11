@@ -12,6 +12,7 @@ const NAMES: Record<string, string> = {
 	'team=>name': 'Team name',
 	'group=>name': 'Group name',
 	'group=>custom_attributes=>booking_link': 'Booking link',
+	'group=>custom_attributes=>campus_tours=>schedule': 'Tour schedule',
 	'contact=>local=>custom_attributes=>program_interest': 'Program interest',
 };
 const SOURCES: Record<string, string> = {
@@ -19,6 +20,10 @@ const SOURCES: Record<string, string> = {
 	team: 'a team field',
 	group: "a group field from the enrollment's group",
 	local: 'a local attribute read from this context',
+	'contact custom': 'a contact custom attribute shared across contexts',
+	'team custom': 'a team custom attribute',
+	'group custom': "a group custom attribute from the enrollment's group",
+	'local custom': 'a local custom attribute read from this context',
 };
 
 export type Pressed = { index: number; path: string };
@@ -32,7 +37,9 @@ function token(inner: string) {
 	const exits = rest.at(-1) === 'exit';
 	const fallback = !rest.length ? undefined : exits && rest.length === 1 ? ('exit' as const) : ('next' as const);
 	const words = rest.map((step) => (step === 'exit' ? 'the flow exits' : (NAMES[step] ?? step)));
-	const description = `${NAMES[path] ?? path}, ${SOURCES[path.startsWith('contact=>local=>') ? 'local' : path.split('=>')[0]] ?? 'a field'}.${words.length ? ` If empty: ${words.join(', then ')}.` : ''}`;
+	const level = path.startsWith('contact=>local=>') ? 'local' : path.split('=>')[0];
+	const source = SOURCES[path.includes('=>custom_attributes=>') ? `${level} custom` : level] ?? 'a field';
+	const description = `${NAMES[path] ?? path}, ${source}.${words.length ? ` If empty: ${words.join(', then ')}.` : ''}`;
 	return { path, fallback, description };
 }
 

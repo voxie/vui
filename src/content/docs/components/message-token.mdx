@@ -11,7 +11,7 @@ import MessageTokenContextExample from '@site/MessageTokenContextExample.vue';
 
 A message token represents a value that is filled in when the message is sent, such as a contact's first name. It is drawn as a chip inside the text of a message. The icon shows which record the value comes from. The text names the field on that record.
 
-The `path` prop is the variable as the message builder writes it, without the braces. The builder's `{{contact=>first_name}}` is `path="contact=>first_name"`. The first segment is the level, and the icon replaces it. The chip draws the remaining segments with a colon between them. `contact=>first_name` reads `first_name`, and `group=>custom_attributes=>booking_link` reads `custom_attributes:booking_link`.
+The `path` prop is the variable as the message builder writes it, without the braces. The builder's `{{contact=>first_name}}` is `path="contact=>first_name"`. The first segment is the level, and the icon replaces it. The chip draws the remaining segments with a colon between them. `contact=>first_name` reads `first_name`. A `custom_attributes` segment isn't drawn, so `group=>custom_attributes=>booking_link` reads `booking_link`, and a nested `group=>custom_attributes=>tours=>booking_link` reads `tours:booking_link`. Name it in the token's `description` instead.
 
 ```vue
 <p class="text-sm leading-relaxed">
@@ -91,15 +91,15 @@ A level the component doesn't know draws as `contact`.
   </div>
 </Card>
 
-### Longer paths
+### Long names
 
-Every segment after the level is drawn, with a colon between them. A token wider than its line wraps inside its one box. It breaks after a colon, and mid-word only when a single segment is wider than the line.
+A token wider than its line wraps inside its one box. It breaks after a colon, and mid-word only when a single segment is wider than the line.
 
 <Card>
   <div class="not-prose flex flex-wrap items-start gap-6 text-sm leading-relaxed">
-    <MessageToken path="group=>custom_attributes=>booking_link" />
-    <div class="w-56 rounded border border-dashed border-slate-300 p-2">
-      <MessageToken client:load path="group=>custom_attributes=>booking_link" />
+    <MessageToken path="group=>custom_attributes=>campus_tours=>booking_link" />
+    <div class="w-44 rounded border border-dashed border-slate-300 p-2">
+      <MessageToken client:load path="group=>custom_attributes=>campus_tours=>booking_link" />
     </div>
   </div>
 </Card>
@@ -132,7 +132,7 @@ Every segment after the level is drawn, with a colon between them. A token wider
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
     <MessageToken client:load path="contact=>first_name" description="First name, a contact field shared across contexts." />
-    <MessageToken client:load path="contact=>local=>custom_attributes=>program_interest" fallback="next" description={'Program interest, a local attribute read from this context. If empty: "preschool".'} />
+    <MessageToken client:load path="contact=>local=>custom_attributes=>program_interest" fallback="next" description={'Program interest, a local custom attribute read from this context. If empty: "preschool".'} />
   </div>
 </Card>
 
