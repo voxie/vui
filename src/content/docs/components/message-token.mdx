@@ -9,7 +9,7 @@ import MessageTokenBubbleExample from '@site/MessageTokenBubbleExample.vue';
 import MessageTokenFieldExample from '@site/MessageTokenFieldExample.vue';
 import MessageTokenContextExample from '@site/MessageTokenContextExample.vue';
 
-A message token is a merge variable drawn as a chip inside the text of a message. The icon shows which record the value comes from. The text names the field on that record.
+A message token represents a value that is filled in when the message is sent, such as a contact's first name. It is drawn as a chip inside the text of a message. The icon shows which record the value comes from. The text names the field on that record.
 
 The `path` prop is the variable as the message builder writes it, without the braces. The builder's `{{contact=>first_name}}` is `path="contact=>first_name"`. The first segment is the level, and the icon replaces it. The chip draws the remaining segments with a colon between them. `contact=>first_name` reads `first_name`, and `group=>custom_attributes=>booking_link` reads `custom_attributes:booking_link`.
 
@@ -19,7 +19,7 @@ The `path` prop is the variable as the message builder writes it, without the br
 </p>
 ```
 
-A token's text is Google Sans Code at 0.85em, so it follows the size of the text around it and sits a little smaller. Its icons are a step smaller again. The chip adds padding above and below its text. Set the text at `leading-relaxed` so a one-line chip sits inside the line with room above and below.
+The token's text and icons are slightly smaller than surrounding text. The size is set in ems so it scales proportionally with it. Surrounding text uses `leading-relaxed` so a one-line chip sits inside the line with room above and below.
 
 ## Examples
 
