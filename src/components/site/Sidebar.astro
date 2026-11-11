@@ -21,8 +21,8 @@ const sections = [...new Set(docs.map((entry) => entry.id.split('/')[0]))].sort(
 );
 
 // Built once and rendered twice, as the wide column and as the narrow select.
-// Labels are capitalized here and not with `capitalize`, since `optgroup` labels
-// are attribute text CSS can't reach. The intro lives outside, behind the mark.
+// Labels are capitalized here and not with `capitalize`, so both get the same
+// text. The intro lives outside, behind the mark.
 const groups = [
   ...sections.map((section) => ({
     label: section.charAt(0).toUpperCase() + section.slice(1),
@@ -60,24 +60,22 @@ function linkClass(href: string) {
     above the content. The content scrolls beneath it, so it needs no sticky. */}
 <div class="md:hidden shrink-0 flex items-center gap-3 p-5 bg-slate-200 border-b border-slate-300">
   <a href={home} aria-label="Voxie UI home" class="flex shrink-0"><Logo class="h-10 w-auto" /></a>
-  {/* Rendered static: the change handler below is all the behavior it needs.
-      Wrapped, since a class on Select lands on the select itself. */}
-  <div class="flex-1 min-w-0">
-  <Select data-docs-nav block sits-on="background" aria-label="Browse documentation">
-    {/* Home matches no option; without this the first doc would read as selected. */}
-    {currentPath === home && <option value="" hidden selected>Browse…</option>}
-    {
-      groups.map((group) => (
-        <optgroup label={group.label}>
-          {group.links.map((link) => (
-            <option value={link.href} selected={link.href === currentPath}>
-              {link.title}
-            </option>
-          ))}
-        </optgroup>
-      ))
-    }
-  </Select>
+  {/* Its `change` bubbles out of the island to the handler below. Wrapped,
+      since a class on Select lands on the control itself. Home matches no
+      option, so it shows the placeholder. */}
+  <div data-docs-nav class="flex-1 min-w-0">
+  <Select
+    client:load
+    block
+    sits-on="background"
+    aria-label="Browse documentation"
+    placeholder="Browse…"
+    model-value={currentPath}
+    options={groups.map((group) => ({
+      label: group.label,
+      options: group.links.map((link) => ({ value: link.href, label: link.title })),
+    }))}
+  />
   </div>
   <button
     type="button"
@@ -131,8 +129,8 @@ function linkClass(href: string) {
 
 <script>
   // Selecting is the whole interaction — no separate Go button to press.
-  const select = document.querySelector<HTMLSelectElement>('[data-docs-nav]');
-  select?.addEventListener('change', () => {
-    if (select.value) window.location.href = select.value;
+  document.querySelector('[data-docs-nav]')?.addEventListener('change', (event) => {
+    const { value } = event.target as HTMLSelectElement;
+    if (value) window.location.href = value;
   });
 </script>
