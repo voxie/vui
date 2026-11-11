@@ -5,71 +5,73 @@ keywords: [toggle, collapse, expand, accordion]
 ---
 
 import DisclosureExample from '@site/DisclosureExample.vue';
-import DisclosureSectionsExample from '@site/DisclosureSectionsExample.vue';
 
 A disclosure is a control that opens and closes a block of content in place. The block sits in the flow of the page under its control, and pushes whatever follows it down while it is open. A chevron on the control shows which state the block is in, and the block opens and closes with a short transition instead of a jump.
 
-<div class="my-10">
-  <DisclosureSectionsExample client:load />
-</div>
-
 This is the shape of a grouped list that folds by section, an expandable card on a settings page, and a details panel under a row. A panel that floats over the page instead of opening in it is a [Menu](/docs/components/menu) or a [Popover](/docs/components/popover). [Tabs](/docs/components/tabs) are for a few alternative blocks where one is always showing. A disclosure has one block, and it can be closed.
 
-There is no component for it yet. The examples on this page are a [Card](/docs/components/card), a [Button](/docs/components/button), a [Badge](/docs/components/badge), and the classes below.
-
-## Sections
-
-A section is a card around one group of a list, like the flows in one state or the resources in one part of a flow. Its header holds a mark, the group's name, a count in a slate Badge, and a square Button at the far end that folds it. The example at the top of the page is three of them.
-
-The card's [surface](/docs/components/card#surface) follows the state. Open, the section is a sunken well and the cards in it are white. Closed, it is a white card itself, and a summary bar under the header stands in for what is folded away.
-
-|                  | Open          | Closed          |
-| ---------------- | ------------- | --------------- |
-| Surface          | `sunken`      | `default`       |
-| Chevron          | `fa-angle-up` | `fa-angle-down` |
-| Under the header | The block     | The summary bar |
-
-The summary bar has one segment for each kind of thing in the section, as wide as that kind's share, so a closed section still shows its mix. The Button takes its fill from the card. It steps from slate-100 on the white card to slate-300 on the sunken one without being passed anything.
-
-```vue
-<Card as="section" :surface="open ? 'sunken' : 'default'" padding="none" class="px-6 py-4">
-  <div class="flex items-center gap-4">
-    <h3>…the mark and the name…</h3>
-    <Badge color="slate" size="sm">4</Badge>
-    <span class="grow"></span>
-    <Button class="w-10 px-0!" aria-label="Failing" :aria-expanded="open" aria-controls="failing" @click="open = !open">
-      <span :key="open ? 'up' : 'down'" class="contents">
-        <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
-      </span>
-    </Button>
-  </div>
-  <div id="failing" :inert="!open">…</div>
-</Card>
-```
-
-Sections start open. The first one at the top of the page starts closed to show both states.
+Disclosure is a behavior that many components take on, such as a card, a row, or a group in a table. It has no component of its own. A [Summary Card](/docs/components/summary-card) has it built in. The examples on this page are a [Card](/docs/components/card), a [Button](/docs/components/button), and the classes below.
 
 ## Control
 
-The control is a `<button>`. `aria-expanded` says whether the block is open, and `aria-controls` names the block, so a screen reader hears the state and what it belongs to. It takes one of two shapes.
+The control is a [Button](/docs/components/button). `aria-expanded` says whether the block is open, and `aria-controls` names the block, so a screen reader hears the state and what it belongs to.
 
-When the header holds only a label, the whole heading is the control. The button wraps the label and the chevron, and all of it is the target. Nothing else pressable goes inside it, since a button can't sit inside a button.
+What the header holds decides the control's shape. The block can hold anything under either one.
+
+| The header holds                                            | The control                                                |
+| ----------------------------------------------------------- | ---------------------------------------------------------- |
+| Only a label                                                | [The whole header](#the-whole-header)                      |
+| A label and more, such as a count, a menu, or a drag handle | [A square Button at the far end](#a-button-at-the-far-end) |
+
+### The whole header
+
+When the header holds only a label, the whole heading is the control. A transparent `block` Button inside the heading holds the label and the chevron, and all of it is the target. Nothing else pressable goes inside it, since a button can't sit inside a button.
 
 <div class="not-prose my-10">
   <DisclosureExample client:load />
 </div>
 
-```html
-<h3>
-  <button type="button" aria-expanded="false" aria-controls="delivery-window">
-    Delivery window
-    <span><i class="fa-solid fa-angle-down" aria-hidden="true"></i></span>
-  </button>
-</h3>
-<div id="delivery-window" inert>…</div>
+The label is a span that takes the free width and carries the heading's own size and weight. The Card's padding is `compact` and the block's is `px-4`, which lines the block's text up with the label inside the Button.
+
+```vue
+<Card padding="compact">
+  <h3>
+    <Button block color="transparent" :aria-expanded="open" aria-controls="delivery-window" @click="open = !open">
+      <span class="flex-1 text-left text-base font-extrabold text-slate-800">Delivery window</span>
+      <span :key="open ? 'up' : 'down'" class="contents">
+        <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+      </span>
+    </Button>
+  </h3>
+  <div id="delivery-window" class="px-4" :inert="!open">…</div>
+</Card>
 ```
 
-When the header holds more than a label, such as a count, a menu, or a drag handle, the chevron gets a square Button of its own at the far end and the heading stays plain text. This is the shape a [section](#sections) uses. The Button has no visible label, so its `aria-label` is the section's name. With `aria-expanded` a screen reader hears "Failing, collapsed".
+### A button at the far end
+
+When the header holds more than a label, the chevron gets a square Button of its own at the far end and the heading stays plain text. A [Summary Card](/docs/components/summary-card) has this control built in.
+
+<div class="not-prose my-10">
+  <DisclosureExample client:load label="Opted out" count={3}>
+    <p>These contacts replied STOP after the last send. They are skipped until they opt back in.</p>
+  </DisclosureExample>
+</div>
+
+The Button has no visible label, so its `aria-label` is the header's name. With `aria-expanded` a screen reader hears "Opted out, collapsed".
+
+```vue
+<div class="flex items-center gap-4">
+  <h3>Opted out</h3>
+  <Badge color="slate" size="sm">3</Badge>
+  <span class="grow"></span>
+  <Button class="w-10 px-0!" aria-label="Opted out" :aria-expanded="open" aria-controls="opted-out" @click="open = !open">
+    <span :key="open ? 'up' : 'down'" class="contents">
+      <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+    </span>
+  </Button>
+</div>
+<div id="opted-out" :inert="!open">…</div>
+```
 
 ## Orientation
 
@@ -114,7 +116,7 @@ The swap and the turn both go on a `<span>` around the icon, never on the `<i>`.
 </span>
 ```
 
-In a heading the chevron is slate-500 and one text size under the label. It darkens to slate-800 while the control is hovered, and the label holds its color. In a square Button it takes the Button's own label color and size. It is the one visible cue for the state, so it is never dropped.
+The chevron takes the Button's own label color and size. It is the one visible cue for the state, so it is never dropped.
 
 ## Transition
 
@@ -125,8 +127,6 @@ Opening and closing are smooth. The block grows from nothing to its full height 
 | The block                 | Grows from nothing to its full height   | 200ms ease-out  |
 | A chevron at the start    | Turns from right to down                | 200ms ease-out  |
 | A chevron at the end      | Swaps from down to up                   | No transition   |
-| A section's surface       | Crosses from white to sunken            | 200ms ease-out  |
-| A section's summary bar   | Folds away as the block grows           | 200ms ease-out  |
 
 Closing runs each one backwards.
 
@@ -140,14 +140,12 @@ The height is a grid row rather than a measured number, so the block can hold an
 
 Opening swaps `grid-rows-[0fr]` for `grid-rows-[1fr]` and drops `invisible`. Visibility is in the transition too, so on the way closed it flips only once the row has shut, and on the way open it flips at once. The same shape opens the [nested sections](/docs/components/navbar#menus-inside-menus) of a Navbar menu.
 
-Every part of the transition is `motion-safe`. With reduced motion the block, the chevron, and the surface snap between the two states.
+Every part of the transition is `motion-safe`. With reduced motion the block and the chevron snap between the two states.
 
 ## Interaction
 
 A press on the control toggles the block. Nothing opens on hover.
 
-In a list of sections, a press with <kbd>Option</kbd> held (<kbd>Alt</kbd> on Windows) sets every section to the state of the one pressed.
-
-<kbd>Tab</kbd> lands on the control, and <kbd>Enter</kbd> or <kbd>Space</kbd> toggles it, as on any button. Focus draws a blue outline around the control, two pixels wide at a four pixel offset, and only for keyboard focus. Clicking doesn't ring it.
+Hover, press, focus, and the keyboard all work as they do on any [Button](/docs/components/button).
 
 The closed block is `inert`, so nothing inside it can be reached with <kbd>Tab</kbd>, pressed, or read by a screen reader until it opens. Without it, a closed block would still hold a stop in the tab order with nothing on screen to show for it.

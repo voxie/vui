@@ -1,6 +1,6 @@
 ---
 name: vui-foundations
-description: The Voxie UI (vui) visual rules for building or reviewing any screen, mockup, or HTML prototype that should look like the Voxie product. Read this before choosing colors, surfaces, text styles, button styles, or icons. Covers the slate surface ladder, when an accent color is allowed and at which weight, text colors, the Inter type scale and weights, card and button shapes, Font Awesome icon usage, and the chevron and transition on a disclosure that opens content in place. Also use it to check a finished page against the system.
+description: The Voxie UI (vui) visual rules for building or reviewing any screen, mockup, or HTML prototype that should look like the Voxie product. Read this before choosing colors, surfaces, text styles, button styles, or icons. Covers the slate surface ladder, when an accent color is allowed and at which weight, text colors, the Inter type scale and weights, card and button shapes, Font Awesome icon usage, the chevron and transition on a disclosure that opens content in place, and the summary card that folds one group of a list. Also use it to check a finished page against the system.
 ---
 
 # Voxie UI foundations
@@ -103,15 +103,31 @@ Font Awesome Pro, classic solid by default, classic regular for a few outlines l
 
 ## Disclosures
 
-A control that opens and closes a block in place (a section of a grouped list, an expandable card, a details panel under a row) is a `<button>` with `aria-expanded` and `aria-controls`, and the block is `inert` while closed.
+A control that opens and closes a block in place (a section of a grouped list, an expandable card, a details panel under a row) is a `Button` with `aria-expanded` and `aria-controls`, and the block is `inert` while closed.
 
 - **Orientation.** The chevron sits at the end of the control. It points down while the block is closed and up while it is open. Only in rows that stack (table groups, tree branches) does it sit at the start, ahead of the label, where it points right while closed and down while open. Up always means open.
 - **Icon.** The `angle` family, never `chevron` or `caret`. At the end, swap `fa-angle-down` for `fa-angle-up`. At the start, turn one `fa-angle-right` with `rotate-90`. Put the swap or the turn on a `<span>` around the `<i>`, since the Font Awesome kit replaces the `<i>` with an `<svg>` and a class bound to it later does nothing. Key the span on the state for a swap.
-- **Control.** A header holding only a label is one button around the label and the chevron. A header holding more (a count, a menu) gets a square `Button` at the far end, `class="w-10 px-0!"`, with the section's name as its `aria-label`.
+- **Control.** A header holding only a label is one `<Button block color="transparent">` inside the heading, around the label and the chevron. The label is a `flex-1 text-left` span in the heading's size and weight, which puts the chevron at the far end. A header holding more (a count, a menu) gets a square `Button` at the far end, `class="w-10 px-0!"`, with the header's name as its `aria-label`.
 - **Transition.** The block's height is a grid row running `grid-rows-[0fr]` to `grid-rows-[1fr]` around a `min-h-0 overflow-clip` child, over 200ms ease-out, `motion-safe` only. A chevron that turns and a surface that changes use the same 200ms. A chevron that swaps has no transition.
-- **Sections.** A section of a grouped list is a card whose surface follows its state. Open, it is `sunken` around white cards. Closed, it is `default` white with a summary bar under the header (one `h-3 rounded-sm` segment per kind of item, sized by share). Its header is a mark, the name in `font-extrabold`, a slate `sm` Badge with the count, and the square Button. Sections start open, and a press with Option or Alt held sets every section at once.
 
 Full pattern: `/docs/patterns/disclosure`.
+
+## Summary card
+
+A card around one group of a list (the flows in one state, the resources in one part of a flow) that folds. It is a disclosure, so every rule above applies. With the components it is `<SummaryCard label="Failing" :count="4" :summary="[{ label, value, color }]">`, with a `mark` slot for the icon and the group's cards in the default slot. In plain HTML, build it from the parts below.
+
+| | Open | Closed |
+| --- | --- | --- |
+| Card | sunken | default (white) |
+| Chevron | `fa-angle-up` | `fa-angle-down` |
+| Under the header | The group's cards, each white | The summary bar |
+
+- **Card.** `px-6 py-4`, with the surface and its transition on the same 200ms ease-out as the block.
+- **Header.** `flex items-center gap-4` holding a mark icon in its own color, the name in `text-base font-extrabold text-slate-800`, a slate `sm` badge with the count, a spacer, and the square button at the far end.
+- **Summary bar.** `pt-4` under the header. One `h-3 rounded-sm` segment per kind of item, with `flex-grow` set to that kind's count, filled at the 300 of sky, teal, amber, rose, violet, or slate. It folds in as the block folds out.
+- **State.** Summary cards start open. A press with Option or Alt held sets every card in the list at once.
+
+Full component: `/docs/components/summary-card`.
 
 ## Review checklist
 
