@@ -27,7 +27,7 @@ export const icons: Icon[] = [
 		name: "angle-down",
 		variant: "solid",
 		represents: "The caret on a select or a multiselect, and the closed state of a disclosure, at the end of its control.",
-		avoid: "Not chevron-down.",
+		avoid: "Not chevron-down or caret-down.",
 	},
 	{
 		name: "angle-right",
@@ -39,7 +39,7 @@ export const icons: Icon[] = [
 		name: "angle-up",
 		variant: "solid",
 		represents: "The open state of a menu or a disclosure, at the end of its control.",
-		avoid: "Not chevron-up.",
+		avoid: "Not chevron-up or caret-up.",
 	},
 	{
 		name: "angles-up-down",
@@ -269,14 +269,10 @@ export const icons: Icon[] = [
 		represents: "Reserved date.",
 	},
 	{
-		name: "caret-down",
-		variant: "solid",
-		represents: "Expand a details panel.",
-	},
-	{
 		name: "caret-left",
 		variant: "solid",
-		represents: "Collapse or hide a details panel.",
+		represents: "Hide a panel that sits beside the content, like Hide Details in Message Hub.",
+		avoid: "A disclosure, which takes the angle family.",
 	},
 	{
 		name: "cart-arrow-down",
