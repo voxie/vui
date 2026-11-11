@@ -15,22 +15,27 @@ function flush() {
 	const chips = [...pending].map((token) => token()).filter((chip): chip is HTMLElement => !!chip?.isConnected);
 	pending.clear();
 	for (const chip of chips) chip.style.width = '';
-	const widths = chips.map(measure);
+	const sizes = chips.map(measure);
 	chips.forEach((chip, i) => {
-		chip.style.width = widths[i];
-		chip.toggleAttribute('data-wrapped', !!widths[i]);
+		chip.style.width = sizes[i].width;
+		chip.style.setProperty('--token-height', sizes[i].height);
+		chip.toggleAttribute('data-wrapped', !!sizes[i].height);
 	});
 }
 
+// A wrapped chip reports its height so the raise can center it. Rows aren't counted, since a segment can wrap inside itself.
 function measure(chip: HTMLElement) {
-	const rows = [...chip.children] as HTMLElement[];
-	if (rows.length < 2 || rows[0].offsetTop === rows[rows.length - 1].offsetTop) return '';
 	const box = chip.getBoundingClientRect();
 	const style = getComputedStyle(chip);
-	// Rects are scaled by a transform, such as a canvas zoom, and CSS widths aren't.
+	// Rects are scaled by a transform, such as a canvas zoom, and CSS sizes aren't.
 	const scale = box.width / parseFloat(style.width) || 1;
+	const height = box.height / scale;
+	// One row is about 1.45em tall and two are about 2.45em.
+	if (height < 2 * parseFloat(style.fontSize)) return { width: '', height: '' };
+	const rows = [...chip.children] as HTMLElement[];
+	if (rows.length < 2 || rows[0].offsetTop === rows[rows.length - 1].offsetTop) return { width: '', height: `${height}px` };
 	const right = Math.max(...rows.map((row) => row.getBoundingClientRect().right));
-	return `${Math.ceil((right - box.left) / scale + parseFloat(style.paddingRight))}px`;
+	return { width: `${Math.ceil((right - box.left) / scale + parseFloat(style.paddingRight))}px`, height: `${height}px` };
 }
 
 function watchLine(wrapper: HTMLElement, token: Token) {
@@ -133,8 +138,9 @@ const pressable = computed(() => props.press || Boolean(props.description));
 
 // A wrapping flex row, so a token wider than its line wraps inside one box. gap-x is the quarter gap after a colon.
 // The row gap spaces trimmed rows, which take no leading. Uneven padding is the fallback for no text-box.
-const CHIP = 'inline-flex flex-wrap items-baseline gap-x-[1.5px] align-middle translate-y-[calc((var(--token-ex)_-_var(--token-cap))_/_2)] max-w-full rounded-[2px] px-1.25 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:pt-[0.35em] supports-[text-box:trim-both_cap_alphabetic]:pb-[0.38em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.3em] supports-[text-box:trim-both_cap_alphabetic]:data-wrapped:my-[max(0px,(var(--token-line)_-_1cap_-_.73em)_/_2_-_1px)] text-left font-token font-[350] tracking-[0.015em] [font-variation-settings:"MONO"_var(--token-mono,0)] text-[.85em] break-words shadow-sm ring-1 shadow-slate-500/10';
-// middle centers the chip on the parent's half x-height, and the translate lifts it to half cap height.
+const CHIP = 'inline-flex flex-wrap items-baseline gap-x-[1.5px] [baseline-source:last]! max-w-full rounded-[2px] px-1.25 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:pt-[0.35em] supports-[text-box:trim-both_cap_alphabetic]:pb-[0.38em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.3em] supports-[text-box:trim-both_cap_alphabetic]:align-[calc((var(--token-cap)_-_var(--token-height,calc(1cap_+_.73em)))_/_2_+_.38em)] supports-[text-box:trim-both_cap_alphabetic]:data-wrapped:my-[max(0px,(var(--token-line)_-_1cap_-_.73em)_/_2_-_1px)] text-left font-token font-[350] tracking-[0.015em] [font-variation-settings:"MONO"_var(--token-mono,0)] text-[.85em] break-words shadow-sm ring-1 shadow-slate-500/10';
+// The raise centers the chip on the surrounding capitals. .38em is pb, the last baseline's height above the bottom, and 1cap + .73em is one row.
+// baseline-source is important because vertical-align is a shorthand that resets it.
 // A wrapped chip outgrows the line, so its margins keep a one-row chip's air (.73em is pt + pb). Less 1px for rounding.
 // A flex container takes no text-box, so each piece trims its own line to cap height and baseline and the padding centers it. The bottom is heavier because mostly lowercase text reads low when its capitals are centered.
 const PIECE = 'supports-[text-box:trim-both_cap_alphabetic]:[text-box:trim-both_cap_alphabetic]';
@@ -158,7 +164,7 @@ watch([chip, segments, mark], () => nextTick(() => hug([token])));
 
 <template>
 	<!-- Popover wraps its trigger in two divs. Both go to display: contents so the chip stays in the line. -->
-	<span ref="wrapper" class="inline-block max-w-full [--token-line:1lh] [--token-cap:1cap] [--token-ex:1ex]">{{ before }}<Popover :content="description" :disabled="press || !description" class="contents! [&>div]:contents!">
+	<span ref="wrapper" class="inline-block max-w-full [--token-line:1lh] [--token-cap:1cap]">{{ before }}<Popover :content="description" :disabled="press || !description" class="contents! [&>div]:contents!">
 		<template #default="{ triggerProps, open }">
 			<component
 				ref="chip"
@@ -182,7 +188,7 @@ watch([chip, segments, mark], () => nextTick(() => hug([token])));
 </template>
 
 <style>
-/* Registered so 1lh, 1cap and 1ex resolve to px on the wrapper, in the parent's font, before the smaller chip inherits them. */
+/* Registered so 1lh and 1cap resolve to px on the wrapper, in the parent's font, before the smaller chip inherits them. */
 @property --token-line {
 	syntax: '<length>';
 	inherits: true;
@@ -190,12 +196,6 @@ watch([chip, segments, mark], () => nextTick(() => hug([token])));
 }
 
 @property --token-cap {
-	syntax: '<length>';
-	inherits: true;
-	initial-value: 0px;
-}
-
-@property --token-ex {
 	syntax: '<length>';
 	inherits: true;
 	initial-value: 0px;
