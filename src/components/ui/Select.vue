@@ -134,11 +134,14 @@ const sizeClasses = computed(() => {
 				</slot>
 			</select>
 
-			<i
-				aria-hidden="true"
-				class="fa-solid fa-chevron-down pointer-events-none absolute top-1/2 -translate-y-1/2"
-				:class="[sizeClasses.icon, props.error ? 'text-rose-600' : 'text-slate-500']"
-			></i>
+			<!-- Keyed, so a change of color or size mounts a new <i> for the kit to pick up. -->
+			<span :key="`${props.size} ${Boolean(props.error)}`" class="contents">
+				<i
+					aria-hidden="true"
+					class="fa-solid fa-chevron-down pointer-events-none absolute top-1/2 -translate-y-1/2"
+					:class="[sizeClasses.icon, props.error ? 'text-rose-600' : 'text-slate-500']"
+				></i>
+			</span>
 		</div>
 
 		<div
