@@ -178,6 +178,8 @@ onBeforeUnmount(() => {
 });
 
 // Only a menu carries a chevron, which turns at every level once it is open.
+// The kit swaps each <i> for an <svg>, so the chevron sits in a span keyed on
+// this, which mounts a new <i> on every change.
 const chevronIcon = computed(() => {
 	return dropdownOpen.value ? 'fa-solid fa-angle-up' : 'fa-solid fa-angle-down';
 });
@@ -272,12 +274,9 @@ const markerClasses = () => {
 				<slot :open="dropdownOpen" />
 				<!-- A step under the label. The arrow is punctuation and not a word: at
 				     the label's own size it competes with it for the reading. -->
-				<i
-					v-if="hasDropdown()"
-					class="fa-width-auto text-2xs"
-					:class="chevronIcon"
-					aria-hidden="true"
-				></i>
+				<span v-if="hasDropdown()" :key="chevronIcon" class="contents">
+					<i class="fa-width-auto text-2xs" :class="chevronIcon" aria-hidden="true"></i>
+				</span>
 			</Button>
 
 			<!-- Drawn here and not on the element that took the focus: a row runs the
@@ -310,12 +309,13 @@ const markerClasses = () => {
 				     arrow isn't in one, so `fa-width-auto` leaves the gap alone. A step
 				     under the label at every depth — a button in a side slot has to set
 				     the same size on the arrow it carries. -->
-				<i
-					v-if="hasDropdown() && element() !== 'div'"
-					class="fa-width-auto text-2xs"
-					:class="[chevronIcon, { 'text-slate-900': props.nested }]"
-					aria-hidden="true"
-				></i>
+				<span v-if="hasDropdown() && element() !== 'div'" :key="chevronIcon" class="contents">
+					<i
+						class="fa-width-auto text-2xs"
+						:class="[chevronIcon, { 'text-slate-900': props.nested }]"
+						aria-hidden="true"
+					></i>
+				</span>
 			</span>
 		</component>
 
