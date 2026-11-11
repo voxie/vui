@@ -16,7 +16,10 @@ function flush() {
 	pending.clear();
 	for (const chip of chips) chip.style.width = '';
 	const widths = chips.map(measure);
-	chips.forEach((chip, i) => (chip.style.width = widths[i]));
+	chips.forEach((chip, i) => {
+		chip.style.width = widths[i];
+		chip.toggleAttribute('data-wrapped', !!widths[i]);
+	});
 }
 
 function measure(chip: HTMLElement) {
@@ -130,10 +133,11 @@ const pressable = computed(() => props.press || Boolean(props.description));
 
 // A wrapping flex row, so a token wider than its line wraps inside one box. gap-x is the quarter gap after a colon.
 // The row gap spaces trimmed rows, which take no leading. Uneven padding is the fallback for no text-box.
-const CHIP = 'inline-flex flex-wrap items-baseline gap-x-[1.5px] [baseline-source:last]! max-w-full rounded-[2px] px-1.25 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:pt-[0.35em] supports-[text-box:trim-both_cap_alphabetic]:pb-[0.38em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.3em] supports-[text-box:trim-both_cap_alphabetic]:align-[calc((var(--token-cap)_-_1cap_+_.03em)_/_2)] supports-[text-box:trim-both_cap_alphabetic]:mt-[max(0px,(var(--token-line)_-_1cap_-_.73em)_/_2_-_1px)] text-left font-token font-[350] tracking-[0.015em] [font-variation-settings:"MONO"_var(--token-mono,0)] text-[.85em] break-words shadow-sm ring-1 shadow-slate-500/10';
+const CHIP = 'inline-flex flex-wrap items-baseline gap-x-[1.5px] [baseline-source:last]! max-w-full rounded-[2px] px-1.25 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:pt-[0.35em] supports-[text-box:trim-both_cap_alphabetic]:pb-[0.38em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.3em] supports-[text-box:trim-both_cap_alphabetic]:align-[calc((var(--token-cap)_-_1cap_+_.03em)_/_2)] supports-[text-box:trim-both_cap_alphabetic]:mt-[max(0px,(var(--token-line)_-_1cap_-_.73em)_/_2_-_1px)] data-wrapped:align-middle! data-wrapped:relative data-wrapped:top-[calc((var(--token-ex)_-_var(--token-cap))_/_2)] supports-[text-box:trim-both_cap_alphabetic]:data-wrapped:mb-[max(0px,(var(--token-line)_-_1cap_-_.73em)_/_2_-_1px)] text-left font-token font-[350] tracking-[0.015em] [font-variation-settings:"MONO"_var(--token-mono,0)] text-[.85em] break-words shadow-sm ring-1 shadow-slate-500/10';
 // The raise centers the chip on the surrounding capitals (.03em is pb - pt). The margin is a one-row chip's air (.73em is pt + pb), so a wrapped chip keeps it.
 // Less 1px because the chip sits above the line's middle and browsers round the leading above a line down.
 // baseline-source is important because vertical-align is a shorthand that resets it.
+// A wrapped chip centers its whole box instead. middle lands on the parent's half x-height, and top lifts it to half cap height.
 // A flex container takes no text-box, so each piece trims its own line to cap height and baseline and the padding centers it. The bottom is heavier because mostly lowercase text reads low when its capitals are centered.
 const PIECE = 'supports-[text-box:trim-both_cap_alphabetic]:[text-box:trim-both_cap_alphabetic]';
 // Important because the kit's unlayered CSS sets height and vertical-align.
@@ -156,7 +160,7 @@ watch([chip, segments, mark], () => nextTick(() => hug([token])));
 
 <template>
 	<!-- Popover wraps its trigger in two divs. Both go to display: contents so the chip stays in the line. -->
-	<span ref="wrapper" class="inline-block max-w-full [--token-line:1lh] [--token-cap:1cap]">{{ before }}<Popover :content="description" :disabled="press || !description" class="contents! [&>div]:contents!">
+	<span ref="wrapper" class="inline-block max-w-full [--token-line:1lh] [--token-cap:1cap] [--token-ex:1ex]">{{ before }}<Popover :content="description" :disabled="press || !description" class="contents! [&>div]:contents!">
 		<template #default="{ triggerProps, open }">
 			<component
 				ref="chip"
@@ -180,7 +184,7 @@ watch([chip, segments, mark], () => nextTick(() => hug([token])));
 </template>
 
 <style>
-/* Registered so 1lh and 1cap resolve to px on the wrapper, in the parent's font, before the smaller chip inherits them. */
+/* Registered so 1lh, 1cap and 1ex resolve to px on the wrapper, in the parent's font, before the smaller chip inherits them. */
 @property --token-line {
 	syntax: '<length>';
 	inherits: true;
@@ -188,6 +192,12 @@ watch([chip, segments, mark], () => nextTick(() => hug([token])));
 }
 
 @property --token-cap {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 0px;
+}
+
+@property --token-ex {
 	syntax: '<length>';
 	inherits: true;
 	initial-value: 0px;
