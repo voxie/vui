@@ -103,7 +103,15 @@ Font Awesome Pro, classic solid by default, classic regular for a few outlines l
 
 ## Disclosures
 
-A control that opens and closes a block in place (an expandable card, a collapsible sidebar section, a filter panel) is a `<button>` with `aria-expanded` and `aria-controls`, and the block is `inert` while closed. A chevron on the button shows the current state, not the action. Closed, it points right when it sits ahead of the label (`fa-angle-right`) and left when it sits after it (`fa-angle-left`). Open, it points down. Turn the one icon a quarter turn (`rotate-90` or `-rotate-90`) rather than swapping icons. The block and the chevron both move over 200ms ease-out, `motion-safe` only, with the block's height as a grid row running `grid-rows-[0fr]` to `grid-rows-[1fr]` around a `min-h-0 overflow-clip` child. A collapsible container sits on the sunken surface. Full pattern: `/docs/patterns/disclosure`.
+A control that opens and closes a block in place (a section of a grouped list, an expandable card, a details panel under a row) is a `<button>` with `aria-expanded` and `aria-controls`, and the block is `inert` while closed.
+
+- **Orientation.** The chevron sits at the end of the control. It points down while the block is closed and up while it is open. Only in rows that stack (table groups, tree branches) does it sit at the start, ahead of the label, where it points right while closed and down while open. Up always means open.
+- **Icon.** The `angle` family, never `chevron`. At the end, swap `fa-angle-down` for `fa-angle-up`. At the start, turn one `fa-angle-right` with `rotate-90`. Put the swap or the turn on a `<span>` around the `<i>`, since the Font Awesome kit replaces the `<i>` with an `<svg>` and a class bound to it later does nothing. Key the span on the state for a swap.
+- **Control.** A header holding only a label is one button around the label and the chevron. A header holding more (a count, a menu) gets a square `Button` at the far end, `class="w-10 px-0!"`, with the section's name as its `aria-label`.
+- **Transition.** The block's height is a grid row running `grid-rows-[0fr]` to `grid-rows-[1fr]` around a `min-h-0 overflow-clip` child, over 200ms ease-out, `motion-safe` only. A chevron that turns and a surface that changes use the same 200ms. A chevron that swaps has no transition.
+- **Sections.** A section of a grouped list is a card whose surface follows its state. Open, it is `sunken` around white cards. Closed, it is `default` white with a summary bar under the header (one `h-3 rounded-sm` segment per kind of item, sized by share). Its header is a mark, the name in `font-extrabold`, a slate `sm` Badge with the count, and the square Button. Sections start open, and a press with Option or Alt held sets every section at once.
+
+Full pattern: `/docs/patterns/disclosure`.
 
 ## Review checklist
 
@@ -114,4 +122,4 @@ A control that opens and closes a block in place (an expandable card, a collapsi
 - One sky primary action per screen. Good is sky, not green.
 - Default text is `text-sm`. No all caps. Corners are `rounded-2xl` on cards, `rounded-xl` on default buttons.
 - Icons are `fa-solid` or `fa-regular` only, sized with text utilities.
-- A disclosure's chevron points right or left while closed and down while open, and its block opens over 200ms.
+- A disclosure's chevron sits at the end of its control, points down while closed and up while open, and its block opens over 200ms.

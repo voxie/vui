@@ -4,60 +4,130 @@ order: 3
 ---
 
 import DisclosureExample from '@site/DisclosureExample.vue';
+import DisclosureSectionsExample from '@site/DisclosureSectionsExample.vue';
 
-A disclosure is a control that opens and closes a block of content in place. The block sits in the flow of the page under its control, and pushes whatever follows it down while it is open. The control carries a chevron that shows which state the block is in, and the block opens and closes with a short transition instead of a jump.
+A disclosure is a control that opens and closes a block of content in place. The block sits in the flow of the page under its control, and pushes whatever follows it down while it is open. A chevron on the control shows which state the block is in, and the block opens and closes with a short transition instead of a jump.
+
+<div class="my-10">
+  <DisclosureSectionsExample client:load />
+</div>
+
+This is the shape of a grouped list that folds by section, an expandable card on a settings page, and a details panel under a row. A panel that floats over the page instead of opening in it is a [Menu](/docs/components/menu) or a [Popover](/docs/components/popover). [Tabs](/docs/components/tabs) are for a few alternative blocks where one is always showing. A disclosure has one block, and it can be closed.
+
+There is no component for it yet. The examples on this page are a [Card](/docs/components/card), a [Button](/docs/components/button), a [Badge](/docs/components/badge), and the classes below.
+
+## Sections
+
+A section is a card around one group of a list, like the flows in one state or the resources in one part of a flow. Its header holds a mark, the group's name, a count in a slate Badge, and a square Button at the far end that folds it. The example at the top of the page is three of them.
+
+The card's [surface](/docs/components/card#surface) follows the state. Open, the section is a sunken well and the cards in it are white. Closed, it is a white card itself, and a summary bar under the header stands in for what is folded away.
+
+|                  | Open          | Closed          |
+| ---------------- | ------------- | --------------- |
+| Surface          | `sunken`      | `default`       |
+| Chevron          | `fa-angle-up` | `fa-angle-down` |
+| Under the header | The block     | The summary bar |
+
+The summary bar has one segment for each kind of thing in the section, as wide as that kind's share, so a closed section still shows its mix. The Button takes its fill from the card. It steps from slate-100 on the white card to slate-300 on the sunken one without being passed anything.
+
+```vue
+<Card as="section" :surface="open ? 'sunken' : 'default'" padding="none" class="px-6 py-4">
+  <div class="flex items-center gap-4">
+    <h3>…the mark and the name…</h3>
+    <Badge color="slate" size="sm">4</Badge>
+    <span class="grow"></span>
+    <Button class="w-10 px-0!" aria-label="Failing" :aria-expanded="open" aria-controls="failing" @click="open = !open">
+      <span :key="open ? 'up' : 'down'" class="contents">
+        <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+      </span>
+    </Button>
+  </div>
+  <div id="failing" :inert="!open">…</div>
+</Card>
+```
+
+Sections start open. The first one at the top of the page starts closed to show both states.
+
+## Control
+
+The control is a `<button>`. `aria-expanded` says whether the block is open, and `aria-controls` names the block, so a screen reader hears the state and what it belongs to. It takes one of two shapes.
+
+When the header holds only a label, the whole heading is the control. The button wraps the label and the chevron, and all of it is the target. Nothing else pressable goes inside it, since a button can't sit inside a button.
 
 <div class="not-prose my-10">
   <DisclosureExample client:load />
 </div>
 
-This is the shape of an expandable card on a settings page, a collapsible section in a sidebar, and a filter panel that folds away above a list. A panel that floats over the page instead of opening in it is a [Menu](/docs/components/menu) or a [Popover](/docs/components/popover), and the dropdowns on the [Navbar](/docs/components/navbar#sections) have a chevron rule of their own. [Tabs](/docs/components/tabs) are for a few alternative blocks where one is always showing. A disclosure has one block, and it can be closed.
-
-There is no component for it yet. The examples on this page are a [Card](/docs/components/card), a button, and the classes below. A collapsible container sits on the [sunken surface](/docs/components/card#surface).
-
-## The control
-
-The control is a `<button>` holding the label and the chevron, and the whole of it is the target. `aria-expanded` says whether the block is open, and `aria-controls` names the block, so a screen reader hears the state and what it belongs to. Nothing else pressable goes inside it, since a button can't sit inside a button.
-
-In the examples on this page the button sits inside the card's heading, so a closed section still has a heading.
-
 ```html
 <h3>
   <button type="button" aria-expanded="false" aria-controls="delivery-window">
-    <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
     Delivery window
+    <span><i class="fa-solid fa-angle-down" aria-hidden="true"></i></span>
   </button>
 </h3>
 <div id="delivery-window" inert>…</div>
 ```
 
-## The chevron
+When the header holds more than a label, such as a count, a menu, or a drag handle, the chevron gets a square Button of its own at the far end and the heading stays plain text. This is the shape a [section](#sections) uses. The Button has no visible label, so its `aria-label` is the section's name. With `aria-expanded` a screen reader hears "Failing, collapsed".
 
-The chevron shows the state the block is in, not the action a press would take. Closed, it points right or left. Open, it points down.
+## Orientation
 
-Which way it points while closed depends on where it sits. At the start of the control, ahead of the label, it points right. At the end of the control, after the label, it points left. Either way it points in at the label, which names what would open. Open, it points down at the block from both positions.
+The chevron sits at the end of the control. It points down while the block is closed and up while it is open, the same reading as the menus on a [Navbar](/docs/components/navbar#sections).
+
+A chevron at the start of the control, ahead of the label, points right while the block is closed and down while it is open. That position is for rows that stack, like the groups in a table or the branches of a tree, where the chevrons line up in a column down the leading edge.
 
 <div class="not-prose my-10 grid items-start gap-4 sm:grid-cols-2">
   <DisclosureExample client:load label="Details" />
-  <DisclosureExample client:load label="Details" chevron="end" />
+  <DisclosureExample client:load label="Details" chevron="start" />
 </div>
 
-| Chevron sits at      | Closed           | Open            |
-| -------------------- | ---------------- | --------------- |
-| Start of the control | `fa-angle-right` | `fa-angle-down` |
-| End of the control   | `fa-angle-left`  | `fa-angle-down` |
+| Chevron sits at      | Closed | Open |
+| -------------------- | ------ | ---- |
+| End of the control   | Down   | Up   |
+| Start of the control | Right  | Down |
 
-The icon is the `angle` family from [Icons](/docs/foundations/icons#reference), not `chevron`. Turn the closed icon a quarter turn to reach down, `rotate-90` for `fa-angle-right` and `-rotate-90` for `fa-angle-left`, rather than swapping it for `fa-angle-down`. One icon turning can animate, and two icons swapping can't.
+Up always means open. A chevron that points up over a closed block reads as a block that has already been opened.
 
-The chevron is slate-500 and one text size under the label. It darkens to slate-800 while the control is hovered, and the label holds its color. It is the one visible cue for the state, so it is never dropped. `aria-expanded` carries the same thing to a screen reader.
+## Icon
 
-## The transition
+The icon is the `angle` family from [Icons](/docs/foundations/icons#reference), not `chevron`.
 
-Opening and closing are smooth. The block grows from nothing to its full height over 200ms on an ease-out curve, and shrinks back the same way. The chevron turns in the same 200ms, so the two finish together. Quick and gentle, with no bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly).
+| Chevron sits at      | Closed           | Open                             |
+| -------------------- | ---------------- | -------------------------------- |
+| End of the control   | `fa-angle-down`  | `fa-angle-up`                    |
+| Start of the control | `fa-angle-right` | `fa-angle-right` with `rotate-90` |
 
-<div class="not-prose my-10">
-  <DisclosureExample client:load surface="sunken" label="Advanced settings" open />
-</div>
+At the end of the control the two icons swap. At the start one icon turns a quarter turn to reach down, rather than swapping for `fa-angle-down`.
+
+The swap and the turn both go on a `<span>` around the icon, never on the `<i>`. The Font Awesome kit replaces every `<i>` with an `<svg>` once the page loads, so a class bound to the `<i>` after that never reaches the screen and the chevron stays where it started. A turn is a class on the span. A swap gives the span a `key` that changes with the state, so a new `<i>` is mounted each time.
+
+```vue
+<!-- At the end: two icons swap -->
+<span :key="open ? 'up' : 'down'">
+  <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+</span>
+
+<!-- At the start: one icon turns -->
+<span class="inline-flex motion-safe:transition-[rotate] motion-safe:duration-200 motion-safe:ease-out" :class="{ 'rotate-90': open }">
+  <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+</span>
+```
+
+In a heading the chevron is slate-500 and one text size under the label. It darkens to slate-800 while the control is hovered, and the label holds its color. In a square Button it takes the Button's own label color and size. It is the one visible cue for the state, so it is never dropped.
+
+## Transition
+
+Opening and closing are smooth. The block grows from nothing to its full height over 200ms on an ease-out curve, and shrinks back the same way. Everything else that moves with it runs on the same timing, so the parts finish together. Quick and gentle, with no bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly).
+
+| Part                      | Opening                                 | Timing          |
+| ------------------------- | --------------------------------------- | --------------- |
+| The block                 | Grows from nothing to its full height   | 200ms ease-out  |
+| A chevron at the start    | Turns from right to down                | 200ms ease-out  |
+| A chevron at the end      | Swaps from down to up                   | No transition   |
+| A section's surface       | Crosses from white to sunken            | 200ms ease-out  |
+| A section's summary bar   | Folds away as the block grows           | 200ms ease-out  |
+
+Closing runs each one backwards.
 
 The height is a grid row rather than a measured number, so the block can hold anything and the transition never has to know how tall it is. The block is a `grid` whose one row runs from `0fr` to `1fr`, and the content inside it is `min-h-0` with `overflow-clip`, so it is cut off while the row is short.
 
@@ -69,11 +139,13 @@ The height is a grid row rather than a measured number, so the block can hold an
 
 Opening swaps `grid-rows-[0fr]` for `grid-rows-[1fr]` and drops `invisible`. Visibility is in the transition too, so on the way closed it flips only once the row has shut, and on the way open it flips at once. The same shape opens the [nested sections](/docs/components/navbar#menus-inside-menus) of a Navbar menu.
 
-Every part of the transition is `motion-safe`. With reduced motion the block and the chevron snap between the two states.
+Every part of the transition is `motion-safe`. With reduced motion the block, the chevron, and the surface snap between the two states.
 
 ## Interaction
 
 A press on the control toggles the block. Nothing opens on hover.
+
+In a list of sections, a press with <kbd>Option</kbd> held (<kbd>Alt</kbd> on Windows) sets every section to the state of the one pressed.
 
 <kbd>Tab</kbd> lands on the control, and <kbd>Enter</kbd> or <kbd>Space</kbd> toggles it, as on any button. Focus draws a blue outline around the control, two pixels wide at a four pixel offset, and only for keyboard focus. Clicking doesn't ring it.
 
