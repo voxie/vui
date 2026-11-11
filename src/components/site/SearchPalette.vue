@@ -28,7 +28,7 @@ type Group = { page: string; section: string; hits: Hit[] };
 const terms = computed(() => query.value.toLowerCase().split(/\s+/).filter(Boolean));
 
 // Every term has to appear somewhere in the record. Where it appears sets the
-// score: the page title outranks a heading, which outranks the body.
+// score: the page title outranks a keyword, then a heading, then the body.
 const groups = computed<Group[]>(() => {
 	if (!records.value) return [];
 
@@ -44,6 +44,7 @@ const groups = computed<Group[]>(() => {
 			let score = 0;
 			for (const term of terms.value) {
 				if (page.includes(term)) score += 10;
+				else if (record.keywords?.includes(term)) score += 8;
 				else if (heading.includes(term)) score += 5;
 				else if (text.includes(term)) score += 1;
 				else {
