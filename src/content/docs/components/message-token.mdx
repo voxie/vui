@@ -9,9 +9,9 @@ import MessageTokenBubbleExample from '@site/MessageTokenBubbleExample.vue';
 import MessageTokenFieldExample from '@site/MessageTokenFieldExample.vue';
 import MessageTokenContextExample from '@site/MessageTokenContextExample.vue';
 
-A message token is a merge variable drawn as a chip inside the text of a message. The icon says where the value comes from, and the text is the path to it.
+A message token represents a value that is filled in when the message is sent, such as a contact's first name. It is drawn as a chip inside the text of a message. The icon shows which record the value comes from. The text names the field on that record.
 
-The `path` prop is the variable as the message builder writes it, without the braces. The builder's `{{contact=>first_name}}` is `path="contact=>first_name"`. The first segment is the level, and the icon replaces it. The chip draws the remaining segments with a colon between them. `contact=>first_name` reads `first_name`, and `group=>custom_attributes=>booking_link` reads `custom_attributes:booking_link`.
+The `path` prop is the variable as the message builder writes it, without the braces. The builder's `{{contact=>first_name}}` is `path="contact=>first_name"`. The first segment is the level, and the icon replaces it. The chip draws the remaining segments with a colon between them. `contact=>first_name` reads `first_name`. A `custom_attributes` segment isn't drawn, so `group=>custom_attributes=>booking_link` reads `booking_link`, and a nested `group=>custom_attributes=>tours=>booking_link` reads `tours:booking_link`. Name it in the token's `description` instead.
 
 ```vue
 <p class="text-sm leading-relaxed">
@@ -19,7 +19,7 @@ The `path` prop is the variable as the message builder writes it, without the br
 </p>
 ```
 
-A token's text is Google Sans Code at 0.85em, so it follows the size of the text around it and sits a little smaller. Its icons are a step smaller again. The chip adds padding above and below its text. Set the text at `leading-relaxed` so a one-line chip sits inside the line with room above and below.
+The token's text and icons are slightly smaller than surrounding text. The size is set in ems allowing them to scale proportionally. Surrounding text uses `leading-relaxed` so a one-line chip sits inside the line with room above and below.
 
 ## Examples
 
@@ -31,7 +31,7 @@ The workflow builder's Send card previews its message with each variable drawn a
 
 ### In a message field
 
-The same message in the Send drawer's field. Here each token is a button. This example draws the field and is not an editor, so the text can't be typed into and a press does nothing.
+The text can be edited, and each token is a button. A press would open an editor but here only opens a placeholder panel. A token can be deleted but not typed. Instead they are added from a message variable picker ui which is not shown here.
 
 <MessageTokenFieldExample client:load />
 
@@ -49,11 +49,11 @@ The token is set in Google Sans Code with its `MONO` axis at 0, the proportional
   <div class="not-prose flex flex-col gap-4 text-sm leading-relaxed text-slate-800">
     <div class="flex items-baseline gap-4">
       <div class="w-32 shrink-0"><span class="block text-sm font-medium text-slate-900">Proportional</span><code class="block text-xs text-slate-500">MONO 0</code></div>
-      <div style="--token-mono: 0">Hi <MessageToken path="contact=>first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group=>name" after="." /> Want to tour our <MessageToken path="contact=>local=>custom_attributes=>program_interest" /> classroom? <MessageToken path="group=>custom_attributes=>booking_link" fallback="exit" /></div>
+      <div style="--token-mono: 0">Hi <MessageToken client:load path="contact=>first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken client:load path="group=>name" after="." /> Want to tour our <MessageToken client:load path="contact=>local=>custom_attributes=>program_interest" /> classroom? <MessageToken client:load path="group=>custom_attributes=>booking_link" fallback="exit" /></div>
     </div>
     <div class="flex items-baseline gap-4">
       <div class="w-32 shrink-0"><span class="block text-sm font-medium text-slate-900">Fixed-width</span><code class="block text-xs text-slate-500">MONO 1</code></div>
-      <div style="--token-mono: 1">Hi <MessageToken path="contact=>first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken path="group=>name" after="." /> Want to tour our <MessageToken path="contact=>local=>custom_attributes=>program_interest" /> classroom? <MessageToken path="group=>custom_attributes=>booking_link" fallback="exit" /></div>
+      <div style="--token-mono: 1">Hi <MessageToken client:load path="contact=>first_name" fallback="next" after="!" /> Thanks for asking about <MessageToken client:load path="group=>name" after="." /> Want to tour our <MessageToken client:load path="contact=>local=>custom_attributes=>program_interest" /> classroom? <MessageToken client:load path="group=>custom_attributes=>booking_link" fallback="exit" /></div>
     </div>
   </div>
 </Card>
@@ -91,15 +91,15 @@ A level the component doesn't know draws as `contact`.
   </div>
 </Card>
 
-### Longer paths
+### Long names
 
-Every segment after the level is drawn, with a colon between them. A token wider than its line wraps inside its one box. It breaks after a colon, and mid-word only when a single segment is wider than the line.
+A token wider than its line wraps inside its one box. It breaks after a colon, and mid-word only when a single segment is wider than the line.
 
 <Card>
   <div class="not-prose flex flex-wrap items-start gap-6 text-sm leading-relaxed">
-    <MessageToken path="group=>custom_attributes=>booking_link" />
-    <div class="w-56 rounded border border-dashed border-slate-300 p-2">
-      <MessageToken path="group=>custom_attributes=>booking_link" />
+    <MessageToken path="group=>custom_attributes=>campus_tours=>booking_link" />
+    <div class="w-44 rounded border border-dashed border-slate-300 p-2">
+      <MessageToken client:load path="group=>custom_attributes=>campus_tours=>booking_link" />
     </div>
   </div>
 </Card>
@@ -122,7 +122,7 @@ Every segment after the level is drawn, with a colon between them. A token wider
 `before` and `after` take the punctuation touching a token, such as the `!` after a greeting or the parentheses around a name. They share the token's block, so a line never starts or ends on a stranded mark.
 
 <Card>
-  <div class="not-prose text-sm leading-relaxed text-slate-800">Hi <MessageToken path="contact=>first_name" after="!" /> Your tour <MessageToken path="contact=>local=>custom_attributes=>tour_date" before="(" after=")" /> is booked.</div>
+  <div class="not-prose text-sm leading-relaxed text-slate-800">Hi <MessageToken client:load path="contact=>first_name" after="!" /> Your tour <MessageToken client:load path="contact=>local=>custom_attributes=>tour_date" before="(" after=")" /> is booked.</div>
 </Card>
 
 ### Description
@@ -132,7 +132,7 @@ Every segment after the level is drawn, with a colon between them. A token wider
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-3 text-sm leading-relaxed">
     <MessageToken client:load path="contact=>first_name" description="First name, a contact field shared across contexts." />
-    <MessageToken client:load path="contact=>local=>custom_attributes=>program_interest" fallback="next" description={'Program interest, a local attribute read from this context. If empty: "preschool".'} />
+    <MessageToken client:load path="contact=>local=>custom_attributes=>program_interest" fallback="next" description={'Program interest, a local custom attribute read from this context. If empty: "preschool".'} />
   </div>
 </Card>
 
