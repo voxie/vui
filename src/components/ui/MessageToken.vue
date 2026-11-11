@@ -1,5 +1,76 @@
+<script lang="ts">
+// A box whose contents wrap keeps the full line width, so a wrapped chip is set to its widest row.
+// Shared by every token: one observer, and each pass batches its writes and reads into a single layout.
+type Token = () => HTMLElement | null;
+const lines = new Map<Element, { width?: number; tokens: Set<Token> }>();
+const pending = new Set<Token>();
+let observer: ResizeObserver | undefined;
+
+function hug(tokens: Iterable<Token>) {
+	if (!pending.size) queueMicrotask(flush);
+	for (const token of tokens) pending.add(token);
+}
+
+function flush() {
+	const chips = [...pending].map((token) => token()).filter((chip): chip is HTMLElement => !!chip?.isConnected);
+	pending.clear();
+	for (const chip of chips) chip.style.width = '';
+	const widths = chips.map(measure);
+	chips.forEach((chip, i) => (chip.style.width = widths[i]));
+}
+
+function measure(chip: HTMLElement) {
+	const rows = [...chip.children] as HTMLElement[];
+	if (rows.length < 2 || rows[0].offsetTop === rows[rows.length - 1].offsetTop) return '';
+	const box = chip.getBoundingClientRect();
+	const style = getComputedStyle(chip);
+	// Rects are scaled by a transform, such as a canvas zoom, and CSS widths aren't.
+	const scale = box.width / parseFloat(style.width) || 1;
+	const right = Math.max(...rows.map((row) => row.getBoundingClientRect().right));
+	return `${Math.ceil((right - box.left) / scale + parseFloat(style.paddingRight))}px`;
+}
+
+function watchLine(wrapper: HTMLElement, token: Token) {
+	// The chip wraps against the nearest block, and an observer sees no size on an inline box.
+	let line = wrapper.parentElement!;
+	while (line.parentElement && ['inline', 'contents'].includes(getComputedStyle(line).display)) line = line.parentElement;
+	if (!observer) {
+		// Hugging in the observer's own pass changes the line's height, which logs a ResizeObserver loop error, so it waits a frame.
+		observer = new ResizeObserver((entries) => {
+			const tokens: Token[] = [];
+			for (const entry of entries) {
+				const watched = lines.get(entry.target);
+				if (!watched) continue;
+				// Only a width change can rewrap a chip. The first report records the width.
+				if (watched.width !== undefined && watched.width !== entry.contentRect.width) tokens.push(...watched.tokens);
+				watched.width = entry.contentRect.width;
+			}
+			if (tokens.length) requestAnimationFrame(() => hug(tokens));
+		});
+		// A late font changes every chip's measure.
+		document.fonts?.addEventListener('loadingdone', () => hug([...lines.values()].flatMap((watched) => [...watched.tokens])));
+	}
+	const watched = lines.get(line) ?? { tokens: new Set<Token>() };
+	if (!lines.has(line)) {
+		lines.set(line, watched);
+		observer.observe(line);
+	}
+	watched.tokens.add(token);
+	return line;
+}
+
+function unwatchLine(line: Element, token: Token) {
+	const watched = lines.get(line);
+	watched?.tokens.delete(token);
+	if (watched && !watched.tokens.size) {
+		lines.delete(line);
+		observer?.unobserve(line);
+	}
+}
+</script>
+
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, useTemplateRef, watch } from 'vue';
 import Popover from './Popover.vue';
 
 type Tone = 'shared' | 'local' | 'preferred';
@@ -70,13 +141,25 @@ const ICON = 'fa-width-auto [--size:.85em] h-[var(--size)]! align-[calc((1cap_-_
 // Binds the icon and the mark to their segment, one gap from its label.
 const SEGMENT = 'flex min-w-0 items-baseline gap-x-1';
 const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-2 focus-visible:outline-2';
+
+const wrapper = useTemplateRef<HTMLElement>('wrapper');
+const chip = useTemplateRef<HTMLElement>('chip');
+const token = () => chip.value;
+let line: Element | undefined;
+onMounted(() => {
+	line = watchLine(wrapper.value!, token);
+	hug([token]);
+});
+onBeforeUnmount(() => line && unwatchLine(line, token));
+watch([chip, segments, mark], () => nextTick(() => hug([token])));
 </script>
 
 <template>
 	<!-- Popover wraps its trigger in two divs. Both go to display: contents so the chip stays in the line. -->
-	<span class="inline-block max-w-full [--token-line:1lh] [--token-cap:1cap]">{{ before }}<Popover :content="description" :disabled="press || !description" class="contents! [&>div]:contents!">
+	<span ref="wrapper" class="inline-block max-w-full [--token-line:1lh] [--token-cap:1cap]">{{ before }}<Popover :content="description" :disabled="press || !description" class="contents! [&>div]:contents!">
 		<template #default="{ triggerProps, open }">
 			<component
+				ref="chip"
 				:is="pressable ? 'button' : 'span'"
 				:type="pressable ? 'button' : undefined"
 				v-bind="press ? {} : pressable ? triggerProps : {}"
