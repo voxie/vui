@@ -9,7 +9,7 @@ import MessageTokenBubbleExample from '@site/MessageTokenBubbleExample.vue';
 import MessageTokenFieldExample from '@site/MessageTokenFieldExample.vue';
 import MessageTokenContextExample from '@site/MessageTokenContextExample.vue';
 
-A message token is a merge variable drawn as a chip inside the text of a message. The icon says where the value comes from, and the text is the path to it.
+A message token is a merge variable drawn as a chip inside the text of a message. The icon shows which record the value comes from. The text names the field on that record.
 
 The `path` prop is the variable as the message builder writes it, without the braces. The builder's `{{contact=>first_name}}` is `path="contact=>first_name"`. The first segment is the level, and the icon replaces it. The chip draws the remaining segments with a colon between them. `contact=>first_name` reads `first_name`, and `group=>custom_attributes=>booking_link` reads `custom_attributes:booking_link`.
 
