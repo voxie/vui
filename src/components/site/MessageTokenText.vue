@@ -4,7 +4,7 @@
 import { computed } from 'vue';
 import MessageToken from '@ui/MessageToken.vue';
 
-const props = defineProps<{ text: string; press?: boolean }>();
+const props = defineProps<{ text: string; press?: boolean; selected?: number }>();
 
 const NAMES: Record<string, string> = {
 	'contact=>first_name': 'First name',
@@ -20,6 +20,9 @@ const SOURCES: Record<string, string> = {
 	group: "a group field from the enrollment's group",
 	local: 'a local attribute read from this context',
 };
+
+export type Pressed = { index: number; path: string };
+defineEmits<{ press: [token: Pressed] }>();
 
 type Part = { text: string } | { path: string; fallback?: 'next' | 'exit'; description: string; before: string; after: string };
 
@@ -53,5 +56,5 @@ const parts = computed(() => {
 </script>
 
 <template>
-	<template v-for="(part, i) in parts" :key="i"><MessageToken v-if="'path' in part" :path="part.path" :fallback="part.fallback" :description="part.description" :press="press" :before="part.before" :after="part.after" /><template v-else>{{ part.text }}</template></template>
+	<template v-for="(part, i) in parts" :key="i"><MessageToken v-if="'path' in part" :path="part.path" :fallback="part.fallback" :description="part.description" :press="press" :selected="selected === i" :contenteditable="press ? 'false' : undefined" :data-token="`{{${part.path}}}${part.before}${part.after}`" :before="part.before" :after="part.after" @press="$emit('press', { index: i, path: part.path })" /><template v-else>{{ part.text }}</template></template>
 </template>
