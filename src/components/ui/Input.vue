@@ -383,7 +383,10 @@ defineExpose({
 					@mousedown.prevent
 					@click="toggleShowPassword"
 				>
-					<i aria-hidden="true" class="fa-solid" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+					<!-- Keyed, so each swap mounts a new <i> for the kit to pick up. -->
+					<span :key="showPassword ? 'hide' : 'show'" class="contents">
+						<i aria-hidden="true" class="fa-solid" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+					</span>
 				</button>
 
 				<!-- Held in the layout while it's hidden, so the field's padding
