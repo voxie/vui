@@ -5,7 +5,7 @@ description: How a Voxie UI (vui) page is laid out. Read this when building or r
 
 # Voxie UI page structure
 
-Two layout sections make a page. The navbar runs the full width of the window. The main content area has its width capped. Source of truth: `/docs/patterns/page-structure` and `/docs/components/navbar`.
+Two layout sections make a page. The navbar runs the full width of the window. The main content area has its width capped. Source of truth: `/docs/patterns/page-structure`, `/docs/components/page-layout`, and `/docs/components/navbar`.
 
 ## The component
 
@@ -24,7 +24,7 @@ In a Vue app with `@voxie/frontend-components`, the page is `VxPageLayout`. It r
 | `layout` | Use it for |
 |---|---|
 | `base` (default) | A plain page: a list, a dashboard without a grid, a detail page with no section nav |
-| `dashboard` | Cards on the 12-column grid; children carry `col-span-*` |
+| `grid` | Cards on the 12-column grid; children carry `col-span-*` |
 | `create` | A create form, centered under a centered heading. Create forms only, never a fallback for "no sidebar" |
 | `sidebar` | A detail or settings page with section links or filters |
 
@@ -41,7 +41,7 @@ The header renders only when a title, description, subtitle or actions is given.
 ```html
 <body class="bg-slate-200 text-slate-700 text-sm">
   <nav class="bg-slate-700"> ... </nav>
-  <main class="container mx-auto px-4 sm:px-6 md:px-8 max-w-(--breakpoint-xl)">
+  <main class="container mx-auto px-4 sm:px-6 2xl:px-0 max-w-(--breakpoint-xl)">
     ...
   </main>
 </body>
@@ -77,8 +77,8 @@ Creating a campaign, a segment, a contact. A centered single column, and these a
 Edit screens, analytics, settings. Sidebar and content in a flex row from `md` up, stacked below that.
 
 ```html
-<div class="flex flex-col md:flex-row gap-4 md:gap-6 xl:gap-8">
-  <aside class="md:w-48 lg:w-56 shrink-0"> sunken card </aside>
+<div class="flex flex-col md:flex-row gap-4 md:gap-6 2xl:gap-8">
+  <aside class="md:w-48 lg:w-64 shrink-0"> sunken card </aside>
   <div class="flex-1 min-w-0"> cards </div>
 </div>
 ```

@@ -88,7 +88,7 @@ onBeforeUnmount(() => {
 <template>
 	<div>
 		<div class="border border-slate-300 rounded-2xl">
-			<PageStructureExample :layout="layout" class="py-12" />
+			<PageStructureExample :layout="layout" class="pt-12" />
 			<div class="p-4 border-t border-t-slate-300">
 			<Button
 				:href="previewHref"
@@ -124,7 +124,7 @@ onBeforeUnmount(() => {
 				>
 					Close
 				</button>
-				<div class="py-12">
+				<div class="pt-12">
 					<PageStructureExample :layout="layout" />
 				</div>
 				<!-- One span per breakpoint, each shown only in its own range, so
