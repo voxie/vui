@@ -1,0 +1,69 @@
+---
+title: Page Layout
+order: 19
+---
+
+import PageStructureDemo from '@site/PageStructureDemo.vue';
+
+A page layout is everything on a page below the [Navbar](/docs/components/navbar). It owns the container, the padding, and the header, and a page supplies only the title and the content. Use one per page. Never add padding or a second container around it, and never nest one layout in another.
+
+```vue
+<PageLayout layout="sidebar" title="Campaigns" description="…">
+  <template #callout>…</template>     <!-- banner above the header -->
+  <template #subtitle>…</template>    <!-- grey line above the title, usually a back link -->
+  <template #actions>…</template>     <!-- right side of the header -->
+  <template #sidebar>…</template>     <!-- sidebar layout only -->
+  …content…
+</PageLayout>
+```
+
+## Examples
+
+### Layout
+
+The `layout` prop picks the arrangement of the content. The choices are `base` (the default), `grid`, `create`, and `sidebar`. Each one is shown live on [Page Structure](/docs/patterns/page-structure).
+
+| `layout` | Content |
+|---|---|
+| `base` | A plain block. The content brings its own spacing. |
+| `grid` | A 12-column grid. Each child carries its own `col-span-*`. |
+| `create` | A centered flex column. The header centers too. |
+| `sidebar` | The `sidebar` slot beside a flex column, in a row from `md` up. Below that the sidebar stacks above the content. |
+
+`base` is the plain single column for a list, a detail page, or a dashboard that doesn't need the grid. `grid` is the 12-column grid. `create` is for create forms only, since it centers the heading as well as the content. `sidebar` is for a page with section links or filters.
+
+The `grid`, `create`, and `sidebar` layouts space their children with `gap-4 md:gap-6 xl:gap-8`. The sidebar is `w-48` at `md` and `w-64` at `lg`, and the content column takes the remaining width.
+
+### Size
+
+The `size` prop picks the cap on the page width. The choices are `xl` (the default), `2xl`, and `full`.
+
+| `size` | Width |
+|---|---|
+| `xl` | Tailwind's `container`, capped at 1280px |
+| `2xl` | Tailwind's `container`, capped at 1536px |
+| `full` | The whole window |
+
+`xl` is the normal page width, including a sidebar page whose sidebar is section navigation. `2xl` is for a sidebar page whose sidebar is a filter panel, like the analytics pages, so the charts and tables beside the filters keep their room. `full` drops the cap for screens that need the whole window, like Message Hub and the kiosk lists.
+
+The side padding is 16px, then 24px from `sm`. At `xl` the padding drops from the `2xl` breakpoint, where the cap already leaves a margin.
+
+### Header
+
+The `title` and `description` props set the heading and the line under it. Each has a slot of the same name for markup. The `subtitle` slot is a slate-400 line above the title. The `actions` slot sits at the right of the header. The `callout` slot sits above the header and runs the full width of the layout.
+
+<div class="not-prose my-10">
+  <PageStructureDemo client:load layout="base" previewId="base" />
+</div>
+
+The header renders only when a title, a description, a subtitle, or actions is given. The page title is the one `h1` on the page. A back link goes in the `subtitle` slot, never inside the title, where it would become part of the heading's text.
+
+Below `sm` the actions wrap onto their own line under the title. With the `create` layout the header is centered.
+
+### Bottom space
+
+The layout ends with 24px of bottom padding, and 128px from `md`. A sticky button bar at the end of a form comes to rest above the bottom of the window instead of against it.
+
+## Migration
+
+This component replaces `vx-page-layout` from `@voxie/frontend-components`. The `layout`, `size`, `title`, and `description` props carry over with the same values, and so do the `callout`, `subtitle`, `title`, `description`, `actions`, and `sidebar` slots. The `data-test` attributes are gone.

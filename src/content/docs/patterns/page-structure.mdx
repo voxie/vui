@@ -10,7 +10,7 @@ A page is made up of two layout sections. The [Navbar](/docs/components/navbar) 
 Tailwind's `container` plus a max width and padding determine the main content width.
 
 ```html
-<main class="container mx-auto px-4 sm:px-6 md:px-8 max-w-(--breakpoint-xl)">
+<main class="container mx-auto px-4 sm:px-6 2xl:px-0 max-w-(--breakpoint-xl)">
 ```
 
 Screens like Message Hub and the workflow builder are exceptions. They drop the max width, because the user needs maximum space for complex or heavy work.
@@ -27,43 +27,30 @@ Every layout below is live. **View Full Screen** will let you preview the layout
 
 ## The component
 
-In the product these layouts are one component, `VxPageLayout` from `@voxie/frontend-components`. It owns the container, the padding, and the header, and a page supplies only the title and the content. The `layout` prop picks the arrangement below. The choices are `base`, `dashboard`, `create`, and `sidebar`. The `size` prop picks the cap. The choices are `xl` (the default), `2xl`, and `full`.
+These layouts are one component, [Page Layout](/docs/components/page-layout). It owns the container, the padding, and the header, and a page supplies only the title and the content. Its `layout` prop picks the arrangement below, and its `size` prop picks the cap.
 
-```vue
-<vx-page-layout layout="sidebar" title="Campaigns" description="…">
-  <template v-slot:subtitle>…</template>    <!-- grey line above the title, usually a back link -->
-  <template v-slot:actions>…</template>     <!-- right side of the header -->
-  <template v-slot:sidebar>…</template>     <!-- sidebar layout only -->
-  …content…
-</vx-page-layout>
-```
-
-`base` is the plain single column for a list, a detail page, or a dashboard that doesn't need the grid. `dashboard` is the 12-column grid below. `create` is for create forms only, since it centers the heading as well as the content. `sidebar` is the sidebar layout below.
-
-`xl` is the normal page width, including a sidebar page whose sidebar is section navigation. `2xl` is for a sidebar page whose sidebar is a filter panel, like the analytics pages, so the charts and tables beside the filters keep their room. `full` drops the cap for screens that need the whole window, like Message Hub and the kiosk lists.
-
-The page title is the one `h1` on the page. A back link goes in the `subtitle` slot, never inside the title, where it would become part of the heading's text.
-
-## Base Layout
+## Grid Pages
 
 Most pages use a left-aligned 12-column grid that gets filled with content cards. Examples are dashboards, item lists, and analytics.
 
-```html
-<div class="grid grid-cols-12 gap-4 md:gap-6 xl:gap-8">
+```vue
+<PageLayout layout="grid" title="Example Heading">
 ```
 
 The grid sits at the main content level in the markup, not on the html body. That way it can be dropped in when a page needs it. This also allows content padding and gaps to be managed separately from the navbar.
 
 <div class="not-prose my-10">
-  <PageStructureDemo client:load layout="base" previewId="base" />
+  <PageStructureDemo client:load layout="grid" previewId="grid" />
 </div>
 
 ## Create Pages
 
 Create pages use a centered, single column layout for a focused flow experience. These are the only pages that do so. Examples include creating a campaign, a segment, or a contact. The column is a flex stack with its cards centered. Each card is full width up to `md`, then capped at `max-w-2xl`. A page description sits on the page background, directly under the heading. The cards usually have a `glass` surface, because they hold form inputs.
 
-```html
-<Card class="w-full md:max-w-2xl">
+```vue
+<PageLayout layout="create" title="Example Heading" description="Single sentence page description.">
+  <Card surface="glass" class="w-full md:max-w-2xl" />
+</PageLayout>
 ```
 
 That card width is shared with the small cards on sidebar pages, so a form looks the same wherever it appears.
@@ -74,10 +61,13 @@ That card width is shared with the small cards on sidebar pages, so a form looks
 
 ## Sidebar Pages
 
-Some pages require sidebars. Examples include edit screen, analytics, and settings. The sidebar and the content sit in a flex row from `md` up. Below that the sidebar stacks above the content. The sidebar has a fixed width of `w-48` at `md` and `w-56` at `lg`. The content column takes the remaining width.
+Some pages require sidebars. Examples include edit screen, analytics, and settings. The sidebar and the content sit in a flex row from `md` up. Below that the sidebar stacks above the content. The sidebar has a fixed width of `w-48` at `md` and `w-64` at `lg`. The content column takes the remaining width.
 
-```html
-<div class="flex flex-col md:flex-row">
+```vue
+<PageLayout layout="sidebar" title="Example Heading">
+  <template #sidebar>…</template>
+  …cards…
+</PageLayout>
 ```
 
 Small content cards in this layout match the width of the ones in the create screens for consistency. They use the same `w-full md:max-w-2xl` and sit at the left of the content column. Some content requires more space. In those instances the cards fill the full width of the content column with `w-full`.
