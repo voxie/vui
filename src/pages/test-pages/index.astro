@@ -62,7 +62,7 @@ const briefs = {
     reading: 'Read all of these first and treat them as binding:',
     list: reading.map((group) => ({ code: group.dir, text: group.files })),
     rules: [
-      "Run `npm run trial -- --docs` first if src/pages/trial/ doesn't exist. It copies the raw fixtures there, and the copy is what you style. Never edit src/pages/test-pages/.",
+      "Run `pnpm run trial -- --docs` first if src/pages/trial/ doesn't exist. It copies the raw fixtures there, and the copy is what you style. Never edit src/pages/test-pages/.",
       'The vui-* skills are not part of this trial. If any are loaded, ignore them.',
       ...sharedRules,
       "When the docs don't answer something, make the call, but keep a running list of every gap you hit.",
@@ -72,7 +72,7 @@ const briefs = {
     reading: 'The vui-* skills are installed in this repo for the trial. They are your only reference:',
     list: skills.map((entry) => ({ code: entry.id, text: entry.data.description })),
     rules: [
-      "Run `npm run trial -- --skills` first if src/pages/trial/ doesn't exist. It copies the raw fixtures there and links the skills in, and the copy is what you style. Never edit src/pages/test-pages/.",
+      "Run `pnpm run trial -- --skills` first if src/pages/trial/ doesn't exist. It copies the raw fixtures there and links the skills in, and the copy is what you style. Never edit src/pages/test-pages/.",
       "Don't open anything under src/content/docs/. The skills stand in for the docs, and the trial measures how well they do.",
       ...sharedRules,
       "When the skills don't answer something, make the call, but keep a running list of every gap you hit.",
@@ -136,11 +136,11 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
 
   <h2 id="running-a-trial">Running a trial</h2>
 
-  <p>Point an agent at one page with a brief along these lines. The brief has the agent copy the fixtures into <code>src/pages/trial/</code> with <code>npm run trial</code> and style the copy, which serves at <code>/trial/…</code> beside the raw page. The folder is ignored by git, so a trial can't be committed by accident.</p>
+  <p>Point an agent at one page with a brief along these lines. The brief has the agent copy the fixtures into <code>src/pages/trial/</code> with <code>pnpm run trial</code> and style the copy, which serves at <code>/trial/…</code> beside the raw page. The folder is ignored by git, so a trial can't be committed by accident.</p>
 
   <p>A trial runs on one reference or the other. A docs trial has the agent read the documentation pages. A skills trial links the <code>vui-*</code> skills into <code>.claude/skills/</code>, the way a consuming repo sees them, and keeps the docs closed. Run the same page both ways to see what the skills lose.</p>
 
-  <p>Start a docs trial in a fresh Claude Code session. Run <code>npm run trial -- --docs</code> first, then open the session. Claude Code picks up a newly linked skill while a session is running, but a session that already loaded the skills during a skills trial may hold on to them after the docs trial unlinks the files. A new session reads <code>.claude/skills/</code> from scratch and sees only <code>docs-voice</code>.</p>
+  <p>Start a docs trial in a fresh Claude Code session. Run <code>pnpm run trial -- --docs</code> first, then open the session. Claude Code picks up a newly linked skill while a session is running, but a session that already loaded the skills during a skills trial may hold on to them after the docs trial unlinks the files. A new session reads <code>.claude/skills/</code> from scratch and sees only <code>docs-voice</code>.</p>
 
   {/* The choices come first, so the brief below reads as the result of them.
       Padding moves onto each block so the brief can reach the card's edges,
@@ -236,7 +236,7 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
   <h2 id="resetting">Resetting</h2>
 
   <p>
-    A trial lives in <code>src/pages/trial/</code> and nowhere else. <code>npm run trial -- --remove</code> throws it away and unlinks the skills, and <code>npm run trial -- --fresh --docs</code> or <code>--fresh --skills</code> does the same and copies the fixtures again. The linked skills sit in <code>.claude/skills/</code> beside <code>docs-voice</code> and are ignored by git. The fixtures under <code>src/pages/test-pages/</code> are ordinary source, so edit and commit them freely.
+    A trial lives in <code>src/pages/trial/</code> and nowhere else. <code>pnpm run trial -- --remove</code> throws it away and unlinks the skills, and <code>pnpm run trial -- --fresh --docs</code> or <code>--fresh --skills</code> does the same and copies the fixtures again. The linked skills sit in <code>.claude/skills/</code> beside <code>docs-voice</code> and are ignored by git. The fixtures under <code>src/pages/test-pages/</code> are ordinary source, so edit and commit them freely.
   </p>
 
   <p>
