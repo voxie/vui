@@ -17,7 +17,7 @@ const remove = process.argv.includes('--remove');
 // be compared. Only a skills trial links the skills in.
 const mode = ['--docs', '--skills'].find((flag) => process.argv.includes(flag))?.slice(2);
 if (!remove && !mode) {
-	console.log('Pick a reference: npm run trial -- --docs or npm run trial -- --skills.');
+	console.log('Pick a reference: pnpm run trial -- --docs or pnpm run trial -- --skills.');
 	process.exit(1);
 }
 

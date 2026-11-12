@@ -2,7 +2,7 @@
 dist/
 # generated types
 .astro/
-# styling trials, copied from src/pages/test-pages by `npm run trial`, and the
+# styling trials, copied from src/pages/test-pages by `pnpm run trial`, and the
 # consumer skills it links in for the duration
 src/pages/trial/
 .claude/skills/*
