@@ -161,6 +161,42 @@ const sections = [
 
 		<template v-if="!hideRight" #right="{ narrow }">
 			<NavbarAction v-if="!narrow" as="div" placement="right">
+				<template #default="{ open }">
+					<Button
+						size="sm"
+						color="slate"
+						aria-haspopup="true"
+						:aria-expanded="open"
+					>
+						<!-- Inside the button so the action still sees a control of its own.
+						     The offsets undo the button's padding to reach its corner, and the
+						     border is the bar's own color, so the dot reads as cut out of it.
+						     First in the slot: Font Awesome swaps the icons out before Vue
+						     hydrates, and anything after them can be lost to the mismatch. -->
+						<span
+							class="pointer-events-none absolute -end-[19px] -top-[15px] size-4 rounded-full border-3 border-solid bg-rose-400"
+							:class="surface === 'glass' ? 'border-slate-50' : 'border-slate-700'"
+							aria-hidden="true"
+						></span>
+						<i class="fa-solid fa-circle-question" aria-hidden="true"></i>
+						<i
+							class="fa-width-auto fa-solid text-2xs"
+							:class="open ? 'fa-angle-up' : 'fa-angle-down'"
+							aria-hidden="true"
+						></i>
+						<span class="sr-only">Help, unread items</span>
+					</Button>
+				</template>
+
+				<!-- A stand-in until the help menu has contents. -->
+				<template #dropdown>
+					<div class="flex h-32 w-64 items-center justify-center text-sm text-slate-400">
+						Help
+					</div>
+				</template>
+			</NavbarAction>
+
+			<NavbarAction v-if="!narrow" as="div" placement="right">
 				<!-- The action drops to a div around a control of its own, so the angle
 				     and the two aria attributes read the slot's `open` instead. -->
 				<template #default="{ open }">
