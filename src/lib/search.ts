@@ -5,5 +5,7 @@ export interface SearchRecord {
 	page: string;
 	section: string;
 	heading?: string;
+	// The page's frontmatter keywords, on the page record only.
+	keywords?: string;
 	text: string;
 }

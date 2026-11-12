@@ -85,7 +85,9 @@ export const GET: APIRoute = async () => {
 
 	for (const entry of docs) {
 		const { headings } = await render(entry);
-		records.push(...split(entry.body ?? '', entry.data.title, sectionLabel(entry.id), withBase(`/docs/${entry.id}`), headings));
+		const page = split(entry.body ?? '', entry.data.title, sectionLabel(entry.id), withBase(`/docs/${entry.id}`), headings);
+		if (entry.data.keywords.length) page[0].keywords = entry.data.keywords.join(' ').toLowerCase();
+		records.push(...page);
 	}
 
 	records.push(...split(skillsIntro(), 'Intro', 'Skills', withBase('/skills'), skillsIntroHeadings()));

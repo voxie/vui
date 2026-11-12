@@ -178,6 +178,8 @@ onBeforeUnmount(() => {
 });
 
 // Only a menu carries a chevron, which turns at every level once it is open.
+// The kit swaps each <i> for an <svg>, so the chevron and the icon each sit in
+// a keyed span, which mounts a new <i> on every change.
 const chevronIcon = computed(() => {
 	return dropdownOpen.value ? 'fa-solid fa-angle-up' : 'fa-solid fa-angle-down';
 });
@@ -263,21 +265,15 @@ const markerClasses = () => {
 				:aria-current="props.active ? (props.href ? 'page' : 'true') : undefined"
 				class="pointer-events-auto"
 			>
-				<i
-					v-if="props.icon"
-					class="fa-width-auto text-xs text-slate-400"
-					:class="props.icon"
-					aria-hidden="true"
-				></i>
+				<span v-if="props.icon" :key="props.icon" class="contents">
+					<i class="fa-width-auto text-xs text-slate-400" :class="props.icon" aria-hidden="true"></i>
+				</span>
 				<slot :open="dropdownOpen" />
 				<!-- A step under the label. The arrow is punctuation and not a word: at
 				     the label's own size it competes with it for the reading. -->
-				<i
-					v-if="hasDropdown()"
-					class="fa-width-auto text-2xs"
-					:class="chevronIcon"
-					aria-hidden="true"
-				></i>
+				<span v-if="hasDropdown()" :key="chevronIcon" class="contents">
+					<i class="fa-width-auto text-2xs" :class="chevronIcon" aria-hidden="true"></i>
+				</span>
 			</Button>
 
 			<!-- Drawn here and not on the element that took the focus: a row runs the
@@ -298,24 +294,26 @@ const markerClasses = () => {
 				>
 					<!-- Fixed width in a menu, where the icons are a column holding the
 					     labels in line. On the bar each section is on its own. -->
-					<i
-						v-if="props.icon"
-						class="text-xs text-slate-400"
-						:class="[props.icon, props.nested ? 'fa-fw' : 'fa-width-auto']"
-						aria-hidden="true"
-					></i>
+					<span v-if="props.icon" :key="`${props.icon} ${props.nested}`" class="contents">
+						<i
+							class="text-xs text-slate-400"
+							:class="[props.icon, props.nested ? 'fa-fw' : 'fa-width-auto']"
+							aria-hidden="true"
+						></i>
+					</span>
 					<slot :open="dropdownOpen" />
 				</span>
 				<!-- Font Awesome fixes every icon at 1.25em so a column lines up; the
 				     arrow isn't in one, so `fa-width-auto` leaves the gap alone. A step
 				     under the label at every depth — a button in a side slot has to set
 				     the same size on the arrow it carries. -->
-				<i
-					v-if="hasDropdown() && element() !== 'div'"
-					class="fa-width-auto text-2xs"
-					:class="[chevronIcon, { 'text-slate-900': props.nested }]"
-					aria-hidden="true"
-				></i>
+				<span v-if="hasDropdown() && element() !== 'div'" :key="chevronIcon" class="contents">
+					<i
+						class="fa-width-auto text-2xs"
+						:class="[chevronIcon, { 'text-slate-900': props.nested }]"
+						aria-hidden="true"
+					></i>
+				</span>
 			</span>
 		</component>
 

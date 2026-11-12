@@ -1,0 +1,151 @@
+---
+title: Disclosure
+order: 3
+keywords: [toggle, collapse, expand, accordion]
+---
+
+import DisclosureExample from '@site/DisclosureExample.vue';
+
+A disclosure is a control that opens and closes a block of content in place. The block sits in the flow of the page under its control, and pushes whatever follows it down while it is open. A chevron on the control shows which state the block is in, and the block opens and closes with a short transition instead of a jump.
+
+This is the shape of a grouped list that folds by section, an expandable card on a settings page, and a details panel under a row. A panel that floats over the page instead of opening in it is a [Menu](/docs/components/menu) or a [Popover](/docs/components/popover). [Tabs](/docs/components/tabs) are for a few alternative blocks where one is always showing. A disclosure has one block, and it can be closed.
+
+Disclosure is a behavior that many components take on, such as a card, a row, or a group in a table. It has no component of its own. A [Summary Card](/docs/components/summary-card) has it built in. The examples on this page are a [Card](/docs/components/card), a [Button](/docs/components/button), and the classes below.
+
+## Control
+
+The control is a [Button](/docs/components/button). `aria-expanded` says whether the block is open, and `aria-controls` names the block, so a screen reader hears the state and what it belongs to.
+
+What the header holds decides the control's shape. The block can hold anything under either one.
+
+| The header holds                                            | The control                                                |
+| ----------------------------------------------------------- | ---------------------------------------------------------- |
+| Only a label                                                | [The whole header](#the-whole-header)                      |
+| A label and more, such as a count, a menu, or a drag handle | [A square Button at the far end](#a-button-at-the-far-end) |
+
+### The whole header
+
+When the header holds only a label, the whole heading is the control. A transparent `block` Button inside the heading holds the label and the chevron, and all of it is the target. Nothing else pressable goes inside it, since a button can't sit inside a button.
+
+<div class="not-prose my-10">
+  <DisclosureExample client:load />
+</div>
+
+The label is a span that takes the free width and carries the heading's own size and weight. The Card's padding is `compact` and the block's is `px-4`, which lines the block's text up with the label inside the Button.
+
+```vue
+<Card padding="compact">
+  <h3>
+    <Button block color="transparent" :aria-expanded="open" aria-controls="delivery-window" @click="open = !open">
+      <span class="flex-1 text-left text-base font-extrabold text-slate-800">Delivery window</span>
+      <span :key="open ? 'up' : 'down'" class="contents">
+        <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+      </span>
+    </Button>
+  </h3>
+  <div id="delivery-window" class="px-4" :inert="!open">…</div>
+</Card>
+```
+
+### A button at the far end
+
+When the header holds more than a label, the chevron gets a square Button of its own at the far end and the heading stays plain text. A [Summary Card](/docs/components/summary-card) has this control built in.
+
+<div class="not-prose my-10">
+  <DisclosureExample client:load label="Opted out" count={3}>
+    <p>These contacts replied STOP after the last send. They are skipped until they opt back in.</p>
+  </DisclosureExample>
+</div>
+
+The Button has no visible label, so its `aria-label` is the header's name. With `aria-expanded` a screen reader hears "Opted out, collapsed".
+
+```vue
+<div class="flex items-center gap-4">
+  <h3>Opted out</h3>
+  <Badge color="slate" size="sm">3</Badge>
+  <span class="grow"></span>
+  <Button class="w-10 px-0!" aria-label="Opted out" :aria-expanded="open" aria-controls="opted-out" @click="open = !open">
+    <span :key="open ? 'up' : 'down'" class="contents">
+      <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+    </span>
+  </Button>
+</div>
+<div id="opted-out" :inert="!open">…</div>
+```
+
+## Orientation
+
+The chevron sits at the end of the control. It points down while the block is closed and up while it is open, the same reading as the menus on a [Navbar](/docs/components/navbar#sections).
+
+A chevron at the start of the control, ahead of the label, points right while the block is closed and down while it is open. That position is for rows that stack, like the groups in a table or the branches of a tree, where the chevrons line up in a column down the leading edge.
+
+<div class="not-prose my-10 grid items-start gap-4 sm:grid-cols-2">
+  <DisclosureExample client:load label="Details" />
+  <DisclosureExample client:load label="Details" chevron="start" />
+</div>
+
+| Chevron sits at      | Closed | Open |
+| -------------------- | ------ | ---- |
+| End of the control   | Down   | Up   |
+| Start of the control | Right  | Down |
+
+Up always means open. A chevron that points up over a closed block reads as a block that has already been opened.
+
+## Icon
+
+The icon is the `angle` family from [Icons](/docs/foundations/icons#reference), not `chevron` or `caret`.
+
+| Chevron sits at      | Closed           | Open                             |
+| -------------------- | ---------------- | -------------------------------- |
+| End of the control   | `fa-angle-down`  | `fa-angle-up`                    |
+| Start of the control | `fa-angle-right` | `fa-angle-right` with `rotate-90` |
+
+At the end of the control the two icons swap. At the start one icon turns a quarter turn to reach down, rather than swapping for `fa-angle-down`.
+
+The swap and the turn both go on a `<span>` around the icon, never on the `<i>`. The Font Awesome kit replaces every `<i>` with an `<svg>` once the page loads, so a class bound to the `<i>` after that never reaches the screen and the chevron stays where it started. A turn is a class on the span. A swap gives the span a `key` that changes with the state, so a new `<i>` is mounted each time.
+
+```vue
+<!-- At the end: two icons swap -->
+<span :key="open ? 'up' : 'down'">
+  <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+</span>
+
+<!-- At the start: one icon turns -->
+<span class="inline-flex motion-safe:transition-[rotate] motion-safe:duration-200 motion-safe:ease-out" :class="{ 'rotate-90': open }">
+  <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+</span>
+```
+
+The chevron takes the Button's own label color and size. It is the one visible cue for the state, so it is never dropped.
+
+## Transition
+
+Opening and closing are smooth. The block grows from nothing to its full height over 200ms on an ease-out curve, and shrinks back the same way. Everything else that moves with it runs on the same timing, so the parts finish together. Quick and gentle, with no bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly).
+
+| Part                      | Opening                                 | Timing          |
+| ------------------------- | --------------------------------------- | --------------- |
+| The block                 | Grows from nothing to its full height   | 200ms ease-out  |
+| A chevron at the start    | Turns from right to down                | 200ms ease-out  |
+| A chevron at the end      | Swaps from down to up                   | No transition   |
+
+Closing runs each one backwards.
+
+The height is a grid row rather than a measured number, so the block can hold anything and the transition never has to know how tall it is. The block is a `grid` whose one row runs from `0fr` to `1fr`, and the content inside it is `min-h-0` with `overflow-clip`, so it is cut off while the row is short.
+
+```html
+<div class="grid grid-rows-[0fr] invisible motion-safe:transition-[grid-template-rows,visibility] motion-safe:duration-200 motion-safe:ease-out">
+  <div class="min-h-0 overflow-clip">…</div>
+</div>
+```
+
+Opening swaps `grid-rows-[0fr]` for `grid-rows-[1fr]` and drops `invisible`. Visibility is in the transition too, so on the way closed it flips only once the row has shut, and on the way open it flips at once. The same shape opens the [nested sections](/docs/components/navbar#menus-inside-menus) of a Navbar menu.
+
+Every part of the transition is `motion-safe`. With reduced motion the block and the chevron snap between the two states.
+
+## Interaction
+
+A press on the control toggles the block. Nothing opens on hover.
+
+Hover, press, focus, and the keyboard all work as they do on any [Button](/docs/components/button).
+
+The closed block is `inert`, so nothing inside it can be reached with <kbd>Tab</kbd>, pressed, or read by a screen reader until it opens. Without it, a closed block would still hold a stop in the tab order with nothing on screen to show for it.

@@ -188,11 +188,15 @@ defineExpose({
 					props.boxed ? '' : 'peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2',
 				]"
 			>
-				<i
+				<!-- The kit swaps the <i> for an <svg>, which Vue can neither restyle nor
+				     remove. The keyed span is what Vue mounts and unmounts instead. -->
+				<span
 					v-if="props.indeterminate || checked"
-					class="fa-solid"
-					:class="[sizeClasses.mark, props.indeterminate ? 'fa-minus' : 'fa-check']"
-				></i>
+					:key="props.indeterminate ? 'minus' : 'check'"
+					class="contents"
+				>
+					<i class="fa-solid" :class="[sizeClasses.mark, props.indeterminate ? 'fa-minus' : 'fa-check']"></i>
+				</span>
 			</span>
 
 			<span v-if="props.label || slots.default || props.description || slots.description" class="min-w-0">

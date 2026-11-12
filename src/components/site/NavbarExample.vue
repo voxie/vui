@@ -171,11 +171,13 @@ const sections = [
 						:aria-expanded="open"
 					>
 						<i class="fa-solid fa-gear" aria-hidden="true"></i>
-						<i
-							class="fa-width-auto fa-solid text-2xs"
-							:class="open ? 'fa-angle-up' : 'fa-angle-down'"
-							aria-hidden="true"
-						></i>
+						<span :key="open ? 'up' : 'down'" class="contents">
+							<i
+								class="fa-width-auto fa-solid text-2xs"
+								:class="open ? 'fa-angle-up' : 'fa-angle-down'"
+								aria-hidden="true"
+							></i>
+						</span>
 						<span class="sr-only">Account</span>
 					</Button>
 				</template>
@@ -229,11 +231,13 @@ const sections = [
 							:class="surface === 'glass' ? 'text-slate-500' : 'text-slate-400'"
 							aria-hidden="true"
 						>⌘G</kbd>
-						<i
-							class="fa-width-auto fa-solid text-2xs"
-							:class="open ? 'fa-angle-up' : 'fa-angle-down'"
-							aria-hidden="true"
-						></i>
+						<span :key="open ? 'up' : 'down'" class="contents">
+							<i
+								class="fa-width-auto fa-solid text-2xs"
+								:class="open ? 'fa-angle-up' : 'fa-angle-down'"
+								aria-hidden="true"
+							></i>
+						</span>
 					</Button>
 				</template>
 

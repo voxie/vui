@@ -122,11 +122,10 @@ const zoneClasses = computed(() => {
 			@change="onChange"
 		/>
 
-		<i
-			aria-hidden="true"
-			class="fa-solid text-5xl text-sky-400"
-			:class="props.icon"
-		></i>
+		<!-- Keyed, so a new icon mounts a new <i> for the kit to pick up. -->
+		<span :key="props.icon" class="contents">
+			<i aria-hidden="true" class="fa-solid text-5xl text-sky-400" :class="props.icon"></i>
+		</span>
 		<span class="mt-3 block font-semibold">
 			<slot name="title">Drag a file here</slot>
 		</span>
@@ -151,11 +150,9 @@ const zoneClasses = computed(() => {
 		class="space-y-4 font-sans"
 	>
 		<div class="relative flex items-center gap-4 rounded-2xl bg-white p-4">
-			<i
-				aria-hidden="true"
-				class="fa-solid text-5xl text-slate-400"
-				:class="props.icon"
-			></i>
+			<span :key="props.icon" class="contents">
+				<i aria-hidden="true" class="fa-solid text-5xl text-slate-400" :class="props.icon"></i>
+			</span>
 			<div class="text-lg break-all text-slate-500">{{ file.name }}</div>
 			<button
 				type="button"
