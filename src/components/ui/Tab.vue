@@ -110,13 +110,13 @@ const onClick = () => {
 			class="absolute inset-0 -z-10 transition-all ease-out group-active/tab:duration-75 motion-safe:group-active/tab:inset-0.5 motion-reduce:group-active/tab:opacity-70"
 			:class="[sizeClasses.radius, hoverClasses]"
 		></span>
-		<span :id="labelId" class="relative whitespace-nowrap">
+		<span :id="labelId" class="relative whitespace-nowrap" :class="hasDescription ? 'leading-tight' : ''">
 			<slot />
 		</span>
 		<span
 			v-if="hasDescription"
 			:id="descriptionId"
-			class="relative text-2xs font-normal text-pretty transition duration-200"
+			class="relative text-2xs leading-tight font-normal text-pretty transition duration-200"
 			:class="descriptionClasses"
 		>
 			<slot name="description">{{ props.description }}</slot>
