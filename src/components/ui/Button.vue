@@ -222,12 +222,7 @@ defineExpose({
 
 		<div
 			class="relative flex items-center justify-center transition"
-			:class="[
-				sizeClasses.content,
-				props.loading
-					? 'opacity-0 motion-safe:scale-90'
-					: 'motion-safe:group-active/button:scale-[0.96] group-active/button:duration-75 will-change-transform ease-out',
-			]"
+			:class="[sizeClasses.content, props.loading ? 'opacity-0 motion-safe:scale-90' : '']"
 		>
 			<slot />
 		</div>
