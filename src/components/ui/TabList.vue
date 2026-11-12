@@ -15,11 +15,11 @@ const indicatorStyle = ref({ left: '0px', top: '0px', width: '0px', height: '0px
 provide(TabListKey, { indicatorReady });
 
 // The track is the labeled Switch track at each size, so the two sit level in
-// a toolbar.
+// a toolbar. A minimum, so tabs with descriptions can grow it.
 const sizeClasses = computed(() => {
-	if (tabs.size.value === 'sm') return { track: 'h-8 rounded-md px-0.5 py-0.5', thumb: 'rounded' };
-	if (tabs.size.value === 'lg') return { track: 'h-12 rounded-xl gap-1 px-1 py-1', thumb: 'rounded-md' };
-	return { track: 'h-10 rounded-lg gap-1 px-1 py-1', thumb: 'rounded' };
+	if (tabs.size.value === 'sm') return { track: 'min-h-8 rounded-md px-0.5 py-0.5', thumb: 'rounded' };
+	if (tabs.size.value === 'lg') return { track: 'min-h-12 rounded-xl gap-1 px-1 py-1', thumb: 'rounded-md' };
+	return { track: 'min-h-10 rounded-lg gap-1 px-1 py-1', thumb: 'rounded' };
 });
 
 // The Switch off track, surface for surface: a step darker on sunken, and

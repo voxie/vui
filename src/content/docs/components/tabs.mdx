@@ -7,6 +7,7 @@ import TabsExample from '@site/TabsExample.vue';
 import TabsToExample from '@site/TabsToExample.vue';
 import TabsSurfacesExample from '@site/TabsSurfacesExample.vue';
 import TabsKeepMountedExample from '@site/TabsKeepMountedExample.vue';
+import TabsDescriptionExample from '@site/TabsDescriptionExample.vue';
 
 Use Tabs when a section of a screen has a few alternative blocks of content and only one shows at a time. Each tab names one block. Picking a tab swaps the block below the track without leaving the page. If picking one would take you to another page, it is a link, and it belongs in the [Navbar](/docs/components/navbar) or in the content. A choice that is only a value, with no block to reveal, is not a tab. Neither is a filter that narrows one list. Reach for [Radio](/docs/components/radio) for both.
 
@@ -79,6 +80,20 @@ The `size` prop on `Tabs` sets the height of the track, and the text and padding
 | `md` | 40px  | `text-xs` |
 | `lg` | 48px  | `text-sm` |
 
+### Description
+
+The `description` prop on a `Tab` adds a second line under its label, for what the label can't hold. The `description` slot takes the same place when the text needs markup. The description is `text-2xs` at every size, at normal weight, and wraps inside its tab.
+
+<TabsDescriptionExample client:load />
+
+```html
+<Tab value="rest" description="One URL per resource, called with standard HTTP verbs.">REST</Tab>
+```
+
+The track grows to fit the longest description, and the labels stay level along the top. A track with descriptions is taller than a [Button](/docs/components/button#size) or a [Switch](/docs/components/switch#size) at the same size, so it no longer sits level with them in a toolbar.
+
+The description takes the color of an unpicked label, slate-600, and slate-300 on `dark`. It stays slate-600 on the white pill, under the slate-800 label. A screen reader announces the label as the tab's name and the description as its description.
+
 ### Disabled
 
 `disabled` on `Tabs` flattens the track to slate-200 and the pill to slate-50, drops every label to slate-400, and ignores presses. The pill stays where it was, so a disabled set of tabs still shows which one is picked, and its panel stays up. On `dark` the track is slate-800 at 50%, the pill slate-500, and the labels slate-500 with the picked one slate-300.
@@ -114,6 +129,7 @@ Until the page has hydrated, the picked tab paints its own white in place of the
 | Element                    | On            | WCAG 2.x | APCA   |
 | -------------------------- | ------------- | -------- | ------ |
 | slate-800 label            | white pill    | 14.7:1   | Lc 101 |
+| slate-600 description      | white pill    | 7.6:1    | Lc 86  |
 | slate-600 label            | slate-200     | 6.1:1    | Lc 72  |
 | slate-600 label            | slate-300     | 5.1:1    | Lc 61  |
 | slate-600 label            | slate-400/50  | 4.2:1    | Lc 50  |

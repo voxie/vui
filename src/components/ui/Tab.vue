@@ -1,17 +1,24 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue';
+import { computed, inject, useId } from 'vue';
 import { TabListKey, TabsKey } from './tabs.ts';
 
 const props = withDefaults(
 	defineProps<{
 		// What Tabs' v-model becomes when this tab is picked.
 		value: string;
+		// A second line under the label, for what the label can't hold.
+		description?: string;
 		disabled?: boolean;
 	}>(),
 	{
 		disabled: false,
 	},
 );
+
+const slots = defineSlots<{
+	default?: () => unknown;
+	description?: () => unknown;
+}>();
 
 const tabs = inject(TabsKey);
 if (!tabs) throw new Error('Tab has to be inside a TabList, inside Tabs.');
@@ -21,13 +28,20 @@ const selected = computed(() => tabs.current.value === props.value);
 const disabled = computed(() => props.disabled || tabs.disabled.value);
 const dark = computed(() => tabs.surface.value === 'dark');
 
+// The label names the tab and the description describes it, so a screen
+// reader hears them apart.
+const hasDescription = computed(() => Boolean(props.description || slots.description));
+const labelId = useId();
+const descriptionId = useId();
+
 // Padding and text from the labeled Switch at each size. Height comes from
-// the track.
+// the track, until a description makes the tab two lines and `described` pads
+// it the same on every side.
 const sizeClasses = computed(() => {
 	const size = tabs.size.value;
-	if (size === 'sm') return { radius: 'rounded', label: 'px-3 text-xs' };
-	if (size === 'lg') return { radius: 'rounded-md', label: 'px-5 text-sm' };
-	return { radius: 'rounded', label: 'px-4 text-xs' };
+	if (size === 'sm') return { radius: 'rounded', text: 'text-xs', pad: 'px-3', described: 'p-1.5' };
+	if (size === 'lg') return { radius: 'rounded-md', text: 'text-sm', pad: 'px-5', described: 'p-3' };
+	return { radius: 'rounded', text: 'text-xs', pad: 'px-4', described: 'p-2' };
 });
 
 // The selected label sits on the white pill everywhere. The rest sit on the
@@ -40,6 +54,10 @@ const textClasses = computed(() => {
 	if (selected.value) return 'text-slate-800';
 	return dark.value ? 'text-slate-300' : 'text-slate-600';
 });
+
+// The description keeps the unpicked label's color on the white pill, so the
+// picked label still leads.
+const descriptionClasses = computed(() => (selected.value && !disabled.value ? 'text-slate-600' : ''));
 
 // Only an unpicked tab does anything, so only it hovers and presses.
 const inert = computed(() => selected.value || disabled.value);
@@ -74,11 +92,13 @@ const onClick = () => {
 		:id="tabs.tabId(props.value)"
 		:aria-controls="tabs.panelId(props.value)"
 		:aria-selected="selected"
+		:aria-labelledby="hasDescription ? labelId : undefined"
+		:aria-describedby="hasDescription ? descriptionId : undefined"
 		:disabled="disabled"
 		:tabindex="tabindex"
 		:data-value="props.value"
-		class="group/tab relative z-10 flex h-full items-center justify-center font-semibold whitespace-nowrap transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
-		:class="[sizeClasses.radius, sizeClasses.label, textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected ? 'cursor-default' : 'cursor-pointer']"
+		class="group/tab relative z-10 flex h-full flex-col items-center font-semibold transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
+		:class="[sizeClasses.radius, sizeClasses.text, hasDescription ? ['justify-start gap-0.5', sizeClasses.described] : ['justify-center', sizeClasses.pad], textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected ? 'cursor-default' : 'cursor-pointer']"
 		@click="onClick"
 	>
 		<!-- The hover fill is a box of its own so the press can be a fixed 2px
@@ -92,10 +112,19 @@ const onClick = () => {
 		></span>
 		<!-- The label and not the tab, which is as wide as the track allows. -->
 		<span
-			class="relative transition ease-out"
+			:id="labelId"
+			class="relative whitespace-nowrap transition ease-out"
 			:class="inert ? '' : 'group-active/tab:duration-75 motion-safe:group-active/tab:scale-[0.96]'"
 		>
 			<slot />
+		</span>
+		<span
+			v-if="hasDescription"
+			:id="descriptionId"
+			class="relative text-2xs font-normal text-balance transition duration-200"
+			:class="descriptionClasses"
+		>
+			<slot name="description">{{ props.description }}</slot>
 		</span>
 	</button>
 </template>
