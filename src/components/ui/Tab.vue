@@ -97,8 +97,8 @@ const onClick = () => {
 		:disabled="disabled"
 		:tabindex="tabindex"
 		:data-value="props.value"
-		class="group/tab relative z-10 flex h-full flex-col items-center font-semibold transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
-		:class="[sizeClasses.radius, sizeClasses.text, hasDescription ? ['justify-start gap-0.5', sizeClasses.described] : ['justify-center', sizeClasses.pad], textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected ? 'cursor-default' : 'cursor-pointer']"
+		class="group/tab relative z-10 flex h-full flex-col font-semibold transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
+		:class="[sizeClasses.radius, sizeClasses.text, hasDescription ? ['items-start justify-start gap-0.5 text-left', sizeClasses.described] : ['items-center justify-center', sizeClasses.pad], textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected ? 'cursor-default' : 'cursor-pointer']"
 		@click="onClick"
 	>
 		<!-- The hover fill is a box of its own so the press can be a fixed 2px
@@ -110,18 +110,13 @@ const onClick = () => {
 			class="absolute inset-0 -z-10 transition-all ease-out group-active/tab:duration-75 motion-safe:group-active/tab:inset-0.5 motion-reduce:group-active/tab:opacity-70"
 			:class="[sizeClasses.radius, hoverClasses]"
 		></span>
-		<!-- The label and not the tab, which is as wide as the track allows. -->
-		<span
-			:id="labelId"
-			class="relative whitespace-nowrap transition ease-out"
-			:class="inert ? '' : 'group-active/tab:duration-75 motion-safe:group-active/tab:scale-[0.96]'"
-		>
+		<span :id="labelId" class="relative whitespace-nowrap">
 			<slot />
 		</span>
 		<span
 			v-if="hasDescription"
 			:id="descriptionId"
-			class="relative text-2xs font-normal text-balance transition duration-200"
+			class="relative text-2xs font-normal text-pretty transition duration-200"
 			:class="descriptionClasses"
 		>
 			<slot name="description">{{ props.description }}</slot>
