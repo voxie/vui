@@ -93,13 +93,19 @@ A level the component doesn't know draws as `contact`.
 
 ### Long names
 
-A token wider than its line wraps inside its one box. It breaks after a colon, and mid-word only when a single segment is wider than the line.
+A token wider than its line wraps inside its one box. It breaks after a colon, and mid-word only when a single segment is wider than the line. An underscore isn't a break point, so a long field name like `most_recent_completed_complimentary_trial_class_attendance_date` breaks at whichever character reaches the edge. In running text the whole token moves to its own line before it wraps.
 
 <Card>
   <div class="not-prose flex flex-wrap items-start gap-6 text-sm leading-relaxed">
     <MessageToken path="group=>custom_attributes=>campus_tours=>booking_link" />
     <div class="w-44 rounded border border-dashed border-slate-300 p-2">
       <MessageToken client:load path="group=>custom_attributes=>campus_tours=>booking_link" />
+    </div>
+    <div class="w-44 rounded border border-dashed border-slate-300 p-2">
+      <MessageToken client:load path="contact=>custom_attributes=>most_recent_completed_complimentary_trial_class_attendance_date" />
+    </div>
+    <div class="w-64 rounded border border-dashed border-slate-300 p-2 text-slate-800">
+      You attended a trial class on <MessageToken client:load path="contact=>custom_attributes=>most_recent_completed_complimentary_trial_class_attendance_date" fallback="next" after="." /> Ready to enroll?
     </div>
   </div>
 </Card>
