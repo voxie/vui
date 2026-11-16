@@ -202,10 +202,7 @@ defineExpose({
 				aria-hidden="true"
 				class="absolute inset-0 -z-10 rounded-full transition-all ease-out group-hover/radio:bg-slate-100 group-active/radio:duration-75 motion-safe:group-active/radio:inset-0.5 motion-reduce:group-active/radio:opacity-70"
 			></span>
-			<span
-				class="relative truncate transition ease-out"
-				:class="pillInert ? '' : 'group-active/radio:duration-75 motion-safe:group-active/radio:scale-[0.96]'"
-			>
+			<span class="relative truncate">
 				<slot>{{ props.label }}</slot>
 			</span>
 		</span>

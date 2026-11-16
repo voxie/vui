@@ -12,6 +12,8 @@
 
 @theme {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  /* MessageToken's face. Its MONO axis runs 0 (proportional) to 1 (fixed-width). The token defaults to 0. */
+  --font-token: 'Google Sans Code Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* 10px, one rung below Tailwind's xs. Paired line-height follows the same
      shape as the built-in sizes: 14px over 10px. */
