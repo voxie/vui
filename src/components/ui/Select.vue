@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId, watch, watchPostEffect, type CSSProperties } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch, watchPostEffect, type CSSProperties } from 'vue';
 import { autoUpdate, computePosition, flip, offset, shift, size as fit } from '@floating-ui/dom';
 import Badge from './Badge.vue';
 import Icon from './Icon.vue';
@@ -63,9 +63,38 @@ const listId = useId();
 // it. `name` goes to the native select, which is the part a form submits.
 const attrs = useAttrs();
 const fieldId = computed(() => (attrs.id as string | undefined) ?? generatedId);
-const controlAttrs = computed(() => {
+
+// On a touch device the platform's picker opens in place of the list. The
+// native select becomes the control, and the button is left as its face.
+const touch = ref(false);
+let coarse: MediaQueryList | undefined;
+const readPointer = () => {
+	touch.value = coarse!.matches;
+	if (touch.value) open.value = false;
+};
+// A tapped select matches `:focus-visible`, so the ring waits for focus that
+// came some other way.
+const tapped = ref(false);
+const focusControl = () => {
+	tapped.value = true;
+	(touch.value ? native : control).value?.focus();
+};
+
+// Whichever is the control takes the caller's attrs. The face keeps `class`
+// and `style`, which are about how it's drawn.
+const faceAttrs = computed(() => {
 	const { name, ...rest } = attrs;
-	return rest;
+	return touch.value ? { class: rest.class, style: rest.style } : rest;
+});
+const pickerAttrs = computed(() => {
+	if (!touch.value) return { tabindex: -1, 'aria-hidden': true };
+	const { name, class: _class, style: _style, ...rest } = attrs;
+	return {
+		...rest,
+		id: fieldId.value,
+		'aria-invalid': props.error ? true : undefined,
+		'aria-describedby': describedBy.value,
+	};
 });
 
 const describedBy = computed(() => {
@@ -136,7 +165,7 @@ const step = (from: number, by: 1 | -1) => {
 };
 
 const show = () => {
-	if (!flat.value.length) return;
+	if (touch.value || !flat.value.length) return;
 	active.value = selectedIndex.value === -1 ? step(-1, 1) : selectedIndex.value;
 	open.value = true;
 };
@@ -269,9 +298,16 @@ watch(
 
 watch(active, reveal, { flush: 'post' });
 
+onMounted(() => {
+	coarse = matchMedia('(pointer: coarse)');
+	readPointer();
+	coarse.addEventListener('change', readPointer);
+});
+
 onBeforeUnmount(() => {
 	stopPlacing?.();
 	clearTimeout(searchTimer);
+	coarse?.removeEventListener('change', readPointer);
 });
 
 // End padding clears the chevron, so it runs ahead of the start padding at
@@ -299,7 +335,7 @@ const sizeClasses = computed(() => {
 			:for="fieldId"
 			class="flex items-center gap-1.5 font-extrabold text-slate-800"
 			:class="[sizeClasses.label, props.description ? '' : 'mb-1']"
-			@click.prevent="control?.focus()"
+			@click.prevent="focusControl"
 		>
 			{{ props.label }}
 			<Badge v-if="props.required" color="rose" size="2xs" :title="props.required === 'label' ? undefined : 'Required'">
@@ -319,14 +355,23 @@ const sizeClasses = computed(() => {
 		</div>
 
 		<!-- Shrunk to the control, so the chevron lands on its edge and not on the
-		     container's when the wrapper is stretched by a grid or a flex row. -->
-		<div class="relative" :class="props.block ? 'w-full' : 'w-fit'">
+		     container's when the wrapper is stretched by a grid or a flex row. On a
+		     touch device it draws the focus ring, since the picker itself is unseen. -->
+		<div
+			class="relative"
+			:class="[
+				props.block ? 'w-full' : 'w-fit',
+				touch && !tapped && [sizeClasses.radius, 'outline-blue-600 has-[select:focus-visible]:outline-2 has-[select:focus-visible]:outline-offset-2'],
+			]"
+		>
 			<button
-				v-bind="controlAttrs"
-				:id="fieldId"
+				v-bind="faceAttrs"
+				:id="touch ? undefined : fieldId"
 				ref="control"
 				type="button"
 				role="combobox"
+				:tabindex="touch ? -1 : undefined"
+				:aria-hidden="touch ? true : undefined"
 				aria-haspopup="listbox"
 				:aria-expanded="open"
 				:aria-controls="open ? listId : undefined"
@@ -360,21 +405,33 @@ const sizeClasses = computed(() => {
 			</button>
 
 			<!-- The form's half: it submits under `name`, validates `required`, and
-			     fires `change`. Laid over the control so a validation message points at it. -->
+			     fires `change`. Laid over the control so a validation message points at
+			     it, and so a touch lands on it. At 16px iOS doesn't zoom in on focus. -->
 			<select
+				v-bind="pickerAttrs"
 				ref="native"
 				v-model="model"
 				:name="attrs.name as string | undefined"
 				:required="props.required ? true : undefined"
 				:disabled="props.disabled"
-				tabindex="-1"
-				aria-hidden="true"
-				class="pointer-events-none absolute inset-0 size-full opacity-0"
-				@focus="control?.focus()"
+				class="absolute inset-0 size-full text-base opacity-0"
+				:class="touch ? 'cursor-pointer disabled:cursor-not-allowed' : 'pointer-events-none'"
+				@pointerdown="tapped = true"
+				@focus="touch || control?.focus()"
+				@blur="tapped = false"
 			>
-				<option v-for="(option, index) in flat" :key="index" :value="option.value" :disabled="option.disabled">
-					{{ option.label }}
-				</option>
+				<template v-for="(group, at) in groups" :key="at">
+					<optgroup v-if="group.label !== undefined" :label="group.label">
+						<option v-for="{ option, index } in group.rows" :key="index" :value="option.value" :disabled="option.disabled">
+							{{ option.label }}
+						</option>
+					</optgroup>
+					<template v-else>
+						<option v-for="{ option, index } in group.rows" :key="index" :value="option.value" :disabled="option.disabled">
+							{{ option.label }}
+						</option>
+					</template>
+				</template>
 			</select>
 
 			<Icon

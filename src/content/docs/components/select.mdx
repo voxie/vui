@@ -7,7 +7,7 @@ import Select from '@ui/Select.vue';
 import Card from '@ui/Card.vue';
 import SelectSurfacesExample from '@site/SelectSurfacesExample.vue';
 
-A select is a field that picks one value from a list. Press it and a white panel drops under it holding a row per option, drawn the way a [Menu](/docs/components/menu) panel is. The list is the select's own on every device, never the platform's picker. Options come from the `options` prop.
+A select is a field that picks one value from a list. Press it and a white panel drops under it holding a row per option, drawn the way a [Menu](/docs/components/menu) panel is. On a touch device the platform's picker opens in its place. Options come from the `options` prop.
 
 A select usually sits on a `glass` [Card](/docs/components/card) or on the page background. Almost never on a white default card. The exception is a white card nested inside another card.
 
@@ -230,6 +230,8 @@ The list renders at the end of `<body>`, so an ancestor that clips its overflow 
 The keys are the ones a native `<select>` answers to, and focus stays on the control the whole time. <kbd>Space</kbd>, <kbd>Enter</kbd>, or an arrow key opens the list on the chosen option. The arrow keys move through the options and pass over a disabled one. <kbd>Home</kbd> and <kbd>End</kbd> go to the first and the last. <kbd>Enter</kbd> or <kbd>Space</kbd> chooses the active option, and so does <kbd>Tab</kbd> on its way to the next field. <kbd>Esc</kbd> closes the list and leaves the value alone. Typing jumps to an option that starts with what was typed.
 
 The active option is filled slate-50, the fill a Menu row takes on hover. When a key moved it there it also takes a blue ring, drawn inside the row.
+
+On a touch device a press opens the platform's picker in place of the list. The control looks the same, and a group's label heads its options in the picker too. Touch here means the main pointer is a finger (`pointer: coarse`), so a laptop with a touchscreen and a mouse keeps the list.
 
 ## Contrast
 
