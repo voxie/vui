@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import Icon from './Icon.vue';
 import Popover from './Popover.vue';
 
 type Tone = 'shared' | 'local' | 'preferred';
@@ -82,10 +83,9 @@ const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-
 			>
 				<template v-for="(segment, i) in segments" :key="i">
 					<span :class="SEGMENT">
-						<!-- The kit swaps each <i> for an <svg>, so the icon is keyed to be replaced whole when it changes. -->
-						<span v-if="i === 0" :key="`${kind.icon} ${tone.icon}`" :class="PIECE"><i class="fa-solid" :class="[ICON, kind.icon, tone.icon]" aria-hidden="true"></i></span>
+						<span v-if="i === 0" :class="PIECE"><Icon :name="`fa-solid ${kind.icon}`" :class="[ICON, tone.icon]" /></span>
 						<span class="min-w-0" :class="PIECE">{{ segment }}<template v-if="i < segments.length - 1">:</template></span>
-						<span v-if="mark && i === segments.length - 1" :key="mark" :class="PIECE"><i class="fa-solid" :class="[ICON, mark, tone.icon]" role="img" :aria-label="markLabel"></i></span>
+						<span v-if="mark && i === segments.length - 1" :class="PIECE"><Icon :name="`fa-solid ${mark}`" :class="[ICON, tone.icon]" :label="markLabel" /></span>
 					</span>
 				</template>
 			</component>

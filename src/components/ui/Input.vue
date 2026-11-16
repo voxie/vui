@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, useAttrs, useId } from 'vue';
 import Badge from './Badge.vue';
+import Icon from './Icon.vue';
 import { useControlBoundary, type Surface } from './surface.ts';
 import CharCounter from './CharCounter.vue';
 
@@ -293,7 +294,7 @@ defineExpose({
 			<Badge v-if="props.required" color="rose" size="2xs" :title="props.required === 'label' ? undefined : 'Required'">
 				<template v-if="props.required === 'label'">Required</template>
 				<span v-else class="sr-only">Required</span>
-				<i class="fa-solid fa-asterisk" aria-hidden="true"></i>
+				<Icon name="fa-solid fa-asterisk" />
 			</Badge>
 		</label>
 
@@ -383,7 +384,7 @@ defineExpose({
 					@mousedown.prevent
 					@click="toggleShowPassword"
 				>
-					<i aria-hidden="true" class="fa-solid" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+					<Icon :name="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'" />
 				</button>
 
 				<!-- Held in the layout while it's hidden, so the field's padding
@@ -409,11 +410,7 @@ defineExpose({
 						@mousedown.prevent
 						@click="step(direction)"
 					>
-						<i
-							aria-hidden="true"
-							class="fa-solid"
-							:class="direction === 1 ? 'fa-chevron-up' : 'fa-chevron-down'"
-						></i>
+						<Icon :name="direction === 1 ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'" />
 					</button>
 				</div>
 			</div>
@@ -434,7 +431,7 @@ defineExpose({
 			:id="errorId"
 			class="mt-2 flex gap-1.5 px-0.5 text-xs text-rose-800"
 		>
-			<i aria-hidden="true" class="fa-solid fa-circle-exclamation mt-0.5"></i>
+			<Icon name="fa-solid fa-circle-exclamation" class="mt-0.5" />
 			<div>
 				<slot name="error" />
 				<div v-for="message in errors" :key="message">{{ message }}</div>
@@ -442,7 +439,7 @@ defineExpose({
 		</div>
 
 		<div v-if="slots.hint || props.hint" class="mt-2 flex gap-1.5 px-0.5 text-xs text-slate-600">
-			<i aria-hidden="true" class="fa-solid fa-circle-info mt-0.5"></i>
+			<Icon name="fa-solid fa-circle-info" class="mt-0.5" />
 			<div>
 				<slot name="hint" />
 				{{ props.hint }}

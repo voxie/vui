@@ -1,0 +1,43 @@
+---
+title: Icon
+order: 19
+---
+
+import Icon from '@ui/Icon.vue';
+import Card from '@ui/Card.vue';
+
+Icon draws a Font Awesome icon inside a Vue component. Use it in place of a bare `<i>` in any component that hydrates. The Font Awesome kit swaps each `<i>` for an `<svg>`, sometimes before Vue hydrates the page, and Vue then puts back an empty `<i>` that never draws.
+
+`name` takes the variant and the icon name, the same two classes the [Icons](/docs/foundations/icons) page describes. Any `class` you pass lands on the icon itself, so size, color, and Font Awesome classes like `fa-fw` work as they would on the `<i>`.
+
+```vue
+import Icon from '@ui/Icon.vue';
+
+<Icon name="fa-solid fa-trash" class="text-sm text-slate-700" />
+```
+
+## Examples
+
+### Decorative and labeled
+
+An icon is hidden from screen readers by default, since it usually sits beside text that says the same thing. Pass `label` when the icon is the only thing carrying the meaning.
+
+<Card>
+  <div class="not-prose flex items-center gap-3 text-slate-700">
+    <Icon name="fa-solid fa-trash" />
+    <Icon name="fa-solid fa-circle-exclamation" class="text-rose-600" label="Error" />
+  </div>
+</Card>
+
+```vue
+<Icon name="fa-solid fa-trash" />
+<Icon name="fa-solid fa-circle-exclamation" class="text-rose-600" label="Error" />
+```
+
+### Changing icons
+
+A new `name` replaces the whole icon, so an icon bound to state, like a password field's eye, redraws when the state changes.
+
+```vue
+<Icon :name="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'" />
+```

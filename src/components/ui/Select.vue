@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId, watch, watchPostEffect, type CSSProperties } from 'vue';
 import { autoUpdate, computePosition, flip, offset, shift, size as fit } from '@floating-ui/dom';
 import Badge from './Badge.vue';
+import Icon from './Icon.vue';
 import { useControlBoundary, type Surface } from './surface.ts';
 
 type SelectSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -304,7 +305,7 @@ const sizeClasses = computed(() => {
 			<Badge v-if="props.required" color="rose" size="2xs" :title="props.required === 'label' ? undefined : 'Required'">
 				<template v-if="props.required === 'label'">Required</template>
 				<span v-else class="sr-only">Required</span>
-				<i class="fa-solid fa-asterisk" aria-hidden="true"></i>
+				<Icon name="fa-solid fa-asterisk" />
 			</Badge>
 		</label>
 
@@ -376,11 +377,11 @@ const sizeClasses = computed(() => {
 				</option>
 			</select>
 
-			<i
-				aria-hidden="true"
-				class="fa-solid fa-chevron-down pointer-events-none absolute top-1/2 -translate-y-1/2"
+			<Icon
+				name="fa-solid fa-chevron-down"
+				class="pointer-events-none absolute top-1/2 -translate-y-1/2"
 				:class="[sizeClasses.icon, props.error ? 'text-rose-600' : 'text-slate-500']"
-			></i>
+			/>
 		</div>
 
 		<!-- Drawn like a Menu panel, at the end of `<body>` so nothing clips it. The
@@ -428,7 +429,7 @@ const sizeClasses = computed(() => {
 							@pointermove="point(index)"
 						>
 							<span class="truncate">{{ option.label }}</span>
-							<i v-if="index === selectedIndex" class="fa-solid fa-check" aria-hidden="true"></i>
+							<Icon v-if="index === selectedIndex" name="fa-solid fa-check" />
 						</li>
 					</ul>
 				</li>
@@ -440,12 +441,12 @@ const sizeClasses = computed(() => {
 			:id="errorId"
 			class="mt-2 flex gap-1.5 px-0.5 text-xs text-rose-800"
 		>
-			<i aria-hidden="true" class="fa-solid fa-circle-exclamation mt-0.5"></i>
+			<Icon name="fa-solid fa-circle-exclamation" class="mt-0.5" />
 			<div>{{ props.error }}</div>
 		</div>
 
 		<div v-if="props.hint" class="mt-2 flex gap-1.5 px-0.5 text-xs text-slate-600">
-			<i aria-hidden="true" class="fa-solid fa-circle-info mt-0.5"></i>
+			<Icon name="fa-solid fa-circle-info" class="mt-0.5" />
 			<div>{{ props.hint }}</div>
 		</div>
 	</div>

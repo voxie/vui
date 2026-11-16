@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId, watchEffect } from 'vue';
+import Icon from './Icon.vue';
 import { useSurface, type Surface } from './surface.ts';
 
 type CheckboxSize = 'sm' | 'md' | 'lg';
@@ -188,11 +189,11 @@ defineExpose({
 					props.boxed ? '' : 'peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2',
 				]"
 			>
-				<i
+				<Icon
 					v-if="props.indeterminate || checked"
-					class="fa-solid"
-					:class="[sizeClasses.mark, props.indeterminate ? 'fa-minus' : 'fa-check']"
-				></i>
+					:name="props.indeterminate ? 'fa-solid fa-minus' : 'fa-solid fa-check'"
+					:class="sizeClasses.mark"
+				/>
 			</span>
 
 			<span v-if="props.label || slots.default || props.description || slots.description" class="min-w-0">
@@ -219,7 +220,7 @@ defineExpose({
 			:id="errorId"
 			class="mt-2 flex gap-1.5 px-0.5 text-xs text-rose-800"
 		>
-			<i aria-hidden="true" class="fa-solid fa-circle-exclamation mt-0.5"></i>
+			<Icon name="fa-solid fa-circle-exclamation" class="mt-0.5" />
 			<div>
 				<slot name="error" />
 				<div v-for="message in errors" :key="message">{{ message }}</div>
@@ -227,7 +228,7 @@ defineExpose({
 		</div>
 
 		<div v-if="slots.hint || props.hint" class="mt-2 flex gap-1.5 px-0.5 text-xs text-slate-600">
-			<i aria-hidden="true" class="fa-solid fa-circle-info mt-0.5"></i>
+			<Icon name="fa-solid fa-circle-info" class="mt-0.5" />
 			<div>
 				<slot name="hint" />
 				{{ props.hint }}

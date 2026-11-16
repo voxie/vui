@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import Alert from './Alert.vue';
 import Button from './Button.vue';
+import Icon from './Icon.vue';
 
 const props = withDefaults(
 	defineProps<{
@@ -122,11 +123,7 @@ const zoneClasses = computed(() => {
 			@change="onChange"
 		/>
 
-		<i
-			aria-hidden="true"
-			class="fa-solid text-5xl text-sky-400"
-			:class="props.icon"
-		></i>
+		<Icon :name="`fa-solid ${props.icon}`" class="text-5xl text-sky-400" />
 		<span class="mt-3 block font-semibold">
 			<slot name="title">Drag a file here</slot>
 		</span>
@@ -139,10 +136,7 @@ const zoneClasses = computed(() => {
 			class="pointer-events-none"
 		>
 			<slot name="browse">Browse computer</slot>
-			<i
-				aria-hidden="true"
-				class="fa-solid fa-file-medical"
-			></i>
+			<Icon name="fa-solid fa-file-medical" />
 		</Button>
 	</label>
 
@@ -151,11 +145,7 @@ const zoneClasses = computed(() => {
 		class="space-y-4 font-sans"
 	>
 		<div class="relative flex items-center gap-4 rounded-2xl bg-white p-4">
-			<i
-				aria-hidden="true"
-				class="fa-solid text-5xl text-slate-400"
-				:class="props.icon"
-			></i>
+			<Icon :name="`fa-solid ${props.icon}`" class="text-5xl text-slate-400" />
 			<div class="text-lg break-all text-slate-500">{{ file.name }}</div>
 			<button
 				type="button"
@@ -163,10 +153,7 @@ const zoneClasses = computed(() => {
 				class="absolute -end-4 -top-4 grid size-9 cursor-pointer appearance-none place-items-center rounded-full border-[5px] border-solid border-slate-50 bg-rose-400 p-0 outline-blue-600 transition hover:bg-rose-500 focus-visible:outline-2 focus-visible:outline-offset-2"
 				@click="remove"
 			>
-				<i
-					aria-hidden="true"
-					class="fa-solid fa-trash text-sm text-white"
-				></i>
+				<Icon name="fa-solid fa-trash" class="text-sm text-white" />
 			</button>
 		</div>
 

@@ -58,6 +58,7 @@ import {
 	type VNode,
 } from 'vue';
 import Button from './Button.vue';
+import Icon from './Icon.vue';
 import NavbarAction from './NavbarAction.vue';
 import { provideSurface } from './surface.ts';
 
@@ -306,7 +307,7 @@ const heightClasses = 'h-16 @min-[40rem]/navbar:h-20';
 					<!-- The width the fold holds back is the word's, read from the
 					     rail's copy, which always shows it. -->
 					<Button v-if="hamburger()" size="sm" color="slate">
-						<i class="fa-solid fa-bars fa-width-auto text-sm" aria-hidden="true"></i>
+						<Icon name="fa-solid fa-bars" class="fa-width-auto text-sm" />
 						<span class="sr-only">Menu</span>
 					</Button>
 					<span v-else>More</span>
