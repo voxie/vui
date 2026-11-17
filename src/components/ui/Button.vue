@@ -220,9 +220,10 @@ defineExpose({
 			]"
 		></span>
 
+		<!-- Fills a block button, so a flex-1 child can push the rest to the far end. -->
 		<div
 			class="relative flex items-center justify-center transition"
-			:class="[sizeClasses.content, props.loading ? 'opacity-0 motion-safe:scale-90' : '']"
+			:class="[sizeClasses.content, { 'w-full': props.block }, props.loading ? 'opacity-0 motion-safe:scale-90' : '']"
 		>
 			<slot />
 		</div>

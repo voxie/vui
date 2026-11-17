@@ -1,0 +1,108 @@
+---
+title: Summary Card
+order: 18
+keywords: [section, group, collapse, expand, accordion]
+---
+
+import Badge from '@ui/Badge.vue';
+import Card from '@ui/Card.vue';
+import SummaryCard from '@ui/SummaryCard.vue';
+import SummaryCardExample from '@site/SummaryCardExample.vue';
+
+A summary card is a card around one group of a list, like the flows in one state or the resources in one part of a flow. It opens and closes. Open, it is a sunken well and the cards in it are white. Closed, it is a white card itself, and a summary bar under the header stands in for what is folded away.
+
+<div class="my-10">
+  <SummaryCardExample client:load />
+</div>
+
+Its header holds a mark, the group's name, a count in a slate [Badge](/docs/components/badge), and a square [Button](/docs/components/button) at the far end that folds it. The opening and closing is a [disclosure](/docs/patterns/disclosure), which owns the rules for the chevron, the transition, and the closed block.
+
+```vue
+<SummaryCard label="Failing" :count="4" :summary="summary">
+  <template #mark>
+    <i class="fa-solid fa-circle-xmark text-rose-500" aria-hidden="true"></i>
+  </template>
+
+  …the group's cards…
+</SummaryCard>
+```
+
+## Examples
+
+### Open and closed
+
+The card's [surface](/docs/components/card#surface) follows the state.
+
+|                  | Open          | Closed          |
+| ---------------- | ------------- | --------------- |
+| Surface          | `sunken`      | `default`       |
+| Chevron          | `fa-angle-up` | `fa-angle-down` |
+| Under the header | The block     | The summary bar |
+
+Summary cards start open. `v-model:open` holds the state, and a card left unbound tracks its own. Pass `:open="false"` to start one closed.
+
+<div class="not-prose my-10">
+  <SummaryCard client:load open={false} label="Paused" count={2} summary={[{ label: 'Campaign', value: 1, color: 'sky' }, { label: 'Automation', value: 1, color: 'amber' }]}>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <Card padding="compact" class="text-sm font-semibold text-slate-800">Holiday preview</Card>
+      <Card padding="compact" class="text-sm font-semibold text-slate-800">Refill reminder</Card>
+    </div>
+  </SummaryCard>
+</div>
+
+The Button takes its fill from the card. It steps from slate-100 on the white card to slate-300 on the sunken one without being passed anything.
+
+### Header
+
+`label` is the group's name. `count` puts a number after it in a slate Badge. The `mark` slot takes an icon ahead of the name, and the icon brings its own color.
+
+<div class="not-prose my-10 grid gap-4">
+  <SummaryCard client:load open={false} label="Label only" />
+  <SummaryCard client:load open={false} label="Label and count" count={12} />
+  <SummaryCard client:load open={false} label="Mark, label, and count" count={12}>
+    <i slot="mark" class="fa-solid fa-circle-check text-sky-500" aria-hidden="true"></i>
+  </SummaryCard>
+</div>
+
+The name is an `<h3>`. `level` sets another level from 2 to 6, to fit the outline of the page the card is on.
+
+### Summary
+
+`summary` is a list of segments, and each one has a `label`, a `value`, and a `color`. The bar draws one segment per entry, as wide as its share of the total, so a closed card still shows its mix. A segment with a value of zero is left out.
+
+The colors are `sky`, `teal`, `amber`, `rose`, `violet`, and `slate`. Each fills at its 300.
+
+<div class="not-prose my-10">
+  <SummaryCard client:load open={false} label="Failing" count={9} summary={[{ label: 'Campaign', value: 4, color: 'sky' }, { label: 'Automation', value: 3, color: 'amber' }, { label: 'Segment', value: 2, color: 'violet' }]} />
+</div>
+
+```vue
+<SummaryCard
+  label="Failing"
+  :count="9"
+  :summary="[
+    { label: 'Campaign', value: 4, color: 'sky' },
+    { label: 'Automation', value: 3, color: 'amber' },
+    { label: 'Segment', value: 2, color: 'violet' },
+  ]"
+/>
+```
+
+A screen reader gets the bar as one image named by its segments, here "Campaign 4, Automation 3, Segment 2". With no `summary`, a closed card is its header alone.
+
+## Interaction
+
+A press on the square Button opens or closes the card. The Button has no visible label, so its `aria-label` is the card's `label`. With `aria-expanded` a screen reader hears "Failing, collapsed".
+
+In a list of summary cards, a press with <kbd>Option</kbd> held (<kbd>Alt</kbd> on Windows) sets every card to the state of the one pressed. The card that was pressed emits `toggle-all` with its new state, and the list sets the rest.
+
+```vue
+<SummaryCard
+  v-for="group in groups"
+  v-model:open="group.open"
+  :label="group.label"
+  @toggle-all="(open) => groups.forEach((each) => (each.open = open))"
+/>
+```
+
+The chevron, the 200ms transition, and the `inert` closed block all come from [Disclosure](/docs/patterns/disclosure). The surface and the summary bar run on the same timing, and the summary bar folds in as the block folds out.

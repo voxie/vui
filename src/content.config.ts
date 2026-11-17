@@ -6,6 +6,8 @@ const docs = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		order: z.number().default(0),
+		// Other names a reader might search for. Search ranks them just under the title.
+		keywords: z.array(z.string()).default([]),
 	}),
 });
 

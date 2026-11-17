@@ -84,7 +84,7 @@ Put a [Button](/docs/components/button) or a link in an action's label and the a
 
 The action still positions the panel, carries the marker, and toggles the menu when the control is pressed. It can't put anything inside your control, so three things move to you: the chevron, `aria-haspopup`, and `aria-expanded`.
 
-The label slot hands you `open` for all three:
+The label slot hands you `open` for all three. The chevron goes in a `<span>` keyed on `open`, since the Font Awesome kit replaces each `<i>` with an `<svg>` and a class changed on the `<i>` afterwards [never reaches the screen](/docs/patterns/disclosure#icon):
 
 ```vue
 <template #right>
@@ -92,7 +92,9 @@ The label slot hands you `open` for all three:
     <template #default="{ open }">
       <Button size="sm" aria-haspopup="true" :aria-expanded="open">
         <i class="fa-solid fa-gear" aria-hidden="true"></i>
-        <i :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+        <span :key="open ? 'up' : 'down'" class="contents">
+          <i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+        </span>
         <span class="sr-only">Account</span>
       </Button>
     </template>
