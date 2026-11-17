@@ -63,11 +63,26 @@ const descriptionClasses = computed(() => (selected.value && !disabled.value ? '
 // Only an unpicked tab does anything, so only it hovers and presses.
 const inert = computed(() => selected.value || disabled.value);
 
+// In a pair a click anywhere on the track picks the unpicked tab, so its fill
+// hovers and presses with the track.
+const pair = computed(() => Boolean(list?.pair.value));
+
 const hoverClasses = computed(() => {
+	if (pair.value) {
+		if (dark.value) return 'group-hover/tablist:bg-slate-700';
+		if (tabs.surface.value === 'sunken') return 'group-hover/tablist:bg-slate-500/30';
+		return 'group-hover/tablist:bg-slate-400/40';
+	}
 	if (dark.value) return 'group-hover/tab:bg-slate-700';
 	if (tabs.surface.value === 'sunken') return 'group-hover/tab:bg-slate-500/30';
 	return 'group-hover/tab:bg-slate-400/40';
 });
+
+const pressClasses = computed(() =>
+	pair.value
+		? 'group-active/tablist:duration-75 motion-safe:group-active/tablist:inset-0.5 motion-reduce:group-active/tablist:opacity-70'
+		: 'group-active/tab:duration-75 motion-safe:group-active/tab:inset-0.5 motion-reduce:group-active/tab:opacity-70',
+);
 
 // Only while the sliding indicator hasn't measured this tab yet. The same
 // white and shadow, so nothing flashes when the indicator takes over.
@@ -100,7 +115,7 @@ const onClick = () => {
 		:data-value="props.value"
 		:data-described="hasDescription ? '' : undefined"
 		class="group/tab relative z-10 flex h-full flex-col font-semibold transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
-		:class="[sizeClasses.radius, sizeClasses.text, list?.stacked.value ? sizeClasses.stacked : '', hasDescription ? ['items-start justify-start gap-0.5 text-left', sizeClasses.described] : ['items-center justify-center', sizeClasses.pad], textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected ? 'cursor-default' : 'cursor-pointer']"
+		:class="[sizeClasses.radius, sizeClasses.text, list?.stacked.value ? sizeClasses.stacked : '', hasDescription ? ['items-start justify-start gap-0.5 text-left', sizeClasses.described] : ['items-center justify-center', sizeClasses.pad], textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected && !pair ? 'cursor-default' : 'cursor-pointer']"
 		@click="onClick"
 	>
 		<!-- The hover fill is a box of its own so the press can be a fixed 2px
@@ -109,8 +124,8 @@ const onClick = () => {
 		<span
 			v-if="!inert"
 			aria-hidden="true"
-			class="absolute inset-0 -z-10 transition-all ease-out group-active/tab:duration-75 motion-safe:group-active/tab:inset-0.5 motion-reduce:group-active/tab:opacity-70"
-			:class="[sizeClasses.radius, hoverClasses]"
+			class="absolute inset-0 -z-10 transition-all ease-out"
+			:class="[sizeClasses.radius, hoverClasses, pressClasses]"
 		></span>
 		<span :id="labelId" data-tab-label class="relative whitespace-nowrap" :class="hasDescription ? 'leading-tight' : ''">
 			<slot />

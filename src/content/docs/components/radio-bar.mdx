@@ -5,6 +5,7 @@ order: 10
 
 import RadioBarExample from '@site/RadioBarExample.vue';
 import RadioBarSurfacesExample from '@site/RadioBarSurfacesExample.vue';
+import RadioBarPairExample from '@site/RadioBarPairExample.vue';
 
 A radio bar is a set of [Radio](/docs/components/radio) options laid out in one line, inside a bordered track the height of an [Input](/docs/components/input). Each option drops its circle and draws as a centered label, and the picked one sits on a slate-200 pill. The radios inside are the same component as everywhere else, so they keep their `name`, their `value`, their `v-model`, and the browser's arrow keys.
 
@@ -28,6 +29,14 @@ How a field goes together with its label, its description, and its messages is o
 ### Options
 
 Every `Radio` inside the bar becomes an option. Its `label` is all that shows, so the description, the messages, and `sitsOn` on the radio itself are ignored inside a bar. Put `error` and `hint` on the bar instead.
+
+### Two options
+
+A bar with two options works like a [Switch](/docs/components/switch). A click anywhere on the bar picks the other option, whether it lands on the picked option or on the space around the two.
+
+<RadioBarPairExample client:load />
+
+Both options have to be enabled, and one of them picked. With either option disabled, the bar goes back to picking only the option that is clicked.
 
 ### Surface
 
@@ -73,7 +82,7 @@ The `size` prop on the bar sets the track and every option in it. The sizes are 
 
 ## Interaction
 
-Hovering an unpicked option fills its pill slate-100 and lifts its label to slate-700. The picked option does nothing on hover, since there is nothing left for it to do.
+Hovering an unpicked option fills its pill slate-100 and lifts its label to slate-700. The picked option does nothing on hover, since there is nothing left for it to do. In a bar of [two options](#two-options), the unpicked option hovers and presses with the whole bar, and the cursor is a pointer over all of it.
 
 Picking an option slides the pill to it over 200ms, stretching or shrinking to the new label's width on the way. Pressing an unpicked option pulls its hover fill in by 2px on every side for the length of the press, and leaves the label where it is. The inset is `motion-safe`. With reduced motion the fill dims to 70% instead.
 

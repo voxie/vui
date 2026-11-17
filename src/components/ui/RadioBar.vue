@@ -81,6 +81,22 @@ const updateIndicator = () => {
 	indicatorReady.value = true;
 };
 
+// False until measured, so server-rendered HTML is the plain bar.
+const pair = ref(false);
+
+const updatePair = () => {
+	const inputs = Array.from(root.value?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ?? []);
+	pair.value =
+		inputs.length === 2 &&
+		inputs.every((input) => !input.disabled) &&
+		inputs.filter((input) => input.checked).length === 1;
+};
+
+const measure = () => {
+	updatePair();
+	updateIndicator();
+};
+
 let observer: ResizeObserver | undefined;
 
 // The pills as well as the track: a label that changes length moves every
@@ -94,17 +110,30 @@ const observe = () => {
 onMounted(() => {
 	if (typeof ResizeObserver !== 'undefined') observer = new ResizeObserver(updateIndicator);
 	observe();
-	updateIndicator();
+	measure();
 });
 
 onUpdated(() => {
 	observe();
-	updateIndicator();
+	measure();
 });
 
 // The pick lives in each radio's model, not here, so the input's change event
 // is what says the pill moved.
-const onChange = () => nextTick(updateIndicator);
+const onChange = () => nextTick(measure);
+
+// In a pair, a click on the picked option or the bar around the options picks
+// the other one. A click on an input is the browser's own, from a label or
+// the keyboard, and is left alone.
+const onClick = (event: MouseEvent) => {
+	if (!pair.value || event.target instanceof HTMLInputElement) return;
+	const other = root.value?.querySelector<HTMLInputElement>('input[type="radio"]:not(:checked)');
+	if (!other || other.closest('label')?.contains(event.target as Node)) return;
+	// Or the picked option's label clicks its own input and takes the pick back.
+	event.preventDefault();
+	other.focus();
+	other.click();
+};
 
 onBeforeUnmount(() => observer?.disconnect());
 
@@ -114,6 +143,7 @@ provide(RadioBarKey, {
 	invalid,
 	describedBy: computed(() => (invalid.value ? errorId : undefined)),
 	indicatorReady,
+	pair,
 });
 </script>
 
@@ -122,9 +152,10 @@ provide(RadioBarKey, {
 		<div
 			ref="root"
 			role="radiogroup"
-			class="relative flex w-full items-stretch justify-evenly border border-solid transition ease-out"
-			:class="[sizeClasses, trackClasses, props.disabled ? 'cursor-not-allowed' : '']"
+			class="group/radiobar relative flex w-full items-stretch justify-evenly border border-solid transition ease-out"
+			:class="[sizeClasses, trackClasses, props.disabled ? 'cursor-not-allowed' : pair ? 'cursor-pointer' : '']"
 			@change="onChange"
+			@click="onClick"
 		>
 			<!-- Hidden until it has been measured. Before that the picked option
 			     paints its own fill, so server-rendered HTML shows a pick. -->

@@ -154,17 +154,27 @@ const pillSizeClasses = computed(() => {
 	return 'h-7 px-2.5 text-sm';
 });
 
+// In a pair a click anywhere on the bar picks the unpicked option, so it
+// hovers and presses with the bar.
+const pair = computed(() => Boolean(bar?.pair.value));
+
 // The bar is white on every surface, so the pill's colors don't move with it.
 // The picked fill is the bar's sliding pill once it has measured this one.
 const pillClasses = computed(() => {
 	const ownFill = checked.value && !bar?.indicatorReady.value ? 'bg-slate-200' : '';
 	if (disabled.value) return checked.value ? [ownFill, 'text-slate-500'] : 'text-slate-400';
 	if (checked.value) return [ownFill, 'text-slate-800'];
-	return 'text-slate-500 group-hover/radio:text-slate-700';
+	return ['text-slate-500', pair.value ? 'group-hover/radiobar:text-slate-700' : 'group-hover/radio:text-slate-700'];
 });
 
 // Only an unpicked option does anything, so only it hovers and presses.
 const pillInert = computed(() => checked.value || disabled.value);
+
+const pillFillClasses = computed(() =>
+	pair.value
+		? 'group-hover/radiobar:bg-slate-100 group-active/radiobar:duration-75 motion-safe:group-active/radiobar:inset-0.5 motion-reduce:group-active/radiobar:opacity-70'
+		: 'group-hover/radio:bg-slate-100 group-active/radio:duration-75 motion-safe:group-active/radio:inset-0.5 motion-reduce:group-active/radio:opacity-70',
+);
 
 defineExpose({
 	input,
@@ -176,7 +186,7 @@ defineExpose({
 	<label
 		v-if="inBar"
 		class="group/radio relative flex min-w-0 items-center justify-center rounded-full font-sans outline-blue-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
-		:class="disabled ? 'cursor-not-allowed' : checked ? 'cursor-default' : 'cursor-pointer'"
+		:class="disabled ? 'cursor-not-allowed' : checked && !pair ? 'cursor-default' : 'cursor-pointer'"
 	>
 		<input
 			ref="input"
@@ -200,7 +210,8 @@ defineExpose({
 			<span
 				v-if="!pillInert"
 				aria-hidden="true"
-				class="absolute inset-0 -z-10 rounded-full transition-all ease-out group-hover/radio:bg-slate-100 group-active/radio:duration-75 motion-safe:group-active/radio:inset-0.5 motion-reduce:group-active/radio:opacity-70"
+				class="absolute inset-0 -z-10 rounded-full transition-all ease-out"
+				:class="pillFillClasses"
 			></span>
 			<span class="relative truncate">
 				<slot>{{ props.label }}</slot>
