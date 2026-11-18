@@ -1,0 +1,15 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Button from '@ui/Button.vue';
+import { withBase } from '@lib/base';
+---
+
+<Layout title="Page Not Found">
+  <h1>Page Not Found</h1>
+
+  <p>Nothing lives at this address. The page may have moved or been renamed.</p>
+
+  <div class="not-prose">
+    <Button href={withBase('/')}>Docs Home <i class="fa-solid fa-arrow-right"></i></Button>
+  </div>
+</Layout>
