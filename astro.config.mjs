@@ -7,13 +7,12 @@ import mdx from '@astrojs/mdx';
 
 import vue from '@astrojs/vue';
 
-import { devRootFavicon, rehypeBaseLinks } from './src/lib/base.ts';
+import { rehypeBaseLinks } from './src/lib/base.ts';
 
 // GitHub Pages serves a project repo under its name and redirects to the
 // slashed URL, so hrefs are built slashed. Templates use `withBase` from
 // `src/lib/base.ts`, prose gets the prefix from the rehype plugin. Base stays
-// on in dev so a missed prefix breaks locally. The one exception is the
-// browser's own /favicon.ico probe, which `devRootFavicon` serves from the base.
+// on in dev so a missed prefix breaks locally.
 //
 // PR previews publish into a subfolder of the same Pages site, so the base is
 // settable per build. See .github/workflows/pr-preview.yml.
@@ -42,7 +41,7 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [tailwindcss(), devRootFavicon({ base })],
+    plugins: [tailwindcss()],
   },
 
   integrations: [mdx(), vue()],

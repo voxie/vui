@@ -1,5 +1,3 @@
-import type { Connect, Plugin } from 'vite';
-
 // Astro serves everything under `base` (see astro.config.mjs). Templates are
 // written against the site root, so root-relative paths pass through here
 // where they land in an href or src. Pure, so the rehype plugin below can
@@ -37,21 +35,4 @@ export function rehypeBaseLinks({ base = '/' } = {}) {
 		node.children?.forEach(visit);
 	};
 	return (tree: any) => visit(tree);
-}
-
-// Browsers ask the origin root for /favicon.ico on any response that names no
-// icon, like the dev 404. Only that path is let through; see astro.config.mjs.
-export function devRootFavicon({ base = '/' } = {}): Plugin {
-	const handle: Connect.NextHandleFunction = (req, _res, next) => {
-		if (req.url === '/favicon.ico') req.url = applyBase(base, req.url);
-		next();
-	};
-	return {
-		name: 'vui:dev-root-favicon',
-		// Post, and unshifted from the returned hook, to land ahead of Astro's base check.
-		enforce: 'post',
-		configureServer: (server) => () => {
-			server.middlewares.stack.unshift({ route: '', handle });
-		},
-	};
 }
