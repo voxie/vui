@@ -104,9 +104,7 @@ A token wider than its line wraps inside its one box. It breaks after a colon, a
     <div class="w-44 rounded border border-dashed border-slate-300 p-2">
       <MessageToken client:load path="contact=>custom_attributes=>most_recent_completed_complimentary_trial_class_attendance_date" />
     </div>
-    <div class="w-64 rounded border border-dashed border-slate-300 p-2 text-slate-800">
-      You attended a trial class on <MessageToken client:load path="contact=>custom_attributes=>most_recent_completed_complimentary_trial_class_attendance_date" fallback="next" after="." /> Ready to enroll?
-    </div>
+    <div class="w-64 rounded border border-dashed border-slate-300 p-2 text-slate-800">You attended a trial class on <MessageToken client:load path="contact=>custom_attributes=>most_recent_completed_complimentary_trial_class_attendance_date" fallback="next" after="." /> Ready to enroll?</div>
   </div>
 </Card>
 
@@ -125,7 +123,7 @@ A token wider than its line wraps inside its one box. It breaks after a colon, a
 
 ### Punctuation
 
-`before` and `after` take the punctuation touching a token, such as the `!` after a greeting or the parentheses around a name. They share the token's block, so a line never starts or ends on a stranded mark.
+`before` and `after` take the punctuation touching a token, such as the `!` after a greeting or the parentheses around a name. They share the token's block, so a line never starts or ends on a stranded mark. When the token wraps, `before` sits beside its first row and `after` beside its last.
 
 <Card>
   <div class="not-prose text-sm leading-relaxed text-slate-800">Hi <MessageToken client:load path="contact=>first_name" after="!" /> Your tour <MessageToken client:load path="contact=>local=>custom_attributes=>tour_date" before="(" after=")" /> is booked.</div>
