@@ -20,24 +20,22 @@ function flush() {
 	const sizes = chips.map(measure);
 	chips.forEach((chip, i) => {
 		chip.style.width = sizes[i].width;
-		chip.style.setProperty('--token-height', sizes[i].height);
-		chip.toggleAttribute('data-wrapped', !!sizes[i].height);
+		chip.toggleAttribute('data-wrapped', sizes[i].wrapped);
 	});
 }
 
-// A wrapped chip reports its height so the raise can center it. Rows aren't counted, since a segment can wrap inside itself.
+// A wrapped chip is marked so it can take margins. Rows aren't counted, since a segment can wrap inside itself.
 function measure(chip: HTMLElement) {
 	const box = chip.getBoundingClientRect();
 	const style = getComputedStyle(chip);
 	// Rects are scaled by a transform, such as a canvas zoom, and CSS sizes aren't.
 	const scale = box.width / parseFloat(style.width) || 1;
-	const height = box.height / scale;
 	// One row is about 1.45em tall and two are about 2.45em.
-	if (height < 2 * parseFloat(style.fontSize)) return { width: '', height: '' };
+	if (box.height / scale < 2 * parseFloat(style.fontSize)) return { width: '', wrapped: false };
 	const rows = [...chip.children] as HTMLElement[];
-	if (rows.length < 2 || rows[0].offsetTop === rows[rows.length - 1].offsetTop) return { width: '', height: `${height}px` };
+	if (rows.length < 2 || rows[0].offsetTop === rows[rows.length - 1].offsetTop) return { width: '', wrapped: true };
 	const right = Math.max(...rows.map((row) => row.getBoundingClientRect().right));
-	return { width: `${Math.ceil((right - box.left) / scale + parseFloat(style.paddingRight))}px`, height: `${height}px` };
+	return { width: `${Math.ceil((right - box.left) / scale + parseFloat(style.paddingRight))}px`, wrapped: true };
 }
 
 function watchLine(wrapper: HTMLElement, token: Token) {
@@ -155,17 +153,20 @@ const markLabel = computed(() => (props.fallback === 'exit' ? 'exits the flow wh
 const pressable = computed(() => props.press || Boolean(props.description));
 
 // A wrapping flex row, so a token wider than its line wraps inside one box. gap-x is the quarter gap after a colon.
-// The row gap spaces trimmed rows, which take no leading. Uneven padding is the fallback for no text-box.
-const CHIP = 'inline-flex flex-wrap items-baseline gap-x-[1.5px] [baseline-source:last]! max-w-full rounded-[2px] px-1.25 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:pt-[0.35em] supports-[text-box:trim-both_cap_alphabetic]:pb-[0.38em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.3em] supports-[text-box:trim-both_cap_alphabetic]:align-[calc((var(--token-cap)_-_var(--token-height,calc(1cap_+_.73em)))_/_2_+_.38em)] supports-[text-box:trim-both_cap_alphabetic]:data-wrapped:my-[max(0px,(var(--token-line)_-_1cap_-_.73em)_/_2_-_1px)] text-left font-token font-[350] tracking-[0.015em] [font-variation-settings:"MONO"_var(--token-mono,0)] text-[.85em] break-words ring-1';
-// The raise centers the chip on the surrounding capitals. .38em is pb, the last baseline's height above the bottom, and 1cap + .73em is one row.
-// baseline-source is important because vertical-align is a shorthand that resets it.
-// A wrapped chip outgrows the line, so its margins keep a one-row chip's air (.73em is pt + pb). Less 1px for rounding.
+// The row gap spaces trimmed rows, which take no leading. Rows inside a segment that wraps do, so the leading is set to the same pitch. Uneven padding is the fallback for no text-box.
+const CHIP = 'inline-flex flex-wrap items-baseline gap-x-[1.5px] min-w-0 rounded-[2px] px-1.25 pt-[0.14em] pb-0 supports-[text-box:trim-both_cap_alphabetic]:pt-[0.35em] supports-[text-box:trim-both_cap_alphabetic]:pb-[0.38em] supports-[text-box:trim-both_cap_alphabetic]:gap-y-[0.3em] supports-[text-box:trim-both_cap_alphabetic]:leading-[calc(1cap_+_.3em)] supports-[text-box:trim-both_cap_alphabetic]:data-wrapped:my-[max(0px,(var(--token-line)_-_1cap_-_.73em)_/_2_-_1px)] text-left font-token font-[350] tracking-[0.015em] [font-variation-settings:"MONO"_var(--token-mono,0)] text-[.85em] break-words ring-1';
+// A wrapped chip outgrows the line, so its margins keep a one-row chip's air. 1cap + .73em is one row (.73em is pt + pb). Less 1px for rounding.
 // A flex container takes no text-box, so each piece trims its own line to cap height and baseline and the padding centers it. The bottom is heavier because mostly lowercase text reads low when its capitals are centered.
 const PIECE = 'supports-[text-box:trim-both_cap_alphabetic]:[text-box:trim-both_cap_alphabetic]';
 // Important because the kit's unlayered CSS sets height and vertical-align.
 const ICON = 'fa-width-auto [--size:.85em] h-[var(--size)]! align-[calc((1cap_-_var(--size))/2)]!';
 // Binds the icon and the mark to their segment, one gap from its label.
 const SEGMENT = 'flex min-w-0 items-baseline gap-x-1';
+// A flex row, so the chip shrinks to leave room for its marks. The ::before is as tall as the surrounding capitals and centered, so its bottom edge is the row's baseline and the chip centers on the capitals at any height.
+// Without text-box the chip and its marks sit on the chip's last baseline.
+const ROW = 'group/token inline-flex max-w-full [--token-line:1lh] not-supports-[text-box:trim-both_cap_alphabetic]:items-baseline-last not-supports-[text-box:trim-both_cap_alphabetic]:[baseline-source:last] supports-[text-box:trim-both_cap_alphabetic]:before:h-[1cap] supports-[text-box:trim-both_cap_alphabetic]:before:self-center';
+// Punctuation beside the chip. The ::after is one row tall in the token's face and takes a wrapped chip's margins, and the mark centers its capitals on it.
+const MARK = 'flex shrink-0 items-center supports-[text-box:trim-both_cap_alphabetic]:after:h-[calc(1cap_+_.73em)] supports-[text-box:trim-both_cap_alphabetic]:after:font-token supports-[text-box:trim-both_cap_alphabetic]:after:text-[.85em] supports-[text-box:trim-both_cap_alphabetic]:group-has-data-wrapped/token:after:my-[max(0px,(var(--token-line)_-_1cap_-_.73em)_/_2_-_1px)]';
 const PRESS = 'cursor-pointer transition-colors outline-blue-600 outline-offset-2 focus-visible:outline-2';
 
 const wrapper = useTemplateRef<HTMLElement>('wrapper');
@@ -181,39 +182,41 @@ watch([chip, segments, mark], () => nextTick(() => hug([token])));
 </script>
 
 <template>
-	<!-- Popover wraps its trigger in two divs. Both go to display: contents so the chip stays in the line. -->
-	<span ref="wrapper" class="inline-block max-w-full [--token-line:1lh] [--token-cap:1cap]">{{ before }}<Popover :content="description" :disabled="press || !description" class="contents! [&>div]:contents!">
-		<template #default="{ triggerProps, open }">
-			<component
-				ref="chip"
-				:is="pressable ? 'button' : 'span'"
-				:type="pressable ? 'button' : undefined"
-				v-bind="press ? {} : pressable ? triggerProps : {}"
-				:class="[CHIP, before ? 'ml-0.5' : '', after ? 'mr-0.5' : '', tone.chip, pressable ? [PRESS, tone.press] : '', press ? 'focus:outline-2' : '', selected ? 'outline-2' : '', open ? tone.open : '']"
-				@click="press && $emit('press')"
-			>
-				<template v-for="(segment, i) in segments" :key="i">
-					<span :class="SEGMENT">
-						<!-- The kit swaps each <i> for an <svg>, so the icon is keyed to be replaced whole when it changes. -->
-						<span v-if="i === 0" :key="`${kind.icon} ${tone.icon}`" :class="PIECE"><i class="fa-solid" :class="[ICON, kind.icon, tone.icon]" aria-hidden="true"></i></span>
-						<span class="min-w-0" :class="PIECE">{{ segment }}<template v-if="i < segments.length - 1">:</template></span>
-						<span v-if="mark && i === segments.length - 1" :key="mark" :class="PIECE"><i class="fa-solid" :class="[ICON, mark, tone.icon]" role="img" :aria-label="markLabel"></i></span>
-					</span>
+	<!-- An inline-block, so a token that stands alone as a flex or grid item is still one line tall. -->
+	<span ref="wrapper" class="inline-block max-w-full">
+		<span :class="ROW">
+			<!-- `before` sits on the chip's first row and `after` on its last. -->
+			<span v-if="before" :class="[MARK, 'supports-[text-box:trim-both_cap_alphabetic]:self-start']"><span :class="PIECE">{{ before }}</span></span>
+			<!-- Popover wraps its trigger in two divs. Both go to display: contents so the chip stays in the row. -->
+			<Popover :content="description" :disabled="press || !description" class="contents! [&>div]:contents!">
+				<template #default="{ triggerProps, open }">
+					<component
+						ref="chip"
+						:is="pressable ? 'button' : 'span'"
+						:type="pressable ? 'button' : undefined"
+						v-bind="press ? {} : pressable ? triggerProps : {}"
+						:class="[CHIP, before ? 'ml-0.5' : '', after ? 'mr-0.5' : '', tone.chip, pressable ? [PRESS, tone.press] : '', press ? 'focus:outline-2' : '', selected ? 'outline-2' : '', open ? tone.open : '']"
+						@click="press && $emit('press')"
+					>
+						<template v-for="(segment, i) in segments" :key="i">
+							<span :class="SEGMENT">
+								<!-- The kit swaps each <i> for an <svg>, so the icon is keyed to be replaced whole when it changes. -->
+								<span v-if="i === 0" :key="`${kind.icon} ${tone.icon}`" :class="PIECE"><i class="fa-solid" :class="[ICON, kind.icon, tone.icon]" aria-hidden="true"></i></span>
+								<span class="min-w-0" :class="PIECE">{{ segment }}<template v-if="i < segments.length - 1">:</template></span>
+								<span v-if="mark && i === segments.length - 1" :key="mark" :class="PIECE"><i class="fa-solid" :class="[ICON, mark, tone.icon]" role="img" :aria-label="markLabel"></i></span>
+							</span>
+						</template>
+					</component>
 				</template>
-			</component>
-		</template>
-	</Popover>{{ after }}</span>
+			</Popover>
+			<span v-if="after" :class="[MARK, 'supports-[text-box:trim-both_cap_alphabetic]:self-end']"><span :class="PIECE">{{ after }}</span></span>
+		</span>
+	</span>
 </template>
 
 <style>
-/* Registered so 1lh and 1cap resolve to px on the wrapper, in the parent's font, before the smaller chip inherits them. */
+/* Registered so 1lh resolves to px on the row, in the parent's font, before the smaller chip inherits it. */
 @property --token-line {
-	syntax: '<length>';
-	inherits: true;
-	initial-value: 0px;
-}
-
-@property --token-cap {
 	syntax: '<length>';
 	inherits: true;
 	initial-value: 0px;
