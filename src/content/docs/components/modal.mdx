@@ -9,7 +9,7 @@ import ModalStackedExample from '@site/ModalStackedExample.vue';
 
 A modal is a panel over the page, for a task that has to be finished or abandoned before anything else happens. It renders at the end of `<body>` rather than where you wrote it, so no ancestor's overflow or stacking context can clip it.
 
-Four slots make the panel, top to bottom. `header` is the title, rendered as an `h2`. `subheader` sits under it in the same white bar. The default slot is the body, tinted to slate-50, and the body is the part that scrolls. `footer` is the action bar, white again and pinned under the body.
+Four slots make the panel, top to bottom. `header` is the title, rendered as an `h2`. `subheader` sits under it in the same white bar. The default slot is the body, tinted to slate-50, and the body is the part that scrolls. `footer` is the row of actions, white again and pinned under the body.
 
 ```html
 <Modal v-model="open" size="md">
@@ -37,9 +37,9 @@ Every region pads its content by `24px` and is divided from the next by a slate-
   <ModalDemo client:load label="Open" />
 </Card>
 
-The body is a `glass` surface and it says so to everything inside it. An [Input](/docs/components/input) or a [Select](/docs/components/select) in there picks up the right boundary without being told. The head and the footer are `default`, so a [Button](/docs/components/button) in the action bar comes out slate-100.
+The body is a `glass` surface and it says so to everything inside it. An [Input](/docs/components/input) or a [Select](/docs/components/select) in there picks up the right boundary without being told. The head and the footer are `default`, so a [Button](/docs/components/button) in the footer comes out slate-100.
 
-The action bar is always there. A modal ends in its actions, so the bar is part of the shape rather than a slot that comes and goes.
+The footer is always there. A modal ends in its actions, so the footer is part of the shape rather than a slot that comes and goes.
 
 The head is the part that can go. Drop `header` and `subheader` for a modal whose body speaks for itself, and the body runs to the top edge with no empty bar above it.
 
@@ -51,11 +51,11 @@ The close button floats over the panel rather than sitting in the head, so it su
 
 A modal with no `header` needs an `aria-label`, since there's no title for the dialog to be named by.
 
-### The action bar
+### The footer
 
 The footer is a row. Below `sm` it stacks, reversed, so the last button written is the one on top and closest to the thumb.
 
-The primary action fills the bar. Give it `block` and write it last. A secondary button beside it keeps its own width and the primary takes what's left.
+The primary action fills the row. Give it `block` and write it last. A secondary button beside it keeps its own width and the primary takes what's left.
 
 ```html
 <template #footer>

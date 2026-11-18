@@ -6,7 +6,7 @@ import Alert from '@ui/Alert.vue';
 import Button from '@ui/Button.vue';
 import Card from '@ui/Card.vue';
 import PageLayout from '@ui/PageLayout.vue';
-import StickyFooter from '@ui/StickyFooter.vue';
+import ActionBar from '@ui/ActionBar.vue';
 import type { Layout } from './pageStructure';
 
 defineProps<{
@@ -93,7 +93,7 @@ const cardSm = 'w-full md:max-w-2xl';
       class="h-24"
       :class="cardSm"
     />
-    <StickyFooter :class="cardSm">
+    <ActionBar :class="cardSm">
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"
@@ -102,7 +102,7 @@ const cardSm = 'w-full md:max-w-2xl';
         data-preview-close
         >Save</Button
       >
-    </StickyFooter>
+    </ActionBar>
   </PageLayout>
 
   <PageLayout
@@ -138,7 +138,7 @@ const cardSm = 'w-full md:max-w-2xl';
       surface="glass"
       class="w-full h-24"
     />
-    <StickyFooter :class="cardSm">
+    <ActionBar :class="cardSm">
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"
@@ -147,7 +147,7 @@ const cardSm = 'w-full md:max-w-2xl';
         data-preview-close
         >Save</Button
       >
-    </StickyFooter>
+    </ActionBar>
   </PageLayout>
 
   <PageLayout
@@ -208,7 +208,7 @@ const cardSm = 'w-full md:max-w-2xl';
       />
     </div>
 
-    <StickyFooter :class="cardSm">
+    <ActionBar :class="cardSm">
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"
@@ -217,6 +217,6 @@ const cardSm = 'w-full md:max-w-2xl';
         data-preview-close
         >Save</Button
       >
-    </StickyFooter>
+    </ActionBar>
   </PageLayout>
 </template>
