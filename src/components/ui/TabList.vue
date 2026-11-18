@@ -173,12 +173,13 @@ const onKeydown = (event: KeyboardEvent) => {
 	if (value !== undefined) tabs.select(value);
 };
 
-// In a pair, a click on the picked tab or the track around the tabs picks the
-// other one. `detail` is 0 for a click from the keyboard, which is left alone.
+// In a pair, a pointer click anywhere on the track picks the unpicked tab, and
+// Tab leaves those clicks to this. `detail` is 0 for a click from the keyboard,
+// which stays with Tab.
 const onClick = (event: MouseEvent) => {
 	if (!pair.value || !event.detail || !root.value) return;
 	const other = root.value.querySelector<HTMLElement>('[role="tab"][aria-selected="false"]');
-	if (!other || other.contains(event.target as Node)) return;
+	if (!other) return;
 	// Focus follows the pick, as it does on the arrow keys.
 	if (root.value.contains(document.activeElement)) other.focus();
 	const value = other.dataset.value;
@@ -191,7 +192,7 @@ const onClick = (event: MouseEvent) => {
 		ref="root"
 		role="tablist"
 		:aria-orientation="stacked ? 'vertical' : undefined"
-		class="group/tablist relative grid font-sans select-none"
+		class="relative grid font-sans select-none"
 		:class="[stacked ? 'grid-cols-1' : 'auto-cols-fr grid-flow-col', sizeClasses.track, trackClasses, trackEdge, tabs.disabled.value ? 'cursor-not-allowed' : pair ? 'cursor-pointer' : '']"
 		@keydown="onKeydown"
 		@click="onClick"

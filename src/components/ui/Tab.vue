@@ -60,29 +60,18 @@ const textClasses = computed(() => {
 // picked label still leads.
 const descriptionClasses = computed(() => (selected.value && !disabled.value ? 'text-slate-600' : ''));
 
-// Only an unpicked tab does anything, so only it hovers and presses.
+// Only an unpicked tab hovers and presses, in a pair too.
 const inert = computed(() => selected.value || disabled.value);
 
-// In a pair a click anywhere on the track picks the unpicked tab, so its fill
-// hovers and presses with the track.
+// In a pair a click anywhere on the track picks the unpicked tab, so the
+// picked tab takes a pointer too.
 const pair = computed(() => Boolean(list?.pair.value));
 
 const hoverClasses = computed(() => {
-	if (pair.value) {
-		if (dark.value) return 'group-hover/tablist:bg-slate-700';
-		if (tabs.surface.value === 'sunken') return 'group-hover/tablist:bg-slate-500/30';
-		return 'group-hover/tablist:bg-slate-400/40';
-	}
 	if (dark.value) return 'group-hover/tab:bg-slate-700';
 	if (tabs.surface.value === 'sunken') return 'group-hover/tab:bg-slate-500/30';
 	return 'group-hover/tab:bg-slate-400/40';
 });
-
-const pressClasses = computed(() =>
-	pair.value
-		? 'group-active/tablist:duration-75 motion-safe:group-active/tablist:inset-0.5 motion-reduce:group-active/tablist:opacity-70'
-		: 'group-active/tab:duration-75 motion-safe:group-active/tab:inset-0.5 motion-reduce:group-active/tab:opacity-70',
-);
 
 // Only while the sliding indicator hasn't measured this tab yet. The same
 // white and shadow, so nothing flashes when the indicator takes over.
@@ -96,7 +85,10 @@ const ownBackground = computed(() => {
 // selected yet every tab is reachable.
 const tabindex = computed(() => (selected.value || tabs.current.value === undefined ? 0 : -1));
 
-const onClick = () => {
+// In a pair TabList picks on a pointer click. A pick here would render before
+// the click reaches TabList, which would then pick the other tab back.
+const onClick = (event: MouseEvent) => {
+	if (pair.value && event.detail) return;
 	if (!disabled.value) tabs.select(props.value);
 };
 </script>
@@ -124,8 +116,8 @@ const onClick = () => {
 		<span
 			v-if="!inert"
 			aria-hidden="true"
-			class="absolute inset-0 -z-10 transition-all ease-out"
-			:class="[sizeClasses.radius, hoverClasses, pressClasses]"
+			class="absolute inset-0 -z-10 transition-all ease-out group-active/tab:duration-75 motion-safe:group-active/tab:inset-0.5 motion-reduce:group-active/tab:opacity-70"
+			:class="[sizeClasses.radius, hoverClasses]"
 		></span>
 		<span :id="labelId" data-tab-label class="relative whitespace-nowrap" :class="hasDescription ? 'leading-tight' : ''">
 			<slot />
