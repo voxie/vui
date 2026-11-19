@@ -3,6 +3,7 @@ import { computed, useId } from 'vue';
 import Badge from './Badge.vue';
 import Button from './Button.vue';
 import Card from './Card.vue';
+import Icon from './Icon.vue';
 
 // The five accents plus slate, each at its 300.
 type SummaryColor = 'sky' | 'teal' | 'amber' | 'rose' | 'violet' | 'slate';
@@ -79,10 +80,7 @@ const fold = 'grid motion-safe:transition-[grid-template-rows,visibility] motion
 				:aria-controls="panelId"
 				@click="toggle"
 			>
-				<!-- Keyed, so each swap mounts a new <i> for the kit to pick up. -->
-				<span :key="open ? 'up' : 'down'" class="contents">
-					<i class="fa-solid" :class="open ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
-				</span>
+				<Icon :name="open ? 'fa-solid fa-angle-up' : 'fa-solid fa-angle-down'" />
 			</Button>
 		</div>
 

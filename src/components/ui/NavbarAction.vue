@@ -14,6 +14,7 @@ import {
 	type VNode,
 } from 'vue';
 import Button from './Button.vue';
+import Icon from './Icon.vue';
 import SurfaceProvider from './SurfaceProvider.vue';
 import { provideSurface, useSurface, type Surface } from './surface.ts';
 
@@ -265,15 +266,11 @@ const markerClasses = () => {
 				:aria-current="props.active ? (props.href ? 'page' : 'true') : undefined"
 				class="pointer-events-auto"
 			>
-				<span v-if="props.icon" :key="props.icon" class="contents">
-					<i class="fa-width-auto text-xs text-slate-400" :class="props.icon" aria-hidden="true"></i>
-				</span>
+				<Icon v-if="props.icon" :name="props.icon" class="fa-width-auto text-xs text-slate-400" />
 				<slot :open="dropdownOpen" />
 				<!-- A step under the label. The arrow is punctuation and not a word: at
 				     the label's own size it competes with it for the reading. -->
-				<span v-if="hasDropdown()" :key="chevronIcon" class="contents">
-					<i class="fa-width-auto text-2xs" :class="chevronIcon" aria-hidden="true"></i>
-				</span>
+				<Icon v-if="hasDropdown()" :name="chevronIcon" class="fa-width-auto text-2xs" />
 			</Button>
 
 			<!-- Drawn here and not on the element that took the focus: a row runs the
@@ -294,26 +291,24 @@ const markerClasses = () => {
 				>
 					<!-- Fixed width in a menu, where the icons are a column holding the
 					     labels in line. On the bar each section is on its own. -->
-					<span v-if="props.icon" :key="`${props.icon} ${props.nested}`" class="contents">
-						<i
-							class="text-xs text-slate-400"
-							:class="[props.icon, props.nested ? 'fa-fw' : 'fa-width-auto']"
-							aria-hidden="true"
-						></i>
-					</span>
+					<Icon
+						v-if="props.icon"
+						:name="props.icon"
+						class="text-xs text-slate-400"
+						:class="props.nested ? 'fa-fw' : 'fa-width-auto'"
+					/>
 					<slot :open="dropdownOpen" />
 				</span>
 				<!-- Font Awesome fixes every icon at 1.25em so a column lines up; the
 				     arrow isn't in one, so `fa-width-auto` leaves the gap alone. A step
 				     under the label at every depth — a button in a side slot has to set
 				     the same size on the arrow it carries. -->
-				<span v-if="hasDropdown() && element() !== 'div'" :key="chevronIcon" class="contents">
-					<i
-						class="fa-width-auto text-2xs"
-						:class="[chevronIcon, { 'text-slate-900': props.nested }]"
-						aria-hidden="true"
-					></i>
-				</span>
+				<Icon
+					v-if="hasDropdown() && element() !== 'div'"
+					:name="chevronIcon"
+					class="fa-width-auto text-2xs"
+					:class="{ 'text-slate-900': props.nested }"
+				/>
 			</span>
 		</component>
 

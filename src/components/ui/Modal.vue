@@ -33,6 +33,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } fro
 import { provideSurface } from './surface.ts';
 import SurfaceProvider from './SurfaceProvider.vue';
 import Button from './Button.vue';
+import Icon from './Icon.vue';
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -258,7 +259,7 @@ watch(open, async (isOpen) => {
 					     holds its top end corner clear. -->
 					<div v-if="props.dismissible" class="absolute end-4 top-4 z-10">
 						<Button size="sm" aria-label="Close" @click="close">
-							<i aria-hidden="true" class="fa-solid fa-xmark"></i>
+							<Icon name="fa-solid fa-xmark" />
 						</Button>
 					</div>
 

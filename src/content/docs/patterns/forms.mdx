@@ -53,7 +53,7 @@ The label is extrabold and slate-800, so a form column scans as a list of questi
 <Card surface="glass">
   <div class="not-prose grid gap-4">
     <Input label="First name" />
-    <Select label="Time zone" options={[{ value: 'et', label: 'Eastern Time' }, { value: 'ct', label: 'Central Time' }]} />
+    <Select client:load label="Time zone" options={[{ value: 'et', label: 'Eastern Time' }, { value: 'ct', label: 'Central Time' }]} />
   </div>
 </Card>
 
@@ -65,7 +65,7 @@ Every required field is marked, and optional fields are left unmarked. The mark 
   <div class="not-prose grid gap-4">
     <Input label="Name" description="Shown to contacts as the sender of every message." required="label" />
     <Input label="External ID" required />
-    <Select label="Time zone" block required options={[{ value: 'america/new_york', label: 'Eastern Time' }, { value: 'america/chicago', label: 'Central Time' }]} />
+    <Select client:load label="Time zone" block required options={[{ value: 'america/new_york', label: 'Eastern Time' }, { value: 'america/chicago', label: 'Central Time' }]} />
     <Input label="Description" rows={2} />
   </div>
 </Card>
@@ -116,7 +116,7 @@ A compact field is one in a row that reads as a sentence, where a label above ev
 <Card surface="glass">
   <div class="not-prose flex flex-wrap items-center gap-2 text-sm">
     <span>When</span>
-    <Select size="sm" options={[{ value: 'tag', label: 'contact tag' }, { value: 'segment', label: 'segment' }]} />
+    <Select client:load size="sm" options={[{ value: 'tag', label: 'contact tag' }, { value: 'segment', label: 'segment' }]} />
     <span>is</span>
     <Input size="sm" placeholder="Value" />
   </div>

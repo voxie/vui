@@ -149,13 +149,9 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
   <Card surface="glass" padding="none">
     <div class="not-prose flex flex-col gap-4 border-b border-solid border-slate-100 p-8">
       <TrialMode client:load />
-      <Select
-        block
-        sits-on="glass"
-        label="Page to style"
-        options={pageOptions}
-        data-prompt-page
-      />
+      <div data-prompt-page>
+        <Select client:load block sits-on="glass" label="Page to style" options={pageOptions} />
+      </div>
 
       <Button color="sky" block data-copy-prompt>
         <i data-copy-icon class="fa-regular fa-clipboard"></i>
@@ -183,13 +179,14 @@ const checks = ['Does it use real Tailwind color names, or did it reach for <cod
     </div>
   </Card>
 
-  {/* The select and the button aren't hydrated, and the radios are native
-      inputs whose change bubbles out of the island, so everything is wired here. */}
+  {/* The button isn't hydrated, and the radios and the select's own native
+      select fire a change that bubbles out of their islands, so everything is
+      wired here. */}
   <script define:vars={{ promptTemplates, openingTemplate: promptOpening(PAGE), PAGE }}>
     const button = document.querySelector('[data-copy-prompt]');
     const icon = button?.querySelector('[data-copy-icon]');
     const label = button?.querySelector('[data-copy-label]');
-    const select = document.querySelector('[data-prompt-page]');
+    const select = document.querySelector('[data-prompt-page] select');
     const opening = document.querySelector('[data-prompt-opening]');
     const modeBar = document.querySelector('[data-prompt-mode]');
     const briefs = document.querySelectorAll('[data-brief]');

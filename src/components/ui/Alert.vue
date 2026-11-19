@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { provideSurface, useSurface, type Surface } from './surface.ts';
 import Button from './Button.vue';
+import Icon from './Icon.vue';
 
 // The five accents, which carry the meanings Color documents, plus slate.
 type AlertColor = 'sky' | 'teal' | 'amber' | 'rose' | 'violet' | 'slate';
@@ -154,10 +155,7 @@ function close(): void {
       :class="iconClasses[props.color]"
     >
       <slot name="icon">
-        <i
-          aria-hidden="true"
-          class="fa-solid fa-circle-exclamation"
-        ></i>
+        <Icon name="fa-solid fa-circle-exclamation" />
       </slot>
     </div>
 
@@ -184,10 +182,7 @@ function close(): void {
         :class="{ 'mix-blend-multiply': props.color !== 'slate' }"
         @click="close"
       >
-        <i
-          aria-hidden="true"
-          class="fa-solid fa-xmark"
-        ></i>
+        <Icon name="fa-solid fa-xmark" />
       </Button>
     </div>
 
