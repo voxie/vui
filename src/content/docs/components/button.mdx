@@ -125,6 +125,8 @@ The `size` prop controls height, padding, and corner radius. The sizes are `xs`,
   <div class="not-prose"><Button block>Block button</Button></div>
 </Card>
 
+The row inside a block button fills the width too. A lone label stays centered, and a child with `flex-1` pushes whatever follows it to the far end, as in a [disclosure's header](/docs/patterns/disclosure#the-whole-header).
+
 ### Two buttons
 
 When a card, the floating action panel, or a [modal's action bar](/docs/components/modal#the-action-bar) ends in two buttons, the primary action goes on the right and fills the width. Give it `block` and write it last. The secondary button sits on the left at its own width.

@@ -6,6 +6,8 @@ import '@fontsource-variable/inter/wght.css';
 import '@fontsource-variable/google-sans-code/mono.css';
 import '../styles/global.css';
 
+import { withBase } from '@lib/base';
+
 interface Props {
 	title: string;
 	source?: string;
@@ -17,6 +19,8 @@ const { title, source } = Astro.props;
 <html lang="en" class="scrollbar-thumb-slate-400 scrollbar-track-transparent">
 	<head>
 		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+		<link rel="icon" href={withBase('/favicon.ico')} />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		{source && <meta name="x-source" content={source} />}

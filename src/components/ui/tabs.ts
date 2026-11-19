@@ -20,6 +20,8 @@ export interface TabListContext {
 	// Until the sliding indicator has measured the selected tab, that tab paints
 	// its own white. This is what server-rendered HTML shows.
 	indicatorReady: Ref<boolean>;
+	// The tabs are one above the other, since they no longer fit side by side.
+	stacked: Ref<boolean>;
 }
 
 export const TabsKey: InjectionKey<TabsContext> = Symbol('tabs');

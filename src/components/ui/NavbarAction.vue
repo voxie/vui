@@ -179,6 +179,8 @@ onBeforeUnmount(() => {
 });
 
 // Only a menu carries a chevron, which turns at every level once it is open.
+// The kit swaps each <i> for an <svg>, so the chevron and the icon each sit in
+// a keyed span, which mounts a new <i> on every change.
 const chevronIcon = computed(() => {
 	return dropdownOpen.value ? 'fa-solid fa-angle-up' : 'fa-solid fa-angle-down';
 });

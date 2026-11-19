@@ -75,7 +75,7 @@ list stays readable.
 
 ## Running a trial
 
-A trial never touches these files. `npm run trial -- --docs` or `npm run trial
+A trial never touches these files. `pnpm run trial -- --docs` or `pnpm run trial
 -- --skills` copies every page and the shell into `src/pages/trial/`, rewriting
 the links between pages so the copy stays self-contained, and the agent styles
 that copy. It serves at `/trial/…` next to the raw page at `/test-pages/…`. The
@@ -88,12 +88,12 @@ so Claude Code sees them here the way it does in a consuming repo, and the brief
 keeps the docs closed. Running the same page both ways shows what the skills
 lose. The links are ignored by git and go away with the trial.
 
-Start a docs trial in a fresh Claude Code session: run `npm run trial -- --docs`
+Start a docs trial in a fresh Claude Code session: run `pnpm run trial -- --docs`
 first, then open the session. Claude Code picks up a newly linked skill while a
 session is running, but a session that already loaded the skills during a skills
 trial may hold on to them after the docs trial unlinks the files. A new session
 reads `.claude/skills/` from scratch and sees only `docs-voice`.
 
-The script refuses to overwrite an existing trial. `npm run trial -- --fresh --docs`
-or `--fresh --skills` starts over, and `npm run trial -- --remove` deletes the trial and unlinks the
+The script refuses to overwrite an existing trial. `pnpm run trial -- --fresh --docs`
+or `--fresh --skills` starts over, and `pnpm run trial -- --remove` deletes the trial and unlinks the
 skills. A bare `rm -rf src/pages/trial` leaves the links behind.

@@ -50,6 +50,12 @@ Leading negation, stated plainly:
 
 > Every button below is passed nothing.
 
+A balanced pair in abstract terms, restated directly:
+
+> The icon says where the value comes from, and the text is the path to it.
+
+> The icon shows which record the value comes from. The text names the field on that record.
+
 Direction re-voiced, with every claim kept:
 
 > Can also be used sparingly to draw attention outside warning semantics e.g. the Quickblast feature uses this for its button color.
@@ -91,6 +97,7 @@ Telling them apart: behavior describes ("The `color` prop sets the fill"). Direc
 Write like a colleague explaining the component at a desk. Plain, concrete, a little dry. Contractions are fine. The reader is a designer or engineer who wants to use the thing correctly.
 
 - Present tense, active voice. "A slate button steps one level away from its surface", not "the surface will be stepped away from".
+- Direct beats elegant. Name the subject, use the verb for what it does, and say how two things relate. A reader should never have to unpack a sentence to understand it. Parallel clauses, pronouns, and short sentences all stay when they make the sentence clearer.
 - Say what to do and why, in that order. The reason is usually one clause, not a paragraph.
 - Name the failure mode when there is one. "A bare button on the page comes out slate-100 on slate-200, which is hard to see and easy to miss" earns its place. Vague caution ("be careful with surfaces") does not.
 - Every number, and every claim about what a component does, is measured or read from the source. Open the component or the example file. A guessed number is worse than no number. Direction is the exception, since it has no source but the author.
@@ -135,6 +142,6 @@ A foundations or patterns page has no `## Examples`. It runs an H2 per topic, wi
 
 2. Confirm the page has an opening paragraph and that every H3 has a sentence before its example.
 3. Read each paragraph and ask what it is for. Three paragraphs saying "this happens automatically" is one paragraph. A paragraph that changes nothing about what the reader would do is zero paragraphs.
-4. Split the long sentences. Cut the clauses that only restate the sentence before.
+4. Split the long sentences. Cut the clauses that only restate the sentence before. Rewrite any sentence that takes a second read, however short it is.
 5. Check the prose against the source. Open the component or the example file and confirm the described behavior is what the code does. Stale or slightly-wrong claims are common in prose that has been edited a few times.
 6. Leave the markup, examples, and tables alone unless the copy edit changes what they should say.

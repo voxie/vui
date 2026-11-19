@@ -7,6 +7,7 @@ import TabsExample from '@site/TabsExample.vue';
 import TabsToExample from '@site/TabsToExample.vue';
 import TabsSurfacesExample from '@site/TabsSurfacesExample.vue';
 import TabsKeepMountedExample from '@site/TabsKeepMountedExample.vue';
+import TabsDescriptionExample from '@site/TabsDescriptionExample.vue';
 
 Use Tabs when a section of a screen has a few alternative blocks of content and only one shows at a time. Each tab names one block. Picking a tab swaps the block below the track without leaving the page. If picking one would take you to another page, it is a link, and it belongs in the [Navbar](/docs/components/navbar) or in the content. A choice that is only a value, with no block to reveal, is not a tab. Neither is a filter that narrows one list. Reach for [Radio](/docs/components/radio) for both.
 
@@ -79,6 +80,34 @@ The `size` prop on `Tabs` sets the height of the track, and the text and padding
 | `md` | 40px  | `text-xs` |
 | `lg` | 48px  | `text-sm` |
 
+### Description
+
+The `description` prop on a `Tab` adds a second line under its label, for what the label can't hold. The `description` slot takes the same place when the text needs markup. The description is `text-2xs` at every size, at normal weight, and wraps inside its tab. A tab with a description aligns its label and description to the left, and a tab without one stays centered.
+
+Keep a description concise. When it needs more room, put the full description in the panel of the selected tab.
+
+<TabsDescriptionExample client:load />
+
+```html
+<Tab value="rest" description="One URL per resource, called with standard HTTP verbs.">REST</Tab>
+```
+
+The track grows to fit the longest description, and the labels stay level along the top. A track with descriptions is taller than a [Button](/docs/components/button#size) or a [Switch](/docs/components/switch#size) at the same size, so it no longer sits level with them in a toolbar.
+
+The description takes the color of an unpicked label, slate-600, and slate-300 on `dark`. It stays slate-600 on the white pill, under the slate-800 label. A screen reader announces the label as the tab's name and the description as its description.
+
+### Stacking
+
+The tabs sit side by side for as long as every label fits on one line. When the track is given less width than that, the tabs stack one above the other, each the full width of the track, and go back to a row when the room returns. The switch follows the labels and the width the track actually has, so there is no breakpoint to set. The card below is 320px wide, too narrow for its three labels in a row, so its tabs are stacked at any window size.
+
+<TabsExample client:load class="max-w-xs" />
+
+Columns are equal, so the row needs the width of the widest tab once for every tab. A tab with a description counts as at least 160px wide, so the track stacks before the descriptions are squeezed into a few words per line.
+
+Stacked, each tab keeps the height it had in the row. The track is marked `aria-orientation="vertical"`.
+
+The fit is measured in the browser. Server-rendered HTML is always a row, and a track that doesn't fit stacks once the page has hydrated.
+
 ### Disabled
 
 `disabled` on `Tabs` flattens the track to slate-200 and the pill to slate-50, drops every label to slate-400, and ignores presses. The pill stays where it was, so a disabled set of tabs still shows which one is picked, and its panel stays up. On `dark` the track is slate-800 at 50%, the pill slate-500, and the labels slate-500 with the picked one slate-300.
@@ -101,11 +130,11 @@ A panel is in the DOM only while its tab is picked. Switch away and whatever was
 
 ## Interaction
 
-Hovering an unpicked tab fills it with slate-400 at 40%, slate-500 at 30% on `sunken`, and slate-700 on `dark`. Pressing it pulls that fill in by 2px on every side and shrinks the label to 96%, the same press as a [Button](/docs/components/button). It is an inset and not a scale, so a tab that has grown wide with the track presses the same as a narrow one. The shrink runs `motion-safe`, and with reduced motion the fill dims to 70% instead. The picked tab and a disabled tab don't hover or press. Clicking the picked tab does nothing, and the cursor stays an arrow over it.
+Hovering an unpicked tab fills it with slate-400 at 40%, slate-500 at 30% on `sunken`, and slate-700 on `dark`. Pressing it pulls that fill in by 2px on every side, the same press as a [Button](/docs/components/button). The label stays where it is. It is an inset and not a scale, so a tab that has grown wide with the track presses the same as a narrow one. The inset runs `motion-safe`, and with reduced motion the fill dims to 70% instead. The picked tab and a disabled tab don't hover or press. Clicking the picked tab does nothing, and the cursor stays an arrow over it.
 
 The pill takes 200ms to slide from one tab to the next on an ease-out curve, quick and without a bounce, in line with [Look and Feel](/docs/foundations/look-and-feel#friendly). The label colors cross over in the same 200ms.
 
-<kbd>Tab</kbd> lands on the picked tab and nowhere else in the track, and a second <kbd>Tab</kbd> lands on the panel it reveals, whatever is inside it. From the track, <kbd>←</kbd> and <kbd>→</kbd> move to the next tab and pick it as they go, wrapping at either end, and <kbd>Home</kbd> and <kbd>End</kbd> jump to the first and last. Disabled tabs are skipped. Until something is picked, every tab is in the tab order. Focus draws a blue outline around the tab, two pixels wide at a two pixel offset, and only for keyboard focus. Clicking a tab doesn't ring it. The panel takes the same outline at a four pixel offset when it has the focus.
+<kbd>Tab</kbd> lands on the picked tab and nowhere else in the track, and a second <kbd>Tab</kbd> lands on the panel it reveals, whatever is inside it. From the track, <kbd>←</kbd> and <kbd>→</kbd> move to the next tab and pick it as they go, wrapping at either end, and <kbd>Home</kbd> and <kbd>End</kbd> jump to the first and last. Once the tabs are stacked, <kbd>↑</kbd> and <kbd>↓</kbd> do the same as <kbd>←</kbd> and <kbd>→</kbd>. Disabled tabs are skipped. Until something is picked, every tab is in the tab order. Focus draws a blue outline around the tab, two pixels wide at a two pixel offset, and only for keyboard focus. Clicking a tab doesn't ring it. The panel takes the same outline at a four pixel offset when it has the focus.
 
 Until the page has hydrated, the picked tab paints its own white in place of the pill, so server-rendered HTML shows a selection and nothing flashes when the pill takes over.
 
@@ -114,6 +143,7 @@ Until the page has hydrated, the picked tab paints its own white in place of the
 | Element                    | On            | WCAG 2.x | APCA   |
 | -------------------------- | ------------- | -------- | ------ |
 | slate-800 label            | white pill    | 14.7:1   | Lc 101 |
+| slate-600 description      | white pill    | 7.6:1    | Lc 86  |
 | slate-600 label            | slate-200     | 6.1:1    | Lc 72  |
 | slate-600 label            | slate-300     | 5.1:1    | Lc 61  |
 | slate-600 label            | slate-400/50  | 4.2:1    | Lc 50  |
