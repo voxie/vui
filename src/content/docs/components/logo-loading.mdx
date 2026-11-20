@@ -1,0 +1,70 @@
+---
+title: Logo Loading
+order: 26
+keywords: [loader, loading, spinner]
+---
+
+import LogoLoading from '@ui/LogoLoading.vue';
+import Card from '@ui/Card.vue';
+
+Logo Loading is the [Logo](/docs/components/logo) with its symbol animated. The left arm draws down to the vertex, the right arm stretches up to the dot, and both retract. The loop runs every 1.5 seconds.
+
+```vue
+import LogoLoading from '@ui/LogoLoading.vue';
+
+<LogoLoading />
+```
+
+## Examples
+
+### Sizing
+
+The body, sizing, and tail are the same as [Logo](/docs/components/logo#sizing). The default body is 34px wide. Set one CSS dimension and leave the other on `auto`.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-8">
+    <LogoLoading />
+    <LogoLoading class="w-14 h-auto" />
+    <LogoLoading class="w-20 h-auto" />
+  </div>
+</Card>
+
+```vue
+<LogoLoading />
+<LogoLoading class="w-14 h-auto" />
+<LogoLoading class="w-20 h-auto" />
+```
+
+### Corner radius and color
+
+A `rounded-*` class and a text color class work as they do on [Logo](/docs/components/logo#corner-radius). The symbol stays white.
+
+<Card>
+  <div class="not-prose flex flex-wrap items-center gap-8">
+    <LogoLoading class="w-14 rounded-md" />
+    <LogoLoading class="w-14 text-sky-600" />
+    <LogoLoading class="w-14 text-slate-800" />
+  </div>
+</Card>
+
+```vue
+<LogoLoading class="w-14 rounded-md" />
+<LogoLoading class="w-14 text-sky-600" />
+<LogoLoading class="w-14 text-slate-800" />
+```
+
+## Props
+
+The component has no props. Classes and styles apply to the body.
+
+## Accessibility
+
+With reduced motion on, the symbol holds still and the whole mark pulses.
+
+The mark is hidden from assistive technology, so it announces nothing by itself. Put it in an element that carries the loading state.
+
+```vue
+<div role="status" aria-label="Loading">
+  <LogoLoading class="w-14" />
+</div>
+```
