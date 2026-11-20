@@ -1,0 +1,102 @@
+---
+title: Wallpaper
+order: 27
+keywords: [background, pattern, backdrop, overview]
+---
+
+import Wallpaper from '@ui/Wallpaper.vue';
+import Card from '@ui/Card.vue';
+
+Wallpaper fills its parent with a grid of one repeated icon, faded to white toward the top start corner so text there stays readable. It is positioned absolutely, so the parent has to be positioned, which a [Card](/docs/components/card) already is. Content that shares the parent needs `relative` to sit above it.
+
+```vue
+import Wallpaper from '@ui/Wallpaper.vue';
+
+<Card surface="layered">
+  <Wallpaper icon="fa-regular fa-notebook" />
+  <div class="relative max-w-md">…</div>
+</Card>
+```
+
+## Examples
+
+### Icon
+
+The `icon` prop takes the variant and the icon name, the same two classes [Icon](/docs/components/icon) takes. The icons are cyan-100, and about one in ten is amber-200, violet-200, or emerald-200. The pattern of tints is fixed, so it is the same on every render.
+
+<div class="not-prose space-y-4">
+  <Card surface="layered">
+    <Wallpaper icon="fa-solid fa-wave-square" />
+    <div class="relative max-w-xs">
+      <h4 class="font-extrabold">Flows</h4>
+      <p class="mt-1 leading-snug">A flow is a series of steps a contact moves through.</p>
+    </div>
+  </Card>
+  <Card surface="layered">
+    <Wallpaper icon="fa-solid fa-cube" />
+    <div class="relative max-w-xs">
+      <h4 class="font-extrabold">Segments</h4>
+      <p class="mt-1 leading-snug">A segment is a group of contacts that share a set of traits.</p>
+    </div>
+  </Card>
+</div>
+
+```vue
+<Card surface="layered">
+  <Wallpaper icon="fa-solid fa-wave-square" />
+  <div class="relative max-w-xs">…</div>
+</Card>
+```
+
+The grid is 12 rows of 30 icons at 32px, anchored to the end edge and centered vertically. With the default spacing it covers 432px of height. A taller parent shows bare white above and below it.
+
+### Spacing
+
+`spaceX` and `spaceY` set the gap between icons and between rows, in pixels. They default to 8 and 4. `offset` is how far every second row shifts toward the end edge, and defaults to -20. Set it to 0 for a straight grid.
+
+<div class="not-prose">
+  <Card surface="layered">
+    <Wallpaper icon="fa-solid fa-cube" spaceX={20} spaceY={12} offset={0} />
+    <div class="relative max-w-xs">
+      <h4 class="font-extrabold">Segments</h4>
+      <p class="mt-1 leading-snug">A segment is a group of contacts that share a set of traits.</p>
+    </div>
+  </Card>
+</div>
+
+```vue
+<Wallpaper icon="fa-solid fa-cube" :spaceX="20" :spaceY="12" :offset="0" />
+```
+
+### Fade
+
+The white fade lets more of the grid through as the wallpaper gets wider. It changes at 768px and again at 1024px, where the end side of the grid shows at full strength.
+
+The wallpaper measures its own width for this. Pass `containerless` to measure the nearest ancestor that is a container (`@container`) instead. Use it when the wallpaper's parent is narrow but the fade should follow the layout around it.
+
+```vue
+<div class="@container">
+  <Card class="max-w-2xl">
+    <Wallpaper icon="fa-solid fa-sparkles" containerless />
+    <div class="relative">…</div>
+  </Card>
+</div>
+```
+
+The fade is white, so the wallpaper only works on a white surface, which is a card that is `default` or `layered`.
+
+## Props
+
+| Prop            | Type      | Default | Sets                                                     |
+| --------------- | --------- | ------- | -------------------------------------------------------- |
+| `icon`          | `string`  |         | The Font Awesome variant and name. Required.             |
+| `spaceX`        | `number`  | `8`     | Pixels between icons in a row.                           |
+| `spaceY`        | `number`  | `4`     | Pixels between rows.                                     |
+| `offset`        | `number`  | `-20`   | Pixels every second row shifts toward the end edge.      |
+| `containerless` | `boolean` | `false` | Fades by the nearest ancestor container's width instead. |
+
+The wallpaper takes the parent's corner radius and clips itself to it, so the parent doesn't need `overflow-hidden`.
+
+## Accessibility
+
+The wallpaper is decorative and hidden from assistive technology.
