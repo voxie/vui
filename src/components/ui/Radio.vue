@@ -155,6 +155,10 @@ const pillSizeClasses = computed(() => {
 	return 'h-7 px-2.5 text-sm';
 });
 
+// In a pair a click anywhere on the bar picks the unpicked option, so the
+// picked option takes a pointer too.
+const pair = computed(() => Boolean(bar?.pair.value));
+
 // The bar is white on every surface, so the pill's colors don't move with it.
 // The picked fill is the bar's sliding pill once it has measured this one.
 const pillClasses = computed(() => {
@@ -164,7 +168,7 @@ const pillClasses = computed(() => {
 	return 'text-slate-500 group-hover/radio:text-slate-700';
 });
 
-// Only an unpicked option does anything, so only it hovers and presses.
+// Only an unpicked option hovers and presses, in a pair too.
 const pillInert = computed(() => checked.value || disabled.value);
 
 defineExpose({
@@ -177,7 +181,7 @@ defineExpose({
 	<label
 		v-if="inBar"
 		class="group/radio relative flex min-w-0 items-center justify-center rounded-full font-sans outline-blue-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
-		:class="disabled ? 'cursor-not-allowed' : checked ? 'cursor-default' : 'cursor-pointer'"
+		:class="disabled ? 'cursor-not-allowed' : checked && !pair ? 'cursor-default' : 'cursor-pointer'"
 	>
 		<input
 			ref="input"

@@ -22,6 +22,9 @@ export interface TabListContext {
 	indicatorReady: Ref<boolean>;
 	// The tabs are one above the other, since they no longer fit side by side.
 	stacked: Ref<boolean>;
+	// Two tabs, both enabled, one of them picked. A click anywhere on the track
+	// then picks the other.
+	pair: Ref<boolean>;
 }
 
 export const TabsKey: InjectionKey<TabsContext> = Symbol('tabs');

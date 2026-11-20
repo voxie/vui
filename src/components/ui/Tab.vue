@@ -60,8 +60,12 @@ const textClasses = computed(() => {
 // picked label still leads.
 const descriptionClasses = computed(() => (selected.value && !disabled.value ? 'text-slate-600' : ''));
 
-// Only an unpicked tab does anything, so only it hovers and presses.
+// Only an unpicked tab hovers and presses, in a pair too.
 const inert = computed(() => selected.value || disabled.value);
+
+// In a pair a click anywhere on the track picks the unpicked tab, so the
+// picked tab takes a pointer too.
+const pair = computed(() => Boolean(list?.pair.value));
 
 const hoverClasses = computed(() => {
 	if (dark.value) return 'group-hover/tab:bg-slate-700';
@@ -81,7 +85,10 @@ const ownBackground = computed(() => {
 // selected yet every tab is reachable.
 const tabindex = computed(() => (selected.value || tabs.current.value === undefined ? 0 : -1));
 
-const onClick = () => {
+// In a pair TabList picks on a pointer click. A pick here would render before
+// the click reaches TabList, which would then pick the other tab back.
+const onClick = (event: MouseEvent) => {
+	if (pair.value && event.detail) return;
 	if (!disabled.value) tabs.select(props.value);
 };
 </script>
@@ -100,7 +107,7 @@ const onClick = () => {
 		:data-value="props.value"
 		:data-described="hasDescription ? '' : undefined"
 		class="group/tab relative z-10 flex h-full flex-col font-semibold transition duration-200 outline-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2"
-		:class="[sizeClasses.radius, sizeClasses.text, list?.stacked.value ? sizeClasses.stacked : '', hasDescription ? ['items-start justify-start gap-0.5 text-left', sizeClasses.described] : ['items-center justify-center', sizeClasses.pad], textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected ? 'cursor-default' : 'cursor-pointer']"
+		:class="[sizeClasses.radius, sizeClasses.text, list?.stacked.value ? sizeClasses.stacked : '', hasDescription ? ['items-start justify-start gap-0.5 text-left', sizeClasses.described] : ['items-center justify-center', sizeClasses.pad], textClasses, ownBackground, disabled ? 'cursor-not-allowed' : selected && !pair ? 'cursor-default' : 'cursor-pointer']"
 		@click="onClick"
 	>
 		<!-- The hover fill is a box of its own so the press can be a fixed 2px

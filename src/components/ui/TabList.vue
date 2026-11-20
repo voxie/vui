@@ -15,7 +15,10 @@ const indicatorStyle = ref({ left: '0px', top: '0px', width: '0px', height: '0px
 // Side by side until measured, which is also what server-rendered HTML shows.
 const stacked = ref(false);
 
-provide(TabListKey, { indicatorReady, stacked });
+// False until measured, so server-rendered HTML is the plain track.
+const pair = ref(false);
+
+provide(TabListKey, { indicatorReady, stacked, pair });
 
 // The track is the labeled Switch track at each size, so the two sit level in
 // a toolbar. A minimum, so tabs with descriptions can grow it.
@@ -79,6 +82,14 @@ const updateStacked = () => {
 	stacked.value = track.clientWidth < needed;
 };
 
+const updatePair = () => {
+	const items = Array.from(root.value?.querySelectorAll<HTMLElement>('[role="tab"]') ?? []);
+	pair.value =
+		items.length === 2 &&
+		items.every((tab) => !tab.hasAttribute('disabled')) &&
+		items.some((tab) => tab.getAttribute('aria-selected') === 'true');
+};
+
 // Measured from the selected tab rather than laid out beside it, so the pill
 // can slide between tabs of different widths.
 const updateIndicator = () => {
@@ -113,6 +124,7 @@ const observe = () => {
 
 // Stacking first, since it moves the tab the indicator measures.
 const measure = async () => {
+	updatePair();
 	updateStacked();
 	await nextTick();
 	updateIndicator();
@@ -129,7 +141,12 @@ onUpdated(() => {
 	measure();
 });
 
-watch(tabs.current, () => nextTick(updateIndicator));
+watch(tabs.current, () =>
+	nextTick(() => {
+		updatePair();
+		updateIndicator();
+	}),
+);
 
 onBeforeUnmount(() => observer?.disconnect());
 
@@ -155,6 +172,19 @@ const onKeydown = (event: KeyboardEvent) => {
 	const value = target.dataset.value;
 	if (value !== undefined) tabs.select(value);
 };
+
+// In a pair, a pointer click anywhere on the track picks the unpicked tab, and
+// Tab leaves those clicks to this. `detail` is 0 for a click from the keyboard,
+// which stays with Tab.
+const onClick = (event: MouseEvent) => {
+	if (!pair.value || !event.detail || !root.value) return;
+	const other = root.value.querySelector<HTMLElement>('[role="tab"][aria-selected="false"]');
+	if (!other) return;
+	// Focus follows the pick, as it does on the arrow keys.
+	if (root.value.contains(document.activeElement)) other.focus();
+	const value = other.dataset.value;
+	if (value !== undefined) tabs.select(value);
+};
 </script>
 
 <template>
@@ -163,8 +193,9 @@ const onKeydown = (event: KeyboardEvent) => {
 		role="tablist"
 		:aria-orientation="stacked ? 'vertical' : undefined"
 		class="relative grid font-sans select-none"
-		:class="[stacked ? 'grid-cols-1' : 'auto-cols-fr grid-flow-col', sizeClasses.track, trackClasses, trackEdge, tabs.disabled.value ? 'cursor-not-allowed' : '']"
+		:class="[stacked ? 'grid-cols-1' : 'auto-cols-fr grid-flow-col', sizeClasses.track, trackClasses, trackEdge, tabs.disabled.value ? 'cursor-not-allowed' : pair ? 'cursor-pointer' : '']"
 		@keydown="onKeydown"
+		@click="onClick"
 	>
 		<!-- Hidden until it has been measured. Before that the selected Tab paints
 		     its own white, so server-rendered HTML shows a selection. -->

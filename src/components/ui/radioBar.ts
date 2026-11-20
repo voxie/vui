@@ -13,6 +13,9 @@ export interface RadioBarContext {
 	// True once the bar's sliding pill has measured the picked option, which
 	// then stops painting its own fill.
 	indicatorReady: Ref<boolean>;
+	// Two options, both enabled, one of them picked. A click anywhere on the bar
+	// then picks the other.
+	pair: Ref<boolean>;
 }
 
 export const RadioBarKey: InjectionKey<RadioBarContext> = Symbol('radioBar');
