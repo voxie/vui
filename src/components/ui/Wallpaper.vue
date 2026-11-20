@@ -12,8 +12,10 @@ const props = withDefaults(
 		spaceX?: number;
 		// Pixels every second row shifts toward the end edge.
 		offset?: number;
+		// Fade each tinted icon in and out on its own clock.
+		animate?: boolean;
 	}>(),
-	{ containerless: false, spaceY: 4, spaceX: 8, offset: -20 },
+	{ containerless: false, spaceY: 4, spaceX: 8, offset: -20, animate: false },
 );
 
 const ROWS = 12;
@@ -21,8 +23,26 @@ const COLUMNS = 30;
 
 // One icon in ten takes a tint. Hashed from its place, not random, so the server and the client draw the same pattern.
 const tints = ['text-amber-200', 'text-violet-200', 'text-emerald-200'];
-const tint = (row: number, column: number) =>
-	tints[((Math.imul(row * COLUMNS + column, 2654435761) >>> 16) % COLUMNS)] ?? 'text-cyan-100';
+const tint = (row: number, column: number) => tints[(Math.imul(row * COLUMNS + column, 2654435761) >>> 16) % COLUMNS];
+
+// Scrambles an icon's place into 32 bits with no pattern between neighbors. Hashed for the same reason as the tints.
+const scramble = (row: number, column: number) => {
+	let n = Math.imul(row * COLUMNS + column, 0x9e3779b1);
+	n = Math.imul(n ^ (n >>> 15), 0x2c1b3c6d);
+	n = Math.imul(n ^ (n >>> 12), 0x297a2d39);
+	return (n ^ (n >>> 15)) >>> 0;
+};
+
+// Milliseconds one fade out, or one fade back in, takes. Each icon lands somewhere between the two.
+const FADE_MIN = 1500;
+const FADE_MAX = 3000;
+
+// The negative delay starts each icon partway through, so they never move together.
+const fade = (row: number, column: number) => {
+	const n = scramble(row, column);
+	const duration = FADE_MIN + (n % (FADE_MAX - FADE_MIN + 1));
+	return { animationDuration: `${duration}ms`, animationDelay: `-${(n >>> 12) % (duration * 2)}ms` };
+};
 </script>
 
 <template>
@@ -44,13 +64,16 @@ const tint = (row: number, column: number) =>
 					marginRight: row % 2 === 0 ? `${props.offset}px` : 0,
 				}"
 			>
-				<Icon
+				<!-- Icon passes on classes only, so the wrapper carries the animation. -->
+				<span
 					v-for="column in COLUMNS"
 					:key="column"
-					:name="props.icon"
-					class="fa-width-auto text-[32px]"
-					:class="tint(row, column)"
-				/>
+					class="flex"
+					:class="{ fade: props.animate && tint(row, column) }"
+					:style="props.animate && tint(row, column) ? fade(row, column) : undefined"
+				>
+					<Icon :name="props.icon" class="fa-width-auto text-[32px]" :class="tint(row, column) ?? 'text-cyan-100'" />
+				</span>
 			</div>
 		</div>
 		<!-- Two white fades from the top start corner. The second lets more through as the container widens. -->
@@ -65,3 +88,15 @@ const tint = (row: number, column: number) =>
 		></div>
 	</div>
 </template>
+
+<style scoped>
+@media (prefers-reduced-motion: no-preference) {
+	.fade {
+		animation: wallpaper-fade ease-out infinite alternate;
+	}
+}
+
+@keyframes wallpaper-fade {
+	to { opacity: 0.2; }
+}
+</style>

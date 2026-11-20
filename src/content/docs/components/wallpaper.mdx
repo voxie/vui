@@ -6,6 +6,7 @@ keywords: [background, pattern, backdrop, overview]
 
 import Wallpaper from '@ui/Wallpaper.vue';
 import Card from '@ui/Card.vue';
+import WallpaperDemo from '@site/WallpaperDemo.vue';
 
 Wallpaper is used on hero cards, marketing callouts, or places that just need a little extra attention. It is used very sparingly. In the product, it's only on main feature entry pages. 
 
@@ -70,6 +71,18 @@ The grid is 12 rows of 30 icons at 32px, anchored to the end edge and centered v
 <Wallpaper icon="fa-solid fa-cube" :spaceX="20" :spaceY="12" :offset="0" />
 ```
 
+### Animation
+
+Pass `animate` to fade each tinted icon out completely and back in. The cyan icons stay still. Every tinted icon runs on its own timing, with one fade taking 1.5 to 3.5 seconds. The icons hold still when the reader has asked for reduced motion.
+
+<div class="not-prose">
+  <WallpaperDemo client:load icon="fa-solid fa-wave-square" animate previewId="animation" />
+</div>
+
+```vue
+<Wallpaper icon="fa-solid fa-wave-square" animate />
+```
+
 ### Fade
 
 The white fade lets more of the grid through as the wallpaper gets wider. It changes at 768px and again at 1024px, where the end side of the grid shows at full strength.
@@ -96,6 +109,7 @@ The fade is white, so the wallpaper only works on a white surface, which is a ca
 | `spaceY`        | `number`  | `4`     | Pixels between rows.                                     |
 | `offset`        | `number`  | `-20`   | Pixels every second row shifts toward the end edge.      |
 | `containerless` | `boolean` | `false` | Fades by the nearest ancestor container's width instead. |
+| `animate`       | `boolean` | `false` | Fades each tinted icon in and out on its own timing.     |
 
 The wallpaper takes the parent's corner radius and clips itself to it, so the parent doesn't need `overflow-hidden`.
 
