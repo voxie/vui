@@ -6,13 +6,13 @@ import Alert from '@ui/Alert.vue';
 import Button from '@ui/Button.vue';
 import Card from '@ui/Card.vue';
 import PageLayout from '@ui/PageLayout.vue';
+import ActionBar from '@ui/ActionBar.vue';
 import type { Layout } from './pageStructure';
 
 defineProps<{
   layout: Layout;
 }>();
 
-const buttonContainer = 'w-full flex gap-2 sticky bottom-8 z-30';
 // Small cards share one width on every page, so a form looks the same on a
 // create page and beside a sidebar.
 const cardSm = 'w-full md:max-w-2xl';
@@ -93,10 +93,7 @@ const cardSm = 'w-full md:max-w-2xl';
       class="h-24"
       :class="cardSm"
     />
-    <Card
-      surface="glassRaised"
-      :class="[buttonContainer, cardSm]"
-    >
+    <ActionBar :class="cardSm">
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"
@@ -105,7 +102,7 @@ const cardSm = 'w-full md:max-w-2xl';
         data-preview-close
         >Save</Button
       >
-    </Card>
+    </ActionBar>
   </PageLayout>
 
   <PageLayout
@@ -141,10 +138,7 @@ const cardSm = 'w-full md:max-w-2xl';
       surface="glass"
       class="w-full h-24"
     />
-    <Card
-      surface="glassRaised"
-      :class="[buttonContainer, cardSm]"
-    >
+    <ActionBar :class="cardSm">
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"
@@ -153,7 +147,7 @@ const cardSm = 'w-full md:max-w-2xl';
         data-preview-close
         >Save</Button
       >
-    </Card>
+    </ActionBar>
   </PageLayout>
 
   <PageLayout
@@ -214,10 +208,7 @@ const cardSm = 'w-full md:max-w-2xl';
       />
     </div>
 
-    <Card
-      surface="glassRaised"
-      :class="[buttonContainer, cardSm]"
-    >
+    <ActionBar :class="cardSm">
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"
@@ -226,6 +217,6 @@ const cardSm = 'w-full md:max-w-2xl';
         data-preview-close
         >Save</Button
       >
-    </Card>
+    </ActionBar>
   </PageLayout>
 </template>
