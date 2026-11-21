@@ -7,7 +7,7 @@ import Logo from '@ui/Logo.vue';
 import LogoPlayground from '@site/LogoPlayground.vue';
 import Card from '@ui/Card.vue';
 
-The Voxie logo has a rounded body, a white symbol, and a speech-bubble tail. The body keeps a 34:32 aspect ratio when sized by one dimension. The symbol and tail scale with it.
+The Voxie logo has a rounded body, a white symbol, and a speech-bubble tail. The body keeps a 34:32 aspect ratio when sized by one dimension. The symbol and tail scale with it. The `type` prop adds the Voxie word mark beside it.
 
 ```vue
 import Logo from '@ui/Logo.vue';
@@ -17,6 +17,42 @@ import Logo from '@ui/Logo.vue';
 
 ## Examples
 
+### Type
+
+The `type` prop sets which parts render. The choices are `mark` (the default), `full`, and `word-mark`. `full` puts the word mark to the right of the mark, centered on the body. `word-mark` renders the letters alone.
+
+<Card>
+  <div class="not-prose flex flex-col items-start gap-8">
+    <Logo />
+    <Logo type="full" />
+    <Logo type="word-mark" />
+  </div>
+</Card>
+
+```vue
+<Logo />
+<Logo type="full" />
+<Logo type="word-mark" />
+```
+
+### Appearance
+
+The `appearance` prop sets the word mark's ink. `dark` (the default) is slate-900 for a light background. `light` is white for a dark one. The mark keeps its own color.
+
+<div class="not-prose space-y-4">
+  <Card>
+    <Logo type="full" />
+  </Card>
+  <Card surface="dark">
+    <Logo type="full" appearance="light" />
+  </Card>
+</div>
+
+```vue
+<Logo type="full" />
+<Logo type="full" appearance="light" />
+```
+
 ### Size and radius playground
 
 Choose width or height to resize the mark. Select **Tailwind** under **Radius mode** to step through the `rounded-*` scale and keep the corners at that radius while the size changes. The comparison row uses the same radius setting at several widths.
@@ -25,7 +61,7 @@ Choose width or height to resize the mark. Select **Tailwind** under **Radius mo
 
 ### Sizing
 
-The default body is 34px wide and 32px tall. Set one CSS dimension and leave the other on `auto` to preserve its proportions. Width and height are controlled through CSS, with no dedicated props.
+The default body is 34px wide and 32px tall. Set one CSS dimension and leave the other on `auto` to preserve its proportions. Width and height are controlled through CSS, with no dedicated props. The same applies to `full` and `word-mark`, where the dimension you set is the whole logo's. At its default size `full` is 126px wide and 32px tall.
 
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-8">
@@ -81,7 +117,7 @@ A class radius stays the same as the mark changes size. Use an arbitrary value s
 
 ### Color
 
-The body and tail default to sky-500. Text color classes change both. The symbol stays white.
+The body and tail default to sky-500. Text color classes change both. The symbol stays white. The word mark's color comes from `appearance`, so a text color class leaves it alone.
 
 <Card>
   <div class="not-prose flex flex-wrap items-center gap-6">
@@ -99,7 +135,12 @@ The body and tail default to sky-500. Text color classes change both. The symbol
 
 ## Props
 
-The component has no props. Classes and styles apply to the body. Size it with a width or height class and shape it with a `rounded-*` class.
+| Prop | Values | Default |
+| --- | --- | --- |
+| `type` | `mark`, `full`, `word-mark` | `mark` |
+| `appearance` | `dark`, `light` | `dark` |
+
+Classes and styles apply to the logo. Size it with a width or height class and shape the body with a `rounded-*` class.
 
 ## Accessibility
 
