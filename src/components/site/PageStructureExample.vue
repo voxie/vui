@@ -93,7 +93,7 @@ const cardSm = 'w-full md:max-w-2xl';
       class="h-24"
       :class="cardSm"
     />
-    <ActionBar :class="cardSm">
+    <ActionBar>
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"
@@ -138,7 +138,7 @@ const cardSm = 'w-full md:max-w-2xl';
       surface="glass"
       class="w-full h-24"
     />
-    <ActionBar :class="cardSm">
+    <ActionBar>
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"
@@ -208,7 +208,7 @@ const cardSm = 'w-full md:max-w-2xl';
       />
     </div>
 
-    <ActionBar :class="cardSm">
+    <ActionBar>
       <Button size="lg" data-preview-close>Cancel</Button>
       <Button
         size="lg"

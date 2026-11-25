@@ -8,7 +8,7 @@ import ActionBarExample from '@site/ActionBarExample.vue';
 
 An action bar is the floating panel that holds the buttons that confirm or cancel the content above it. It stays 32px above the bottom of the window while the content scrolls under it, so the buttons are in reach at any point on the page.
 
-Use it for content where a confirm or a cancel is expected, and a [Modal](/docs/components/modal) would cover context that has to stay in view. A form is one case. Sub views in the workflow builder and grid configurations are others. In analytics, dragging over a scatter plot makes a selection, and the bar holds what can be done with it.
+Use it for content where a confirm or a cancel is expected, and a [Modal](/docs/components/modal) would cover context that has to stay in view. A form is one case. Sub views in the workflow builder and grid configurations are others.
 
 Write it last, in the same column as the cards it follows.
 
@@ -17,7 +17,7 @@ Write it last, in the same column as the cards it follows.
   <Card surface="glass" class="w-full md:max-w-2xl">…</Card>
   <Card surface="glass" class="w-full md:max-w-2xl">…</Card>
 
-  <ActionBar class="md:max-w-2xl">
+  <ActionBar>
     <Button size="lg">Cancel</Button>
     <Button size="lg" color="sky" block>Save Contact</Button>
   </ActionBar>
@@ -42,7 +42,7 @@ It sticks to the nearest ancestor that scrolls, which is normally the window. An
 
 ### Surface
 
-The panel is the `glassRaised` surface from [Card](/docs/components/card#surface), padded by 16px, then 24px from `sm`. It announces `glass` to everything inside it, so a slate [Button](/docs/components/button#surface) comes out slate-200 without being passed `sitsOn`. Like every glass raised panel, it goes on the page background only, never inside another panel.
+The panel is the `glassRaised` surface from [Card](/docs/components/card#surface), with Card's default [padding](/docs/components/card#padding). It announces `glass` to everything inside it, so a slate [Button](/docs/components/button#surface) comes out slate-200 without being passed `sitsOn`. Like every glass raised panel, it goes on the page background only, never inside another panel.
 
 ### Buttons
 
@@ -50,7 +50,7 @@ The slot is a row with an 8px gap. The buttons in it follow the [two buttons](/d
 
 ### Width
 
-The bar fills the width of its parent. Give it the width class of the cards above it, so its edges line up with theirs. On a [create page](/docs/patterns/page-structure#create-pages), and for the small cards on a [sidebar page](/docs/patterns/page-structure#sidebar-pages), that is `md:max-w-2xl`.
+The bar is full width up to `md`, then capped at `max-w-2xl`. That is the width of the cards on a [create page](/docs/patterns/page-structure#create-pages) and of the small cards on a [sidebar page](/docs/patterns/page-structure#sidebar-pages), so its edges line up with theirs. It keeps that width under a card that runs the full content width, and it takes no width class of its own.
 
 ### Resting place
 
