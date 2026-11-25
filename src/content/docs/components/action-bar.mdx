@@ -1,0 +1,61 @@
+---
+title: Action Bar
+order: 20
+keywords: [sticky footer, floating button group, floating action panel, button bar, save bar]
+---
+
+import ActionBarExample from '@site/ActionBarExample.vue';
+
+An action bar is the floating panel that holds the buttons that confirm or cancel the content above it. It stays 32px above the bottom of the window while the content scrolls under it, so the buttons are in reach at any point on the page.
+
+Use it for content where a confirm or a cancel is expected, and a [Modal](/docs/components/modal) would cover context that has to stay in view. A form is one case. Sub views in the workflow builder and grid configurations are others.
+
+Write it last, in the same column as the cards it follows.
+
+```vue
+<PageLayout layout="create" title="New Contact">
+  <Card surface="glass" class="w-full md:max-w-2xl">…</Card>
+  <Card surface="glass" class="w-full md:max-w-2xl">…</Card>
+
+  <ActionBar>
+    <Button size="lg">Cancel</Button>
+    <Button size="lg" color="sky" block>Save Contact</Button>
+  </ActionBar>
+</PageLayout>
+```
+
+It takes no props. The default slot holds the buttons.
+
+## Examples
+
+### Sticking
+
+While the end of the content is below the window, the bar floats 32px above the window's bottom edge and the cards slide under it. Once the end of the content scrolls into view, the bar rests in place under the last card. Scroll the box to see both.
+
+<div class="my-10">
+  <ActionBarExample />
+</div>
+
+The bar only travels inside its parent. Put it straight in the column that holds the cards, as the last child. Wrapped in an element of its own, it has no room to travel and stays where it was written.
+
+It sticks to the nearest ancestor that scrolls, which is normally the window. An ancestor with `overflow-hidden` counts as that ancestor even though it never scrolls, so a bar inside one stops floating.
+
+### Surface
+
+The panel is the `glassRaised` surface from [Card](/docs/components/card#surface), with Card's default [padding](/docs/components/card#padding). It announces `glass` to everything inside it, so a slate [Button](/docs/components/button#surface) comes out slate-200 without being passed `sitsOn`. Like every glass raised panel, it goes on the page background only, never inside another panel.
+
+### Buttons
+
+The slot is a row with an 8px gap. The buttons in it follow the [two buttons](/docs/components/button#two-buttons) rule. The primary action is written last with `block` and fills the row. The secondary button sits on the left at its own width.
+
+### Width
+
+The bar is full width up to `md`, then capped at `max-w-2xl`. That is the width of the cards on a [create page](/docs/patterns/page-structure#create-pages) and of the small cards on a [sidebar page](/docs/patterns/page-structure#sidebar-pages), so its edges line up with theirs. It keeps that width under a card that runs the full content width, and it takes no width class of its own.
+
+### Resting place
+
+At the end of the page the bar rests under the last card. [Page Layout](/docs/components/page-layout#bottom-space) leaves 24px below it, and 128px from `md`, so it settles above the bottom of the window instead of against it.
+
+## Migration
+
+This component replaces `vx-sticky-footer` from `@voxie/frontend-components`. The name is new. It still takes no props, and the default slot carries over. The panel is now the `glassRaised` surface, so it is `bg-white/80` with `backdrop-blur-lg` where the old one was `bg-white/70` with `backdrop-blur-md`.
